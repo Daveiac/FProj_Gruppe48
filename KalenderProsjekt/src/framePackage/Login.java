@@ -25,7 +25,6 @@ public class Login extends JPanel{
 		
 		c.insets = new Insets(0,0,5,0);
 		
-		c.weightx = 1;
 		c.ipadx = 10;
 		c.anchor = GridBagConstraints.LINE_END;
 		c.gridx = 0;
@@ -33,19 +32,16 @@ public class Login extends JPanel{
 		add(userLabel,c);
 		
 		c.anchor = GridBagConstraints.LINE_START;
-		
 		c.gridx = 2;
 		c.gridy = 0;
 		add(userField,c);
 		
-		c.anchor = GridBagConstraints.LINE_END;
-		
+		c.anchor = GridBagConstraints.LINE_END;	
 		c.gridx = 0;
 		c.gridy = 1;
 		add(passwordLabel,c);
 		
 		c.anchor = GridBagConstraints.LINE_START;
-		
 		c.gridx = 2;
 		c.gridy = 1;
 		add(passwordField,c);
