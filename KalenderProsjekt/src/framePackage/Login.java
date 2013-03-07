@@ -58,8 +58,9 @@ public class Login extends JPanel{
 	public static void main(String[] args){
 		
 		JFrame frame = new JFrame("Logg inn");
-		frame.setPreferredSize(new Dimension(400, 120));
+		frame.setPreferredSize(new Dimension(350, 130));
 		frame.setResizable(false);
+		frame.setLocationRelativeTo(null);
 		frame.getContentPane().add(new Login());
 		frame.pack();
 		frame.setVisible(true);
