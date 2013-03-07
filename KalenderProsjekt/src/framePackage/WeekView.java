@@ -1,4 +1,4 @@
-package framPackage;
+package framePackage;
 
 public class WeekView {
 	
