@@ -36,10 +36,5 @@ public class DBConnection {
 		st.executeUpdate(sql);
 	}
 	
-	public static void main(String args[]) throws SQLException, ClassNotFoundException{
-		DBConnection dbc = new DBConnection();
-		dbc.initialize();
-		ResultSet rs = dbc.makeQuery("SELECT * FROM Person");
-		rs.getString("name");
-	}
+
 }

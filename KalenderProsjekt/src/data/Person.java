@@ -1,6 +1,11 @@
 package data;
 
 public class Person {
+	/*
+	 * A class that represents an entry in the Person table in the database.
+	 * 
+	 */
+	
 	private String email;
 	private int phone;
 	private String firstName;
@@ -18,6 +23,36 @@ public class Person {
 		this.lastName = lastName;
 		this.username = username;
 		this.password = password;
+	}
+
+
+	public String getEmail() {
+		return email;
+	}
+
+
+	public int getPhone() {
+		return phone;
+	}
+
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+
+	public String getLastName() {
+		return lastName;
+	}
+
+
+	public String getUsername() {
+		return username;
+	}
+
+
+	public String getPassword() {
+		return password;
 	}
 	
 	
