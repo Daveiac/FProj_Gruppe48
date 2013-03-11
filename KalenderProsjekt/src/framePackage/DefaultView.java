@@ -66,7 +66,7 @@ public class DefaultView extends JPanel {
 	}
 
 	public DefaultView() {
-		dayView = new DayView();
+		dayView = new DayView(this);
 		date = new Date();
 		initialize();
 	}
@@ -75,6 +75,7 @@ public class DefaultView extends JPanel {
 		frame = new JFrame();
 		frame.setLayout(new GridBagLayout());
 		GridBagConstraints backGroundConstraints = new GridBagConstraints();
+		backGroundConstraints.anchor = GridBagConstraints.LINE_START;
 		lblday = new JLabel("Idag: " + getDate());
 		backGroundConstraints.gridx = 0;
 		backGroundConstraints.gridy = 0;
@@ -89,9 +90,11 @@ public class DefaultView extends JPanel {
 		
 		backGroundConstraints.gridx = 1;
 		backGroundConstraints.gridy = 0;
+		backGroundConstraints.anchor = GridBagConstraints.LINE_END;
 		frame.add(calendar, backGroundConstraints);
 		backGroundConstraints.gridx = 2;
 		backGroundConstraints.gridy = 0;
+		backGroundConstraints.anchor = GridBagConstraints.LINE_START;
 		frame.add(meeting, backGroundConstraints);
 
 		logOut = new JButton("logout");
