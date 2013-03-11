@@ -230,9 +230,22 @@ public class DefaultView extends JPanel {
 		return month;
 	}
 
+	public String getYear(){
+		SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");  
+		String year = yearFormat.format(date);
+		return year;
+	}
+	
+	public String getWeek(){
+		SimpleDateFormat weekFormat = new SimpleDateFormat("ww");  
+		String week = weekFormat.format(date);
+		return week;
+	}
+	
 	public JFrame getFrame() {
 		return frame;
 	}
+	
 
 	public Component createWarning(String w) {
 		warning = new JButton(w);
