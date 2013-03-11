@@ -5,8 +5,10 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.List;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -52,7 +54,7 @@ public class DayView extends JPanel {
 	private JToggleButton day;
 	private JToggleButton week;
 	private JToggleButton month;
-	
+	private JLabel lbldayInWeek;
 	//denne delen her kan byttes
 
 	public static void main(String[] args) {
@@ -180,8 +182,14 @@ public class DayView extends JPanel {
 		timePanelContraints.gridx = 5;
 		timePanelContraints.gridy = 0;
 		timePanel.add(month, timePanelContraints);
+		lbldayInWeek = new JLabel(getDayInWeek());
+		timePanelContraints.gridx = 4;
+		timePanelContraints.gridy = 1;
+		timePanel.add(lbldayInWeek,timePanelContraints);
 		
 		//bytt denne delen her
+		
+		
 		
 		
 		
@@ -202,6 +210,14 @@ public class DayView extends JPanel {
 		String day = dayFormat.format(today);
 		return day+"."+month;
 	}
+
+	public String getDayInWeek(){
+		Date today = new Date();
+		SimpleDateFormat dayInWeek = new SimpleDateFormat("EEEE");  
+		String week = dayInWeek.format(today);
+		return week;
+	}
+	
 
 	public JFrame getFrame() {
 		return frame;
