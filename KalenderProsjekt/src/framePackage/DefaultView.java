@@ -237,6 +237,12 @@ public class DefaultView extends JPanel {
 		return year;
 	}
 	
+	public String getWeek(){
+		SimpleDateFormat weekFormat = new SimpleDateFormat("ww");  
+		String week = weekFormat.format(date);
+		return week;
+	}
+	
 	public JFrame getFrame() {
 		return frame;
 	}
