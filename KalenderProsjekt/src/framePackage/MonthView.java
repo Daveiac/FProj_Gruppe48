@@ -2,8 +2,12 @@ package framePackage;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,7 +29,7 @@ public class MonthView {
 	
 
 	public static void main(String[] args) {
-		MonthView mw = new MonthView();
+		MonthView mw = new MonthView(new DefaultView());
 		JFrame frame = new JFrame("Month view test");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setContentPane(mw.getMonthView());
@@ -33,9 +37,11 @@ public class MonthView {
 		frame.setVisible(true);
 	}
 
-	public MonthView() {
-		df = new DefaultView();
+	public MonthView(DefaultView defV) {
+		df = defV;
+		date = new Date();
 		initialize();
+		test();
 	}
 
 	private void initialize() {
@@ -51,7 +57,6 @@ public class MonthView {
 	
 	
 	private void test(){
-		SimpleDateFormat
 	}
 
 }
