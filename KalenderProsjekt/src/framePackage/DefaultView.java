@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.LayoutManager;
 import java.awt.List;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -53,6 +54,8 @@ public class DefaultView extends JPanel {
 	private JToggleButton week;
 	private JToggleButton month;
 	private Date date;
+	private JPanel mainView;
+	private DayView dayView;
 
 	public static void main(String[] args) {
 		DefaultView dw = new DefaultView();
@@ -62,6 +65,7 @@ public class DefaultView extends JPanel {
 	}
 
 	public DefaultView() {
+		dayView = new DayView();
 		date = new Date();
 		initialize();
 	}
@@ -183,8 +187,16 @@ public class DefaultView extends JPanel {
 		timePanelContraints.gridy = 0;
 		timePanel.add(month, timePanelContraints);
 		
+		mainView = getFocusPanel();
+		timePanelContraints.gridx = 1;
+		timePanelContraints.gridy = 1;
+		timePanel.add(mainView, timePanelContraints);
 		
 		
+	}
+
+	private JPanel getFocusPanel() {
+		return dayView.getDayView();
 	}
 
 	public String getDate() {
