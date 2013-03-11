@@ -2,6 +2,7 @@ package framePackage;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JFrame;
@@ -48,8 +49,9 @@ public class MonthView {
 		return monthView;
 	}
 	
-	private Date getDate(){
-		
+	
+	private void test(){
+		SimpleDateFormat
 	}
 
 }
