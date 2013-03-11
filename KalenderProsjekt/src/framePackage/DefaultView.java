@@ -61,12 +61,12 @@ public class DefaultView extends JPanel {
 	public static void main(String[] args) {
 		DefaultView dw = new DefaultView();
 		JFrame frame = dw.getFrame();
-		frame.setBounds(0, 0, 1920, 1080);
+		frame.setBounds(0, 0, 1024, 768);
 		frame.setVisible(true);
 	}
 
 	public DefaultView() {
-		dayView = new DayView();
+		dayView = new DayView(this);
 		date = new Date();
 		initialize();
 	}
@@ -75,12 +75,12 @@ public class DefaultView extends JPanel {
 		frame = new JFrame();
 		frame.setLayout(new GridBagLayout());
 		GridBagConstraints backGroundConstraints = new GridBagConstraints();
-
+		backGroundConstraints.anchor = GridBagConstraints.LINE_START;
 		lblday = new JLabel("Idag: " + getDate());
 		backGroundConstraints.gridx = 0;
 		backGroundConstraints.gridy = 0;
 		frame.add(lblday, backGroundConstraints);
-
+		
 		calendar = new JToggleButton("Kalender");
 		calendar.setSelected(true);
 		meeting = new JToggleButton("møte");
@@ -90,20 +90,26 @@ public class DefaultView extends JPanel {
 		
 		backGroundConstraints.gridx = 1;
 		backGroundConstraints.gridy = 0;
+		backGroundConstraints.anchor = GridBagConstraints.LINE_END;
 		frame.add(calendar, backGroundConstraints);
+		backGroundConstraints.gridx = 2;
+		backGroundConstraints.gridy = 0;
+		backGroundConstraints.anchor = GridBagConstraints.LINE_START;
 		frame.add(meeting, backGroundConstraints);
 
 		logOut = new JButton("logout");
-		backGroundConstraints.gridx = 2;
+		backGroundConstraints.gridx = 3;
 		backGroundConstraints.gridy = 0;
 		frame.add(logOut, backGroundConstraints);
 
 		sharedCalendar = new JPanel(new GridBagLayout());
 		sharedCalendar.setSize(100, 100);
 		sharedCalendar.setBorder(BorderFactory.createLineBorder(Color.black));
+		backGroundConstraints.anchor = GridBagConstraints.NORTH;
 		backGroundConstraints.gridx = 0;
-		backGroundConstraints.gridy = 2;
+		backGroundConstraints.gridy = 1;
 		frame.add(sharedCalendar, backGroundConstraints);
+		
 		GridBagConstraints sharedCalendarContraints = new GridBagConstraints();
 		lblcalendar = new JLabel("kalender");
 		sharedCalendarContraints.gridx = 0;
@@ -127,12 +133,13 @@ public class DefaultView extends JPanel {
 		sharedCalendarContraints.gridx = 0;
 		sharedCalendarContraints.gridy = 2;
 		sharedCalendar.add(otherCalendar, sharedCalendarContraints);
-
+		
 		warningPanel = new JPanel(new GridBagLayout());
 		warningPanel.setSize(100, 300);
 		warningPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		
 		backGroundConstraints.gridx = 0;
-		backGroundConstraints.gridy = 3;
+		backGroundConstraints.gridy = 2;
 		frame.add(warningPanel, backGroundConstraints);
 		GridBagConstraints varselPanelContraints = new GridBagConstraints();
 		lblvarsel = new JLabel("varsel");
@@ -149,9 +156,13 @@ public class DefaultView extends JPanel {
 		timePanel = new JPanel(new GridBagLayout());
 		
 		timePanel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-		backGroundConstraints.gridx = 2;
-		backGroundConstraints.gridy = 2;
+		backGroundConstraints.gridx = 1;
+		backGroundConstraints.gridy = 1;
+		backGroundConstraints.gridheight = 2;
+		backGroundConstraints.gridwidth = 2;
+		
 		frame.add(timePanel, backGroundConstraints);
+		
 		GridBagConstraints timePanelContraints = new GridBagConstraints();
 		lbldate = new JLabel(getDay()+"."+getMonth());
 		timePanelContraints.gridx = 1;

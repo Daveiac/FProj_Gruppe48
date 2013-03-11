@@ -28,7 +28,7 @@ public class DayView {
 	
 	
 	public static void main(String[] args) {
-		DayView dw = new DayView();
+		DayView dw = new DayView(new DefaultView());
 		JFrame frame = new JFrame("Day view test");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setContentPane( dw.getDayView());
@@ -37,8 +37,8 @@ public class DayView {
 		
 	}
 
-	public DayView() {
-		df = new DefaultView();
+	public DayView(DefaultView defV) {
+		df = defV;
 		date = new Date();
 		initialize();
 	}
