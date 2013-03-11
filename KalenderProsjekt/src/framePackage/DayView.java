@@ -93,5 +93,11 @@ public class DayView {
 		String week = dayInWeek.format(date);
 		return week;
 	}
+
+	public ArrayList<JButton> getButtonList() {
+		return buttonList;
+	}
+	
+	
 	
 }
