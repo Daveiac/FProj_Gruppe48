@@ -2,6 +2,7 @@ package framePackage;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -23,7 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
-public class DayView extends JPanel {
+public class DefaultView extends JPanel {
 
 	// her er main frame work, som kan brukes på year og month views også
 
@@ -55,17 +56,19 @@ public class DayView extends JPanel {
 	private JToggleButton week;
 	private JToggleButton month;
 	private JLabel lbldayInWeek;
-	//denne delen her kan byttes
 	private Date date;
 
+	//denne delen her kan byttes
+	private JLabel lbltid;
+
 	public static void main(String[] args) {
-		DayView dw = new DayView();
+		DefaultView dw = new DefaultView();
 		JFrame frame = dw.getFrame();
 		frame.setBounds(0, 0, 1000, 600);
 		frame.setVisible(true);
 	}
 
-	public DayView() {
+	public DefaultView() {
 		date = new Date();
 		initialize();
 	}
@@ -150,7 +153,7 @@ public class DayView extends JPanel {
 		// brukes på andre frames
 
 		timePanel = new JPanel(new GridBagLayout());
-		timePanel.setSize(400, 300);
+		
 		timePanel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 		backGroundConstraints.gridx = 2;
 		backGroundConstraints.gridy = 2;
@@ -175,6 +178,8 @@ public class DayView extends JPanel {
 		dayWeekMonthSelect.add(day);
 		dayWeekMonthSelect.add(week);
 		dayWeekMonthSelect.add(month);
+		//setter inn if her for hva som skal være selected
+		day.setSelected(true);
 		timePanelContraints.gridx = 3;
 		timePanelContraints.gridy = 0;
 		timePanel.add(day, timePanelContraints);
@@ -188,10 +193,6 @@ public class DayView extends JPanel {
 		timePanelContraints.gridx = 4;
 		timePanelContraints.gridy = 1;
 		timePanel.add(lbldayInWeek,timePanelContraints);
-		
-		//bytt denne delen her
-		
-		
 		
 		
 		
