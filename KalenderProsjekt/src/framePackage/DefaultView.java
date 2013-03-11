@@ -231,9 +231,16 @@ public class DefaultView extends JPanel {
 		return month;
 	}
 
+	public String getYear(){
+		SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");  
+		String year = yearFormat.format(date);
+		return year;
+	}
+	
 	public JFrame getFrame() {
 		return frame;
 	}
+	
 
 	public Component createWarning(String w) {
 		warning = new JButton(w);
