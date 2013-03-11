@@ -87,15 +87,14 @@ public class DefaultView extends JPanel {
 		calendarSelect = new ButtonGroup();
 		calendarSelect.add(calendar);
 		calendarSelect.add(meeting);
-		backGroundConstraints.gridx = 20;
+		
+		backGroundConstraints.gridx = 1;
 		backGroundConstraints.gridy = 0;
 		frame.add(calendar, backGroundConstraints);
-		backGroundConstraints.gridx = 21;
-		backGroundConstraints.gridy = 0;
 		frame.add(meeting, backGroundConstraints);
 
 		logOut = new JButton("logout");
-		backGroundConstraints.gridx = 40;
+		backGroundConstraints.gridx = 2;
 		backGroundConstraints.gridy = 0;
 		frame.add(logOut, backGroundConstraints);
 
@@ -103,7 +102,7 @@ public class DefaultView extends JPanel {
 		sharedCalendar.setSize(100, 100);
 		sharedCalendar.setBorder(BorderFactory.createLineBorder(Color.black));
 		backGroundConstraints.gridx = 0;
-		backGroundConstraints.gridy = 1;
+		backGroundConstraints.gridy = 2;
 		frame.add(sharedCalendar, backGroundConstraints);
 		GridBagConstraints sharedCalendarContraints = new GridBagConstraints();
 		lblcalendar = new JLabel("kalender");
@@ -133,7 +132,7 @@ public class DefaultView extends JPanel {
 		warningPanel.setSize(100, 300);
 		warningPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		backGroundConstraints.gridx = 0;
-		backGroundConstraints.gridy = 2;
+		backGroundConstraints.gridy = 3;
 		frame.add(warningPanel, backGroundConstraints);
 		GridBagConstraints varselPanelContraints = new GridBagConstraints();
 		lblvarsel = new JLabel("varsel");
@@ -154,7 +153,7 @@ public class DefaultView extends JPanel {
 		backGroundConstraints.gridy = 2;
 		frame.add(timePanel, backGroundConstraints);
 		GridBagConstraints timePanelContraints = new GridBagConstraints();
-		lbldate = new JLabel(getDayMonth());
+		lbldate = new JLabel(getDay()+"."+getMonth());
 		timePanelContraints.gridx = 1;
 		timePanelContraints.gridy = 0;
 		timePanel.add(lbldate, timePanelContraints);
@@ -203,12 +202,15 @@ public class DefaultView extends JPanel {
 		return df.format(date);
 	}
 
-	public String getDayMonth() {
-		SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM");  
-		String month = monthFormat.format(date);
+	public String getDay() {
 		SimpleDateFormat dayFormat = new SimpleDateFormat("dd");  
 		String day = dayFormat.format(date);
-		return day+"."+month;
+		return day;
+	}
+	public String getMonth() {
+		SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM");  
+		String month = monthFormat.format(date);
+		return month;
 	}
 
 	public JFrame getFrame() {
