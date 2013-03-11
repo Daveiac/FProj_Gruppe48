@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -169,18 +170,20 @@ public class DefaultView extends JPanel {
 		frame.add(timePanel, backGroundConstraints);
 		
 		GridBagConstraints timePanelContraints = new GridBagConstraints();
+		
+		JPanel prevNextPanel = new JPanel();
 		lbldate = new JLabel(getDay()+"."+getMonth());
-		timePanelContraints.gridx = 1;
-		timePanelContraints.gridy = 0;
-		timePanel.add(lbldate, timePanelContraints);
 		toYesterDay = new JButton("<");
+		toTomorrow = new JButton(">");
+		prevNextPanel.add(toYesterDay);
+		prevNextPanel.add(lbldate);
+		prevNextPanel.add(toTomorrow);
 		timePanelContraints.gridx = 0;
 		timePanelContraints.gridy = 0;
-		timePanel.add(toYesterDay, timePanelContraints);
-		toTomorrow = new JButton(">");
-		timePanelContraints.gridx = 2;
-		timePanelContraints.gridy = 0;
-		timePanel.add(toTomorrow, timePanelContraints);
+		timePanelContraints.weightx = 1;
+		timePanel.add(prevNextPanel, timePanelContraints);
+		
+		mainView = getFocusPanel();
 		dayWeekMonthSelect = new ButtonGroup();
 		day = new JToggleButton("Dag");
 		week = new JToggleButton("Uke");
@@ -190,21 +193,21 @@ public class DefaultView extends JPanel {
 		dayWeekMonthSelect.add(month);
 		//setter inn if her for hva som skal være selected
 		day.setSelected(true);
-		timePanelContraints.gridx = 3;
+		timePanelContraints.weightx = 0;
+		timePanelContraints.gridx = 1;
 		timePanelContraints.gridy = 0;
 		timePanel.add(day, timePanelContraints);
-		timePanelContraints.gridx = 4;
+		timePanelContraints.gridx = 2;
 		timePanelContraints.gridy = 0;
 		timePanel.add(week, timePanelContraints);
-		timePanelContraints.gridx = 5;
+		timePanelContraints.gridx = 3;
 		timePanelContraints.gridy = 0;
 		timePanel.add(month, timePanelContraints);
 		
-		mainView = getFocusPanel();
-		timePanelContraints.gridwidth = 6;
+		timePanelContraints.gridwidth = 5;
 		timePanelContraints.fill = GridBagConstraints.HORIZONTAL;
 		timePanelContraints.weightx = 1;
-		timePanelContraints.gridx = 1;
+		timePanelContraints.gridx = 0;
 		timePanelContraints.gridy = 1;
 		timePanel.add(mainView, timePanelContraints);
 		
@@ -231,16 +234,9 @@ public class DefaultView extends JPanel {
 		return month;
 	}
 
-	public String getYear(){
-		SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");  
-		String year = yearFormat.format(date);
-		return year;
-	}
-	
 	public JFrame getFrame() {
 		return frame;
 	}
-	
 
 	public Component createWarning(String w) {
 		warning = new JButton(w);
