@@ -23,6 +23,8 @@ public class DayView {
 	private JLabel lbltime;
 	private JButton hourButton;
 	private ArrayList<JButton> buttonList = new ArrayList<JButton>();
+	private JLabel tittle;
+	private DefaultView df;
 	
 	
 	public static void main(String[] args) {
@@ -36,6 +38,7 @@ public class DayView {
 	}
 
 	public DayView() {
+		df = new DefaultView();
 		date = new Date();
 		initialize();
 	}
@@ -72,6 +75,11 @@ public class DayView {
 	
 	public JPanel getDayView(){
 		return view;
+	}
+	
+	public JLabel getTittle(){
+		tittle = new JLabel(df.getDay() +"."+df.getMonth());
+		return tittle;
 	}
 	
 	public String getDayInWeek(){
