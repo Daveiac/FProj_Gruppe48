@@ -56,6 +56,7 @@ public class DayView extends JPanel {
 	private JToggleButton month;
 	private JLabel lbldayInWeek;
 	//denne delen her kan byttes
+	private Date date;
 
 	public static void main(String[] args) {
 		DayView dw = new DayView();
@@ -65,6 +66,7 @@ public class DayView extends JPanel {
 	}
 
 	public DayView() {
+		date = new Date();
 		initialize();
 	}
 
@@ -196,25 +198,22 @@ public class DayView extends JPanel {
 	}
 
 	public String getDate() {
-		Date date = new Date();
 		Locale Norge = new Locale("no", "no");
 		DateFormat df = DateFormat.getDateInstance(DateFormat.FULL, Norge);
 		return df.format(date);
 	}
 
 	public String getDayMonth() {
-		Date today = new Date();
 		SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM");  
-		String month = monthFormat.format(today);
+		String month = monthFormat.format(date);
 		SimpleDateFormat dayFormat = new SimpleDateFormat("dd");  
-		String day = dayFormat.format(today);
+		String day = dayFormat.format(date);
 		return day+"."+month;
 	}
 
 	public String getDayInWeek(){
-		Date today = new Date();
 		SimpleDateFormat dayInWeek = new SimpleDateFormat("EEEE");  
-		String week = dayInWeek.format(today);
+		String week = dayInWeek.format(date);
 		return week;
 	}
 	
