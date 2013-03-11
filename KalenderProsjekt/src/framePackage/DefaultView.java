@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -61,12 +62,12 @@ public class DefaultView extends JPanel {
 	public static void main(String[] args) {
 		DefaultView dw = new DefaultView();
 		JFrame frame = dw.getFrame();
-		frame.setBounds(0, 0, 1920, 1080);
+		frame.setBounds(0, 0, 1024, 768);
 		frame.setVisible(true);
 	}
 
 	public DefaultView() {
-		dayView = new DayView();
+		dayView = new DayView(this);
 		date = new Date();
 		initialize();
 	}
@@ -74,13 +75,15 @@ public class DefaultView extends JPanel {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setLayout(new GridBagLayout());
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		GridBagConstraints backGroundConstraints = new GridBagConstraints();
-
+		backGroundConstraints.anchor = GridBagConstraints.LINE_END;
 		lblday = new JLabel("Idag: " + getDate());
 		backGroundConstraints.gridx = 0;
 		backGroundConstraints.gridy = 0;
 		frame.add(lblday, backGroundConstraints);
-
+		
 		calendar = new JToggleButton("Kalender");
 		calendar.setSelected(true);
 		meeting = new JToggleButton("møte");
@@ -90,20 +93,28 @@ public class DefaultView extends JPanel {
 		
 		backGroundConstraints.gridx = 1;
 		backGroundConstraints.gridy = 0;
+		backGroundConstraints.weightx = 0.5;
+		backGroundConstraints.anchor = GridBagConstraints.LINE_END;
 		frame.add(calendar, backGroundConstraints);
+		backGroundConstraints.gridx = 2;
+		backGroundConstraints.gridy = 0;
+		backGroundConstraints.anchor = GridBagConstraints.LINE_START;
 		frame.add(meeting, backGroundConstraints);
+		backGroundConstraints.weightx = 0;
 
 		logOut = new JButton("logout");
-		backGroundConstraints.gridx = 2;
+		backGroundConstraints.gridx = 3;
 		backGroundConstraints.gridy = 0;
 		frame.add(logOut, backGroundConstraints);
 
 		sharedCalendar = new JPanel(new GridBagLayout());
 		sharedCalendar.setSize(100, 100);
 		sharedCalendar.setBorder(BorderFactory.createLineBorder(Color.black));
+		backGroundConstraints.anchor = GridBagConstraints.NORTH;
 		backGroundConstraints.gridx = 0;
-		backGroundConstraints.gridy = 2;
+		backGroundConstraints.gridy = 1;
 		frame.add(sharedCalendar, backGroundConstraints);
+		
 		GridBagConstraints sharedCalendarContraints = new GridBagConstraints();
 		lblcalendar = new JLabel("kalender");
 		sharedCalendarContraints.gridx = 0;
@@ -127,12 +138,13 @@ public class DefaultView extends JPanel {
 		sharedCalendarContraints.gridx = 0;
 		sharedCalendarContraints.gridy = 2;
 		sharedCalendar.add(otherCalendar, sharedCalendarContraints);
-
+		
 		warningPanel = new JPanel(new GridBagLayout());
 		warningPanel.setSize(100, 300);
 		warningPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		
 		backGroundConstraints.gridx = 0;
-		backGroundConstraints.gridy = 3;
+		backGroundConstraints.gridy = 2;
 		frame.add(warningPanel, backGroundConstraints);
 		GridBagConstraints varselPanelContraints = new GridBagConstraints();
 		lblvarsel = new JLabel("varsel");
@@ -149,9 +161,13 @@ public class DefaultView extends JPanel {
 		timePanel = new JPanel(new GridBagLayout());
 		
 		timePanel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-		backGroundConstraints.gridx = 2;
-		backGroundConstraints.gridy = 2;
+		backGroundConstraints.gridx = 1;
+		backGroundConstraints.gridy = 1;
+		backGroundConstraints.gridheight = 2;
+		backGroundConstraints.gridwidth = 2;
+		backGroundConstraints.fill = GridBagConstraints.HORIZONTAL;
 		frame.add(timePanel, backGroundConstraints);
+		
 		GridBagConstraints timePanelContraints = new GridBagConstraints();
 		lbldate = new JLabel(getDay()+"."+getMonth());
 		timePanelContraints.gridx = 1;
@@ -185,10 +201,12 @@ public class DefaultView extends JPanel {
 		timePanel.add(month, timePanelContraints);
 		
 		mainView = getFocusPanel();
+		timePanelContraints.gridwidth = 6;
+		timePanelContraints.fill = GridBagConstraints.HORIZONTAL;
+		timePanelContraints.weightx = 1;
 		timePanelContraints.gridx = 1;
 		timePanelContraints.gridy = 1;
 		timePanel.add(mainView, timePanelContraints);
-		
 		
 	}
 

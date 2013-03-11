@@ -28,7 +28,7 @@ public class DayView {
 	
 	
 	public static void main(String[] args) {
-		DayView dw = new DayView();
+		DayView dw = new DayView(new DefaultView());
 		JFrame frame = new JFrame("Day view test");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setContentPane( dw.getDayView());
@@ -37,8 +37,8 @@ public class DayView {
 		
 	}
 
-	public DayView() {
-		df = new DefaultView();
+	public DayView(DefaultView defV) {
+		df = defV;
 		date = new Date();
 		initialize();
 	}
@@ -47,24 +47,30 @@ public class DayView {
 		view =  new JPanel(new GridBagLayout());
 		GridBagConstraints dayViewContraints = new GridBagConstraints();
 		
-		lbltid = new JLabel("Tid: ");
-		dayViewContraints.gridx = 0;
-		dayViewContraints.gridy = 0;
-		view.add(lbltid, dayViewContraints);
-		
 		lbldayInWeek = new JLabel(getDayInWeek());
 		dayViewContraints.gridx = 1;
 		dayViewContraints.gridy = 0;
+		dayViewContraints.anchor = GridBagConstraints.LINE_START;
 		view.add(lbldayInWeek,dayViewContraints);
+		
+		lbltid = new JLabel("Tid: ");
+		dayViewContraints.gridx = 0;
+		dayViewContraints.gridy = 0;
+		dayViewContraints.anchor = GridBagConstraints.LINE_START;
+		view.add(lbltid, dayViewContraints);
+		
 		for (int i=0;i<24;i++){
 			lbltime = new JLabel(i+ ":00");
 			dayViewContraints.gridx = 0;
 			dayViewContraints.gridy = i+1;
 			view.add(lbltime, dayViewContraints);
 		}
+		dayViewContraints.fill = GridBagConstraints.HORIZONTAL;
+		dayViewContraints.weightx = 1;
+		dayViewContraints.anchor = GridBagConstraints.LINE_START;
 		for(int i=0;i<24;i++){
 			hourButton = new JButton("                                              ");
-			dayViewContraints.gridx = 2;
+			dayViewContraints.gridx = 1;
 			dayViewContraints.gridy = i+1;
 			buttonList.add(hourButton);
 			view.add(hourButton, dayViewContraints);
