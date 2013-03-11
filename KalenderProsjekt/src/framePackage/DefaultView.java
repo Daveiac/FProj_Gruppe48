@@ -44,9 +44,6 @@ public class DefaultView extends JPanel {
 	private JLabel lblvarsel;
 	private int warningCounter = 1;
 
-	// her i fra kommer selve dayView delen, tar vekk lbltid så kan dette brukes
-	// på andre frames
-
 	private JPanel timePanel;
 	private JLabel lbldate;
 	private JButton toYesterDay;
@@ -55,11 +52,7 @@ public class DefaultView extends JPanel {
 	private JToggleButton day;
 	private JToggleButton week;
 	private JToggleButton month;
-	private JLabel lbldayInWeek;
 	private Date date;
-
-	//denne delen her kan byttes
-	private JLabel lbltid;
 
 	public static void main(String[] args) {
 		DefaultView dw = new DefaultView();
@@ -189,10 +182,6 @@ public class DefaultView extends JPanel {
 		timePanelContraints.gridx = 5;
 		timePanelContraints.gridy = 0;
 		timePanel.add(month, timePanelContraints);
-		lbldayInWeek = new JLabel(getDayInWeek());
-		timePanelContraints.gridx = 4;
-		timePanelContraints.gridy = 1;
-		timePanel.add(lbldayInWeek,timePanelContraints);
 		
 		
 		
@@ -211,13 +200,6 @@ public class DefaultView extends JPanel {
 		String day = dayFormat.format(date);
 		return day+"."+month;
 	}
-
-	public String getDayInWeek(){
-		SimpleDateFormat dayInWeek = new SimpleDateFormat("EEEE");  
-		String week = dayInWeek.format(date);
-		return week;
-	}
-	
 
 	public JFrame getFrame() {
 		return frame;
