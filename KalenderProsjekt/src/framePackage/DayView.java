@@ -60,7 +60,7 @@ public class DayView {
 			view.add(lbltime, dayViewContraints);
 		}
 		for(int i=0;i<24;i++){
-			hourButton = new JButton();
+			hourButton = new JButton("                                              ");
 			dayViewContraints.gridx = 2;
 			dayViewContraints.gridy = i+1;
 			buttonList.add(hourButton);

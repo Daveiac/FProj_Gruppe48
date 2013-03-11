@@ -2,6 +2,7 @@ package framePackage;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -60,7 +61,7 @@ public class DefaultView extends JPanel {
 	public static void main(String[] args) {
 		DefaultView dw = new DefaultView();
 		JFrame frame = dw.getFrame();
-		frame.setBounds(0, 0, 1000, 600);
+		frame.setBounds(0, 0, 1920, 1080);
 		frame.setVisible(true);
 	}
 
@@ -86,18 +87,15 @@ public class DefaultView extends JPanel {
 		calendarSelect = new ButtonGroup();
 		calendarSelect.add(calendar);
 		calendarSelect.add(meeting);
-		backGroundConstraints.insets = new Insets(0, 200, 0, 0);
-		backGroundConstraints.gridx = 2;
+		backGroundConstraints.gridx = 20;
 		backGroundConstraints.gridy = 0;
 		frame.add(calendar, backGroundConstraints);
-		backGroundConstraints.insets = new Insets(0, 0, 0, 0);
-		backGroundConstraints.gridx = 3;
+		backGroundConstraints.gridx = 21;
 		backGroundConstraints.gridy = 0;
 		frame.add(meeting, backGroundConstraints);
 
 		logOut = new JButton("logout");
-		backGroundConstraints.insets = new Insets(0, 200, 0, 0);
-		backGroundConstraints.gridx = 4;
+		backGroundConstraints.gridx = 40;
 		backGroundConstraints.gridy = 0;
 		frame.add(logOut, backGroundConstraints);
 
@@ -221,6 +219,7 @@ public class DefaultView extends JPanel {
 		warning = new JButton(w);
 		warning.setContentAreaFilled(false);
 		warning.setFocusable(true);
+		warning.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		warningCounter += 1;
 		return warning;
 	}
