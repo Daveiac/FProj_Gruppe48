@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -74,8 +75,10 @@ public class DefaultView extends JPanel {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setLayout(new GridBagLayout());
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		GridBagConstraints backGroundConstraints = new GridBagConstraints();
-		backGroundConstraints.anchor = GridBagConstraints.LINE_START;
+		backGroundConstraints.anchor = GridBagConstraints.LINE_END;
 		lblday = new JLabel("Idag: " + getDate());
 		backGroundConstraints.gridx = 0;
 		backGroundConstraints.gridy = 0;
@@ -90,12 +93,14 @@ public class DefaultView extends JPanel {
 		
 		backGroundConstraints.gridx = 1;
 		backGroundConstraints.gridy = 0;
+		backGroundConstraints.weightx = 0.5;
 		backGroundConstraints.anchor = GridBagConstraints.LINE_END;
 		frame.add(calendar, backGroundConstraints);
 		backGroundConstraints.gridx = 2;
 		backGroundConstraints.gridy = 0;
 		backGroundConstraints.anchor = GridBagConstraints.LINE_START;
 		frame.add(meeting, backGroundConstraints);
+		backGroundConstraints.weightx = 0;
 
 		logOut = new JButton("logout");
 		backGroundConstraints.gridx = 3;
@@ -160,7 +165,7 @@ public class DefaultView extends JPanel {
 		backGroundConstraints.gridy = 1;
 		backGroundConstraints.gridheight = 2;
 		backGroundConstraints.gridwidth = 2;
-		
+		backGroundConstraints.fill = GridBagConstraints.HORIZONTAL;
 		frame.add(timePanel, backGroundConstraints);
 		
 		GridBagConstraints timePanelContraints = new GridBagConstraints();
@@ -196,10 +201,12 @@ public class DefaultView extends JPanel {
 		timePanel.add(month, timePanelContraints);
 		
 		mainView = getFocusPanel();
+		timePanelContraints.gridwidth = 6;
+		timePanelContraints.fill = GridBagConstraints.HORIZONTAL;
+		timePanelContraints.weightx = 1;
 		timePanelContraints.gridx = 1;
 		timePanelContraints.gridy = 1;
 		timePanel.add(mainView, timePanelContraints);
-		
 		
 	}
 
