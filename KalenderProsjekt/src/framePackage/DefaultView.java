@@ -180,9 +180,10 @@ public class DefaultView extends JPanel {
 		prevNextPanel.add(toTomorrow);
 		timePanelContraints.gridx = 0;
 		timePanelContraints.gridy = 0;
+		timePanelContraints.weightx = 1;
 		timePanel.add(prevNextPanel, timePanelContraints);
 		
-		JPanel dayWeekMonthPanel = new JPanel();
+		mainView = getFocusPanel();
 		dayWeekMonthSelect = new ButtonGroup();
 		day = new JToggleButton("Dag");
 		week = new JToggleButton("Uke");
@@ -192,14 +193,17 @@ public class DefaultView extends JPanel {
 		dayWeekMonthSelect.add(month);
 		//setter inn if her for hva som skal være selected
 		day.setSelected(true);
-		dayWeekMonthPanel.add(day);
-		dayWeekMonthPanel.add(week);
-		dayWeekMonthPanel.add(month);
+		timePanelContraints.weightx = 0;
 		timePanelContraints.gridx = 1;
 		timePanelContraints.gridy = 0;
-		timePanel.add(dayWeekMonthPanel, timePanelContraints);
+		timePanel.add(day, timePanelContraints);
+		timePanelContraints.gridx = 2;
+		timePanelContraints.gridy = 0;
+		timePanel.add(week, timePanelContraints);
+		timePanelContraints.gridx = 3;
+		timePanelContraints.gridy = 0;
+		timePanel.add(month, timePanelContraints);
 		
-		mainView = getFocusPanel();
 		timePanelContraints.gridwidth = 5;
 		timePanelContraints.fill = GridBagConstraints.HORIZONTAL;
 		timePanelContraints.weightx = 1;
@@ -230,22 +234,9 @@ public class DefaultView extends JPanel {
 		return month;
 	}
 
-	public String getYear(){
-		SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");  
-		String year = yearFormat.format(date);
-		return year;
-	}
-	
-	public String getWeek(){
-		SimpleDateFormat weekFormat = new SimpleDateFormat("ww");  
-		String week = weekFormat.format(date);
-		return week;
-	}
-	
 	public JFrame getFrame() {
 		return frame;
 	}
-	
 
 	public Component createWarning(String w) {
 		warning = new JButton(w);
