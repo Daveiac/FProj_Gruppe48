@@ -47,7 +47,11 @@ public class DBController {
 		rs.next();
 		return personFromResultSet(rs);
 	}
-
+	
+	public void deletePerson(String username) throws SQLException{
+		dBConn.makeUpdate(String.format("DELETE FROM Person WHERE username = '%s'", username));
+	}
+	
 	public List<Person> getEveryPerson() throws SQLException {
 		List<Person> persons = new ArrayList<Person>();
 		ResultSet rs = dBConn.makeQuery("SELECT * FROM Person");
@@ -62,8 +66,8 @@ public class DBController {
 //		Person person = new Person("stian@tull.no", 90814612, "Stian",
 //				"Venstre", "stiven", "stianerbest");
 //		dbc.addPerson(person);
-
 		System.out.println(dbc.getEveryPerson());
+		dbc.deletePerson("stiven");
 
 	}
 }
