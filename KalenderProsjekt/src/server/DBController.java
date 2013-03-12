@@ -2,6 +2,8 @@ package server;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import data.Person;
 
@@ -32,16 +34,27 @@ public class DBController {
 		return true;
 	}
 
-	public Person getPerson(String username) throws SQLException {
-		ResultSet rs = dBConn
-				.makeQuery(String.format("SELECT * FROM Person WHERE username = 'stiven'"));
-		while(rs.next()){
-			
-		}
-		//This throws an exception. Look up documentation for ResultSet to find a fix
+	private Person personFromResultSet(ResultSet rs) throws SQLException {
+		// Remember to call resultset.next() before this method
 		return new Person(rs.getString("email"), rs.getInt("telephone"),
 				rs.getString("firstname"), rs.getString("lastname"),
-				rs.getString("username"), rs.getString("Password"));
+				rs.getString("username"), rs.getString("passwd"));
+	}
+
+	public Person getPerson(String username) throws SQLException {
+		ResultSet rs = dBConn.makeQuery(String.format(
+				"SELECT * FROM Person WHERE username = '%s'", username));
+		rs.next();
+		return personFromResultSet(rs);
+	}
+
+	public List<Person> getEveryPerson() throws SQLException {
+		List<Person> persons = new ArrayList<Person>();
+		ResultSet rs = dBConn.makeQuery("SELECT * FROM Person");
+		while (rs.next()) {
+			persons.add(personFromResultSet(rs));
+		}
+		return persons;
 	}
 
 	public static void main(String[] args) throws SQLException {
@@ -49,7 +62,8 @@ public class DBController {
 //		Person person = new Person("stian@tull.no", 90814612, "Stian",
 //				"Venstre", "stiven", "stianerbest");
 //		dbc.addPerson(person);
-		
-		dbc.getPerson("stiven");
+
+		System.out.println(dbc.getEveryPerson());
+
 	}
 }
