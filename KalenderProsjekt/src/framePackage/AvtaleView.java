@@ -5,12 +5,12 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-public class Avtale extends JPanel{
+public class AvtaleView extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
 	//Alle labels
 	private JLabel overskrift = new JLabel("Avtale for                  ");
-	private JLabel tittel = new JLabel("Tittel:                                      ");
+	private JLabel tittel = new JLabel("Tittel:                                    ");
 	private JLabel start = new JLabel("Starttid: ");
 	private JLabel slutt = new JLabel("Sluttid: ");
 	private JLabel sted = new JLabel("Sted: ");
@@ -20,23 +20,25 @@ public class Avtale extends JPanel{
 	private JLabel alarm = new JLabel("Alarm: ");
 	private JLabel tidspunktAlarm = new JLabel("Tidspunkt for alarm: ");
 	
-	//Alle tekstfelt
+	//Lagar alternativ for TidsComboBoxane
+	String[] hour = new String[] {"00","01","02","03","04","05","06","07","08","09","10"
+			,"11","12","13","14","15","16","17","18","19","20","21","22","23"};
+	String[] min = new String[] {"00","05","10","15","20","25","30","35","40","45","50","55"};
+	
+	//Alle tekstfelt og ComboBoxar
 	private JTextField tittelComponent = new JTextField();
-	private JTextField startHourComponent = new JTextField();
-	private JTextField startMinComponent = new JTextField();
-	private JTextField sluttHourComponent = new JTextField();
-	private JTextField sluttMinComponent = new JTextField();
+	private JComboBox<String> startHourComponent = new JComboBox<String>(hour);
+	private JComboBox<String> startMinComponent = new JComboBox<String>(min);
+	private JComboBox<String> sluttHourComponent = new JComboBox<String>(hour);
+	private JComboBox<String> sluttMinComponent = new JComboBox<String>(min);
 	private JTextField stedComponent = new JTextField();
-	private JComboBox moteRomComponent = new JComboBox();
-	private JComboBox deltakerComponent = new JComboBox();
+	private JComboBox<String> moteRomComponent = new JComboBox<String>();
+	private JComboBox<String> deltakerComponent = new JComboBox<String>();
 	private JTextArea beskrivelseComponent = new JTextArea();
-	private JTextField tidspunktAlarmHourComponent = new JTextField();
-	private JTextField tidspunktAlarmMinComponent = new JTextField();
-	
-	//Liste for deltakere
-	private JList<String> deltakerListe;
-	
-	//Checkbox for alarm
+	private JComboBox<String> tidspunktAlarmHourComponent = new JComboBox<String>(hour);
+	private JComboBox<String> tidspunktAlarmMinComponent = new JComboBox<String>(min);	
+	private JList<data.Person> deltakerListe = new JList<data.Person>();
+	final DefaultListModel<data.Person> listModel = new DefaultListModel<data.Person>();
 	private JCheckBox alarmComponent = new JCheckBox();
 	
 	//Buttons
@@ -46,33 +48,37 @@ public class Avtale extends JPanel{
 	private JButton endreKnapp = new JButton("Endre avtale");
 	private JButton slettKnapp = new JButton("Slett avtale");
 	
-	public Avtale(){
+	public AvtaleView(){
+		
+		//beskrivelseComponent
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		beskrivelseComponent.setLineWrap(true);
+		beskrivelseComponent.setWrapStyleWord(true);
+		beskrivelseComponent.setColumns(8);
+		beskrivelseComponent.setRows(8);
+		scrollPane.setViewportView(beskrivelseComponent);
+		
+		deltakerListe.setPreferredSize( new Dimension(200,200) );
+		
 		//Tilpassar storleiken på tekstfelta
-		tittelComponent.setPreferredSize(new Dimension(100,20));
-		startHourComponent.setPreferredSize(new Dimension(20,20));
-		startMinComponent.setPreferredSize(new Dimension(20,20));
-		sluttHourComponent.setPreferredSize(new Dimension(20,20));
-		sluttMinComponent.setPreferredSize(new Dimension(20,20));
+		tittelComponent.setPreferredSize(new Dimension(300,20));
+		startHourComponent.setPreferredSize(new Dimension(100,20));
+		startMinComponent.setPreferredSize(new Dimension(100,20));
+		sluttHourComponent.setPreferredSize(new Dimension(100,20));
+		sluttMinComponent.setPreferredSize(new Dimension(100,20));
 		stedComponent.setPreferredSize(new Dimension(100,20));
-		beskrivelseComponent.setPreferredSize(new Dimension(100,100));
-		tidspunktAlarmHourComponent.setPreferredSize(new Dimension(20,20));
-		tidspunktAlarmMinComponent.setPreferredSize(new Dimension(20,20));
+		beskrivelseComponent.setPreferredSize(new Dimension(200,200));
+		tidspunktAlarmHourComponent.setPreferredSize(new Dimension(100,20));
+		tidspunktAlarmMinComponent.setPreferredSize(new Dimension(100,20));
 		
-		.addActionListener(new ActionListener(){
+		//Legg til deltakere i deltakerlista
+		leggTilDeltakerKnapp.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				// handle the jbutton event here
-			} 
+				listModel.addElement( new data.Person("Per",5,"sd","sd","sd","sd") );
+			}
 		});
-		
-		//lagar lista for deltakere
-		String	listData[] =
-			{
-				"Item 1",
-				"Item 2",
-				"Item 3",
-				"Item 4"
-			};
-		deltakerListe = new JList<String>( listData );
+		deltakerListe = new JList<data.Person>( listModel );
 		
 		//Lagar layout
 		this.setLayout( new GridBagLayout() );
@@ -180,7 +186,7 @@ public class Avtale extends JPanel{
         c.gridx = 2;
         c.gridy = 7;
         c.gridwidth = 5;
-        this.add(deltakerListe, c);
+        this.add(new JScrollPane(deltakerListe), c);
         
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 7;
@@ -196,50 +202,50 @@ public class Avtale extends JPanel{
         c.gridx = 2;
         c.gridy = 10;
         c.gridwidth = 5;
-        this.add(beskrivelseComponent, c);
+        this.add(scrollPane, c);
         
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
-        c.gridy = 11;
+        c.gridy = 16;
         this.add(alarm, c);
         
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 2;
-        c.gridy = 11;
+        c.gridy = 16;
         this.add(alarmComponent, c);
         
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
-        c.gridy = 12;
+        c.gridy = 17;
         this.add(tidspunktAlarm, c);
         
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 2;
-        c.gridy = 12;
+        c.gridy = 17;
         c.gridwidth = 1;
         this.add(tidspunktAlarmHourComponent, c);
         
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 3;
-        c.gridy = 12;
+        c.gridy = 17;
         c.gridwidth = 1;
         this.add(tidspunktAlarmMinComponent, c);
         
         d.fill = GridBagConstraints.VERTICAL;
         d.gridx = 0;
-        d.gridy = 13;
+        d.gridy = 18;
         d.gridwidth = 1;
         this.add(opprettKnapp, d);
         
         d.fill = GridBagConstraints.VERTICAL;
         d.gridx = 1;
-        d.gridy = 13;
+        d.gridy = 18;
         d.gridwidth = 1;
         this.add(endreKnapp, d);
         
         d.fill = GridBagConstraints.VERTICAL;
         d.gridx = 2;
-        d.gridy = 13;
+        d.gridy = 18;
         d.gridwidth = 5;
         this.add(slettKnapp, d);
         
@@ -279,7 +285,7 @@ public class Avtale extends JPanel{
 		frame.setPreferredSize(new Dimension(550, 700));
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().add(new Avtale());
+		frame.getContentPane().add(new AvtaleView());
 		frame.pack();
 		frame.setVisible(true);
 	}
