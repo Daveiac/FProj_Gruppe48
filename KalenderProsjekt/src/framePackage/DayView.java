@@ -62,7 +62,12 @@ public class DayView {
 		view.add(lbltid, dayViewContraints);
 		
 		for (int i=0;i<24;i++){
-			lbltime = new JLabel(i+ ":00");
+			if(i>9){
+				lbltime = new JLabel(i+ ":00");
+			}
+			else{
+				lbltime = new JLabel("0" +i+ ":00");
+			}
 			dayViewContraints.gridx = 0;
 			dayViewContraints.gridy = i+1;
 			view.add(lbltime, dayViewContraints);
