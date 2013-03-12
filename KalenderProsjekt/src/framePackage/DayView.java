@@ -25,6 +25,7 @@ public class DayView {
 	private ArrayList<JButton> buttonList = new ArrayList<JButton>();
 	private JLabel tittle;
 	private DefaultView df;
+	private Dato dato;
 	
 	
 	public static void main(String[] args) {
@@ -40,6 +41,7 @@ public class DayView {
 	public DayView(DefaultView defV) {
 		df = defV;
 		date = new Date();
+		dato = new Dato();
 		initialize();
 	}
 
@@ -84,7 +86,7 @@ public class DayView {
 	}
 	
 	public JLabel getTittle(){
-		tittle = new JLabel(df.getDay() +"."+df.getMonth());
+		tittle = new JLabel(dato.getDay() +"."+dato.getMonth());
 		return tittle;
 	}
 	

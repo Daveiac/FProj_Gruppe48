@@ -28,6 +28,7 @@ public class MonthView {
 	private Date date;
 	private DefaultView df;
 	private JLabel tittle;
+	private Dato dato;
 	
 
 	public static void main(String[] args) {
@@ -41,6 +42,7 @@ public class MonthView {
 
 	public MonthView(DefaultView defV) {
 		df = defV;
+		dato = new Dato();
 		date = new Date();
 		initialize();
 	}
@@ -98,7 +100,7 @@ public class MonthView {
 	
 	
 	private JLabel getTittle(){
-		tittle = new JLabel (df.getMonth()+"."+df.getYear());
+		tittle = new JLabel (dato.getMonth()+"."+dato.getYear());
 		return tittle;
 	}
 

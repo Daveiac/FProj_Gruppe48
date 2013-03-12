@@ -59,6 +59,7 @@ public class DefaultView extends JPanel {
 	private Date date;
 	private JPanel mainView;
 	private DayView dayView;
+	private Dato dato;
 
 	public static void main(String[] args) {
 		DefaultView dw = new DefaultView();
@@ -68,6 +69,7 @@ public class DefaultView extends JPanel {
 	}
 
 	public DefaultView() {
+		dato = new Dato();
 		dayView = new DayView(this);
 		date = new Date();
 		initialize();
@@ -80,7 +82,7 @@ public class DefaultView extends JPanel {
 		
 		GridBagConstraints backGroundConstraints = new GridBagConstraints();
 		backGroundConstraints.anchor = GridBagConstraints.LINE_END;
-		lblday = new JLabel("Idag: " + getDate());
+		lblday = new JLabel("Idag: " + dato.getDate());
 		backGroundConstraints.gridx = 0;
 		backGroundConstraints.gridy = 0;
 		frame.add(lblday, backGroundConstraints);
@@ -172,7 +174,7 @@ public class DefaultView extends JPanel {
 		GridBagConstraints timePanelContraints = new GridBagConstraints();
 		
 		JPanel prevNextPanel = new JPanel();
-		lbldate = new JLabel(getDay()+"."+getMonth());
+		lbldate = new JLabel(dato.getDay()+"."+dato.getMonth());
 		toYesterDay = new JButton("<");
 		toTomorrow = new JButton(">");
 		prevNextPanel.add(toYesterDay);
@@ -215,23 +217,6 @@ public class DefaultView extends JPanel {
 
 	private JPanel getFocusPanel() {
 		return dayView.getDayView();
-	}
-
-	public String getDate() {
-		Locale Norge = new Locale("no", "no");
-		DateFormat df = DateFormat.getDateInstance(DateFormat.FULL, Norge);
-		return df.format(date);
-	}
-
-	public String getDay() {
-		SimpleDateFormat dayFormat = new SimpleDateFormat("dd");  
-		String day = dayFormat.format(date);
-		return day;
-	}
-	public String getMonth() {
-		SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM");  
-		String month = monthFormat.format(date);
-		return month;
 	}
 
 	public JFrame getFrame() {

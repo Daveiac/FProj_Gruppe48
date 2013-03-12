@@ -27,7 +27,7 @@ public class WeekView {
 	private DefaultView df;
 	private JLabel lbltime;
 	private JLabel tittle;
-	
+	private Dato dato;
 	
 	public static void main(String[] args) {
 		WeekView wv = new WeekView(new DefaultView());
@@ -46,6 +46,7 @@ public class WeekView {
 		df = defV;
 		date = new Date();
 		initialize();
+		dato = new Dato();
 	}
 	
 	private void initialize(){
@@ -104,14 +105,14 @@ public class WeekView {
 	}
 	
 	public JLabel getTittle(){
-		tittle = new JLabel(df.getWeek() + "," + df.getYear());
+		tittle = new JLabel(dato.getWeek() + "," + dato.getYear());
 		return tittle;
 	}
 	
 	public String getFirstDayOfWeek(){
 		Calendar calendar = Calendar.getInstance();
 		calendar.clear();
-		calendar.set(Calendar.WEEK_OF_YEAR, Integer.parseInt(df.getWeek()));
+		calendar.set(Calendar.WEEK_OF_YEAR, Integer.parseInt(dato.getWeek()));
 		SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM");  
 		String month = monthFormat.format(date);
 		return (calendar.getTime()+ "."+ month);
