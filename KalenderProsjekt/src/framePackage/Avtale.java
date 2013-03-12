@@ -10,7 +10,7 @@ public class Avtale extends JPanel{
 	
 	//Alle labels
 	private JLabel overskrift = new JLabel("Avtale for                  ");
-	private JLabel tittel = new JLabel("Tittel:                                      ");
+	private JLabel tittel = new JLabel("Tittel:                                    ");
 	private JLabel start = new JLabel("Starttid: ");
 	private JLabel slutt = new JLabel("Sluttid: ");
 	private JLabel sted = new JLabel("Sted: ");
@@ -22,20 +22,20 @@ public class Avtale extends JPanel{
 	
 	//Alle tekstfelt
 	private JTextField tittelComponent = new JTextField();
-	private JTextField startHourComponent = new JTextField();
-	private JTextField startMinComponent = new JTextField();
-	private JTextField sluttHourComponent = new JTextField();
-	private JTextField sluttMinComponent = new JTextField();
-	private JTextField stedComponent = new JTextField();
+	private JComboBox startHourComponent = new JComboBox();
+	private JComboBox startMinComponent = new JComboBox();
+	private JComboBox sluttHourComponent = new JComboBox();
+	private JComboBox sluttMinComponent = new JComboBox();
+	private JComboBox stedComponent = new JComboBox();
 	private JComboBox moteRomComponent = new JComboBox();
 	private JComboBox deltakerComponent = new JComboBox();
 	private JTextArea beskrivelseComponent = new JTextArea();
-	private JTextField tidspunktAlarmHourComponent = new JTextField();
-	private JTextField tidspunktAlarmMinComponent = new JTextField();
+	private JComboBox tidspunktAlarmHourComponent = new JComboBox();
+	private JComboBox tidspunktAlarmMinComponent = new JComboBox();
 	
 	//Liste for deltakere
-	private JList<String> deltakerListe = new JList<String>();
-	final DefaultListModel<String> listModel = new DefaultListModel();
+	private JList<data.Person> deltakerListe = new JList<data.Person>();
+	final DefaultListModel<data.Person> listModel = new DefaultListModel<data.Person>();
 	
 	//Checkbox for alarm
 	private JCheckBox alarmComponent = new JCheckBox();
@@ -54,24 +54,26 @@ public class Avtale extends JPanel{
 		//Initialiserar lista av ansatte ein kan velge mellom
 		
 		//Tilpassar storleiken på tekstfelta
-		tittelComponent.setPreferredSize(new Dimension(100,20));
-		startHourComponent.setPreferredSize(new Dimension(20,20));
-		startMinComponent.setPreferredSize(new Dimension(20,20));
-		sluttHourComponent.setPreferredSize(new Dimension(20,20));
-		sluttMinComponent.setPreferredSize(new Dimension(20,20));
+		tittelComponent.setPreferredSize(new Dimension(300,20));
+		startHourComponent.setPreferredSize(new Dimension(100,20));
+		startMinComponent.setPreferredSize(new Dimension(100,20));
+		sluttHourComponent.setPreferredSize(new Dimension(100,20));
+		sluttMinComponent.setPreferredSize(new Dimension(100,20));
 		stedComponent.setPreferredSize(new Dimension(100,20));
-		beskrivelseComponent.setPreferredSize(new Dimension(100,100));
-		tidspunktAlarmHourComponent.setPreferredSize(new Dimension(20,20));
-		tidspunktAlarmMinComponent.setPreferredSize(new Dimension(20,20));
+		beskrivelseComponent.setPreferredSize(new Dimension(200,200));
+		tidspunktAlarmHourComponent.setPreferredSize(new Dimension(100,20));
+		tidspunktAlarmMinComponent.setPreferredSize(new Dimension(100,20));
 		
+		beskrivelseComponent.setLineWrap(true);
+		beskrivelseComponent.setWrapStyleWord(true);
 		
 		//Legg til deltakere i deltakerlista
 		leggTilDeltakerKnapp.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				listModel.addElement("Namn som er valgt");
+				listModel.addElement( new data.Person("Per",5,"sd","sd","sd","sd") );
 			}
 		});
-		deltakerListe = new JList<String>( listModel );
+		deltakerListe = new JList<data.Person>( listModel );
 		
 		//Lagar layout
 		this.setLayout( new GridBagLayout() );
@@ -195,7 +197,7 @@ public class Avtale extends JPanel{
         c.gridx = 2;
         c.gridy = 10;
         c.gridwidth = 5;
-        this.add(beskrivelseComponent, c);
+        this.add(new JScrollPane(beskrivelseComponent), c);
         
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
