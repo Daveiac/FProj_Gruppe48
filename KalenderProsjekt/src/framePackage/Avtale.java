@@ -34,7 +34,8 @@ public class Avtale extends JPanel{
 	private JTextField tidspunktAlarmMinComponent = new JTextField();
 	
 	//Liste for deltakere
-	private JList<String> deltakerListe;
+	private JList<String> deltakerListe = new JList<String>();
+	final DefaultListModel<String> listModel = new DefaultListModel();
 	
 	//Checkbox for alarm
 	private JCheckBox alarmComponent = new JCheckBox();
@@ -47,6 +48,11 @@ public class Avtale extends JPanel{
 	private JButton slettKnapp = new JButton("Slett avtale");
 	
 	public Avtale(){
+		
+		deltakerListe.setPreferredSize( new Dimension(200,200) );
+		
+		//Initialiserar lista av ansatte ein kan velge mellom
+		
 		//Tilpassar storleiken på tekstfelta
 		tittelComponent.setPreferredSize(new Dimension(100,20));
 		startHourComponent.setPreferredSize(new Dimension(20,20));
@@ -58,21 +64,14 @@ public class Avtale extends JPanel{
 		tidspunktAlarmHourComponent.setPreferredSize(new Dimension(20,20));
 		tidspunktAlarmMinComponent.setPreferredSize(new Dimension(20,20));
 		
-		.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				// handle the jbutton event here
-			} 
-		});
 		
-		//lagar lista for deltakere
-		String	listData[] =
-			{
-				"Item 1",
-				"Item 2",
-				"Item 3",
-				"Item 4"
-			};
-		deltakerListe = new JList<String>( listData );
+		//Legg til deltakere i deltakerlista
+		leggTilDeltakerKnapp.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				listModel.addElement("Namn som er valgt");
+			}
+		});
+		deltakerListe = new JList<String>( listModel );
 		
 		//Lagar layout
 		this.setLayout( new GridBagLayout() );
@@ -180,7 +179,7 @@ public class Avtale extends JPanel{
         c.gridx = 2;
         c.gridy = 7;
         c.gridwidth = 5;
-        this.add(deltakerListe, c);
+        this.add(new JScrollPane(deltakerListe), c);
         
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 7;
