@@ -26,7 +26,7 @@ public class DBController {
 
 	public Meeting getMeeting(int meetingID) throws SQLException {
 		ResultSet rs = dBConn.makeQuery(String.format(""
-				+ "SELECT * FROM Meeting" + "WHERE meetingID = '%s",
+				+ "SELECT * FROM Meeting " + "WHERE meetingID = %s",
 				Integer.toString(meetingID)));
 		rs.next();
 		return getMeetingFromResultSet(rs);
@@ -41,13 +41,12 @@ public class DBController {
 
 	private Team getTeamFromResultSet(ResultSet rs) throws SQLException {
 		List<Person> members = new ArrayList<Person>();
-		ResultSet membersOf = dBConn.makeQuery("" + "SELECT * FROM Person "
-				+ "WHERE memberOF.username = Person.username"
+		ResultSet membersOf = dBConn.makeQuery("" + "SELECT * FROM Person, memberOF, Team "
+				+ "WHERE memberOF.username = Person.username "
 				+ "AND memberOF.teamID = Team.teamID;");
 		while (membersOf.next()) {
 			members.add(getPersonFromResultSet(membersOf));
 		}
-		rs.next();
 		return new Team(rs.getInt("teamID"), rs.getString("email"), members);
 	}
 
@@ -106,8 +105,6 @@ public class DBController {
 		// Person person = new Person("stian@tull.no", 90814612, "Stian",
 		// "Venstre", "stiven", "stianerbest");
 		// dbc.addPerson(person);
-		System.out.println(dbc.getEveryPerson());
-		dbc.deletePerson("stiven");
-
+		System.out.println(dbc.getMeeting(2));
 	}
 }

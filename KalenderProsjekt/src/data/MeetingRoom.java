@@ -15,6 +15,13 @@ public class MeetingRoom {
 	public int getRoomID() {
 		return roomID;
 	}
+
+
+
+	@Override
+	public String toString() {
+		return "MeetingRoom [roomID=" + roomID + "]";
+	}
 	
 	
 }

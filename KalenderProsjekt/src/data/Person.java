@@ -47,9 +47,13 @@ public class Person {
 		return password;
 	}
 
+	@Override
 	public String toString() {
-		return getEmail() + ", " + getPhone() + ", " + getFirstName() + ", "
-				+ getLastName() + ", " + getUsername() + ", " + getPassword();
+		return "Person [email=" + email + ", phone=" + phone + ", firstName="
+				+ firstName + ", lastName=" + lastName + ", username="
+				+ username + ", password=" + password + "]";
 	}
+
+
 
 }

@@ -49,6 +49,14 @@ public class Meeting {
 	public MeetingRoom getRoom() {
 		return room;
 	}
+
+
+	@Override
+	public String toString() {
+		return "Meeting [meetingID=" + meetingID + ", startTime=" + startTime
+				+ ", endTime=" + endTime + ", description=" + description
+				+ ", team=" + team + ", room=" + room + "]";
+	}
 	
 	
 }

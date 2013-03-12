@@ -23,13 +23,11 @@ public class Team {
 	public List<Person> getMembers() {
 		return members;
 	}
-	
-	public String toString(){
-		String result = "|| ";
-		for (Iterator iterator = members.iterator(); iterator.hasNext();) {
-			Person person = (Person) iterator.next();
-			result += person.toString() + " || ";
-		}
-		return result;
+	@Override
+	public String toString() {
+		return "Team [teamID=" + teamID + ", email=" + email + ", members="
+				+ members + "]";
 	}
+	
+
 }
