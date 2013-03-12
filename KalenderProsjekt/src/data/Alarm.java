@@ -7,16 +7,24 @@ public class Alarm {
 	private int alarmID;
 	private char kind;
 	private long time;
-	private int meetingID;
-	private int appointmentID;
-	public Alarm(int alarmID, char kind, long time, int meetingID,
-			int appointmentID) {
+	private Meeting meeting;
+	private Person person;
+	
+	public Alarm(int alarmID, char kind, long time, Meeting meeting,
+			Person person) {
 		super();
 		this.alarmID = alarmID;
 		this.kind = kind;
 		this.time = time;
-		this.meetingID = meetingID;
-		this.appointmentID = appointmentID;
+		this.meeting = meeting;
+		this.person = person;
+	}
+	public Alarm(int alarmID, char kind, long time, Meeting meeting) {
+		super();
+		this.alarmID = alarmID;
+		this.kind = kind;
+		this.time = time;
+		this.meeting = meeting;
 	}
 	public int getAlarmID() {
 		return alarmID;
@@ -27,12 +35,13 @@ public class Alarm {
 	public long getTime() {
 		return time;
 	}
-	public int getMeetingID() {
-		return meetingID;
+	public Meeting getMeeting() {
+		return meeting;
 	}
-	public int getAppointmentID() {
-		return appointmentID;
+	public Person getPerson() {
+		return person;
 	}
+
 	
 	
 }

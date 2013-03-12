@@ -7,10 +7,11 @@ public class Meeting {
 	private String description;
 	private Team team;
 	private MeetingRoom room;
+	private Person creator;
 	
 	
 	public Meeting(int meetingID, long startTime, long endTime,
-			String description, Team team, MeetingRoom room) {
+			String description, Team team, MeetingRoom room, Person creator) {
 		super();
 		this.meetingID = meetingID;
 		this.startTime = startTime;
@@ -18,6 +19,7 @@ public class Meeting {
 		this.description = description;
 		this.team = team;
 		this.room = room;
+		this.creator = creator;
 	}
 
 
@@ -49,14 +51,21 @@ public class Meeting {
 	public MeetingRoom getRoom() {
 		return room;
 	}
+	
+	public Person getCreator() {
+		return creator;
+	}
 
 
 	@Override
 	public String toString() {
 		return "Meeting [meetingID=" + meetingID + ", startTime=" + startTime
 				+ ", endTime=" + endTime + ", description=" + description
-				+ ", team=" + team + ", room=" + room + "]";
+				+ ", team=" + team + ", room=" + room + ", creator=" + creator
+				+ "]";
 	}
-	
+
+
+
 	
 }

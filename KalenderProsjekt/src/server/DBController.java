@@ -5,8 +5,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import data.Alarm;
 import data.Meeting;
 import data.MeetingRoom;
+import data.Notification;
 import data.Person;
 import data.Team;
 
@@ -23,6 +25,104 @@ public class DBController {
 		} catch (SQLException e) {
 		}
 	}
+	
+	
+	
+	public void addAlarm(Alarm alarm) throws SQLException{
+		String kind = "'" + Character.toString(alarm.getKind()) + "'";
+		String time = Long.toString(alarm.getTime());
+		String meetingID = Integer.toString(alarm.getMeeting().getMeetingID());
+		String username = "'" + alarm.getPerson().getUsername() + "'";
+		String sql = "INSERT INTO Alarm (kind, time, meetingID, username) ";
+		sql += "VALUES (" ;
+		sql += kind + ", " + time + ", " + meetingID + ", " + username + ");";
+		
+		dBConn.makeUpdate(sql);
+		
+		
+	}
+	
+	/*
+	 * Returns every meeting owned by this person
+	 */
+	public List<Meeting> getEveryMeetingForPerson(Person person)
+			throws SQLException {
+		List<Meeting> meetings = new ArrayList<Meeting>();
+
+		String sql = "SELECT * FROM Meeting, Person "
+				+ "WHERE Meeting.username = Person.username;";
+		ResultSet rs = dBConn.makeQuery(sql);
+
+		while (rs.next()) {
+			getMeetingFromResultSet(rs);
+		}
+		return meetings;
+	}
+
+	public List<Meeting> getEveryMeeting() throws SQLException {
+		List<Meeting> meetings = new ArrayList<Meeting>();
+
+		String sql = "SELECT * FROM Meeting;";
+		ResultSet rs = dBConn.makeQuery(sql);
+
+		while (rs.next()) {
+			getMeetingFromResultSet(rs);
+		}
+		return meetings;
+	}
+	
+	
+	public void addNotification(Notification notification) throws SQLException{
+		String time = Long.toString(notification.getTime());
+		String approved = Character.toString(notification.getApproved());
+		String kind = Character.toString(notification.getKind());
+		String meetingID = Integer.toString(notification.getMeeting().getMeetingID());
+		String username = notification.getPerson().getUsername();
+		String sql = "INSERT INTO Notification (time, approved, kind, meetingID, username) ";
+		sql += "VALUES (" ;
+		sql += time + ", '" + approved + "', '" + kind + "', " + meetingID + ", '" + username + "')";
+		
+		dBConn.makeUpdate(sql);
+	}
+
+	public void addMeeting(Meeting meeting) throws SQLException {
+		String teamID = "null";
+		// Checks if the team has been set or not. This is the main difference
+		// between appointments and meetings.
+		if (meeting.getTeam() != null) {
+			teamID = Integer.toString(meeting.getTeam().getTeamID());
+		}
+		
+		String sql = "INSERT INTO Meeting (startTime, endTime, description, username, teamID) ";
+		sql += "VALUES ";
+		sql += "( " + meeting.getStartTime() + ", "
+				+ meeting.getEndTime() + ", '" + meeting.getDescription()
+				+ "', '";
+		sql += meeting.getCreator().getUsername() + "', ";
+		sql += teamID;
+		sql += ");";
+		System.out.println(sql);
+		dBConn.makeUpdate(sql);
+	}
+
+	private Alarm getAlarmFromResultSet(ResultSet alarmResultSet)
+			throws SQLException {
+		return new Alarm(alarmResultSet.getInt("alarmID"), alarmResultSet
+				.getString("type").charAt(0), alarmResultSet.getLong("time"),
+				getMeeting(alarmResultSet.getInt("meetingID")));
+	}
+
+	public List<Alarm> getAlarmsOfPerson(String username) throws SQLException {
+		List<Alarm> alarms = new ArrayList<Alarm>();
+		ResultSet alarmsOfPersonRS = dBConn
+				.makeQuery("SELECT * FROM Alarm, Person "
+						+ "WHERE Alarm.username = Person.username;");
+		while (alarmsOfPersonRS.next()) {
+			alarms.add(getAlarmFromResultSet(alarmsOfPersonRS));
+		}
+		return alarms;
+
+	}
 
 	public Meeting getMeeting(int meetingID) throws SQLException {
 		ResultSet rs = dBConn.makeQuery(String.format(""
@@ -36,14 +136,15 @@ public class DBController {
 		Team team = getTeam(rs.getInt("teamID"));
 		return new Meeting(rs.getInt("meetingID"), rs.getLong("startTime"),
 				rs.getLong("endTime"), rs.getString("description"), team,
-				new MeetingRoom(100));
+				new MeetingRoom(100), getPerson(rs.getString("username")));
 	}
 
 	private Team getTeamFromResultSet(ResultSet rs) throws SQLException {
 		List<Person> members = new ArrayList<Person>();
-		ResultSet membersOf = dBConn.makeQuery("" + "SELECT * FROM Person, memberOF, Team "
-				+ "WHERE memberOF.username = Person.username "
-				+ "AND memberOF.teamID = Team.teamID;");
+		ResultSet membersOf = dBConn
+				.makeQuery("SELECT * FROM Person, memberOF, Team "
+						+ "WHERE memberOF.username = Person.username "
+						+ "AND memberOF.teamID = Team.teamID;");
 		while (membersOf.next()) {
 			members.add(getPersonFromResultSet(membersOf));
 		}
@@ -102,9 +203,12 @@ public class DBController {
 
 	public static void main(String[] args) throws SQLException {
 		DBController dbc = new DBController();
-		// Person person = new Person("stian@tull.no", 90814612, "Stian",
-		// "Venstre", "stiven", "stianerbest");
-		// dbc.addPerson(person);
-		System.out.println(dbc.getMeeting(2));
+		Person person = new Person("stian@tull.no", 90814612, "Stian",
+				"Venstre", "stiven", "stianerbest");
+		dbc.addPerson(person);
+
+		Meeting meeting = new Meeting(123, 1000000, 1000000000,
+				"a booooring meeting", null, null, person);
+		dbc.addMeeting(meeting);
 	}
 }
