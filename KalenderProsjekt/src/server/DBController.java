@@ -34,6 +34,7 @@ public class DBController {
 		}
 	}
 	
+	
 	public void addMemberOf(String username, int teamID) throws SQLException{
 		String sql = "INSERT INTO memberOF (teamID, username) ";
 		sql += "VALUES (" ;
