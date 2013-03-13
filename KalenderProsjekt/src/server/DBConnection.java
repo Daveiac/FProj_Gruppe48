@@ -8,6 +8,12 @@ import java.sql.Statement;
 import java.util.Properties;
 
 public class DBConnection {
+	/*
+	 *A connection with the database.
+	 *Fully tested
+	 *Final 
+	 */
+	
 	Connection connection;
 	String url;
 
