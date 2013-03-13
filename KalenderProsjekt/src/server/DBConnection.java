@@ -11,30 +11,38 @@ public class DBConnection {
 	Connection connection;
 	String url;
 
-	public DBConnection(){
+	public DBConnection() {
 		url = "jdbc:mysql://46.9.153.76:3306/calendar";
 	}
-	
-	public void initialize() throws SQLException, ClassNotFoundException{
+
+	public void initialize() throws SQLException, ClassNotFoundException {
 		Class.forName("com.mysql.jdbc.Driver");
 		Properties connectionProperties = new Properties();
-		
+
 		connectionProperties.setProperty("user", "caluser");
 		connectionProperties.setProperty("password", "heyo!");
 		connection = DriverManager.getConnection(url, connectionProperties);
 	}
 
-	//A method to make a query on the database and get a resultset in return
-	public ResultSet makeQuery(String sql) throws SQLException{
+	// A method to make a query on the database and get a resultset in return
+	public ResultSet makeQuery(String sql) throws SQLException {
 		Statement st = connection.createStatement();
-		return st.executeQuery(sql);	
+		return st.executeQuery(sql);
 	}
-	
-	//Will update the database according to the sql feeded
-	public void makeUpdate(String sql) throws SQLException{
+
+	// Will update the database according to the sql feeded
+	public void makeUpdate(String sql) throws SQLException {
 		Statement st = connection.createStatement();
 		st.executeUpdate(sql);
 	}
-	
+
+	/*
+	 * This method is only to be used when inserting a single row into a table.
+	 * It will return the generated primary key
+	 */
+	public int makeUpdateReturnID(String sql) throws SQLException {
+		Statement st = connection.createStatement();
+		return st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+	}
 
 }
