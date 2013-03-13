@@ -10,9 +10,17 @@ import data.Meeting;
 import data.MeetingRoom;
 import data.Notification;
 import data.Person;
+import data.Reservation;
 import data.Team;
+import data.TimeInterval;
 
 public class DBController {
+	
+	/*
+	 * A class that deals with datatransfer with the database.
+	 * Some methods require testing
+	 * Not final
+	 */
 
 	private DBConnection dBConn;
 
@@ -56,6 +64,31 @@ public class DBController {
 		
 	}
 	
+	public MeetingRoom getMeetingRoom(int roomID) throws SQLException{
+		String sql = String.format(
+				"SELECT * FROM MeetingRoom " +
+				"WHERE MeetingRoom.roomID = %d", roomID);
+		ResultSet rs = dBConn.makeQuery(sql);
+		rs.next();
+		return new MeetingRoom(rs.getInt("roomID"));
+	}
+	
+	private Reservation getReservationFromResultSet(ResultSet rs) throws SQLException{
+		Meeting meeting = getMeeting(rs.getInt("meetingID"));
+		MeetingRoom meetingRoom = getMeetingRoom(rs.getInt("roomID"));
+		TimeInterval timeInterval = new TimeInterval(rs.getLong("startTime"), rs.getLong("endTime"));
+		return new Reservation(timeInterval, meetingRoom, meeting);
+	}
+	
+	public Reservation getReservationForMeeting(Meeting meeting) throws SQLException{
+		String sql = String.format(
+				"SELECT * FROM reservation " +
+				"WHERE reservation.meetingID = %d;",meeting.getMeetingID());
+		ResultSet rs = dBConn.makeQuery(sql);
+		rs.next();
+		return getReservationFromResultSet(rs);
+	}
+	
 	/*
 	 * Returns every meeting owned by this person
 	 */
@@ -71,6 +104,19 @@ public class DBController {
 			getMeetingFromResultSet(rs);
 		}
 		return meetings;
+	}
+	
+	
+	public List<Reservation> getReservationsForMeetingRoom(MeetingRoom room) throws SQLException{
+		String sql = String.format(
+				"SELECT * FROM reservation " +
+				"WHERE reservation.roomID = %d;",room.getRoomID());
+		ResultSet rs = dBConn.makeQuery(sql);
+		List<Reservation> reservations = new ArrayList<Reservation>();
+		while(rs.next()){
+			reservations.add(getReservationFromResultSet(rs));
+		}
+		return reservations;
 	}
 
 	public List<Meeting> getEveryMeeting() throws SQLException {
