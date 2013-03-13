@@ -26,7 +26,21 @@ public class DBController {
 		}
 	}
 	
+	public void addMemberOf(String username, int teamID) throws SQLException{
+		String sql = "INSERT INTO memberOF (teamID, username) ";
+		sql += "VALUES (" ;
+		sql += Integer.toString(teamID) + ", '" + username + "');";
+		dBConn.makeUpdate(sql);
+	}
 	
+	public void addTeam(Team team) throws SQLException{
+		String sql = "INSERT INTO Team (email) ";
+		sql += "VALUES ('" + team.getEmail() + "');";
+		int teamID = dBConn.makeUpdateReturnID(sql);
+		for (Person person : team.getMembers()) {
+			addMemberOf(person.getUsername(), teamID);
+		}
+	}
 	
 	public void addAlarm(Alarm alarm) throws SQLException{
 		String kind = "'" + Character.toString(alarm.getKind()) + "'";
@@ -203,12 +217,18 @@ public class DBController {
 
 	public static void main(String[] args) throws SQLException {
 		DBController dbc = new DBController();
-		Person person = new Person("stian@tull.no", 90814612, "Stian",
-				"Venstre", "stiven", "stianerbest");
-		dbc.addPerson(person);
-
-		Meeting meeting = new Meeting(123, 1000000, 1000000000,
-				"a booooring meeting", null, null, person);
-		dbc.addMeeting(meeting);
+		List<Person> personList = new ArrayList<Person>();
+		Person hakon = dbc.getPerson("haakondi");
+		Person david = dbc.getPerson("davidhov");
+		personList.add(david);
+		personList.add(hakon);
+//		Team team = new Team(-1, "anyone", personList);
+//		dbc.addTeam(team);
+		Person stian = dbc.getPerson("stiven");
+		Meeting meeting = dbc.getMeeting(3);
+		
+		Notification notification = new Notification(10000, 'n', 'n', meeting, stian);
+		dbc.addNotification(notification);
+		
 	}
 }
