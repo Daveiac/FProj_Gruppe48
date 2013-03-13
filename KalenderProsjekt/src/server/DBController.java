@@ -10,9 +10,17 @@ import data.Meeting;
 import data.MeetingRoom;
 import data.Notification;
 import data.Person;
+import data.Reservation;
 import data.Team;
+import data.TimeInterval;
 
 public class DBController {
+	
+	/*
+	 * A class that deals with datatransfer with the database.
+	 * Some methods require testing
+	 * Not final
+	 */
 
 	private DBConnection dBConn;
 
@@ -56,6 +64,31 @@ public class DBController {
 		
 	}
 	
+	public MeetingRoom getMeetingRoom(int roomID) throws SQLException{
+		String sql = String.format(
+				"SELECT * FROM MeetingRoom " +
+				"WHERE MeetingRoom.roomID = %d", roomID);
+		ResultSet rs = dBConn.makeQuery(sql);
+		rs.next();
+		return new MeetingRoom(rs.getInt("roomID"));
+	}
+	
+	private Reservation getReservationFromResultSet(ResultSet rs) throws SQLException{
+		Meeting meeting = getMeeting(rs.getInt("meetingID"));
+		MeetingRoom meetingRoom = getMeetingRoom(rs.getInt("roomID"));
+		TimeInterval timeInterval = new TimeInterval(rs.getLong("startTime"), rs.getLong("endTime"));
+		return new Reservation(timeInterval, meetingRoom, meeting);
+	}
+	
+	public Reservation getReservationForMeeting(Meeting meeting) throws SQLException{
+		String sql = String.format(
+				"SELECT * FROM reservation " +
+				"WHERE reservation.meetingID = %d;",meeting.getMeetingID());
+		ResultSet rs = dBConn.makeQuery(sql);
+		rs.next();
+		return getReservationFromResultSet(rs);
+	}
+	
 	/*
 	 * Returns every meeting owned by this person
 	 */
@@ -71,6 +104,19 @@ public class DBController {
 			getMeetingFromResultSet(rs);
 		}
 		return meetings;
+	}
+	
+	
+	public List<Reservation> getReservationsForMeetingRoom(MeetingRoom room) throws SQLException{
+		String sql = String.format(
+				"SELECT * FROM reservation " +
+				"WHERE reservation.roomID = %d;",room.getRoomID());
+		ResultSet rs = dBConn.makeQuery(sql);
+		List<Reservation> reservations = new ArrayList<Reservation>();
+		while(rs.next()){
+			reservations.add(getReservationFromResultSet(rs));
+		}
+		return reservations;
 	}
 
 	public List<Meeting> getEveryMeeting() throws SQLException {
@@ -92,7 +138,7 @@ public class DBController {
 		String kind = Character.toString(notification.getKind());
 		String meetingID = Integer.toString(notification.getMeeting().getMeetingID());
 		String username = notification.getPerson().getUsername();
-		String sql = "INSERT INTO Notification (time, approved, kind, meetingID, username) ";
+		String sql = "INSERT INTO notification (time, approved, kind, meetingID, username) ";
 		sql += "VALUES (" ;
 		sql += time + ", '" + approved + "', '" + kind + "', " + meetingID + ", '" + username + "')";
 		
@@ -167,7 +213,7 @@ public class DBController {
 
 	public Team getTeam(int teamID) throws SQLException {
 		ResultSet rs = dBConn.makeQuery(String.format(
-				"SELECT * FROM Team WHERE teamID = 'teamID'",
+				"SELECT * FROM Team WHERE teamID = %s",
 				Integer.toString(teamID)));
 		rs.next();
 		return getTeamFromResultSet(rs);
@@ -214,21 +260,63 @@ public class DBController {
 		}
 		return persons;
 	}
+	
+	private Notification getNotificationFromResultSet(ResultSet rs) throws SQLException{
+		long time = rs.getLong("time");
+		char approved = rs.getString("approved").charAt(0);
+		char kind = rs.getString("kind").charAt(0);
+		Meeting meeting = getMeeting(rs.getInt("meetingID"));
+		Person person = getPerson(rs.getString("username"));
+		return new Notification(time, approved, kind, meeting, person);
+	}
+	
+	
+	/*
+	 *Returns every notficiation corresponding to the Person. 
+	 */
+	public List<Notification> getNotifications(Person person) throws SQLException{
+		String sql = String.format("SELECT * FROM notification " +
+				"WHERE notification.username = %s", person.getUsername());
+		ResultSet rs = dBConn.makeQuery(sql);
+		List<Notification> notificationList = new ArrayList<Notification>();
+		while(rs.next()){
+			notificationList.add(getNotificationFromResultSet(rs));
+		}
+		return notificationList;
+	}
+	
+	/*
+	 *Returns every notficiation corresponding to the meeting. 
+	 */
+	public List<Notification> getNotifications(Meeting meeting) throws SQLException{
+		String sql = String.format("SELECT * FROM notification " +
+				"WHERE notification.meetingID = %d", meeting.getMeetingID());
+		ResultSet rs = dBConn.makeQuery(sql);
+		List<Notification> notificationList = new ArrayList<Notification>();
+		while(rs.next()){
+			notificationList.add(getNotificationFromResultSet(rs));
+		}
+		return notificationList;
+	}
 
 	public static void main(String[] args) throws SQLException {
 		DBController dbc = new DBController();
-		List<Person> personList = new ArrayList<Person>();
 		Person hakon = dbc.getPerson("haakondi");
 		Person david = dbc.getPerson("davidhov");
-		personList.add(david);
-		personList.add(hakon);
-//		Team team = new Team(-1, "anyone", personList);
-//		dbc.addTeam(team);
 		Person stian = dbc.getPerson("stiven");
 		Meeting meeting = dbc.getMeeting(3);
 		
-		Notification notification = new Notification(10000, 'n', 'n', meeting, stian);
-		dbc.addNotification(notification);
+		List<Person> personList = new ArrayList<Person>();
+		personList.add(david);
+		personList.add(hakon);
 		
+//		Team team = new Team(-1, "anyone", personList);
+//		dbc.addTeam(team);		
+//		Notification notification = new Notification(10000, 'n', 'n', meeting, stian);
+//		dbc.addNotification(notification);
+		
+		for (Notification notification : dbc.getNotifications(meeting)) {
+			System.out.println(notification);
+		}
 	}
 }
