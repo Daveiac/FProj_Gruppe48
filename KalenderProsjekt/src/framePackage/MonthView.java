@@ -64,7 +64,9 @@ public class MonthView implements CalendarView{
 		monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		monthTable.setRowSelectionAllowed(false);
 		monthTable.setRowHeight(42);
-		monthTable.getColumnModel().getColumn(0).setCellRenderer(new MyCellRenderer());
+		for (int i = 0; i < 7; i++) {
+			monthTable.getColumnModel().getColumn(i).setCellRenderer(new MonthTableCellRenderer());
+		}
 		
 		monthPanel = new JPanel();
 		monthPanel.setSize(600, 500);
@@ -75,6 +77,7 @@ public class MonthView implements CalendarView{
 	private void refreshCalendar() {
 		int nDays, monthStart;
 		title = new JLabel(months[currentMonth]+", "+currentYear);
+		
 		GregorianCalendar cal = new GregorianCalendar(currentYear, currentMonth, 1);
 		nDays = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
 		monthStart = cal.get(GregorianCalendar.DAY_OF_WEEK);
@@ -88,7 +91,7 @@ public class MonthView implements CalendarView{
 		for (int i=1; i<=nDays; i++){
 			int row = new Integer((i+monthStart-3)/7);
 			int column  =  (i+monthStart-3)%7;
-			tableModel.setValueAt(i, row, column);
+			tableModel.setValueAt(new JList<String>(new String[]{i+". "+"Møte 1","AvtaleYO","zomg"}), row, column);
 		}
 	}
 	
