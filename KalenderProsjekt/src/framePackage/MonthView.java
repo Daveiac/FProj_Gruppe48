@@ -25,20 +25,17 @@ public class MonthView implements CalendarView{
 			"August", "September", "Oktober", "November", "Desember"};
 	
 	public static void main(String args[]){
-		MonthView mw = new MonthView(1, 2013);
+		MonthView mw = new MonthView();
 		JFrame frame = new JFrame("monthView test: ");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setContentPane(mw.getMonthView());
+		frame.setContentPane(mw.getPanel());
 		frame.setSize(700, 400);
 		frame.setVisible(true);
 		}
 	
-	public MonthView(int month, int year){
+	public MonthView(){
 		initialize();
 		refreshCalendar();
-		for (int i = 0; i < 3; i++) {
-			prev();
-		}
 	}
 	
 	@SuppressWarnings("serial")
@@ -77,6 +74,7 @@ public class MonthView implements CalendarView{
 	private void refreshCalendar() {
 		int nDays, monthStart;
 		title = new JLabel(months[currentMonth]+", "+currentYear);
+		System.out.println(months[currentMonth]+", "+currentYear);
 		
 		GregorianCalendar cal = new GregorianCalendar(currentYear, currentMonth, 1);
 		nDays = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
@@ -95,7 +93,7 @@ public class MonthView implements CalendarView{
 		}
 	}
 	
-	public JPanel getMonthView(){
+	public JPanel getPanel(){
 		return monthPanel;
 	}
 	

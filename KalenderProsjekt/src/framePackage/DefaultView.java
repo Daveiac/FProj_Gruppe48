@@ -11,6 +11,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,15 +51,17 @@ public class DefaultView extends JPanel {
 
 	private JPanel timePanel;
 	private JLabel lbldate;
-	private JButton toYesterDay;
-	private JButton toTomorrow;
+	private JButton prevBtn;
+	private JButton nextBtn;
 	private ButtonGroup dayWeekMonthSelect;
 	private JToggleButton day;
 	private JToggleButton week;
 	private JToggleButton month;
 	private Date date;
-	private JPanel mainView;
+	private CalendarView mainView;
 	private DayView dayView;
+	private WeekView weekView;
+	private MonthView monthView;
 	private Dato dato;
 
 	public static void main(String[] args) {
@@ -70,6 +74,8 @@ public class DefaultView extends JPanel {
 	public DefaultView() {
 		dato = new Dato();
 		dayView = new DayView(this);
+		weekView = new WeekView();
+		monthView = new MonthView();
 		date = new Date();
 		initialize();
 	}
@@ -88,7 +94,7 @@ public class DefaultView extends JPanel {
 		
 		calendar = new JToggleButton("Kalender");
 		calendar.setSelected(true);
-		meeting = new JToggleButton("m鴗e");
+		meeting = new JToggleButton("møte");
 		calendarSelect = new ButtonGroup();
 		calendarSelect.add(calendar);
 		calendarSelect.add(meeting);
@@ -126,7 +132,7 @@ public class DefaultView extends JPanel {
 		calendarVisible.addItem("David Hovind");
 		calendarVisible.addItem("Aina Elisabeth Thunestveit");
 		calendarVisible.addItem("Christoffer Pram");
-		calendarVisible.addItem("H錵on Dissen");
+		calendarVisible.addItem("Håkon Dissen");
 		calendarVisible.addItem("Vegar Lerpoll");
 		calendarVisible.setSelectedItem(null);
 		sharedCalendarContraints.gridx = 0;
@@ -172,23 +178,33 @@ public class DefaultView extends JPanel {
 		
 		GridBagConstraints timePanelContraints = new GridBagConstraints();
 		
+		mainView = getFocusView();
 		JPanel prevNextPanel = new JPanel();
-		lbldate = new JLabel(dato.getDay()+"."+dato.getMonth());
-		toYesterDay = new JButton("<");
-		toTomorrow = new JButton(">");
-		prevNextPanel.add(toYesterDay);
+		lbldate = mainView.getTitle();
+		prevBtn = new JButton("<");
+		nextBtn = new JButton(">");
+		prevBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				mainView.prev();
+			}
+		});
+		nextBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				mainView.next();
+			}
+		});
+		prevNextPanel.add(prevBtn);
 		prevNextPanel.add(lbldate);
-		prevNextPanel.add(toTomorrow);
+		prevNextPanel.add(nextBtn);
 		timePanelContraints.gridx = 0;
 		timePanelContraints.gridy = 0;
 		timePanelContraints.weightx = 1;
 		timePanel.add(prevNextPanel, timePanelContraints);
 		
-		mainView = getFocusPanel();
 		dayWeekMonthSelect = new ButtonGroup();
 		day = new JToggleButton("Dag");
 		week = new JToggleButton("Uke");
-		month = new JToggleButton("M錸ede");
+		month = new JToggleButton("Måned");
 		dayWeekMonthSelect.add(day);
 		dayWeekMonthSelect.add(week);
 		dayWeekMonthSelect.add(month);
@@ -205,17 +221,17 @@ public class DefaultView extends JPanel {
 		timePanelContraints.gridy = 0;
 		timePanel.add(month, timePanelContraints);
 //		
-//		timePanelContraints.gridwidth = 5;
-//		timePanelContraints.fill = GridBagConstraints.HORIZONTAL;
-//		timePanelContraints.weightx = 1;
-//		timePanelContraints.gridx = 0;
-//		timePanelContraints.gridy = 1;
-//		timePanel.add(mainView, timePanelContraints);
+		timePanelContraints.gridwidth = 5;
+		timePanelContraints.fill = GridBagConstraints.HORIZONTAL;
+		timePanelContraints.weightx = 1;
+		timePanelContraints.gridx = 0;
+		timePanelContraints.gridy = 1;
+		timePanel.add(mainView.getPanel(), timePanelContraints);
 //		
 	}
 
-	private JPanel getFocusPanel() {
-		return dayView.getDayView();
+	private CalendarView getFocusView() {
+		return monthView;
 	}
 
 	public JFrame getFrame() {
