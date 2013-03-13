@@ -21,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
 public class WeekView extends JPanel implements CalendarView {
 
 	private GregorianCalendar calendar;
-	private JLabel title;
+	private String title;
 
 	public WeekView() {
 
@@ -29,6 +29,7 @@ public class WeekView extends JPanel implements CalendarView {
 
 		calendar = new GregorianCalendar();
 
+		title = calendar.get(GregorianCalendar.WEEK_OF_YEAR) + "," + calendar.get(GregorianCalendar.MONTH) + "," + calendar.get(GregorianCalendar.YEAR);
 		int dayOfWeek = calendar.get(GregorianCalendar.DAY_OF_WEEK) + 1;
 		calendar.add(GregorianCalendar.DAY_OF_WEEK, dayOfWeek);
 
@@ -75,8 +76,7 @@ public class WeekView extends JPanel implements CalendarView {
 	}
 
 	@Override
-	public JLabel getTitle(){
-		title = new JLabel(calendar.get(GregorianCalendar.WEEK_OF_YEAR) + "," + calendar.get(GregorianCalendar.MONTH) + "," + calendar.get(GregorianCalendar.YEAR));
+	public String getTitle(){
 		return title;
 	}
 
@@ -88,5 +88,10 @@ public class WeekView extends JPanel implements CalendarView {
 	@Override
 	public void prev() {
 		calendar.get(GregorianCalendar.WEEK_OF_YEAR - 1);
+	}
+
+	@Override
+	public JPanel getPanel() {
+		return this;
 	}
 }

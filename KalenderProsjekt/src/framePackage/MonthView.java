@@ -20,7 +20,7 @@ public class MonthView implements CalendarView{
 	private JPanel monthPanel;
 	private int realDay,realMonth,realYear,currentMonth,currentYear;
 	private DefaultTableModel tableModel;
-	private JLabel title;
+	private String title;
 	public static final String[] months = {"Januar","Februar", "Mars", "April", "Mai", "Juni", "Juli", 
 			"August", "September", "Oktober", "November", "Desember"};
 	
@@ -70,15 +70,16 @@ public class MonthView implements CalendarView{
 		JScrollPane jsp = new JScrollPane(monthTable);
 		jsp.setPreferredSize(new Dimension(650,275));
 		monthPanel.add(jsp);
+		
+		title = months[currentMonth]+", "+currentYear;
 	}
 	private void refreshCalendar() {
 		int nDays, monthStart;
-		title = new JLabel(months[currentMonth]+", "+currentYear);
-		System.out.println(months[currentMonth]+", "+currentYear);
-		
+		title = months[currentMonth]+", "+currentYear;
 		GregorianCalendar cal = new GregorianCalendar(currentYear, currentMonth, 1);
 		nDays = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
 		monthStart = cal.get(GregorianCalendar.DAY_OF_WEEK);
+		monthStart = (monthStart == 1) ? 6 : monthStart-2;
 		// Clear table
 		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 7; j++) {
@@ -86,10 +87,12 @@ public class MonthView implements CalendarView{
 			}
 		}
 		//Draw calendar
-		for (int i=1; i<=nDays; i++){
-			int row = new Integer((i+monthStart-3)/7);
-			int column  =  (i+monthStart-3)%7;
-			tableModel.setValueAt(new JList<String>(new String[]{i+". "+"Møte 1","AvtaleYO","zomg"}), row, column);
+		for (int i=0; i<=nDays; i++){
+			int row = new Integer((i+monthStart)/7);
+			int column  =  (i+monthStart)%7 ;
+			tableModel.setValueAt(
+					new JList<String>(new String[]{i+1+". "+"Møte 1","AvtaleYO","zomg"})
+					, row, column);
 		}
 	}
 	
@@ -97,7 +100,7 @@ public class MonthView implements CalendarView{
 		return monthPanel;
 	}
 	
-	public JLabel getTitle() {
+	public String getTitle() {
 		return title;
 	}
 
