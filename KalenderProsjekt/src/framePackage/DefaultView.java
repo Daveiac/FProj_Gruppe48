@@ -59,7 +59,7 @@ public class DefaultView extends JPanel {
 	private JToggleButton monthBtn;
 	private Date date;
 	private CalendarView mainView;
-	private DayView2 dayView;
+	private DayView dayView;
 	private WeekView weekView;
 	private MonthView monthView;
 	private Dato dato;
@@ -75,7 +75,7 @@ public class DefaultView extends JPanel {
 
 	public DefaultView() {
 		dato = new Dato();
-		dayView = new DayView2();
+		dayView = new DayView();
 		weekView = new WeekView();
 		monthView = new MonthView();
 		date = new Date();
