@@ -92,7 +92,7 @@ public class MonthView implements CalendarView{
 		for (int i = 0; i < 6; i++) {
 			tableModel.setValueAt(weekStart+i, i, 0);			
 		}
-		for (int i=0; i<=nDays; i++){
+		for (int i=0; i<nDays; i++){
 			int row = new Integer((i+monthStart)/7);
 			int column  =  (i+monthStart)%7 +1 ;
 			tableModel.setValueAt(

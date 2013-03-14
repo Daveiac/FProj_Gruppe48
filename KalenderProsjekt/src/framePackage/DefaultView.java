@@ -59,7 +59,7 @@ public class DefaultView extends JPanel {
 	private JToggleButton monthBtn;
 	private Date date;
 	private CalendarView mainView;
-	private DayView dayView;
+	private DayView2 dayView;
 	private WeekView weekView;
 	private MonthView monthView;
 	private Dato dato;
@@ -69,13 +69,13 @@ public class DefaultView extends JPanel {
 	public static void main(String[] args) {
 		DefaultView dw = new DefaultView();
 		JFrame frame = dw.getFrame();
-		frame.setBounds(0, 0, 1024, 768);
+		frame.setBounds(0, 0, 1260, 768);
 		frame.setVisible(true);
 	}
 
 	public DefaultView() {
 		dato = new Dato();
-		dayView = new DayView();
+		dayView = new DayView2();
 		weekView = new WeekView();
 		monthView = new MonthView();
 		date = new Date();
@@ -183,6 +183,7 @@ public class DefaultView extends JPanel {
 		mainView = dayView;
 		JPanel prevNextPanel = new JPanel();
 		calendarTitle = new JLabel(mainView.getTitle());
+		calendarTitle.setPreferredSize(new Dimension(100,20));
 		prevBtn = new JButton("<");
 		nextBtn = new JButton(">");
 		PrevNextListener prevNextListener = new PrevNextListener();

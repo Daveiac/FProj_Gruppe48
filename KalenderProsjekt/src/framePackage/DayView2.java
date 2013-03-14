@@ -14,24 +14,17 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-/**
- * 
- * @return title
- */
 @SuppressWarnings("serial")
-public class dayView2 extends JPanel implements CalendarView {
+public class DayView2 extends JPanel implements CalendarView {
 
 	private GregorianCalendar calendar;
 	private String title;
-	private String[] days = {"Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag","Søndag"};
-
-	public dayView2() {
+	public DayView2() {
 
 		SimpleDateFormat weekFormat = new SimpleDateFormat("EEEEEEE dd. MMM.");
 		calendar = new GregorianCalendar();
 
 		title = weekFormat.format(calendar.getTime());
-		int dayOfWeek = calendar.get(GregorianCalendar.DAY_OF_WEEK);
 		String[] headers = {"Tid", title};
 		DefaultTableModel tableModel = new DefaultTableModel(headers, 24);
 		for (int i = 0; i < 24; i++) {
@@ -46,6 +39,7 @@ public class dayView2 extends JPanel implements CalendarView {
 			}
 		};
 		tblWeeks.getColumnModel().getColumn(0).setPreferredWidth(0);
+		tblWeeks.getColumnModel().getColumn(1).setPreferredWidth(719);
 		tblWeeks.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tblWeeks.setRowSelectionAllowed(false);
 
@@ -56,9 +50,9 @@ public class dayView2 extends JPanel implements CalendarView {
 	}
 
 	public static void main(String[] args) {
-		JFrame frame = new JFrame("Week View");
+		JFrame frame = new JFrame("Day View");
 
-		dayView2 weekPanel = new dayView2();
+		DayView2 weekPanel = new DayView2();
 
 		frame.setContentPane(weekPanel);
 		frame.pack();
@@ -77,12 +71,12 @@ public class dayView2 extends JPanel implements CalendarView {
 
 	@Override
 	public void next() {
-		calendar.get(GregorianCalendar.WEEK_OF_YEAR + 1);
+		//TODO
 	}
 
 	@Override
 	public void prev() {
-		calendar.get(GregorianCalendar.WEEK_OF_YEAR - 1);
+		//TODO
 	}
 
 	@Override
