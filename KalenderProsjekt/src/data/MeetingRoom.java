@@ -1,26 +1,26 @@
 package data;
 
 public class MeetingRoom {
-	private int roomID;
+	private String roomName;
 	
 	
 	
-	public MeetingRoom(int roomID) {
+	public MeetingRoom(String roomName) {
 		super();
-		this.roomID = roomID;
+		this.roomName = roomName;
 	}
 
 
 
-	public int getRoomID() {
-		return roomID;
+	public String getRoomName() {
+		return roomName;
 	}
 
 
 
 	@Override
 	public String toString() {
-		return "MeetingRoom [roomID=" + roomID + "]";
+		return "MeetingRoom [roomName=" + roomName + "]";
 	}
 	
 	
