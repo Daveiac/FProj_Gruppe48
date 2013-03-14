@@ -15,11 +15,11 @@ public class Server extends Thread{
 	 */
 	
 	private BlockingQueue<Socket> newClientQueue;
-	private BlockingQueue<NetworkRequest> requestQueue;
+	private BlockingQueue<ReceivedRequest> requestQueue;
 	
 	public Server(){
 		newClientQueue = new LinkedBlockingQueue<Socket>();
-		requestQueue = new LinkedBlockingQueue<NetworkRequest>();
+		requestQueue = new LinkedBlockingQueue<ReceivedRequest>();
 		initializeServer();
 	}
 	
