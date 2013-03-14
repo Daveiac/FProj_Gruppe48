@@ -1,19 +1,18 @@
 package framePackage;
 
 import java.awt.Dimension;
-import java.awt.image.renderable.RenderContext;
 import java.util.GregorianCalendar;
 
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-public class MonthView {
+public class MonthView implements CalendarView{
 	
 	private JTable monthTable;
 	private GregorianCalendar cal;
@@ -36,13 +35,15 @@ public class MonthView {
 	
 	public MonthView(int month, int year){
 		initialize();
-		refreshCalendar(month, year);
+		refreshCalendar();
+		for (int i = 0; i < 3; i++) {
+			prev();
+		}
 	}
 	
 	@SuppressWarnings("serial")
 	private void initialize(){
 		GregorianCalendar cal =  new GregorianCalendar();
-		
 		
 		tableModel = new DefaultTableModel();
 		String[] headers = {"Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag","Søndag"};
@@ -57,25 +58,27 @@ public class MonthView {
 		
 		monthTable = new JTable(tableModel) {
 			  public boolean isCellEditable(int rowIndex, int colIndex) {
-				  return false; //Disallow the editing of any cell
+				  return false; //Disable the editing of any cell
 			  }
 		};
 		monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		monthTable.setRowSelectionAllowed(false);
 		monthTable.setRowHeight(42);
-		
+		for (int i = 0; i < 7; i++) {
+			monthTable.getColumnModel().getColumn(i).setCellRenderer(new MonthTableCellRenderer());
+		}
 		
 		monthPanel = new JPanel();
 		monthPanel.setSize(600, 500);
-		monthPanel.setBorder(BorderFactory.createTitledBorder("Kalender: "));
 		JScrollPane jsp = new JScrollPane(monthTable);
 		jsp.setPreferredSize(new Dimension(650,275));
 		monthPanel.add(jsp);
 	}
-	private void refreshCalendar(int month, int year) {
+	private void refreshCalendar() {
 		int nDays, monthStart;
-		title = new JLabel(months[month]+", "+year);
-		GregorianCalendar cal = new GregorianCalendar(year, month, 1);
+		title = new JLabel(months[currentMonth]+", "+currentYear);
+		
+		GregorianCalendar cal = new GregorianCalendar(currentYear, currentMonth, 1);
 		nDays = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
 		monthStart = cal.get(GregorianCalendar.DAY_OF_WEEK);
 		// Clear table
@@ -88,7 +91,7 @@ public class MonthView {
 		for (int i=1; i<=nDays; i++){
 			int row = new Integer((i+monthStart-3)/7);
 			int column  =  (i+monthStart-3)%7;
-			tableModel.setValueAt(i, row, column);
+			tableModel.setValueAt(new JList<String>(new String[]{i+". "+"Møte 1","AvtaleYO","zomg"}), row, column);
 		}
 	}
 	
@@ -99,5 +102,26 @@ public class MonthView {
 	public JLabel getTitle() {
 		return title;
 	}
-	
+
+	@Override
+	public void next() {
+		if(currentMonth == 11) {
+			currentMonth = 0;
+			currentYear++;
+		} else {
+			currentMonth++;
+		}
+		refreshCalendar();
+	}
+
+	@Override
+	public void prev() {
+		if(currentMonth == 0) {
+			currentMonth = 11;
+			currentYear--;
+		} else {
+			currentMonth--;
+		}
+		refreshCalendar();
+	}
 }
