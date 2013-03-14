@@ -2,14 +2,19 @@ package framePackage;
 
 import java.awt.Dimension;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import data.Meeting;
+import data.MeetingRoom;
+import data.Person;
+import data.Team;
+
 /**
- * 
- * @return title
+ * This is the WeekView Panel that shows the week planner.
  */
 @SuppressWarnings("serial")
 public class WeekView extends JPanel implements CalendarView {
@@ -19,8 +24,28 @@ public class WeekView extends JPanel implements CalendarView {
 	private DefaultTableModel tableModel;
 	private JTable tableWeek;
 
+	/**
+	 * Constructs the WeekView Panel.
+	 */
 	public WeekView() {
 		calendar = new GregorianCalendar();
+
+		// test code
+		ArrayList<Meeting> meetings = new ArrayList<Meeting>();
+		ArrayList<Person> members = new ArrayList<Person>();
+		Team team = new Team(0, null, members);
+		MeetingRoom room = new MeetingRoom(0);
+		Person creator = new Person(null, 00000000, "Dav", "Hov", "dave", "1234");
+		members.add(creator);
+		long startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
+		long endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
+		meetings.add(new Meeting(0, "suppemøte", "inHell", startTime, endTime, "This is a desc", team, room, creator));
+		startTime = new GregorianCalendar(2013, 2, 15, 10, 30).getTimeInMillis();
+		endTime = new GregorianCalendar(2013, 2, 15, 11, 00).getTimeInMillis();
+		meetings.add(new Meeting(0, "suppemøte2", "stillInHell", startTime, endTime, "This is a desc", team, room, creator));
+		startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
+		endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
+		meetings.add(new Meeting(0, "suppemøte3", "wtfWhyInHell", startTime, endTime, "This is a desc", team, room, creator));
 
 		// Creating a non-editable table
 		tableWeek = new JTable() {
@@ -37,6 +62,9 @@ public class WeekView extends JPanel implements CalendarView {
 		add(scrollPane);
 	}
 
+	/**
+	 * Creates a new week view.
+	 */
 	public void createWeek() {
 
 		SimpleDateFormat titleFormat = new SimpleDateFormat("ww, MMMMM yyyy");
@@ -66,23 +94,37 @@ public class WeekView extends JPanel implements CalendarView {
 		tableWeek.setRowSelectionAllowed(false);
 	}
 
+	/**
+	 * Generates the title of week panel.
+	 * @return the title of week panel.
+	 */
 	@Override
 	public String getTitle(){
 		return title;
 	}
 
+	/**
+	 * Shows next week.
+	 */
 	@Override
 	public void next() {
 		calendar.add(GregorianCalendar.WEEK_OF_YEAR, 1);
 		createWeek();
 	}
 
+	/**
+	 * Shows previous week.
+	 */
 	@Override
 	public void prev() {
 		calendar.add(GregorianCalendar.WEEK_OF_YEAR, -1);
 		createWeek();
 	}
 
+	/**
+	 * Gets the week panel.
+	 * @return week panel.
+	 */
 	@Override
 	public JPanel getPanel() {
 		return this;

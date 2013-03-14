@@ -2,18 +2,14 @@ package framePackage;
 
 import java.awt.Dimension;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * This is the DayView Panel that shows the day planner.
+ */
 @SuppressWarnings("serial")
 public class DayView extends JPanel implements CalendarView {
 
@@ -22,6 +18,9 @@ public class DayView extends JPanel implements CalendarView {
 	private DefaultTableModel tableModel;
 	private JTable tableDay;
 
+	/**
+	 * Constructs the DayView Panel.
+	 */
 	public DayView() {
 		calendar = new GregorianCalendar();
 
@@ -39,6 +38,9 @@ public class DayView extends JPanel implements CalendarView {
 		add(scrollPane);
 	}
 
+	/**
+	 * Creates a new day view.
+	 */
 	public void createDay() {
 
 		SimpleDateFormat titleFormat = new SimpleDateFormat("dd. MMMMM");
@@ -62,23 +64,37 @@ public class DayView extends JPanel implements CalendarView {
 		tableDay.setRowSelectionAllowed(false);
 	}
 
+	/**
+	 * Generates the title of day panel.
+	 * @return the title of day panel.
+	 */
 	@Override
 	public String getTitle() {
 		return title;
 	}
 
+	/**
+	 * Shows next day.
+	 */
 	@Override
 	public void next() {
 		calendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
 		createDay();
 	}
 
+	/**
+	 * Shows previous day.
+	 */
 	@Override
 	public void prev() {
 		calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
 		createDay();
 	}
 
+	/**
+	 * Gets the day panel.
+	 * @return day panel.
+	 */
 	@Override
 	public JPanel getPanel() {
 		return this;
