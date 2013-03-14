@@ -183,7 +183,7 @@ public class DefaultView extends JPanel {
 		mainView = dayView;
 		JPanel prevNextPanel = new JPanel();
 		calendarTitle = new JLabel(mainView.getTitle());
-		calendarTitle.setPreferredSize(new Dimension(100,20));
+		calendarTitle.setPreferredSize(new Dimension(150,20));
 		prevBtn = new JButton("<");
 		nextBtn = new JButton(">");
 		PrevNextListener prevNextListener = new PrevNextListener();

@@ -13,7 +13,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 public class MonthView implements CalendarView{
-	
+
 	private JTable monthTable;
 	private GregorianCalendar cal;
 	private JFrame frame;
@@ -22,8 +22,8 @@ public class MonthView implements CalendarView{
 	private DefaultTableModel tableModel;
 	private String title;
 	public static final String[] months = {"Januar","Februar", "Mars", "April", "Mai", "Juni", "Juli", 
-			"August", "September", "Oktober", "November", "Desember"};
-	
+		"August", "September", "Oktober", "November", "Desember"};
+
 	public static void main(String args[]){
 		MonthView mw = new MonthView();
 		JFrame frame = new JFrame("monthView test: ");
@@ -31,32 +31,32 @@ public class MonthView implements CalendarView{
 		frame.setContentPane(mw.getPanel());
 		frame.setSize(700, 600);
 		frame.setVisible(true);
-		}
-	
+	}
+
 	public MonthView(){
 		initialize();
 		refreshCalendar();
 	}
-	
+
 	@SuppressWarnings("serial")
 	private void initialize(){
 		GregorianCalendar cal =  new GregorianCalendar();
-		
+
 		tableModel = new DefaultTableModel();
 		String[] headers = {"Uke", "Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag","Søndag"};
 		tableModel.setColumnIdentifiers(headers);
 		tableModel.setRowCount(6);
-		
+
 		realDay = cal.get(GregorianCalendar.DAY_OF_MONTH);
 		realMonth = cal.get(GregorianCalendar.MONTH);
 		realYear = cal.get(GregorianCalendar.YEAR);
 		currentMonth =  realMonth;
 		currentYear = realYear;
-		
+
 		monthTable = new JTable(tableModel) {
-			  public boolean isCellEditable(int rowIndex, int colIndex) {
-				  return false; //Disable the editing of any cell
-			  }
+			public boolean isCellEditable(int rowIndex, int colIndex) {
+				return false; //Disable the editing of any cell
+			}
 		};
 		monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		monthTable.setRowSelectionAllowed(false);
@@ -65,13 +65,13 @@ public class MonthView implements CalendarView{
 		for (int i = 1; i < 8; i++) {
 			monthTable.getColumnModel().getColumn(i).setCellRenderer(new MonthTableCellRenderer());
 		}
-		
+
 		monthPanel = new JPanel();
 		monthPanel.setSize(600, 500);
 		JScrollPane jsp = new JScrollPane(monthTable);
 		jsp.setPreferredSize(new Dimension(800,407));
 		monthPanel.add(jsp);
-		
+
 		title = months[currentMonth]+", "+currentYear;
 	}
 	private void refreshCalendar() {
@@ -100,11 +100,11 @@ public class MonthView implements CalendarView{
 					, row, column);
 		}
 	}
-	
+
 	public JPanel getPanel(){
 		return monthPanel;
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}
