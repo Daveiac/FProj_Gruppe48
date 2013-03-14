@@ -29,7 +29,7 @@ public class MonthView implements CalendarView{
 		JFrame frame = new JFrame("monthView test: ");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setContentPane(mw.getPanel());
-		frame.setSize(700, 400);
+		frame.setSize(700, 600);
 		frame.setVisible(true);
 		}
 	
@@ -60,7 +60,7 @@ public class MonthView implements CalendarView{
 		};
 		monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		monthTable.setRowSelectionAllowed(false);
-		monthTable.setRowHeight(42);
+		monthTable.setRowHeight(64);
 		monthTable.getColumnModel().getColumn(0).setPreferredWidth(10);
 		for (int i = 1; i < 8; i++) {
 			monthTable.getColumnModel().getColumn(i).setCellRenderer(new MonthTableCellRenderer());
@@ -69,7 +69,7 @@ public class MonthView implements CalendarView{
 		monthPanel = new JPanel();
 		monthPanel.setSize(600, 500);
 		JScrollPane jsp = new JScrollPane(monthTable);
-		jsp.setPreferredSize(new Dimension(800,500));
+		jsp.setPreferredSize(new Dimension(800,407));
 		monthPanel.add(jsp);
 		
 		title = months[currentMonth]+", "+currentYear;
