@@ -3,6 +3,7 @@ package data;
 public class Meeting {
 	private int meetingID;
 	private String title;
+	private String location;
 	private long startTime;
 	private long endTime;
 	private String description;
@@ -11,11 +12,12 @@ public class Meeting {
 	private Person creator;
 	
 	
-	public Meeting(int meetingID, String title, long startTime, long endTime,
+	public Meeting(int meetingID, String title, String location, long startTime, long endTime,
 			String description, Team team, MeetingRoom room, Person creator) {
 		super();
 		this.meetingID = meetingID;
 		this.title = title;
+		this.location = location;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.description = description;
@@ -32,6 +34,11 @@ public class Meeting {
 	public String getTitle() {
 		return title;
 	}
+	
+	public String getLocation() {
+		return location;
+	}
+
 
 	public long getStartTime() {
 		return startTime;

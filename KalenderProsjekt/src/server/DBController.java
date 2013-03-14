@@ -156,7 +156,7 @@ public class DBController {
 		
 		String sql = "INSERT INTO Meeting (title, startTime, endTime, description, username, teamID) ";
 		sql += "VALUES ";
-		sql += "( " + meeting.getTitle() + ", " +meeting.getStartTime() + ", "
+		sql += "( " + meeting.getTitle() + ", " +meeting.getLocation() + ", " +meeting.getStartTime() + ", "
 				+ meeting.getEndTime() + ", '" + meeting.getDescription()
 				+ "', '";
 		sql += meeting.getCreator().getUsername() + "', ";
@@ -195,7 +195,8 @@ public class DBController {
 
 	private Meeting getMeetingFromResultSet(ResultSet rs) throws SQLException {
 		Team team = getTeam(rs.getInt("teamID"));
-		return new Meeting(rs.getInt("meetingID"), rs.getString("title"), rs.getLong("startTime"),
+		return new Meeting(rs.getInt("meetingID"), rs.getString("title"),
+				rs.getString("location"), rs.getLong("startTime"),
 				rs.getLong("endTime"), rs.getString("description"), team,
 				new MeetingRoom(100), getPerson(rs.getString("username")));
 	}
