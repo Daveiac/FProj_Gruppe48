@@ -23,25 +23,13 @@ public class WeekView extends JPanel implements CalendarView {
 
 	private GregorianCalendar calendar;
 	private String title;
+	private String[] days;
 
 	public WeekView() {
-
-		SimpleDateFormat weekFormat = new SimpleDateFormat("EEEEEEE dd. MMM.");
-
 		calendar = new GregorianCalendar();
 
-		title = calendar.get(GregorianCalendar.WEEK_OF_YEAR) + "," + calendar.get(GregorianCalendar.MONTH) + "," + calendar.get(GregorianCalendar.YEAR);
-		int dayOfWeek = -calendar.get(GregorianCalendar.DAY_OF_WEEK) + 2;
-		calendar.add(GregorianCalendar.DAY_OF_WEEK, dayOfWeek);
+		createWeek();
 
-
-		String[] days = new String[8];
-		days[0] = "Tid";
-		for (int i = 1; i < 8; i++) {
-			days[i] = weekFormat.format(calendar.getTime());
-			calendar.add(Calendar.DAY_OF_MONTH, 1);
-		}
-		
 		DefaultTableModel tableModel = new DefaultTableModel(days, 24);
 		for (int i = 0; i < 24; i++) {
 			String time = String.format("%02d", i) + ":00";
@@ -76,7 +64,20 @@ public class WeekView extends JPanel implements CalendarView {
 	}
 
 	public void createWeek() {
-		
+
+		int startOfWeek = -calendar.get(GregorianCalendar.DAY_OF_WEEK) + 2;
+		calendar.add(GregorianCalendar.DAY_OF_WEEK, startOfWeek);
+
+		SimpleDateFormat titlekFormat = new SimpleDateFormat("ww, MMMMM yyyy");
+		title = "Uke " + titlekFormat.format(calendar.getTime());
+
+		SimpleDateFormat weekFormat = new SimpleDateFormat("EEEEEEE dd. MMM.");
+		days = new String[8];
+		days[0] = "Tid";
+		for (int i = 1; i < 8; i++) {
+			days[i] = weekFormat.format(calendar.getTime());
+			calendar.add(Calendar.DAY_OF_MONTH, 1);
+		}
 	}
 
 	@Override
