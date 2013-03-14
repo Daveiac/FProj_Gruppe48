@@ -8,13 +8,14 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import networking.packages.NetworkRequest;
+import networking.packages.ReceivedRequest;
 
 public class RequestListener implements Runnable {
 	private Socket clientSocket;
-	private BlockingQueue<NetworkRequest> queue;
+	private BlockingQueue<ReceivedRequest> queue;
 
 	public RequestListener(Socket clientSocket,
-			BlockingQueue<NetworkRequest> queue) {
+			BlockingQueue<ReceivedRequest> queue) {
 		super();
 		this.clientSocket = clientSocket;
 		this.queue = queue;
@@ -34,7 +35,8 @@ public class RequestListener implements Runnable {
 			while ((request = (NetworkRequest) in.readObject()) != null) {
 				OutputController.output("Received a new request ["
 						+ request.toString() + "]");
-				while (!queue.offer(request, 200, TimeUnit.MILLISECONDS));
+				ReceivedRequest rRequest = new ReceivedRequest(request, clientSocket);
+				while (!queue.offer(rRequest, 200, TimeUnit.MILLISECONDS));
 				in = new ObjectInputStream(clientSocket.getInputStream());
 			}
 		} catch (IOException | InterruptedException | ClassNotFoundException e) {

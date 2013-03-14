@@ -5,41 +5,49 @@ import java.util.concurrent.BlockingQueue;
 
 import networking.packages.AuthenticationRequest;
 import networking.packages.AuthenticationResponse;
+import networking.packages.AuthenticationResponse.AuthenticationResponseType;
 import networking.packages.NetworkRequest;
+import networking.packages.ReceivedRequest;
 import data.Person;
 
 public class ServerRequestHandler implements Runnable{
 	/**
 	 * Will listen to a blockingqueue and when it is populated 
 	 */
-	BlockingQueue<NetworkRequest> requests;
+	BlockingQueue<ReceivedRequest> requests;
 	private DBController dbController;
 	
-	public ServerRequestHandler(BlockingQueue<NetworkRequest> requests){
+	public ServerRequestHandler(BlockingQueue<ReceivedRequest> requests){
 		dbController = new DBController();
 		this.requests = requests;
 	}
 	
 	private AuthenticationResponse handleAuthenticationRequest(AuthenticationRequest aRequest){
-		if(dbController.personExists(aRequest.getUsername())){
-			if(dbController.authenticateUser(aRequest.getUsername(), aRequest.getPassword())){
-				
+		try {
+			if(dbController.personExists(aRequest.getUsername())){
+				if(dbController.authenticateUser(aRequest.getUsername(), aRequest.getPassword())){
+					return new AuthenticationResponse(AuthenticationResponseType.APPROVED);
+				}
+				return new AuthenticationResponse(AuthenticationResponseType.WRONG_PASS);
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		return new AuthenticationResponse(AuthenticationResponseType.USER_NOEXIST);
 		
 	}
 	
-	private void processRequest(NetworkRequest request) {
-		switch(request.getEventType()){
+	private void processRequest(ReceivedRequest request) {
+		switch(request.networkRequest.getEventType()){
 		case AUTHENTICATION:
-			handleAuthenticationRequest((AuthenticationRequest) request);
+			handleAuthenticationRequest((AuthenticationRequest) request.networkRequest);
 			break;
 		case LOGOUT:
 			break;
 		case QUERY:
 			break;
 		default:
-			OutputController.output("Received a requst, but unable to determine type: " + request);
+			OutputController.output("Received a request, but unable to determine type: " + request);
 			break;
 		}
 	}

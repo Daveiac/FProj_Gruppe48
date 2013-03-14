@@ -6,6 +6,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import networking.ConnectionListener;
 import networking.packages.NetworkRequest;
+import networking.packages.ReceivedRequest;
 
 
 public class Server extends Thread{
@@ -15,11 +16,11 @@ public class Server extends Thread{
 	 */
 	
 	private BlockingQueue<Socket> newClientQueue;
-	private BlockingQueue<NetworkRequest> requestQueue;
+	private BlockingQueue<ReceivedRequest> requestQueue;
 	
 	public Server(){
 		newClientQueue = new LinkedBlockingQueue<Socket>();
-		requestQueue = new LinkedBlockingQueue<NetworkRequest>();
+		requestQueue = new LinkedBlockingQueue<ReceivedRequest>();
 		initializeServer();
 	}
 	
