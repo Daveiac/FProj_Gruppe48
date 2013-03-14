@@ -1,4 +1,4 @@
-package networking.requests;
+package networking.packages;
 
 import java.net.Socket;
 

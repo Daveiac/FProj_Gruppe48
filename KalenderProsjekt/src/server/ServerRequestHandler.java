@@ -2,7 +2,7 @@ package server;
 
 import java.util.concurrent.BlockingQueue;
 
-import networking.requests.NetworkRequest;
+import networking.packages.NetworkRequest;
 
 public class ServerRequestHandler implements Runnable{
 	/**

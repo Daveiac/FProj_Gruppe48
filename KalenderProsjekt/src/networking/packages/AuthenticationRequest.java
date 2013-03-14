@@ -1,4 +1,4 @@
-package networking.requests;
+package networking.packages;
 
 public class AuthenticationRequest extends NetworkRequest{
 	/**

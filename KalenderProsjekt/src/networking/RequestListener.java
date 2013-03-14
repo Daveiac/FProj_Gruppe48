@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import networking.requests.NetworkRequest;
+import networking.packages.NetworkRequest;
 
 public class RequestListener implements Runnable{
 	Socket clientSocket;
