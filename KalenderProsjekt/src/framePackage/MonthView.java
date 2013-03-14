@@ -43,7 +43,7 @@ public class MonthView implements CalendarView{
 		GregorianCalendar cal =  new GregorianCalendar();
 		
 		tableModel = new DefaultTableModel();
-		String[] headers = {"Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag","Søndag"};
+		String[] headers = {"Uke", "Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag","Søndag"};
 		tableModel.setColumnIdentifiers(headers);
 		tableModel.setRowCount(6);
 		
@@ -61,7 +61,8 @@ public class MonthView implements CalendarView{
 		monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		monthTable.setRowSelectionAllowed(false);
 		monthTable.setRowHeight(42);
-		for (int i = 0; i < 7; i++) {
+		monthTable.getColumnModel().getColumn(0).setPreferredWidth(10);
+		for (int i = 1; i < 8; i++) {
 			monthTable.getColumnModel().getColumn(i).setCellRenderer(new MonthTableCellRenderer());
 		}
 		
@@ -74,22 +75,26 @@ public class MonthView implements CalendarView{
 		title = months[currentMonth]+", "+currentYear;
 	}
 	private void refreshCalendar() {
-		int nDays, monthStart;
+		int nDays, monthStart, weekStart;
 		title = months[currentMonth]+", "+currentYear;
 		GregorianCalendar cal = new GregorianCalendar(currentYear, currentMonth, 1);
 		nDays = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
 		monthStart = cal.get(GregorianCalendar.DAY_OF_WEEK);
 		monthStart = (monthStart == 1) ? 6 : monthStart-2;
+		weekStart = cal.get(GregorianCalendar.WEEK_OF_YEAR);
 		// Clear table
 		for (int i = 0; i < 6; i++) {
-			for (int j = 0; j < 7; j++) {
+			for (int j = 0; j < 8; j++) {
 				tableModel.setValueAt(null, i, j);
 			}
 		}
 		//Draw calendar
+		for (int i = 0; i < 6; i++) {
+			tableModel.setValueAt(weekStart+i, i, 0);			
+		}
 		for (int i=0; i<=nDays; i++){
 			int row = new Integer((i+monthStart)/7);
-			int column  =  (i+monthStart)%7 ;
+			int column  =  (i+monthStart)%7 +1 ;
 			tableModel.setValueAt(
 					new JList<String>(new String[]{i+1+". "+"Møte 1","AvtaleYO","zomg"})
 					, row, column);
