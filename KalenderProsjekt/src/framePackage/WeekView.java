@@ -3,6 +3,8 @@ package framePackage;
 import java.awt.Dimension;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.swing.*;
@@ -34,7 +36,7 @@ public class WeekView extends JPanel implements CalendarView {
 		ArrayList<Meeting> meetings = new ArrayList<Meeting>();
 		ArrayList<Person> members = new ArrayList<Person>();
 		Team team = new Team(0, null, members);
-		MeetingRoom room = new MeetingRoom(0);
+		MeetingRoom room = new MeetingRoom("0");
 		Person creator = new Person(null, 00000000, "Dav", "Hov", "dave", "1234");
 		members.add(creator);
 		long startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
@@ -67,12 +69,17 @@ public class WeekView extends JPanel implements CalendarView {
 	 */
 	public void createWeek() {
 
+		// sets this week's title
 		SimpleDateFormat titleFormat = new SimpleDateFormat("ww, MMMMM yyyy");
 		title = "Uke " + titleFormat.format(calendar.getTime());
 
-		int startOfWeek = -calendar.get(GregorianCalendar.DAY_OF_WEEK) + 2;
-		calendar.add(GregorianCalendar.DAY_OF_WEEK, startOfWeek);
+		// saves this day
+		int thisDayOfWeek = calendar.get(GregorianCalendar.DAY_OF_WEEK);
+		// sets the day to monday
+		int firstDayOfWeek = -calendar.get(GregorianCalendar.DAY_OF_WEEK) + 2;
+		calendar.add(GregorianCalendar.DAY_OF_WEEK, firstDayOfWeek);
 
+		// sets table headers with corresponding days
 		SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE dd. MMM.");
 		String[] days = new String[8];
 		days[0] = "Tid";
@@ -80,15 +87,38 @@ public class WeekView extends JPanel implements CalendarView {
 			days[i] = weekFormat.format(calendar.getTime());
 			calendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
 		}
-		calendar.add(GregorianCalendar.WEEK_OF_YEAR, -1);
+
+		// sets the day today
+		thisDayOfWeek -= 9;
+		calendar.add(GregorianCalendar.DAY_OF_WEEK, thisDayOfWeek);
+
+		// creates a table model
 		tableModel = new DefaultTableModel(days, 24);
-		tableWeek.setModel(tableModel);
+
+		// ---------------------------------------------
+		// WEIRD
+		// ---------------------------------------------
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+		int firstHourOfDay = calendar.get(GregorianCalendar.HOUR_OF_DAY);
+		int firstMinuteofHour = calendar.get(GregorianCalendar.MINUTE);
+//		int year = calendar.get(Calendar.YEAR);
+//		int month = calendar.get(Calendar.MONTH);
+//		int date = calendar.get(Calendar.DATE);
+//		calendar.set(year, month, date, 0, 0, 0);
+		System.out.println(firstHourOfDay);
+		System.out.println(GregorianCalendar.HOUR_OF_DAY);
+		System.out.println(timeFormat.format(calendar.getTime()));
+
+		calendar.add(GregorianCalendar.HOUR_OF_DAY, firstHourOfDay);
 
 		for (int i = 0; i < 24; i++) {
-			String time = String.format("%02d", i) + ":00";
+			//			String time = String.format("%02d", i) + ":00";
+			String time = timeFormat.format(calendar.getTime());
 			tableModel.setValueAt(time, i, 0);
+			calendar.add(GregorianCalendar.HOUR_OF_DAY, 1);
 		}
 
+		tableWeek.setModel(tableModel);
 		tableWeek.getColumnModel().getColumn(0).setPreferredWidth(0);
 		tableWeek.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableWeek.setRowSelectionAllowed(false);
