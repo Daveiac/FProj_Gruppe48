@@ -8,14 +8,16 @@ import java.util.concurrent.TimeUnit;
 
 import server.OutputController;
 
+public class ConnectionListener implements Runnable {
 
-public class ConnectionListener implements Runnable{
-	
 	BlockingQueue<Socket> clients;
-	
-	
-	
-	public void run(){
+
+	public ConnectionListener(BlockingQueue<Socket> clients) {
+		super();
+		this.clients = clients;
+	}
+
+	public void run() {
 		ServerSocket serverSocket = null;
 		try {
 			serverSocket = new ServerSocket(Constants.port);
@@ -27,7 +29,8 @@ public class ConnectionListener implements Runnable{
 			Socket clientSocket = null;
 			try {
 				clientSocket = serverSocket.accept();
-				while(clients.offer(clientSocket, 200, TimeUnit.MILLISECONDS));
+				while (!clients.offer(clientSocket, 200, TimeUnit.MILLISECONDS))
+					;
 			} catch (IOException | InterruptedException e) {
 				OutputController.output("Client tried to connect: failed");
 				break;
@@ -39,6 +42,6 @@ public class ConnectionListener implements Runnable{
 				serverSocket.close();
 		} catch (IOException e) {
 		}
-		
+
 	}
 }
