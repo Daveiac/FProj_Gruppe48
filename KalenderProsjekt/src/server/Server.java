@@ -5,7 +5,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import networking.ConnectionListener;
-import networking.RequestListener;
 import networking.packages.NetworkRequest;
 
 
@@ -15,18 +14,17 @@ public class Server extends Thread{
 	 * will spawn new listener-threads
 	 */
 	
-	private DBController dbController;
 	private BlockingQueue<Socket> newClientQueue;
 	private BlockingQueue<NetworkRequest> requestQueue;
 	
 	public Server(){
-		dbController = new DBController();
 		newClientQueue = new LinkedBlockingQueue<Socket>();
+		requestQueue = new LinkedBlockingQueue<NetworkRequest>();
 		initializeServer();
 	}
 	
 	private void initializeServer(){
-		Thread connectionListener = new Thread(new ConnectionListener());
+		Thread connectionListener = new Thread(new ConnectionListener(newClientQueue));
 		connectionListener.start();
 		
 		
@@ -36,7 +34,9 @@ public class Server extends Thread{
 	public void run(){
 		while(true){
 			try {
+				System.out.println(newClientQueue);
 				Socket nClient = newClientQueue.take();
+				OutputController.output("spawning new RequestListener thread");
 				(new Thread(new RequestListener(nClient, requestQueue))).start();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

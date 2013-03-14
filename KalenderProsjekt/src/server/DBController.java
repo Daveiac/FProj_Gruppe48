@@ -34,6 +34,20 @@ public class DBController {
 		}
 	}
 	
+	public boolean authenticateUser(String username, String password) throws SQLException{
+		String sql = String.format(
+				"SELECT * FROM Person " +
+				"WHERE username = '%s' " +
+				"AND passwd = '%s'", username, password);
+		return dBConn.makeQuery(sql).next();
+	}
+	
+	public boolean personExists(String username) throws SQLException{
+		ResultSet rs = dBConn.makeQuery(String.format(
+				"SELECT * FROM Person " +
+				"WHERE username = '%s'", username));
+		return rs.next();
+	}
 	
 	public void addMemberOf(String username, int teamID) throws SQLException{
 		String sql = "INSERT INTO memberOF (teamID, username) ";
@@ -65,18 +79,18 @@ public class DBController {
 		
 	}
 	
-	public MeetingRoom getMeetingRoom(int roomID) throws SQLException{
+	public MeetingRoom getMeetingRoom(String roomName) throws SQLException{
 		String sql = String.format(
 				"SELECT * FROM MeetingRoom " +
-				"WHERE MeetingRoom.roomID = %d", roomID);
+				"WHERE MeetingRoom.roomName = %d", roomName);
 		ResultSet rs = dBConn.makeQuery(sql);
 		rs.next();
-		return new MeetingRoom(rs.getInt("roomID"));
+		return new MeetingRoom(rs.getString("roomName"));
 	}
 	
 	private Reservation getReservationFromResultSet(ResultSet rs) throws SQLException{
 		Meeting meeting = getMeeting(rs.getInt("meetingID"));
-		MeetingRoom meetingRoom = getMeetingRoom(rs.getInt("roomID"));
+		MeetingRoom meetingRoom = getMeetingRoom(rs.getString("roomName"));
 		TimeInterval timeInterval = new TimeInterval(rs.getLong("startTime"), rs.getLong("endTime"));
 		return new Reservation(timeInterval, meetingRoom, meeting);
 	}
@@ -111,7 +125,7 @@ public class DBController {
 	public List<Reservation> getReservationsForMeetingRoom(MeetingRoom room) throws SQLException{
 		String sql = String.format(
 				"SELECT * FROM reservation " +
-				"WHERE reservation.roomID = %d;",room.getRoomID());
+				"WHERE reservation.roomName = '%s';",room.getRoomName());
 		ResultSet rs = dBConn.makeQuery(sql);
 		List<Reservation> reservations = new ArrayList<Reservation>();
 		while(rs.next()){
@@ -156,7 +170,7 @@ public class DBController {
 		
 		String sql = "INSERT INTO Meeting (title, startTime, endTime, description, username, teamID) ";
 		sql += "VALUES ";
-		sql += "( " + meeting.getTitle() + ", " +meeting.getLocation() + ", " +meeting.getStartTime() + ", "
+		sql += "( '" + meeting.getTitle() + "', '" +meeting.getLocation() + "', " +meeting.getStartTime() + ", "
 				+ meeting.getEndTime() + ", '" + meeting.getDescription()
 				+ "', '";
 		sql += meeting.getCreator().getUsername() + "', ";
@@ -198,7 +212,7 @@ public class DBController {
 		return new Meeting(rs.getInt("meetingID"), rs.getString("title"),
 				rs.getString("location"), rs.getLong("startTime"),
 				rs.getLong("endTime"), rs.getString("description"), team,
-				new MeetingRoom(100), getPerson(rs.getString("username")));
+				new MeetingRoom("100"), getPerson(rs.getString("username")));
 	}
 
 	private Team getTeamFromResultSet(ResultSet rs) throws SQLException {
