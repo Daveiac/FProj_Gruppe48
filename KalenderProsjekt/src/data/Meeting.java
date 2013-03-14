@@ -2,6 +2,7 @@ package data;
 
 public class Meeting {
 	private int meetingID;
+	private String title;
 	private long startTime;
 	private long endTime;
 	private String description;
@@ -10,10 +11,11 @@ public class Meeting {
 	private Person creator;
 	
 	
-	public Meeting(int meetingID, long startTime, long endTime,
+	public Meeting(int meetingID, String title, long startTime, long endTime,
 			String description, Team team, MeetingRoom room, Person creator) {
 		super();
 		this.meetingID = meetingID;
+		this.title = title;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.description = description;
@@ -27,6 +29,9 @@ public class Meeting {
 		return meetingID;
 	}
 
+	public String getTitle() {
+		return title;
+	}
 
 	public long getStartTime() {
 		return startTime;
@@ -64,6 +69,8 @@ public class Meeting {
 				+ ", team=" + team + ", room=" + room + ", creator=" + creator
 				+ "]";
 	}
+
+
 
 
 
