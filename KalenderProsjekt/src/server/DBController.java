@@ -34,6 +34,20 @@ public class DBController {
 		}
 	}
 	
+	public boolean authenticateUser(String username, String password) throws SQLException{
+		String sql = String.format(
+				"SELECT * FROM Person " +
+				"WHERE username = '%s' " +
+				"AND passwd = '%s'", username, password);
+		return dBConn.makeQuery(sql).next();
+	}
+	
+	public boolean personExists(String username) throws SQLException{
+		ResultSet rs = dBConn.makeQuery(String.format(
+				"SELECT * FROM Person " +
+				"WHERE username = '%s'", username));
+		return rs.next();
+	}
 	
 	public void addMemberOf(String username, int teamID) throws SQLException{
 		String sql = "INSERT INTO memberOF (teamID, username) ";
@@ -156,7 +170,7 @@ public class DBController {
 		
 		String sql = "INSERT INTO Meeting (title, startTime, endTime, description, username, teamID) ";
 		sql += "VALUES ";
-		sql += "( " + meeting.getTitle() + ", " +meeting.getLocation() + ", " +meeting.getStartTime() + ", "
+		sql += "( '" + meeting.getTitle() + "', '" +meeting.getLocation() + "', " +meeting.getStartTime() + ", "
 				+ meeting.getEndTime() + ", '" + meeting.getDescription()
 				+ "', '";
 		sql += meeting.getCreator().getUsername() + "', ";
