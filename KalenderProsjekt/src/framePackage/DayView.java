@@ -1,99 +1,65 @@
 package framePackage;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.Dimension;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
-public class DayView implements CalendarView{
-	
-	private JPanel view;
-	private JLabel lbltid;
-	private Date date;
-	private JLabel lbldayInWeek;
-	private JLabel lbltime;
-	private JButton hourButton;
-	private ArrayList<JButton> buttonList = new ArrayList<JButton>();
+@SuppressWarnings("serial")
+public class DayView extends JPanel implements CalendarView {
+
+	private GregorianCalendar calendar;
 	private String title;
-	private Dato dato;
-	
-	
-	public static void main(String[] args) {
-		DayView dw = new DayView();
-		JFrame frame = new JFrame("Day view test");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setContentPane( dw.getDayView());
-		frame.setSize(600, 500);
-		frame.setVisible(true);
-		
-	}
+	private DefaultTableModel tableModel;
+	private JTable tableDay;
 
 	public DayView() {
-		date = new Date();
-		dato = new Dato();
-		initialize();
+		calendar = new GregorianCalendar();
+
+		tableDay = new JTable() {
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				return false;
+			}
+		};
+
+		createDay();
+
+		JScrollPane scrollPane = new JScrollPane(tableDay);
+		scrollPane.setPreferredSize(new Dimension(800, 407));
+
+		add(scrollPane);
 	}
 
-	private void initialize(){
-		title =dato.getDay() +"."+dato.getMonth();
-		view =  new JPanel(new GridBagLayout());
-		GridBagConstraints dayViewContraints = new GridBagConstraints();
-		
-		lbldayInWeek = new JLabel(getDayInWeek());
-		dayViewContraints.gridx = 1;
-		dayViewContraints.gridy = 0;
-		dayViewContraints.anchor = GridBagConstraints.LINE_START;
-		view.add(lbldayInWeek,dayViewContraints);
-		
-		lbltid = new JLabel("Tid: ");
-		dayViewContraints.gridx = 0;
-		dayViewContraints.gridy = 0;
-		dayViewContraints.anchor = GridBagConstraints.LINE_START;
-		view.add(lbltid, dayViewContraints);
-		
-		for (int i=0;i<24;i++){
-			if(i>9){
-				lbltime = new JLabel(i+ ":00");
-			}
-			else{
-				lbltime = new JLabel("0" +i+ ":00");
-			}
-			dayViewContraints.gridx = 0;
-			dayViewContraints.gridy = i+1;
-			view.add(lbltime, dayViewContraints);
-		}
-		dayViewContraints.fill = GridBagConstraints.HORIZONTAL;
-		dayViewContraints.weightx = 1;
-		dayViewContraints.anchor = GridBagConstraints.LINE_START;
-		for(int i=0;i<24;i++){
-			hourButton = new JButton("                                              ");
-			dayViewContraints.gridx = 1;
-			dayViewContraints.gridy = i+1;
-			buttonList.add(hourButton);
-			view.add(hourButton, dayViewContraints);
-		}
-		
-		
-	}
-	
-	public JPanel getDayView(){
-		return view;
-	}
-	
-	public String getDayInWeek(){
-		SimpleDateFormat dayInWeek = new SimpleDateFormat("EEEE");  
-		String week = dayInWeek.format(date);
-		return week;
-	}
+	public void createDay() {
 
-	public ArrayList<JButton> getButtonList() {
-		return buttonList;
+		SimpleDateFormat titleFormat = new SimpleDateFormat("dd. MMMMM");
+		title = titleFormat.format(calendar.getTime());
+
+		SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE");
+		String[] days = new String[2];
+		days[0] = "Tid";
+		days[1] = weekFormat.format(calendar.getTime());
+		tableModel = new DefaultTableModel(days, 24);
+		tableDay.setModel(tableModel);
+
+		for (int i = 0; i < 24; i++) {
+			String time = String.format("%02d", i) + ":00";
+			tableModel.setValueAt(time, i, 0);
+		}
+
+		tableDay.getColumnModel().getColumn(0).setPreferredWidth(0);
+		tableDay.getColumnModel().getColumn(1).setPreferredWidth(718);
+		tableDay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableDay.setRowSelectionAllowed(false);
 	}
 
 	@Override
@@ -102,22 +68,19 @@ public class DayView implements CalendarView{
 	}
 
 	@Override
-	public JPanel getPanel() {
-		return view;
-	}
-
-	@Override
 	public void next() {
-		// TODO Auto-generated method stub
-		
+		calendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
+		createDay();
 	}
 
 	@Override
 	public void prev() {
-		// TODO Auto-generated method stub
-		
+		calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
+		createDay();
 	}
-	
-	
-	
+
+	@Override
+	public JPanel getPanel() {
+		return this;
+	}
 }
