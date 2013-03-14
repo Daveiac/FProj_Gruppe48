@@ -22,6 +22,12 @@ public class AuthenticationRequest extends NetworkRequest{
 	public String getPassword() {
 		return password;
 	}
+
+	@Override
+	public String toString() {
+		return "AuthenticationRequest [username=" + username + ", password="
+				+ password + "]";
+	}
 	
 	
 }
