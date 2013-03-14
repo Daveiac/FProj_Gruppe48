@@ -1,6 +1,8 @@
-package networking.packages;
+package server;
 
 import java.net.Socket;
+
+import networking.packages.NetworkRequest;
 
 public class ReceivedRequest {
 	public final NetworkRequest networkRequest;

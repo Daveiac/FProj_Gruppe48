@@ -7,7 +7,6 @@ import networking.packages.AuthenticationRequest;
 import networking.packages.AuthenticationResponse;
 import networking.packages.AuthenticationResponse.AuthenticationResponseType;
 import networking.packages.NetworkRequest;
-import networking.packages.ReceivedRequest;
 import data.Person;
 
 public class ServerRequestHandler implements Runnable{

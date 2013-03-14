@@ -8,7 +8,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import networking.packages.NetworkRequest;
-import networking.packages.ReceivedRequest;
 
 public class RequestListener implements Runnable {
 	private Socket clientSocket;

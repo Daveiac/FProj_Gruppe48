@@ -6,7 +6,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import networking.ConnectionListener;
 import networking.packages.NetworkRequest;
-import networking.packages.ReceivedRequest;
 
 
 public class Server extends Thread{
