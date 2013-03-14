@@ -69,7 +69,7 @@ public class MonthView implements CalendarView{
 		monthPanel = new JPanel();
 		monthPanel.setSize(600, 500);
 		JScrollPane jsp = new JScrollPane(monthTable);
-		jsp.setPreferredSize(new Dimension(650,275));
+		jsp.setPreferredSize(new Dimension(800,500));
 		monthPanel.add(jsp);
 		
 		title = months[currentMonth]+", "+currentYear;
