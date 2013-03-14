@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.util.GregorianCalendar;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -15,8 +14,6 @@ import javax.swing.table.DefaultTableModel;
 public class MonthView implements CalendarView{
 
 	private JTable monthTable;
-	private GregorianCalendar cal;
-	private JFrame frame;
 	private JPanel monthPanel;
 	private int realDay,realMonth,realYear,currentMonth,currentYear;
 	private DefaultTableModel tableModel;
