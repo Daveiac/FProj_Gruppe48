@@ -11,6 +11,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,28 +50,34 @@ public class DefaultView extends JPanel {
 	private int warningCounter = 1;
 
 	private JPanel timePanel;
-	private JLabel lbldate;
-	private JButton toYesterDay;
-	private JButton toTomorrow;
+	private JLabel calendarTitle;
+	private JButton prevBtn;
+	private JButton nextBtn;
 	private ButtonGroup dayWeekMonthSelect;
-	private JToggleButton day;
-	private JToggleButton week;
-	private JToggleButton month;
+	private JToggleButton dayBtn;
+	private JToggleButton weekBtn;
+	private JToggleButton monthBtn;
 	private Date date;
-	private JPanel mainView;
-	private DayView dayView;
+	private CalendarView mainView;
+	private DayView2 dayView;
+	private WeekView weekView;
+	private MonthView monthView;
 	private Dato dato;
+	private JPanel calendarPanel;
+	private GridBagConstraints timePanelContraints;
 
 	public static void main(String[] args) {
 		DefaultView dw = new DefaultView();
 		JFrame frame = dw.getFrame();
-		frame.setBounds(0, 0, 1024, 768);
+		frame.setBounds(0, 0, 1260, 768);
 		frame.setVisible(true);
 	}
 
 	public DefaultView() {
 		dato = new Dato();
-		dayView = new DayView(this);
+		dayView = new DayView2();
+		weekView = new WeekView();
+		monthView = new MonthView();
 		date = new Date();
 		initialize();
 	}
@@ -88,7 +96,7 @@ public class DefaultView extends JPanel {
 		
 		calendar = new JToggleButton("Kalender");
 		calendar.setSelected(true);
-		meeting = new JToggleButton("m鴗e");
+		meeting = new JToggleButton("møte");
 		calendarSelect = new ButtonGroup();
 		calendarSelect.add(calendar);
 		calendarSelect.add(meeting);
@@ -126,7 +134,7 @@ public class DefaultView extends JPanel {
 		calendarVisible.addItem("David Hovind");
 		calendarVisible.addItem("Aina Elisabeth Thunestveit");
 		calendarVisible.addItem("Christoffer Pram");
-		calendarVisible.addItem("H錵on Dissen");
+		calendarVisible.addItem("Håkon Dissen");
 		calendarVisible.addItem("Vegar Lerpoll");
 		calendarVisible.setSelectedItem(null);
 		sharedCalendarContraints.gridx = 0;
@@ -170,52 +178,57 @@ public class DefaultView extends JPanel {
 		backGroundConstraints.fill = GridBagConstraints.HORIZONTAL;
 		frame.add(timePanel, backGroundConstraints);
 		
-		GridBagConstraints timePanelContraints = new GridBagConstraints();
+		timePanelContraints = new GridBagConstraints();
 		
+		mainView = dayView;
 		JPanel prevNextPanel = new JPanel();
-		lbldate = new JLabel(dato.getDay()+"."+dato.getMonth());
-		toYesterDay = new JButton("<");
-		toTomorrow = new JButton(">");
-		prevNextPanel.add(toYesterDay);
-		prevNextPanel.add(lbldate);
-		prevNextPanel.add(toTomorrow);
+		calendarTitle = new JLabel(mainView.getTitle());
+		calendarTitle.setPreferredSize(new Dimension(100,20));
+		prevBtn = new JButton("<");
+		nextBtn = new JButton(">");
+		PrevNextListener prevNextListener = new PrevNextListener();
+		prevBtn.addActionListener(prevNextListener);
+		nextBtn.addActionListener(prevNextListener);
+		prevNextPanel.add(prevBtn);
+		prevNextPanel.add(calendarTitle);
+		prevNextPanel.add(nextBtn);
 		timePanelContraints.gridx = 0;
 		timePanelContraints.gridy = 0;
 		timePanelContraints.weightx = 1;
 		timePanel.add(prevNextPanel, timePanelContraints);
 		
-		mainView = getFocusPanel();
 		dayWeekMonthSelect = new ButtonGroup();
-		day = new JToggleButton("Dag");
-		week = new JToggleButton("Uke");
-		month = new JToggleButton("M錸ede");
-		dayWeekMonthSelect.add(day);
-		dayWeekMonthSelect.add(week);
-		dayWeekMonthSelect.add(month);
+		DayWeekMonthListener dwmListener = new DayWeekMonthListener(); 
+		dayBtn = new JToggleButton("Dag");
+		weekBtn = new JToggleButton("Uke");
+		monthBtn = new JToggleButton("Måned");
+		dayBtn.addActionListener(dwmListener);
+		weekBtn.addActionListener(dwmListener);
+		monthBtn.addActionListener(dwmListener);
+		dayWeekMonthSelect.add(dayBtn);
+		dayWeekMonthSelect.add(weekBtn);
+		dayWeekMonthSelect.add(monthBtn);
 		//setter inn if her for hva som skal v鎟e selected
-		day.setSelected(true);
+		dayBtn.setSelected(true);
 		timePanelContraints.weightx = 0;
 		timePanelContraints.gridx = 1;
 		timePanelContraints.gridy = 0;
-		timePanel.add(day, timePanelContraints);
+		timePanel.add(dayBtn, timePanelContraints);
 		timePanelContraints.gridx = 2;
 		timePanelContraints.gridy = 0;
-		timePanel.add(week, timePanelContraints);
+		timePanel.add(weekBtn, timePanelContraints);
 		timePanelContraints.gridx = 3;
 		timePanelContraints.gridy = 0;
-		timePanel.add(month, timePanelContraints);
+		timePanel.add(monthBtn, timePanelContraints);
 //		
-//		timePanelContraints.gridwidth = 5;
-//		timePanelContraints.fill = GridBagConstraints.HORIZONTAL;
-//		timePanelContraints.weightx = 1;
-//		timePanelContraints.gridx = 0;
-//		timePanelContraints.gridy = 1;
-//		timePanel.add(mainView, timePanelContraints);
+		timePanelContraints.gridwidth = 5;
+		timePanelContraints.fill = GridBagConstraints.HORIZONTAL;
+		timePanelContraints.weightx = 1;
+		timePanelContraints.gridx = 0;
+		timePanelContraints.gridy = 1;
+		calendarPanel = mainView.getPanel();
+		timePanel.add(calendarPanel, timePanelContraints);
 //		
-	}
-
-	private JPanel getFocusPanel() {
-		return dayView.getDayView();
 	}
 
 	public JFrame getFrame() {
@@ -229,5 +242,32 @@ public class DefaultView extends JPanel {
 		warning.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		warningCounter += 1;
 		return warning;
+	}
+	
+	private class PrevNextListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if(e.getSource() == prevBtn) {
+				mainView.prev();
+			} else {
+				mainView.next();
+			}
+			calendarTitle.setText(mainView.getTitle());
+		}
+	}
+	private class DayWeekMonthListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if(e.getSource() == dayBtn) {
+				mainView = dayView;
+			} else if(e.getSource() == weekBtn) {
+				mainView = weekView;
+			} else {
+				mainView = monthView;
+			}
+			calendarTitle.setText(mainView.getTitle());
+			timePanel.remove(calendarPanel);
+			calendarPanel = mainView.getPanel();
+			timePanel.add(calendarPanel, timePanelContraints);
+			timePanel.validate();
+		}
 	}
 }

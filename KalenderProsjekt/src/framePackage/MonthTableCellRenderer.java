@@ -15,7 +15,7 @@ class MonthTableCellRenderer extends DefaultTableCellRenderer {
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column) {
 		@SuppressWarnings("unchecked")
-		JList<String> list = (JList<String>) value;
+		JList<String> list =(JList<String>) value;
 		if (list != null) {
 			if (hasFocus) {
 				list.setBorder(lineBorder);

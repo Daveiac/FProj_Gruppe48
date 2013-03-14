@@ -14,35 +14,19 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-/**
- * 
- * @return title
- */
 @SuppressWarnings("serial")
-public class WeekView extends JPanel implements CalendarView {
+public class DayView2 extends JPanel implements CalendarView {
 
 	private GregorianCalendar calendar;
 	private String title;
-
-	public WeekView() {
+	public DayView2() {
 
 		SimpleDateFormat weekFormat = new SimpleDateFormat("EEEEEEE dd. MMM.");
-
 		calendar = new GregorianCalendar();
 
-		title = calendar.get(GregorianCalendar.WEEK_OF_YEAR) + "," + calendar.get(GregorianCalendar.MONTH) + "," + calendar.get(GregorianCalendar.YEAR);
-		int dayOfWeek = -calendar.get(GregorianCalendar.DAY_OF_WEEK) + 2;
-		calendar.add(GregorianCalendar.DAY_OF_WEEK, dayOfWeek);
-
-
-		String[] days = new String[8];
-		days[0] = "Tid";
-		for (int i = 1; i < 8; i++) {
-			days[i] = weekFormat.format(calendar.getTime());
-			calendar.add(Calendar.DAY_OF_MONTH, 1);
-		}
-		
-		DefaultTableModel tableModel = new DefaultTableModel(days, 24);
+		title = weekFormat.format(calendar.getTime());
+		String[] headers = {"Tid", title};
+		DefaultTableModel tableModel = new DefaultTableModel(headers, 24);
 		for (int i = 0; i < 24; i++) {
 			String time = String.format("%02d", i) + ":00";
 			tableModel.setValueAt(time, i, 0);
@@ -55,6 +39,7 @@ public class WeekView extends JPanel implements CalendarView {
 			}
 		};
 		tblWeeks.getColumnModel().getColumn(0).setPreferredWidth(0);
+		tblWeeks.getColumnModel().getColumn(1).setPreferredWidth(719);
 		tblWeeks.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tblWeeks.setRowSelectionAllowed(false);
 
@@ -65,9 +50,9 @@ public class WeekView extends JPanel implements CalendarView {
 	}
 
 	public static void main(String[] args) {
-		JFrame frame = new JFrame("Week View");
+		JFrame frame = new JFrame("Day View");
 
-		WeekView weekPanel = new WeekView();
+		DayView2 weekPanel = new DayView2();
 
 		frame.setContentPane(weekPanel);
 		frame.pack();
@@ -76,22 +61,22 @@ public class WeekView extends JPanel implements CalendarView {
 	}
 
 	public void createWeek() {
-		
+
 	}
 
 	@Override
-	public String getTitle(){
+	public String getTitle() {
 		return title;
 	}
 
 	@Override
 	public void next() {
-		calendar.get(GregorianCalendar.WEEK_OF_YEAR + 1);
+		//TODO
 	}
 
 	@Override
 	public void prev() {
-		calendar.get(GregorianCalendar.WEEK_OF_YEAR - 1);
+		//TODO
 	}
 
 	@Override

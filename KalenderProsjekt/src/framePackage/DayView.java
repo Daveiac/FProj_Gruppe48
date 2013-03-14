@@ -1,20 +1,17 @@
 package framePackage;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class DayView {
+public class DayView implements CalendarView{
 	
 	private JPanel view;
 	private JLabel lbltid;
@@ -23,13 +20,12 @@ public class DayView {
 	private JLabel lbltime;
 	private JButton hourButton;
 	private ArrayList<JButton> buttonList = new ArrayList<JButton>();
-	private JLabel title;
-	private DefaultView df;
+	private String title;
 	private Dato dato;
 	
 	
 	public static void main(String[] args) {
-		DayView dw = new DayView(new DefaultView());
+		DayView dw = new DayView();
 		JFrame frame = new JFrame("Day view test");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setContentPane( dw.getDayView());
@@ -38,14 +34,14 @@ public class DayView {
 		
 	}
 
-	public DayView(DefaultView defV) {
-		df = defV;
+	public DayView() {
 		date = new Date();
 		dato = new Dato();
 		initialize();
 	}
 
 	private void initialize(){
+		title =dato.getDay() +"."+dato.getMonth();
 		view =  new JPanel(new GridBagLayout());
 		GridBagConstraints dayViewContraints = new GridBagConstraints();
 		
@@ -90,11 +86,6 @@ public class DayView {
 		return view;
 	}
 	
-	public JLabel getTittle(){
-		title = new JLabel(dato.getDay() +"."+dato.getMonth());
-		return title;
-	}
-	
 	public String getDayInWeek(){
 		SimpleDateFormat dayInWeek = new SimpleDateFormat("EEEE");  
 		String week = dayInWeek.format(date);
@@ -103,6 +94,28 @@ public class DayView {
 
 	public ArrayList<JButton> getButtonList() {
 		return buttonList;
+	}
+
+	@Override
+	public String getTitle() {
+		return title;
+	}
+
+	@Override
+	public JPanel getPanel() {
+		return view;
+	}
+
+	@Override
+	public void next() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void prev() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
