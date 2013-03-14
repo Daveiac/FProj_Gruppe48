@@ -59,7 +59,7 @@ public class WeekView extends JPanel implements CalendarView {
 		tblWeeks.setRowSelectionAllowed(false);
 
 		JScrollPane scrollPane = new JScrollPane(tblWeeks);
-		scrollPane.setPreferredSize(new Dimension(800, 500));
+		scrollPane.setPreferredSize(new Dimension(800, 407));
 
 		add(scrollPane);
 	}
@@ -76,7 +76,7 @@ public class WeekView extends JPanel implements CalendarView {
 	}
 
 	public void createWeek() {
-
+		
 	}
 
 	@Override
