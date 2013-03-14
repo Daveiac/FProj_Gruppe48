@@ -3,9 +3,16 @@ package networking;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
+
+import server.OutputController;
 
 
 public class ConnectionListener implements Runnable{
+	
+	BlockingQueue<Socket> clients;
+	
 	
 	
 	public void run(){
@@ -13,16 +20,16 @@ public class ConnectionListener implements Runnable{
 		try {
 			serverSocket = new ServerSocket(Constants.port);
 		} catch (Exception e) {
-			System.out.println("Could not create socket");
+			OutputController.output("Could not create socket");
 			System.exit(0);
 		}
 		while (true) {
 			Socket clientSocket = null;
 			try {
 				clientSocket = serverSocket.accept();
-				//New client connected. Now do whatever!
-			} catch (IOException e) {
-				System.out.println("Client tried to connect: failed");
+				while(clients.offer(clientSocket, 200, TimeUnit.MILLISECONDS));
+			} catch (IOException | InterruptedException e) {
+				OutputController.output("Client tried to connect: failed");
 				break;
 			}
 
