@@ -1,9 +1,12 @@
 package server;
 
+import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
 
 import networking.packages.AuthenticationRequest;
+import networking.packages.AuthenticationResponse;
 import networking.packages.NetworkRequest;
+import data.Person;
 
 public class ServerRequestHandler implements Runnable{
 	/**
@@ -17,11 +20,16 @@ public class ServerRequestHandler implements Runnable{
 		this.requests = requests;
 	}
 	
-	private void handleAuthenticationRequest(AuthenticationRequest aRequest){
-		dbController.authenticatePerson()
+	private AuthenticationResponse handleAuthenticationRequest(AuthenticationRequest aRequest){
+		if(dbController.personExists(aRequest.getUsername())){
+			if(dbController.authenticateUser(aRequest.getUsername(), aRequest.getPassword())){
+				
+			}
+		}
+		
 	}
 	
-	private void processRequest(NetworkRequest request){
+	private void processRequest(NetworkRequest request) {
 		switch(request.getEventType()){
 		case AUTHENTICATION:
 			handleAuthenticationRequest((AuthenticationRequest) request);
