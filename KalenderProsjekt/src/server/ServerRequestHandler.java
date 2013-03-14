@@ -1,5 +1,8 @@
 package server;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
 
@@ -7,11 +10,12 @@ import networking.packages.AuthenticationRequest;
 import networking.packages.AuthenticationResponse;
 import networking.packages.AuthenticationResponse.AuthenticationResponseType;
 import networking.packages.NetworkRequest;
+import networking.packages.Response;
 import data.Person;
 
 public class ServerRequestHandler implements Runnable{
 	/**
-	 * Will listen to a blockingqueue and when it is populated 
+	 * Will listen to a blockingqueue and when it is populated handle the requests inside
 	 */
 	BlockingQueue<ReceivedRequest> requests;
 	private DBController dbController;
@@ -36,10 +40,24 @@ public class ServerRequestHandler implements Runnable{
 		
 	}
 	
+	private void sendResponse(Response response, Socket clientSocket){
+		ObjectOutputStream oos= null;
+		
+		try {
+			oos = new ObjectOutputStream(clientSocket.getOutputStream());
+			oos.writeObject(response);
+			OutputController.output("Responded to " + clientSocket.getInetAddress() + " with " + response);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private void processRequest(ReceivedRequest request) {
+		Response response = null;
 		switch(request.networkRequest.getEventType()){
 		case AUTHENTICATION:
-			handleAuthenticationRequest((AuthenticationRequest) request.networkRequest);
+			response = handleAuthenticationRequest((AuthenticationRequest) request.networkRequest);
 			break;
 		case LOGOUT:
 			break;
@@ -49,6 +67,8 @@ public class ServerRequestHandler implements Runnable{
 			OutputController.output("Received a request, but unable to determine type: " + request);
 			break;
 		}
+		sendResponse(response, request.clientSocket);
+		
 	}
 	
 	public void run(){
