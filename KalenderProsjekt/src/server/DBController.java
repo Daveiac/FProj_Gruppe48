@@ -104,15 +104,16 @@ public class DBController {
 		return getReservationFromResultSet(rs);
 	}
 	
+	
 	/*
 	 * Returns every meeting owned by this person
 	 */
-	public List<Meeting> getEveryMeetingForPerson(Person person)
+	public List<Meeting> getEveryMeetingOwnedByPerson(Person person)
 			throws SQLException {
 		List<Meeting> meetings = new ArrayList<Meeting>();
 
 		String sql = "SELECT * FROM Meeting, Person "
-				+ "WHERE Meeting.username = Person.username;";
+				+ "WHERE Meeting.username = " + person.getUsername();
 		ResultSet rs = dBConn.makeQuery(sql);
 
 		while (rs.next()) {

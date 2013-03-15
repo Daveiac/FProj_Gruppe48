@@ -14,6 +14,7 @@ import networking.packages.QueryRequest;
 import networking.packages.QueryResponse;
 import networking.packages.QueryResponse.QueryResponseType;
 import networking.packages.Response;
+import data.Alarm;
 import data.Meeting;
 import data.Notification;
 import data.Person;
@@ -29,7 +30,10 @@ public class ServerRequestHandler implements Runnable {
 	public ServerRequestHandler(BlockingQueue<ReceivedRequest> requests) {
 		dbController = new DBController();
 		this.requests = requests;
+		
 	}
+	
+	
 
 	private AuthenticationResponse handleAuthenticationRequest(
 			AuthenticationRequest aRequest) {
@@ -64,18 +68,19 @@ public class ServerRequestHandler implements Runnable {
 			e.printStackTrace();
 		}
 	}
-	
-	private QueryResponse getEveryPerson(){
+
+	private QueryResponse getEveryPerson() {
 		List<Person> data = null;
 		try {
 			data = dbController.getEveryPerson();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		QueryResponse response = new QueryResponse(data, QueryResponseType.NOTIFICATION_RESPONSE);
+		QueryResponse response = new QueryResponse(data,
+				QueryResponseType.NOTIFICATION_RESPONSE);
 		return response;
 	}
-	
+
 	private QueryResponse getNotificationsByMeeting(Meeting meeting) {
 		List<Notification> notifications = null;
 		try {
@@ -83,10 +88,36 @@ public class ServerRequestHandler implements Runnable {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		QueryResponse response = new QueryResponse(notifications, QueryResponseType.NOTIFICATION_RESPONSE);
+		QueryResponse response = new QueryResponse(notifications,
+				QueryResponseType.NOTIFICATION_RESPONSE);
 		return response;
 	}
-	
+
+	private QueryResponse getAlarms(String username) {
+		List<Alarm> data = null;
+		try {
+			data = dbController.getAlarmsOfPerson(username);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		QueryResponse response = new QueryResponse(data,
+				QueryResponseType.NOTIFICATION_RESPONSE);
+		return response;
+	}
+
+	private QueryResponse getMeetingsByPerson(String username) {
+		List<Meeting> data = null;
+		try {
+			data = dbController.getEveryMeetingOwnedByPerson(new Person(null,
+					0, null, null, username, null));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		QueryResponse response = new QueryResponse(data,
+				QueryResponseType.NOTIFICATION_RESPONSE);
+		return response;
+	}
+
 	private QueryResponse handleQueryRequest(QueryRequest request) {
 		QueryResponse response = null;
 
@@ -99,6 +130,11 @@ public class ServerRequestHandler implements Runnable {
 			break;
 		case GET_NOTIFICATIONS_BY_MEETING:
 			response = getNotificationsByMeeting(request.getMeeting());
+			break;
+		case GET_ALARMS_BY_PERSON:
+			response = getAlarms(request.getUsername());
+		case GET_EVERY_MEETING_BY_PERSON:
+			response = getMeetingsByPerson(request.getUsername());
 		default:
 			break;
 		}
@@ -114,7 +150,8 @@ public class ServerRequestHandler implements Runnable {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		QueryResponse response = new QueryResponse(notifications, QueryResponseType.NOTIFICATION_RESPONSE);
+		QueryResponse response = new QueryResponse(notifications,
+				QueryResponseType.NOTIFICATION_RESPONSE);
 		return response;
 	}
 
