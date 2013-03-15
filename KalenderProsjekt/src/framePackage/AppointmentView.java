@@ -50,10 +50,6 @@ public class AppointmentView {
 		};
 		meetingTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		meetingTable.setRowSelectionAllowed(false);
-		meetingTable.getColumnModel().getColumn(5).setCellRenderer(new ButtonTableCellRenderer());
-		meetingTable.getColumnModel().getColumn(6).setCellRenderer(new ButtonTableCellRenderer());
-		meetingTable.getColumnModel().getColumn(5).setCellEditor(new ButtonTableCellEditor())
-		meetingTable.getColumnModel().getColumn(6).setCellRenderer(new ButtonTableCellRenderer());
 //		meetingTable.setRowHeight(64);
 //		meetingTable.getColumnModel().getColumn(0).setPreferredWidth(10);
 //		for (int i = 1; i < 8; i++) {
