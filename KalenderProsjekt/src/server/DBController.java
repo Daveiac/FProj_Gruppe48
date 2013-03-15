@@ -290,9 +290,9 @@ public class DBController {
 	/*
 	 *Returns every notficiation corresponding to the Person. 
 	 */
-	public List<Notification> getNotifications(Person person) throws SQLException{
+	public List<Notification> getNotifications(String username) throws SQLException{
 		String sql = String.format("SELECT * FROM notification " +
-				"WHERE notification.username = %s", person.getUsername());
+				"WHERE notification.username = %s", username);
 		ResultSet rs = dBConn.makeQuery(sql);
 		List<Notification> notificationList = new ArrayList<Notification>();
 		while(rs.next()){
