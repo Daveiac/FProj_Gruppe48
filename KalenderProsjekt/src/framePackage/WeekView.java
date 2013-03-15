@@ -3,17 +3,12 @@ package framePackage;
 import java.awt.Dimension;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import data.Meeting;
-import data.MeetingRoom;
-import data.Person;
-import data.Team;
+import data.*;
 
 /**
  * This is the WeekView Panel that shows the week planner.
@@ -26,6 +21,9 @@ public class WeekView extends JPanel implements CalendarView {
 	private DefaultTableModel tableModel;
 	private JTable tableWeek;
 
+	//test code
+	ArrayList<Meeting> meetings;
+
 	/**
 	 * Constructs the WeekView Panel.
 	 */
@@ -33,7 +31,7 @@ public class WeekView extends JPanel implements CalendarView {
 		calendar = new GregorianCalendar();
 
 		// test code
-		ArrayList<Meeting> meetings = new ArrayList<Meeting>();
+		meetings = new ArrayList<Meeting>();
 		ArrayList<Person> members = new ArrayList<Person>();
 		Team team = new Team(0, null, members);
 		MeetingRoom room = new MeetingRoom("0");
@@ -57,6 +55,7 @@ public class WeekView extends JPanel implements CalendarView {
 		};
 
 		createWeek();
+		setMeetings(meetings);
 
 		JScrollPane scrollPane = new JScrollPane(tableWeek);
 		scrollPane.setPreferredSize(new Dimension(800, 407));
@@ -64,64 +63,91 @@ public class WeekView extends JPanel implements CalendarView {
 		add(scrollPane);
 	}
 
+	public void setMeetings(ArrayList<Meeting> meetings) {
+		for (Meeting meeting : meetings) {
+			GregorianCalendar mordi = new GregorianCalendar();
+			long startTime = meeting.getStartTime();
+			mordi.setTimeInMillis(startTime);
+
+			int startHour = mordi.get(GregorianCalendar.HOUR_OF_DAY);
+			int startMinute = mordi.get(GregorianCalendar.MINUTE);
+			int startRow = startHour * 4 + startMinute / 15;
+			int startColumn = mordi.get(GregorianCalendar.DAY_OF_WEEK) - 1;
+
+			long endTime = meeting.getEndTime();
+			mordi.setTimeInMillis(endTime);
+			int endHour = mordi.get(GregorianCalendar.HOUR_OF_DAY);
+			int endMinute = mordi.get(GregorianCalendar.MINUTE);
+			int endRow = endHour * 4 + endMinute / 15;
+			int endColumn = mordi.get(GregorianCalendar.DAY_OF_WEEK) - 1;
+
+			tableModel.setValueAt(42, startRow, startColumn);
+			tableModel.setValueAt("troll", endRow, endColumn);
+		}
+
+	}
+
 	/**
 	 * Creates a new week view.
 	 */
 	public void createWeek() {
 
-		// sets this week's title
+		// Sets this week's title
 		SimpleDateFormat titleFormat = new SimpleDateFormat("ww, MMMMM yyyy");
 		title = "Uke " + titleFormat.format(calendar.getTime());
 
-		// saves this day
+		// Saves this day
 		int thisDayOfWeek = calendar.get(GregorianCalendar.DAY_OF_WEEK);
-		// sets the day to monday
+		// Sets the day to Monday
 		int firstDayOfWeek = -calendar.get(GregorianCalendar.DAY_OF_WEEK) + 2;
 		calendar.add(GregorianCalendar.DAY_OF_WEEK, firstDayOfWeek);
 
-		// sets table headers with corresponding days
+		// Sets table headers with corresponding days
 		SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE dd. MMM.");
-		String[] days = new String[8];
+		int columns = 8;
+		String[] days = new String[columns];
 		days[0] = "Tid";
-		for (int i = 1; i < 8; i++) {
+		for (int i = 1; i < columns; i++) {
 			days[i] = weekFormat.format(calendar.getTime());
 			calendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
 		}
 
-		// sets the day today
+		// Sets the day today
 		thisDayOfWeek -= 9;
 		calendar.add(GregorianCalendar.DAY_OF_WEEK, thisDayOfWeek);
 
-		// creates a table model
-		tableModel = new DefaultTableModel(days, 24);
+		// Creates a table model
+		int quarters = 24 * 4;
+		tableModel = new DefaultTableModel(days, quarters);
 
-		// ---------------------------------------------
-		// WEIRD
-		// ---------------------------------------------
+		// Sets the clock every 15 minutes
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-		int firstHourOfDay = calendar.get(GregorianCalendar.HOUR_OF_DAY);
-		int firstMinuteofHour = calendar.get(GregorianCalendar.MINUTE);
-//		int year = calendar.get(Calendar.YEAR);
-//		int month = calendar.get(Calendar.MONTH);
-//		int date = calendar.get(Calendar.DATE);
-//		calendar.set(year, month, date, 0, 0, 0);
-		System.out.println(firstHourOfDay);
-		System.out.println(GregorianCalendar.HOUR_OF_DAY);
-		System.out.println(timeFormat.format(calendar.getTime()));
+		// Saves this hour and minute
+		int thisHourOfDay = calendar.get(GregorianCalendar.HOUR_OF_DAY);
+		calendar.add(GregorianCalendar.HOUR_OF_DAY, -thisHourOfDay);
+		int thisMinuteOfDay = calendar.get(GregorianCalendar.MINUTE);
+		calendar.add(GregorianCalendar.MINUTE, -thisMinuteOfDay);
 
-		calendar.add(GregorianCalendar.HOUR_OF_DAY, firstHourOfDay);
-
-		for (int i = 0; i < 24; i++) {
-			//			String time = String.format("%02d", i) + ":00";
+		for (int i = 0; i < quarters; i++) {
 			String time = timeFormat.format(calendar.getTime());
 			tableModel.setValueAt(time, i, 0);
-			calendar.add(GregorianCalendar.HOUR_OF_DAY, 1);
+			calendar.add(GregorianCalendar.MINUTE, 15);
 		}
 
+		// Sets this hour and minute
+		int hoursOfDay = 23;
+		thisHourOfDay -= hoursOfDay;
+		calendar.add(GregorianCalendar.HOUR_OF_DAY, thisHourOfDay);
+		int minutesOfHour = 60;
+		thisMinuteOfDay -= minutesOfHour;
+		calendar.add(GregorianCalendar.MINUTE, thisMinuteOfDay);
+
+		// Sets the new week into the table
 		tableWeek.setModel(tableModel);
 		tableWeek.getColumnModel().getColumn(0).setPreferredWidth(0);
 		tableWeek.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableWeek.setRowSelectionAllowed(false);
+		tableWeek.getSelectionModel();
 	}
 
 	/**
@@ -140,6 +166,7 @@ public class WeekView extends JPanel implements CalendarView {
 	public void next() {
 		calendar.add(GregorianCalendar.WEEK_OF_YEAR, 1);
 		createWeek();
+		setMeetings(meetings);
 	}
 
 	/**
@@ -149,6 +176,7 @@ public class WeekView extends JPanel implements CalendarView {
 	public void prev() {
 		calendar.add(GregorianCalendar.WEEK_OF_YEAR, -1);
 		createWeek();
+		setMeetings(meetings);
 	}
 
 	/**

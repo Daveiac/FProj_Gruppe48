@@ -2,6 +2,7 @@ package framePackage;
 
 import java.awt.Dimension;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javax.swing.*;
@@ -43,21 +44,45 @@ public class DayView extends JPanel implements CalendarView {
 	 */
 	public void createDay() {
 
+		// Sets this week's title
 		SimpleDateFormat titleFormat = new SimpleDateFormat("dd. MMMMM");
 		title = titleFormat.format(calendar.getTime());
 
+		// Sets table headers
 		SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE");
-		String[] days = new String[2];
+		int columns = 2;
+		String[] days = new String[columns];
 		days[0] = "Tid";
 		days[1] = weekFormat.format(calendar.getTime());
-		tableModel = new DefaultTableModel(days, 24);
-		tableDay.setModel(tableModel);
 
-		for (int i = 0; i < 24; i++) {
-			String time = String.format("%02d", i) + ":00";
+		// Creates a table model
+		int quarters = 24 * 4;
+		tableModel = new DefaultTableModel(days, quarters);
+
+		// Sets the clock every 15 minutes
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+		// Saves this hour and minute
+		int thisHourOfDay = calendar.get(GregorianCalendar.HOUR_OF_DAY);
+		calendar.add(GregorianCalendar.HOUR_OF_DAY, -thisHourOfDay);
+		int thisMinuteOfDay = calendar.get(GregorianCalendar.MINUTE);
+		calendar.add(GregorianCalendar.MINUTE, -thisMinuteOfDay);
+
+		for (int i = 0; i < quarters; i++) {
+			String time = timeFormat.format(calendar.getTime());
 			tableModel.setValueAt(time, i, 0);
+			calendar.add(GregorianCalendar.MINUTE, 15);
 		}
 
+		// Sets this hour and minute
+		int hoursOfDay = 23;
+		thisHourOfDay -= hoursOfDay;
+		calendar.add(GregorianCalendar.HOUR_OF_DAY, thisHourOfDay);
+		int minutesOfHour = 60;
+		thisMinuteOfDay -= minutesOfHour;
+		calendar.add(GregorianCalendar.MINUTE, thisMinuteOfDay);
+
+		// Sets the new week into the table
+		tableDay.setModel(tableModel);
 		tableDay.getColumnModel().getColumn(0).setPreferredWidth(0);
 		tableDay.getColumnModel().getColumn(1).setPreferredWidth(718);
 		tableDay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
