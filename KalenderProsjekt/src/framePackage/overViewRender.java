@@ -20,11 +20,20 @@ public class overViewRender extends DefaultListCellRenderer {
 	
 	public Component getListCellRendererComponent(JList list, Object value,
 			int index, boolean isSelected, boolean cellHasFocus) {
-		JLabel label = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+		JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 		Notification noti = (Notification) value;
 		
-		if() {
+		if(noti.getApproved() == 'y') {
 			label.setIcon(check);
+		}
+		if(noti.getApproved() == 'n'){
+			label.setIcon(cross);
+		}
+		if(noti.getApproved() == 'w'){
+			label.setIcon(question);
+		}
+		if(noti.getMeeting().getCreator() == noti.getPerson()){
+			label.setIcon(star);
 		}
 		label.setText(noti.getPerson().getFirstName() + noti.getPerson().getLastName());
 		return label;
