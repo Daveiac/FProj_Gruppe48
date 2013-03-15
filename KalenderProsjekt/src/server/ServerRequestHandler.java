@@ -10,6 +10,7 @@ import networking.packages.AuthenticationRequest;
 import networking.packages.AuthenticationResponse;
 import networking.packages.AuthenticationResponse.AuthenticationResponseType;
 import networking.packages.NetworkRequest;
+import networking.packages.QueryRequest;
 import networking.packages.Response;
 import data.Person;
 
@@ -53,6 +54,25 @@ public class ServerRequestHandler implements Runnable{
 		}
 	}
 	
+	private void handleQueryRequest(QueryRequest request){
+		Response response = null;
+		
+		switch(request.getQueryType()){
+		case GET_NOTIFICATIONS_BY_PERSON:
+			response = getNotificationsByPerson(request.getUsername());
+			break;
+		default:
+			break;
+		}
+		
+		
+	}
+	
+	private Response getNotificationsByPerson(String username) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	private void processRequest(ReceivedRequest request) {
 		Response response = null;
 		switch(request.networkRequest.getEventType()){
@@ -62,6 +82,7 @@ public class ServerRequestHandler implements Runnable{
 		case LOGOUT:
 			break;
 		case QUERY:
+			handleQueryRequest((QueryRequest) request.networkRequest);
 			break;
 		default:
 			OutputController.output("Received a request, but unable to determine type: " + request);

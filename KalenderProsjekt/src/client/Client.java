@@ -9,6 +9,8 @@ import java.net.UnknownHostException;
 import networking.Constants;
 import networking.packages.AuthenticationRequest;
 import networking.packages.NetworkRequest;
+import networking.packages.QueryRequest;
+import networking.packages.QueryRequest.QueryType;
 
 public class Client{
 	InetAddress serverAddress;
@@ -29,7 +31,8 @@ public class Client{
 	
 	public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException{
 		Client client = new Client(InetAddress.getByName(Constants.serverIP));
-		client.sendRequest(new AuthenticationRequest("haakondi", "pass"));
-		
+//		client.sendRequest(new AuthenticationRequest("haakondi", "pass"));
+		QueryRequest qReq = new QueryRequest("haakondi", null, QueryType.GET_NOTIFICATIONS_BY_PERSON);
+		client.sendRequest(qReq);
 	}
 }

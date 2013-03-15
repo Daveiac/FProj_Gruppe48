@@ -8,7 +8,6 @@ public class AuthenticationResponse extends Response{
 	private AuthenticationResponseType type;
 
 	public AuthenticationResponse(AuthenticationResponseType type) {
-		super();
 		this.type = type;
 	}
 
