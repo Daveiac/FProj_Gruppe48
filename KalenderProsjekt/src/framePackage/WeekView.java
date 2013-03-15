@@ -72,17 +72,36 @@ public class WeekView extends JPanel implements CalendarView {
 			int startHour = mordi.get(GregorianCalendar.HOUR_OF_DAY);
 			int startMinute = mordi.get(GregorianCalendar.MINUTE);
 			int startRow = startHour * 4 + startMinute / 15;
-			int startColumn = mordi.get(GregorianCalendar.DAY_OF_WEEK) - 1;
+			int day = mordi.get(GregorianCalendar.DAY_OF_WEEK) - 1;
 
 			long endTime = meeting.getEndTime();
 			mordi.setTimeInMillis(endTime);
 			int endHour = mordi.get(GregorianCalendar.HOUR_OF_DAY);
 			int endMinute = mordi.get(GregorianCalendar.MINUTE);
 			int endRow = endHour * 4 + endMinute / 15;
-			int endColumn = mordi.get(GregorianCalendar.DAY_OF_WEEK) - 1;
+			System.out.println(startHour + ", " + endHour);
+			System.out.println(startMinute + ", " + endMinute);
+			System.out.println(startRow + ", " + endRow);
+			System.out.println(startColumn + ", " + endColumn);
 
-			tableModel.setValueAt(42, startRow, startColumn);
-			tableModel.setValueAt("troll", endRow, endColumn);
+//			// Sets table headers with corresponding days
+//			SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE dd. MMM.");
+//			int columns = 8;
+//			String[] days = new String[columns];
+//			days[0] = "Tid";
+//			for (int i = 1; i < columns; i++) {
+//				days[i] = weekFormat.format(calendar.getTime());
+//				calendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
+//			}
+
+//			int daysOfWeek = 8;
+//			for (int day = 1; day < daysOfWeek; day++) {
+//				for (int time = 0; time < end; i++) {
+//					
+//				}
+//			}
+			tableModel.setValueAt(42, startRow, day);
+			tableModel.setValueAt("troll", endRow, day);
 		}
 
 	}
