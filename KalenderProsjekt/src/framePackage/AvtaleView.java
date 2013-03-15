@@ -269,9 +269,10 @@ public class AvtaleView extends JPanel {
 		slettDeltakerKnapp.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
-				listModel.remove(participantList.getSelectedIndex());
+				if(participantList.getSelectedValue()!=null){
+					listModel.remove(participantList.getSelectedIndex());
 			}
-		});
+		}});
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
@@ -350,29 +351,6 @@ public class AvtaleView extends JPanel {
 		d.gridwidth = 9;
 		this.add(slettKnapp, d);
 	}
-
-	/*
-	 * //keyListener class tekstHoyrar implements KeyListener { public void
-	 * keyPressed(KeyEvent e) { }
-	 * 
-	 * public void keyReleased(KeyEvent e) { //Gjer det umogeleg for brukaren og
-	 * skrive inn ugyldige tidspunkt if(startHourComponent.getText() > 0 &&
-	 * startHourComponent.getText() <= 23){ startHourComponent.setText(
-	 * startHourComponent.getText() ); } if(startMinComponent.getText() > 0 &&
-	 * startMinComponent.getText() <= 59){ startMinComponent.setText(
-	 * startMinComponent.getText() ); } if(sluttHourComponent.getText() > 0 &&
-	 * sluttHourComponent.getText() <= 23){ sluttHourComponent.setText(
-	 * sluttHourComponent.getText() ); } if(sluttMinComponent.getText() > 0 &&
-	 * sluttMinComponent.getText() <= 59){ sluttMinComponent.setText(
-	 * sluttMinComponent.getText() ); } if(tidspunktAlarmHourComponent.getText()
-	 * > 0 && tidspunktAlarmHourComponent.getText() <= 23){
-	 * tidspunktAlarmHourComponent.setText(
-	 * tidspunktAlarmHourComponent.getText() ); }
-	 * if(tidspunktAlarmMinComponent.getText() > 0 &&
-	 * tidspunktAlarmMinComponent.getText() <= 59){
-	 * tidspunktAlarmMinComponent.setText( tidspunktAlarmMinComponent.getText()
-	 * ); } } }
-	 */
 
 	private void addDay(int nDays) {
 		GregorianCalendar cal = new GregorianCalendar();
