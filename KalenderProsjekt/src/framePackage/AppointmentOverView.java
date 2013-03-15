@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import data.Meeting;
@@ -110,12 +111,15 @@ public class AppointmentOverView {
 		lblStatus = new JLabel();
 		overViewPanel.add(lblStatus, c);
 		if (notifications.get(0).getApproved() == 'y') {
+			yourStatus.setSelectedItem(check);
 			lblStatus.setText("Deltar");
 		}
 		if (notifications.get(0).getApproved() == 'n') {
+			yourStatus.setSelectedItem(cross);
 			lblStatus.setText("Deltar Ikke");
 		}
-		if (notifications.get(0).getApproved() == 'v') {
+		if (notifications.get(0).getApproved() == 'w') {
+			yourStatus.setSelectedItem(question);
 			lblStatus.setText("Vet Ikke");
 		}
 		yourStatus.addActionListener(new ActionListener() {
@@ -142,12 +146,17 @@ public class AppointmentOverView {
 
 		listModel = new DefaultListModel();
 		listModel.addElement(creator);
-		participantList = new JList<Person>();
+		participantList = new JList<Notification>();
 		participantList.setModel(listModel);
 		participantList.setEnabled(false);
+		participantList.setFixedCellWidth(300);
+		participantList.setCellRenderer(new overViewRender());
+		JScrollPane myJScrollPane = new JScrollPane(participantList);
+		myJScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		c.gridx = 1;
 		c.gridy = 3;
-		overViewPanel.add(participantList, c);
+		overViewPanel.add(myJScrollPane, c);
+		
 	}
 
 	public static void main(String args[]) {
