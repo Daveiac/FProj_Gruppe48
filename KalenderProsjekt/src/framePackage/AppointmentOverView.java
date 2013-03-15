@@ -139,7 +139,7 @@ public class AppointmentOverView {
 					lblStatus.setText("Deltar Ikke");
 				}
 				if (yourStatus.getSelectedItem() == question) {
-					lblStatus.setText("Vet ikke");
+					lblStatus.setText("Ikke svart");
 				}
 			}
 		});
