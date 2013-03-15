@@ -1,27 +1,31 @@
 package networking.packages;
 
 import data.Meeting;
+import data.Person;
 
-public class QueryRequest extends NetworkRequest{
+public class QueryRequest extends NetworkRequest {
 	private static final long serialVersionUID = -1922826697363368302L;
-	String username;
+	Person person;
 	Meeting meeting;
 	private QueryType queryType;
-	
-	public enum QueryType{
-		GET_ALL_PERSONS, GET_EVERY_MEETING_BY_PERSON, GET_ALARMS_BY_PERSON, GET_NOTIFICATIONS_BY_MEETING,
-		GET_NOTIFICATIONS_BY_PERSON, GET_TEAMS_BY_MEETING, 
+
+	public enum QueryType {
+		GET_ALL_PERSONS, GET_EVERY_MEETING_BY_PERSON, GET_ALARMS_BY_PERSON, GET_NOTIFICATIONS_BY_MEETING, GET_NOTIFICATIONS_BY_PERSON, GET_TEAMS_BY_MEETING,
 	}
 
-	public QueryRequest(String username, Meeting meeting, QueryType queryType) {
+	public QueryRequest(Person person, Meeting meeting, QueryType queryType) {
 		super();
-		this.username = username;
+		this.person = person;
 		this.meeting = meeting;
 		this.queryType = queryType;
 	}
 
 	public String getUsername() {
-		return username;
+		return person.getUsername();
+	}
+
+	public Person getPerson() {
+		return person;
 	}
 
 	public Meeting getMeeting() {
@@ -32,5 +36,4 @@ public class QueryRequest extends NetworkRequest{
 		return queryType;
 	}
 
-	
 }
