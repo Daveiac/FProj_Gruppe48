@@ -1,7 +1,9 @@
 package framePackage;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -9,11 +11,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
+import javax.swing.AbstractButton;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.LineBorder;
 
 import data.Meeting;
 import data.MeetingRoom;
@@ -26,89 +32,96 @@ public class AppointmentView {
 	private JPanel meetingPanel;
 	private JPanel mainPanel;
 	private JPanel legendPanel;
+	private JPanel headerPanel;
 	private GridBagConstraints mc;
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MMM.yyyy");
 	private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+	private static final int[] sizes = {50,100,50,300,100,90,90};
 	
 	public AppointmentView(ArrayList<Meeting> meetings) {
 		this.meetings = meetings;
 		mainPanel = new JPanel();
 		meetingPanel = new JPanel();
-		legendPanel = new JPanel();
 		meetingPanel.setLayout(new GridBagLayout());
 		mainPanel.add(meetingPanel,BorderLayout.CENTER);
+		
 		JScrollPane jsp = new JScrollPane(meetingPanel);
 		mainPanel.setLayout(new BorderLayout());
-		mainPanel.add(jsp, BorderLayout.NORTH);
-		mainPanel.add(legendPanel, BorderLayout.SOUTH);
-		mainPanel.setPreferredSize(new Dimension(800, 500));
 		createHeaders();
 		createLegend();
+		mainPanel.add(headerPanel, BorderLayout.NORTH);
+		mainPanel.add(jsp, BorderLayout.CENTER);
+		mainPanel.add(legendPanel, BorderLayout.SOUTH);
+		mainPanel.setPreferredSize(new Dimension(800, 500));
 		refreshMeetings();
 		
 	}
 
 	private void createLegend() {
-		legendPanel = new JPanel();
-		//TODO
+		legendPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,20,5));
+		JLabel leader = new JLabel(": Møteleder");
+		leader.setIcon(new ImageIcon("res/icons/icon_star.png"));
+		JLabel participates = new JLabel(": Deltar");
+		participates.setIcon(new ImageIcon("res/icons/icon_check.png"));
+		JLabel notParticipates = new JLabel(": Deltar ikke");
+		notParticipates.setIcon(new ImageIcon("res/icons/icon_cross.png"));
+		JLabel unanswered = new JLabel(": Venter svar");
+		unanswered.setIcon(new ImageIcon("res/icons/icon_question.png"));
+		legendPanel.add(leader);
+		legendPanel.add(participates);
+		legendPanel.add(notParticipates);
+		legendPanel.add(unanswered);
+		legendPanel.setPreferredSize(new Dimension(800, 30));
+		legendPanel.setBorder(new LineBorder(Color.black));
 	}
 
 	private void createHeaders() {
+		headerPanel = new JPanel(new GridBagLayout());
+		JLabel[] headers = new JLabel[7];
+		headers[0] = new JLabel("status");
+		headers[1] = new JLabel("dato");
+		headers[2] = new JLabel("tid");
+		headers[3] = new JLabel("avtale");
+		headers[4] = new JLabel("sted");
+		headers[5] = new JLabel("endre");
+		headers[6] = new JLabel("mer info");
+
 		mc = new GridBagConstraints();
 		mc.gridy = 0;
-		mc.gridx = 0;
 		mc.anchor = GridBagConstraints.LINE_END;
-		meetingPanel.add(new JLabel("status"));
-		mc.gridx = 1;
-		meetingPanel.add(new JLabel("dato"));
-		mc.gridx = 2;
-		meetingPanel.add(new JLabel("tid"));
-		mc.gridx = 3;
-		meetingPanel.add(new JLabel("avtale"));
-		mc.gridx = 4;
-		meetingPanel.add(new JLabel("sted"));
-		mc.gridx = 5;
-		meetingPanel.add(new JLabel("endre"));
-		mc.gridx = 6;
-		meetingPanel.add(new JLabel("mer info"));
+		for (int i = 0; i < headers.length; i++) {
+			headers[i].setPreferredSize(new Dimension(sizes[i],20));
+			mc.gridx = i;
+			headerPanel.add(headers[i]);
+		}
 	}
 
 	private void refreshMeetings() {
 		
 		for (int i = 0; i < meetings.size(); i++) {
 			Meeting meeting = meetings.get(i);
-			JLabel icon = new JLabel();
-			JLabel date = new JLabel();
-			JLabel time = new JLabel();
-			JLabel title = new JLabel(meeting.getTitle());
-			JLabel location = new JLabel(meeting.getLocation());
-			JButton changeBtn = new JButton("endre");
-			JButton moreBtn = new JButton("mer info...");
+			JComponent[] items = new JComponent[7];
+			items[0] = new JLabel(new ImageIcon("res/icons/icon_check.png"));
+			items[1] = new JLabel();
+			items[2] = new JLabel();
+			items[3] = new JLabel(meeting.getTitle());
+			items[4] = new JLabel(meeting.getLocation());
+			items[5] = new JButton("endre");
+			items[6] = new JButton("mer info...");
 			
 
 			GregorianCalendar startDate = new GregorianCalendar();
 			startDate.setTimeInMillis(meeting.getStartTime());
-			date.setText(dateFormat.format(startDate.getTime()));
-			time.setText(timeFormat.format(startDate.getTime()));
+			((JLabel) items[1]).setText(dateFormat.format(startDate.getTime()));
+			((JLabel) items[2]).setText(timeFormat.format(startDate.getTime()));
 			
 			mc.gridy = i+1;
-			mc.gridx = 0;
-			mc.insets = new Insets(0, 10, 0, 0);
-			meetingPanel.add(icon,mc);
-			mc.gridx = 1;
-			meetingPanel.add(date,mc);
-			mc.gridx = 2;
-			meetingPanel.add(time,mc);
-			mc.gridx = 3;
-			meetingPanel.add(title,mc);
-			mc.gridx = 4;
-			meetingPanel.add(location,mc);
-			mc.gridx = 5;
-			meetingPanel.add(changeBtn,mc);
-			mc.insets = new Insets(0, 0, 0, 0);
-			mc.gridx = 6;
-			meetingPanel.add(moreBtn,mc);
-			
+			for (int j = 0; j < items.length; j++) {
+				JComponent item = items[j];
+				item.setPreferredSize(new Dimension(sizes[j],20));
+				mc.gridx = j;
+				meetingPanel.add(item,mc);
+			}
 		}
 	}
 	
@@ -127,6 +140,27 @@ public class AppointmentView {
 		meetings.add(new Meeting(0, "suppemøte2", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
 		startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
 		endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
 		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
 		
 		JFrame frame = new JFrame("APPointmensTest");
