@@ -23,12 +23,15 @@ import javax.swing.border.LineBorder;
 
 import data.Meeting;
 import data.MeetingRoom;
+import data.Notification;
 import data.Person;
 import data.Team;
 
 public class AppointmentView {
 	
 	private ArrayList<Meeting> meetings;
+	private ArrayList<Notification> notifications;
+	private Person user;
 	private JPanel meetingPanel;
 	private JPanel mainPanel;
 	private JPanel legendPanel;
@@ -38,8 +41,10 @@ public class AppointmentView {
 	private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 	private static final int[] sizes = {50,100,50,300,100,90,90};
 	
-	public AppointmentView(ArrayList<Meeting> meetings) {
+	public AppointmentView(Person user, ArrayList<Notification> notifications, ArrayList<Meeting> meetings) {
 		this.meetings = meetings;
+		this.notifications = notifications;
+		this.user = user;
 		mainPanel = new JPanel();
 		meetingPanel = new JPanel();
 		meetingPanel.setLayout(new GridBagLayout());
@@ -97,7 +102,12 @@ public class AppointmentView {
 	}
 
 	private void refreshMeetings() {
-		
+		for (int i = 0; i < notifications.size(); i++) {
+			Notification n = notifications.get(i);
+//			if(n.get) {
+//				
+//			}
+		}
 		for (int i = 0; i < meetings.size(); i++) {
 			Meeting meeting = meetings.get(i);
 			JComponent[] items = new JComponent[7];
