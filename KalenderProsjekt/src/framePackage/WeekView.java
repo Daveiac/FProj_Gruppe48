@@ -1,11 +1,16 @@
 package framePackage;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Insets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 
 import data.*;
@@ -19,10 +24,11 @@ public class WeekView extends JPanel implements CalendarView {
 	private GregorianCalendar calendar;
 	private String title;
 	private DefaultTableModel tableModel;
-	private JTable tableWeek;
+	private JTable weekTable;
 
-	//test code
+	// ----- test code -----
 	ArrayList<Meeting> meetings;
+	// ----- test code end -----
 
 	/**
 	 * Constructs the WeekView Panel.
@@ -30,7 +36,9 @@ public class WeekView extends JPanel implements CalendarView {
 	public WeekView() {
 		calendar = new GregorianCalendar();
 
-		// test code
+
+
+		// ----- test code -----
 		meetings = new ArrayList<Meeting>();
 		ArrayList<Person> members = new ArrayList<Person>();
 		Team team = new Team(0, null, members);
@@ -38,6 +46,7 @@ public class WeekView extends JPanel implements CalendarView {
 		Person creator = new Person(null, 00000000, "Dav", "Hov", "dave", "1234");
 		members.add(creator);
 		long startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
+		System.out.println("meeting1: " + startTime);
 		long endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
 		meetings.add(new Meeting(0, "suppemøte", "inHell", startTime, endTime, "This is a desc", team, room, creator));
 		startTime = new GregorianCalendar(2013, 2, 15, 10, 30).getTimeInMillis();
@@ -46,9 +55,12 @@ public class WeekView extends JPanel implements CalendarView {
 		startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
 		endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
 		meetings.add(new Meeting(0, "suppemøte3", "wtfWhyInHell", startTime, endTime, "This is a desc", team, room, creator));
+		// ----- test code end -----
+
+
 
 		// Creating a non-editable table
-		tableWeek = new JTable() {
+		weekTable = new JTable() {
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
 				return false;
 			}
@@ -57,51 +69,38 @@ public class WeekView extends JPanel implements CalendarView {
 		createWeek();
 		setMeetings(meetings);
 
-		JScrollPane scrollPane = new JScrollPane(tableWeek);
+		JScrollPane scrollPane = new JScrollPane(weekTable);
 		scrollPane.setPreferredSize(new Dimension(800, 407));
 
 		add(scrollPane);
 	}
 
+	/**
+	 * Attaches the meetings to the table.
+	 * @param meetings	a list of meeting objects
+	 */
 	public void setMeetings(ArrayList<Meeting> meetings) {
 		for (Meeting meeting : meetings) {
-			GregorianCalendar mordi = new GregorianCalendar();
-			long startTime = meeting.getStartTime();
-			mordi.setTimeInMillis(startTime);
+			GregorianCalendar meetingCalendar = new GregorianCalendar();
 
-			int startHour = mordi.get(GregorianCalendar.HOUR_OF_DAY);
-			int startMinute = mordi.get(GregorianCalendar.MINUTE);
-			int startRow = startHour * 4 + startMinute / 15;
-			int day = mordi.get(GregorianCalendar.DAY_OF_WEEK) - 1;
+			long startTime = meeting.getStartTime();
+			meetingCalendar.setTimeInMillis(startTime);
+
+			int startHour = meetingCalendar.get(GregorianCalendar.HOUR_OF_DAY);
+			int startMinute = meetingCalendar.get(GregorianCalendar.MINUTE);
+			int startTableTime = startHour * 4 + startMinute / 15;
 
 			long endTime = meeting.getEndTime();
-			mordi.setTimeInMillis(endTime);
-			int endHour = mordi.get(GregorianCalendar.HOUR_OF_DAY);
-			int endMinute = mordi.get(GregorianCalendar.MINUTE);
-			int endRow = endHour * 4 + endMinute / 15;
-			System.out.println(startHour + ", " + endHour);
-			System.out.println(startMinute + ", " + endMinute);
-			System.out.println(startRow + ", " + endRow);
-			System.out.println(startColumn + ", " + endColumn);
+			meetingCalendar.setTimeInMillis(endTime);
+			int endHour = meetingCalendar.get(GregorianCalendar.HOUR_OF_DAY);
+			int endMinute = meetingCalendar.get(GregorianCalendar.MINUTE);
+			int endTableTime = endHour * 4 + endMinute / 15;
 
-//			// Sets table headers with corresponding days
-//			SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE dd. MMM.");
-//			int columns = 8;
-//			String[] days = new String[columns];
-//			days[0] = "Tid";
-//			for (int i = 1; i < columns; i++) {
-//				days[i] = weekFormat.format(calendar.getTime());
-//				calendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
-//			}
+			int day = meetingCalendar.get(GregorianCalendar.DAY_OF_WEEK) - 1;
 
-//			int daysOfWeek = 8;
-//			for (int day = 1; day < daysOfWeek; day++) {
-//				for (int time = 0; time < end; i++) {
-//					
-//				}
-//			}
-			tableModel.setValueAt(42, startRow, day);
-			tableModel.setValueAt("troll", endRow, day);
+			for (int time = startTableTime; time < endTableTime; time++) {
+				tableModel.setValueAt(meeting, time, day);
+			}
 		}
 
 	}
@@ -162,11 +161,14 @@ public class WeekView extends JPanel implements CalendarView {
 		calendar.add(GregorianCalendar.MINUTE, thisMinuteOfDay);
 
 		// Sets the new week into the table
-		tableWeek.setModel(tableModel);
-		tableWeek.getColumnModel().getColumn(0).setPreferredWidth(0);
-		tableWeek.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tableWeek.setRowSelectionAllowed(false);
-		tableWeek.getSelectionModel();
+		weekTable.setModel(tableModel);
+		weekTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+		weekTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		weekTable.setRowSelectionAllowed(false);
+		weekTable.getSelectionModel();
+		for (int i = 1; i < 8; i++) {
+			weekTable.getColumnModel().getColumn(i).setCellRenderer(new DayTableCellRenderer());
+		}
 	}
 
 	/**
