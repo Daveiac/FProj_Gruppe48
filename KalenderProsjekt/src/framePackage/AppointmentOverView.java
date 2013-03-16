@@ -2,8 +2,10 @@ package framePackage;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -67,13 +69,18 @@ public class AppointmentOverView {
 		headLine = new JLabel(meetings.getTitle());
 		c.gridx = 0;
 		c.gridy = 0;
+		headLine.setPreferredSize(new Dimension(300, 25));
+		headLine.setFont(new Font(headLine.getFont().getName(),headLine.getFont().getStyle(), 20 ));
 		overViewPanel.add(headLine, c);
 
 		lblInfo = new JLabel(getTime() + " på rom: " + getLoc());
 		c.gridx = 0;
 		c.gridy = 1;
+		lblInfo.setPreferredSize(new Dimension(300,25));
 		overViewPanel.add(lblInfo, c);
-
+		
+		c.insets = new Insets(10,0,10,0);
+		
 		lblMoreInfo = new JLabel("Beskrivelse:");
 		c.gridx = 0;
 		c.gridy = 2;
@@ -109,6 +116,7 @@ public class AppointmentOverView {
 		c.gridx = 2;
 		c.gridy = 4;
 		lblStatus = new JLabel();
+		lblStatus.setPreferredSize(new Dimension(70, 25));
 		overViewPanel.add(lblStatus, c);
 		if (notifications.get(0).getApproved() == 'y') {
 			yourStatus.setSelectedItem(check);
@@ -131,7 +139,7 @@ public class AppointmentOverView {
 					lblStatus.setText("Deltar Ikke");
 				}
 				if (yourStatus.getSelectedItem() == question) {
-					lblStatus.setText("Vet ikke");
+					lblStatus.setText("Ikke svart");
 				}
 			}
 		});
@@ -139,16 +147,15 @@ public class AppointmentOverView {
 		moreInfo = new JTextArea(meetings.getDescription());
 		moreInfo.setEditable(false);
 		moreInfo.setFocusable(false);
-		moreInfo.setPreferredSize(new Dimension(300, 100));
+		moreInfo.setPreferredSize(new Dimension(320, 100));
 		c.gridx = 1;
 		c.gridy = 2;
 		overViewPanel.add(moreInfo, c);
 
 		listModel = new DefaultListModel();
-		listModel.addElement(creator);
+		listModel.addElement(notifications.get(0));
 		participantList = new JList<Notification>();
 		participantList.setModel(listModel);
-		participantList.setEnabled(false);
 		participantList.setFixedCellWidth(300);
 		participantList.setCellRenderer(new overViewRender());
 		JScrollPane myJScrollPane = new JScrollPane(participantList);
