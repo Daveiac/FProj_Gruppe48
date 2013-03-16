@@ -156,14 +156,14 @@ public class DefaultView extends JPanel {
 		backGroundConstraints.gridx = 0;
 		backGroundConstraints.gridy = 2;
 		frame.add(warningPanel, backGroundConstraints);
-		GridBagConstraints varselPanelContraints = new GridBagConstraints();
-		lblvarsel = new JLabel("varsel");
-		varselPanelContraints.gridx = 0;
-		varselPanelContraints.gridy = 0;
-		warningPanel.add(lblvarsel, varselPanelContraints);
-		varselPanelContraints.gridy = warningCounter;
-		warningPanel.add(createWarning("shit just got real"),
-				varselPanelContraints);
+//		GridBagConstraints varselPanelContraints = new GridBagConstraints();
+//		lblvarsel = new JLabel("varsel");
+//		varselPanelContraints.gridx = 0;
+//		varselPanelContraints.gridy = 0;
+//		warningPanel.add(lblvarsel, varselPanelContraints);
+//		varselPanelContraints.gridy = warningCounter;
+//		warningPanel.add(createWarning("shit just got real"),
+//				varselPanelContraints);
 
 		// her i fra kommer selve dayView delen, tar vekk lbltid s�kan dette
 		// brukes p�andre frames
