@@ -26,8 +26,9 @@ public class WeekView extends JPanel implements CalendarView {
 	private DefaultTableModel tableModel;
 	private JTable weekTable;
 
-	//test code
+	// ----- test code -----
 	ArrayList<Meeting> meetings;
+	// ----- test code end -----
 
 	/**
 	 * Constructs the WeekView Panel.
@@ -35,7 +36,9 @@ public class WeekView extends JPanel implements CalendarView {
 	public WeekView() {
 		calendar = new GregorianCalendar();
 
-		// test code
+
+
+		// ----- test code -----
 		meetings = new ArrayList<Meeting>();
 		ArrayList<Person> members = new ArrayList<Person>();
 		Team team = new Team(0, null, members);
@@ -43,6 +46,7 @@ public class WeekView extends JPanel implements CalendarView {
 		Person creator = new Person(null, 00000000, "Dav", "Hov", "dave", "1234");
 		members.add(creator);
 		long startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
+		System.out.println("meeting1: " + startTime);
 		long endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
 		meetings.add(new Meeting(0, "suppemøte", "inHell", startTime, endTime, "This is a desc", team, room, creator));
 		startTime = new GregorianCalendar(2013, 2, 15, 10, 30).getTimeInMillis();
@@ -51,6 +55,9 @@ public class WeekView extends JPanel implements CalendarView {
 		startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
 		endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
 		meetings.add(new Meeting(0, "suppemøte3", "wtfWhyInHell", startTime, endTime, "This is a desc", team, room, creator));
+		// ----- test code end -----
+
+
 
 		// Creating a non-editable table
 		weekTable = new JTable() {
@@ -68,24 +75,28 @@ public class WeekView extends JPanel implements CalendarView {
 		add(scrollPane);
 	}
 
+	/**
+	 * Attaches the meetings to the table.
+	 * @param meetings	a list of meeting objects
+	 */
 	public void setMeetings(ArrayList<Meeting> meetings) {
 		for (Meeting meeting : meetings) {
-			GregorianCalendar mordi = new GregorianCalendar();
+			GregorianCalendar meetingCalendar = new GregorianCalendar();
 
 			long startTime = meeting.getStartTime();
-			mordi.setTimeInMillis(startTime);
+			meetingCalendar.setTimeInMillis(startTime);
 
-			int startHour = mordi.get(GregorianCalendar.HOUR_OF_DAY);
-			int startMinute = mordi.get(GregorianCalendar.MINUTE);
+			int startHour = meetingCalendar.get(GregorianCalendar.HOUR_OF_DAY);
+			int startMinute = meetingCalendar.get(GregorianCalendar.MINUTE);
 			int startTableTime = startHour * 4 + startMinute / 15;
 
 			long endTime = meeting.getEndTime();
-			mordi.setTimeInMillis(endTime);
-			int endHour = mordi.get(GregorianCalendar.HOUR_OF_DAY);
-			int endMinute = mordi.get(GregorianCalendar.MINUTE);
+			meetingCalendar.setTimeInMillis(endTime);
+			int endHour = meetingCalendar.get(GregorianCalendar.HOUR_OF_DAY);
+			int endMinute = meetingCalendar.get(GregorianCalendar.MINUTE);
 			int endTableTime = endHour * 4 + endMinute / 15;
 
-			int day = mordi.get(GregorianCalendar.DAY_OF_WEEK) - 1;
+			int day = meetingCalendar.get(GregorianCalendar.DAY_OF_WEEK) - 1;
 
 			for (int time = startTableTime; time < endTableTime; time++) {
 				tableModel.setValueAt(meeting, time, day);
