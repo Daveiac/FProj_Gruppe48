@@ -3,11 +3,13 @@ package framePackage;
 import java.awt.Dimension;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import data.CalendarModel;
+import data.Person;
 
 /**
  * This is the WeekView Panel that shows the week planner.
@@ -23,6 +25,7 @@ public class WeekView extends JPanel implements CalendarView {
 	private DayView dayView;
 
 	private CalendarModel calendarModel;
+	private List<Person> persons;
 
 	/**
 	 * Constructs the WeekView Panel.
@@ -125,7 +128,7 @@ public class WeekView extends JPanel implements CalendarView {
 		weekTable.setRowSelectionAllowed(false);
 		weekTable.getSelectionModel();
 		for (int i = 1; i < 8; i++) {
-			weekTable.getColumnModel().getColumn(i).setCellRenderer(new DayTableCellRenderer(calendarModel));
+			weekTable.getColumnModel().getColumn(i).setCellRenderer(new DayTableCellRenderer(calendarModel, persons));
 		}
 	}
 

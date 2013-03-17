@@ -103,7 +103,7 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 		dayTable.setModel(tableModel);
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
-		dayTable.getColumnModel().getColumn(1).setCellRenderer(new DayTableCellRenderer(calendarModel));
+		dayTable.getColumnModel().getColumn(1).setCellRenderer(new DayTableCellRenderer(calendarModel, persons));
 	}
 
 	/**
