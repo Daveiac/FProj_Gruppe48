@@ -7,6 +7,8 @@ import java.util.GregorianCalendar;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import data.CalendarModel;
+
 /**
  * This is the WeekView Panel that shows the week planner.
  */
@@ -20,12 +22,15 @@ public class WeekView extends JPanel implements CalendarView {
 	private String[] columnHeaders;
 	private DayView dayView;
 
+	private CalendarModel calendarModel;
+
 	/**
 	 * Constructs the WeekView Panel.
 	 */
-	public WeekView() {
+	public WeekView(CalendarModel calendarModel) {
 		calendar = new GregorianCalendar();
-		dayView = new DayView();
+		this.calendarModel = calendarModel;
+		dayView = new DayView(calendarModel);
 		dayView.getDayView();
 
 		// Creating a non-editable table
@@ -120,7 +125,7 @@ public class WeekView extends JPanel implements CalendarView {
 		weekTable.setRowSelectionAllowed(false);
 		weekTable.getSelectionModel();
 		for (int i = 1; i < 8; i++) {
-			weekTable.getColumnModel().getColumn(i).setCellRenderer(new DayTableCellRenderer());
+			weekTable.getColumnModel().getColumn(i).setCellRenderer(new DayTableCellRenderer(calendarModel));
 		}
 	}
 

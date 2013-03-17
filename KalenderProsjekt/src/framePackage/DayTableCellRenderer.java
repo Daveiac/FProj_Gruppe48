@@ -6,10 +6,17 @@ import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import data.CalendarModel;
 import data.Meeting;
 
 @SuppressWarnings("serial")
 public class DayTableCellRenderer extends DefaultTableCellRenderer {
+
+	private CalendarModel calendarModel;
+
+	public DayTableCellRenderer(CalendarModel calendarModel) {
+		this.calendarModel = calendarModel;
+	}
 
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
@@ -18,7 +25,7 @@ public class DayTableCellRenderer extends DefaultTableCellRenderer {
 		Meeting meeting = (Meeting) value;
 
 		if (meeting != null) {
-			component.setBackground(Color.ORANGE);
+			component.setBackground(calendarModel.getColorOfPerson);
 			setText(meeting.getTitle());
 		}
 		else {

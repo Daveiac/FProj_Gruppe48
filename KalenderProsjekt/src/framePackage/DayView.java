@@ -22,52 +22,16 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 	private DefaultTableModel tableModel;
 	private JTable dayTable;
 	private String[] columnHeaders;
-	
-	private CalendarModel calendarModel;
 
-	// ----- test code -----
-	ArrayList<Meeting> meetingsTest;
-	// ----- test code end -----
+	private CalendarModel calendarModel;
+	private List<Person> persons;
 
 	/**
 	 * Constructs the DayView Panel.
 	 */
-	public DayView() {
+	public DayView(CalendarModel calendarModel) {
 		calendar = new GregorianCalendar();
-//		calendarModel.getCalendarModel();
-//		meetingsTest = calendarModel.
-
-
-
-		// ----- test code -----
-		meetingsTest = new ArrayList<Meeting>();
-		ArrayList<Person> members = new ArrayList<Person>();
-		Team team = new Team(0, null, members);
-		MeetingRoom room = new MeetingRoom("0");
-		Person creator = new Person(null, 00000000, "Dav", "Hov", "dave", "1234");
-		members.add(creator);
-		long startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
-		long endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
-		meetingsTest.add(new Meeting(0, "suppemøte", "inHell", startTime, endTime, "This is a desc", team, room, creator));
-		startTime = new GregorianCalendar(2013, 2, 15, 10, 30).getTimeInMillis();
-		endTime = new GregorianCalendar(2013, 2, 15, 11, 00).getTimeInMillis();
-		meetingsTest.add(new Meeting(0, "suppemøte2", "stillInHell", startTime, endTime, "This is a desc", team, room, creator));
-		startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
-		endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
-		meetingsTest.add(new Meeting(0, "suppemøte3", "wtfWhyInHell", startTime, endTime, "This is a desc", team, room, creator));
-		startTime = new GregorianCalendar(2013, 2, 14, 12, 00).getTimeInMillis();
-		endTime = new GregorianCalendar(2013, 2, 14, 15, 30).getTimeInMillis();
-		meetingsTest.add(new Meeting(0, "suppemøte4", "fuInHell", startTime, endTime, "This is a desc", team, room, creator));
-		startTime = new GregorianCalendar(2013, 2, 16, 12, 00).getTimeInMillis();
-		endTime = new GregorianCalendar(2013, 2, 16, 15, 30).getTimeInMillis();
-		meetingsTest.add(new Meeting(0, "suppemøte5", "careInHell", startTime, endTime, "This is a desc", team, room, creator));
-		startTime = new GregorianCalendar(2013, 2, 17, 03, 00).getTimeInMillis();
-		endTime = new GregorianCalendar(2013, 2, 17, 04, 30).getTimeInMillis();
-		meetingsTest.add(new Meeting(0, "suppemøte6", "w00t?", startTime, endTime, "This is a desc", team, room, creator));
-		// ----- test code end -----
-
-
-
+		this.calendarModel = calendarModel;
 
 		// Creating a non-editable table
 		dayTable = new JTable() {
@@ -139,7 +103,7 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 		dayTable.setModel(tableModel);
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
-		dayTable.getColumnModel().getColumn(1).setCellRenderer(new DayTableCellRenderer());
+		dayTable.getColumnModel().getColumn(1).setCellRenderer(new DayTableCellRenderer(calendarModel));
 	}
 
 	/**
@@ -160,7 +124,11 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 		}
 
 		// Sets today's meetings
-		setMeetings(calendar, tableModel, dayOfWeek, meetingsTest);
+		persons = calendarModel.getSelectedPersons();
+		for (Person person : persons) {
+			ArrayList<Meeting> meetings = calendarModel.getMeetings(person);
+			setMeetings(calendar, tableModel, dayOfWeek, meetings);
+		}
 	}
 
 	/**
@@ -244,6 +212,19 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-//		if (evt.getPropertyName() == CalendarModel)
+		switch (evt.getPropertyName()) {
+		case CalendarModel.CALENDAR_LOADED_Property:
+			HashMap<Person, ArrayList<Meeting>> pmr = (HashMap<Person, ArrayList<Meeting>>) evt.getNewValue();
+			//			addAllShizz(pmr);
+			break;
+		case CalendarModel.MEETING_CHANGED_Property:
+			createDayTable();
+			break;
+		case CalendarModel.MEETING_REMOVED_Property:
+			createDayTable();
+			break;
+		default:
+			break;
+		}
 	}
 }
