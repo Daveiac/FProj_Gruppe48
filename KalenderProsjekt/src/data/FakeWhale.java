@@ -1,9 +1,7 @@
 package data;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 public class FakeWhale {
 
@@ -15,43 +13,86 @@ public class FakeWhale {
 
 	private ArrayList<Meeting> meetings;
 	private CalendarModel cModel;
+	private ArrayList<Person> persons;
 
 	public FakeWhale(CalendarModel cModel) {
 		this.cModel = cModel;
+		persons = new ArrayList<Person>();
 		
-		receiveAllPersons();
-		
+		requestEveryPerson();
+		for (Person p : persons) {
+			requestEveryMeetingForPerson(p);
+		}
+	}
+	/**
+	 * Just test code
+	 * @param person
+	 */
+	private void reccieveMeetingsFromPerson2(Person person) {
 		meetings = new ArrayList<Meeting>();
 		ArrayList<Person> members = new ArrayList<Person>();
 		Team team = new Team(0, null, members);
 		MeetingRoom room = new MeetingRoom("Roomsa");
-		Person creator = new Person(null, 00000000, "Dav", "Hov", "dave", "1234");
-		members.add(creator);
+		members.add(person);
 		
 		long startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
 		long endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
-		meetings.add(new Meeting(0, "suppemøte", "inHell", startTime, endTime, "This is a desc", team, room, creator));
-		startTime = new GregorianCalendar(2013, 2, 15, 10, 30).getTimeInMillis();
-		endTime = new GregorianCalendar(2013, 2, 15, 11, 00).getTimeInMillis();
-		meetings.add(new Meeting(0, "suppemøte2", "stillInHell", startTime, endTime, "This is a desc", team, room, creator));
-		startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
-		endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
-		meetings.add(new Meeting(0, "suppemøte3", "wtfWhyInHell", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemy", "inHell", startTime, endTime, "This is a desc", team, room, person));
+		startTime = new GregorianCalendar(2013, 2, 18, 10, 00).getTimeInMillis();
+		endTime = new GregorianCalendar(2013, 2, 18, 11, 00).getTimeInMillis();
+		meetings.add(new Meeting(0, "suppelol2", "stillInHell", startTime, endTime, "This is a desc", team, room, person));
+		startTime = new GregorianCalendar(2013, 2, 19, 12, 30).getTimeInMillis();
+		endTime = new GregorianCalendar(2013, 2, 19, 18, 30).getTimeInMillis();
+		meetings.add(new Meeting(0, "suppemøte3", "wtfWhyInHell", startTime, endTime, "This is a desc", team, room, person));
 		startTime = new GregorianCalendar(2013, 2, 14, 12, 00).getTimeInMillis();
 		endTime = new GregorianCalendar(2013, 2, 14, 15, 30).getTimeInMillis();
-		meetings.add(new Meeting(0, "suppemøte4", "fuInHell", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte4", "fuInHell", startTime, endTime, "This is a desc", team, room, person));
 		startTime = new GregorianCalendar(2013, 2, 16, 12, 00).getTimeInMillis();
 		endTime = new GregorianCalendar(2013, 2, 16, 15, 30).getTimeInMillis();
-		meetings.add(new Meeting(0, "suppemøte5", "careInHell", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte5", "careInHell", startTime, endTime, "This is a desc", team, room, person));
 		startTime = new GregorianCalendar(2013, 2, 17, 03, 00).getTimeInMillis();
 		endTime = new GregorianCalendar(2013, 2, 17, 04, 30).getTimeInMillis();
-		meetings.add(new Meeting(0, "suppemøte6", "w00t?", startTime, endTime, "This is a desc", team, room, creator));
-		
-		
+		meetings.add(new Meeting(0, "suppemøte6", "w00t?", startTime, endTime, "This is a desc", team, room, person));
+		// TODO Auto-generated method stub
 		
 	}
+	/**
+	 * Just test code
+	 * @param person
+	 */
+	private void reccieveMeetingsFromPerson1(Person person) {
+		meetings = new ArrayList<Meeting>();
+		ArrayList<Person> members = new ArrayList<Person>();
+		Team team = new Team(0, null, members);
+		MeetingRoom room = new MeetingRoom("Roomsa");
+		members.add(person);
+		
+		long startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
+		long endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
+		meetings.add(new Meeting(0, "suppemøte", "inHell", startTime, endTime, "This is a desc", team, room, person));
+		startTime = new GregorianCalendar(2013, 2, 15, 10, 30).getTimeInMillis();
+		endTime = new GregorianCalendar(2013, 2, 15, 11, 00).getTimeInMillis();
+		meetings.add(new Meeting(0, "suppemøte2", "stillInHell", startTime, endTime, "This is a desc", team, room, person));
+		startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
+		endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
+		meetings.add(new Meeting(0, "suppemøte3", "wtfWhyInHell", startTime, endTime, "This is a desc", team, room, person));
+		startTime = new GregorianCalendar(2013, 2, 14, 12, 00).getTimeInMillis();
+		endTime = new GregorianCalendar(2013, 2, 14, 15, 30).getTimeInMillis();
+		meetings.add(new Meeting(0, "suppemøte4", "fuInHell", startTime, endTime, "This is a desc", team, room, person));
+		startTime = new GregorianCalendar(2013, 2, 16, 12, 00).getTimeInMillis();
+		endTime = new GregorianCalendar(2013, 2, 16, 15, 30).getTimeInMillis();
+		meetings.add(new Meeting(0, "suppemøte5", "careInHell", startTime, endTime, "This is a desc", team, room, person));
+		startTime = new GregorianCalendar(2013, 2, 17, 03, 00).getTimeInMillis();
+		endTime = new GregorianCalendar(2013, 2, 17, 04, 30).getTimeInMillis();
+		meetings.add(new Meeting(0, "suppemøte6", "w00t?", startTime, endTime, "This is a desc", team, room, person));
+		
+		cModel.addAllMeetingsOfPerson(meetings, person);
+		
+	}
+	/**
+	 * Just test code
+	 */
 	private void receiveAllPersons() {
-		List<Person> persons = new ArrayList<Person>();
 		Person kari = new Person("karitr@ggk.no", 81549300, "Kari", "Traa", "karitr", "123456");
 		Person jon = new Person("jonbl@ggk.no", 81549301, "Jon", "blund", "jonbl", "123456");
 		Person chris = new Person("chrispr@ggk.no", 81549302, "Christoffer", "Pman", "chrispr", "123456");
@@ -69,12 +110,16 @@ public class FakeWhale {
 	 * @param person the persons whose meetings to request.
 	 */
 	public void requestEveryMeetingForPerson(Person person){ 
-		//todo
+		if(persons.indexOf(person) %2 == 0) {
+			reccieveMeetingsFromPerson1(person);
+		} else {
+			reccieveMeetingsFromPerson2(person);
+		}
 	}
 	/**
 	 * This method will request every person from the database.
 	 */
 	public void requestEveryPerson(){
-		//todo
+		receiveAllPersons();
 	}
 }
