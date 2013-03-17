@@ -134,8 +134,18 @@ public class MonthView implements CalendarView, PropertyChangeListener{
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if(evt.getPropertyName() == CalendarModel.MEETING_ADDED_Property) {
+		switch (evt.getPropertyName()) {
+		case CalendarModel.MEETING_ADDED_Property:
 			refreshCalendar();
+			break;
+		case CalendarModel.MEETING_CHANGED_Property:
+			refreshCalendar();
+			break;
+		case CalendarModel.MEETING_REMOVED_Property:
+			refreshCalendar();
+			break;
+		default:
+			break;
 		}
 	}
 }
