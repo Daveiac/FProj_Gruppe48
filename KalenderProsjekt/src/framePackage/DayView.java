@@ -214,8 +214,7 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 	public void propertyChange(PropertyChangeEvent evt) {
 		switch (evt.getPropertyName()) {
 		case CalendarModel.CALENDAR_LOADED_Property:
-			HashMap<Person, ArrayList<Meeting>> pmr = (HashMap<Person, ArrayList<Meeting>>) evt.getNewValue();
-			//			addAllShizz(pmr);
+			createDayTable();
 			break;
 		case CalendarModel.MEETING_CHANGED_Property:
 			createDayTable();

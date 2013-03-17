@@ -30,6 +30,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
+import data.CalendarModel;
+
 public class DefaultView extends JPanel {
 
 	// her er main frame work, som kan brukes p�year og month views ogs�
@@ -66,6 +68,8 @@ public class DefaultView extends JPanel {
 	private JPanel calendarPanel;
 	private GridBagConstraints timePanelContraints;
 
+	private CalendarModel calendarModel;
+
 	public static void main(String[] args) {
 		DefaultView dw = new DefaultView();
 		JFrame frame = dw.getFrame();
@@ -74,9 +78,10 @@ public class DefaultView extends JPanel {
 	}
 
 	public DefaultView() {
+		calendarModel = new CalendarModel();
 		dato = new Dato();
-		dayView = new DayView();
-		weekView = new WeekView();
+		dayView = new DayView(calendarModel);
+		weekView = new WeekView(calendarModel);
 		monthView = new MonthView();
 		date = new Date();
 		initialize();
@@ -86,21 +91,21 @@ public class DefaultView extends JPanel {
 		frame = new JFrame();
 		frame.setLayout(new GridBagLayout());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		GridBagConstraints backGroundConstraints = new GridBagConstraints();
 		backGroundConstraints.anchor = GridBagConstraints.LINE_END;
 		lblday = new JLabel("Idag: " + dato.getDate());
 		backGroundConstraints.gridx = 0;
 		backGroundConstraints.gridy = 0;
 		frame.add(lblday, backGroundConstraints);
-		
+
 		calendar = new JToggleButton("Kalender");
 		calendar.setSelected(true);
 		meeting = new JToggleButton("møte");
 		calendarSelect = new ButtonGroup();
 		calendarSelect.add(calendar);
 		calendarSelect.add(meeting);
-		
+
 		backGroundConstraints.gridx = 1;
 		backGroundConstraints.gridy = 0;
 		backGroundConstraints.weightx = 0.5;
@@ -124,7 +129,7 @@ public class DefaultView extends JPanel {
 		backGroundConstraints.gridx = 0;
 		backGroundConstraints.gridy = 1;
 		frame.add(sharedCalendar, backGroundConstraints);
-		
+
 		GridBagConstraints sharedCalendarContraints = new GridBagConstraints();
 		lblcalendar = new JLabel("kalender");
 		sharedCalendarContraints.gridx = 0;
@@ -148,28 +153,28 @@ public class DefaultView extends JPanel {
 		sharedCalendarContraints.gridx = 0;
 		sharedCalendarContraints.gridy = 2;
 		sharedCalendar.add(otherCalendar, sharedCalendarContraints);
-		
+
 		warningPanel = new JPanel(new GridBagLayout());
 		warningPanel.setSize(100, 300);
 		warningPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-		
+
 		backGroundConstraints.gridx = 0;
 		backGroundConstraints.gridy = 2;
 		frame.add(warningPanel, backGroundConstraints);
-//		GridBagConstraints varselPanelContraints = new GridBagConstraints();
-//		lblvarsel = new JLabel("varsel");
-//		varselPanelContraints.gridx = 0;
-//		varselPanelContraints.gridy = 0;
-//		warningPanel.add(lblvarsel, varselPanelContraints);
-//		varselPanelContraints.gridy = warningCounter;
-//		warningPanel.add(createWarning("shit just got real"),
-//				varselPanelContraints);
+		//		GridBagConstraints varselPanelContraints = new GridBagConstraints();
+		//		lblvarsel = new JLabel("varsel");
+		//		varselPanelContraints.gridx = 0;
+		//		varselPanelContraints.gridy = 0;
+		//		warningPanel.add(lblvarsel, varselPanelContraints);
+		//		varselPanelContraints.gridy = warningCounter;
+		//		warningPanel.add(createWarning("shit just got real"),
+		//				varselPanelContraints);
 
 		// her i fra kommer selve dayView delen, tar vekk lbltid s�kan dette
 		// brukes p�andre frames
 
 		timePanel = new JPanel(new GridBagLayout());
-		
+
 		timePanel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 		backGroundConstraints.gridx = 1;
 		backGroundConstraints.gridy = 1;
@@ -177,9 +182,9 @@ public class DefaultView extends JPanel {
 		backGroundConstraints.gridwidth = 2;
 		backGroundConstraints.fill = GridBagConstraints.HORIZONTAL;
 		frame.add(timePanel, backGroundConstraints);
-		
+
 		timePanelContraints = new GridBagConstraints();
-		
+
 		mainView = dayView;
 		JPanel prevNextPanel = new JPanel();
 		calendarTitle = new JLabel(mainView.getTitle());
@@ -196,7 +201,7 @@ public class DefaultView extends JPanel {
 		timePanelContraints.gridy = 0;
 		timePanelContraints.weightx = 1;
 		timePanel.add(prevNextPanel, timePanelContraints);
-		
+
 		dayWeekMonthSelect = new ButtonGroup();
 		DayWeekMonthListener dwmListener = new DayWeekMonthListener(); 
 		dayBtn = new JToggleButton("Dag");
@@ -220,7 +225,7 @@ public class DefaultView extends JPanel {
 		timePanelContraints.gridx = 3;
 		timePanelContraints.gridy = 0;
 		timePanel.add(monthBtn, timePanelContraints);
-//		
+		//		
 		timePanelContraints.gridwidth = 5;
 		timePanelContraints.fill = GridBagConstraints.HORIZONTAL;
 		timePanelContraints.weightx = 1;
@@ -228,7 +233,7 @@ public class DefaultView extends JPanel {
 		timePanelContraints.gridy = 1;
 		calendarPanel = mainView.getPanel();
 		timePanel.add(calendarPanel, timePanelContraints);
-//		
+		//		
 	}
 
 	public JFrame getFrame() {
@@ -243,7 +248,7 @@ public class DefaultView extends JPanel {
 		warningCounter += 1;
 		return warning;
 	}
-	
+
 	private class PrevNextListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource() == prevBtn) {
