@@ -118,4 +118,13 @@ public class FakeWhale {
 	public void requestEveryPerson(){
 		receiveAllPersons();
 	}
+	
+	public void pushMeeting(Meeting meeting) {
+		reccieveMeeting(meeting);
+	}
+	
+	
+	private void reccieveMeeting(Meeting meeting) {
+		cModel.addMeeting(meeting);
+	}
 }
