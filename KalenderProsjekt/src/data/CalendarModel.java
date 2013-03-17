@@ -11,7 +11,7 @@ import server.DBController;
 
 public class CalendarModel {
 	private List<Person> persons;
-	private HashMap<Person, ArrayList<Meeting>> hasjmap;
+	private HashMap<Person, ArrayList<Meeting>> personMeetingRelation;
 	private ArrayList<Boolean> selected;
 	private FakeWhale data;
 	private PropertyChangeSupport pcs;
@@ -24,7 +24,7 @@ public class CalendarModel {
 	public CalendarModel() {
 		pcs = new PropertyChangeSupport(this);
 		persons = new ArrayList<Person>();
-		hasjmap = new HashMap<Person,ArrayList<Meeting>>();
+		personMeetingRelation = new HashMap<Person,ArrayList<Meeting>>();
 		selected = new ArrayList<Boolean>();
 		data = new FakeWhale(this);
 
@@ -35,7 +35,7 @@ public class CalendarModel {
 	 * @return all the meetings of the given person
 	 */
 	public ArrayList<Meeting> getMeetings(Person person) {
-		return hasjmap.get(person);
+		return personMeetingRelation.get(person);
 	}
 	/**
 	 * Gets ALL of the meetings of a person in the given time interval
@@ -45,7 +45,7 @@ public class CalendarModel {
 	 * @return all the meetings of the given person within the given time interval.
 	 */
 	public ArrayList<Meeting> getMeetings(Person person, long start, long end) {
-		ArrayList<Meeting> meetings = hasjmap.get(person);
+		ArrayList<Meeting> meetings = personMeetingRelation.get(person);
 		ArrayList<Meeting> newMeetings = new ArrayList<Meeting>();
 		for (Meeting meeting : meetings) {
 			if (meeting.getStartTime() >= start && meeting.getEndTime() < end) {
@@ -60,7 +60,7 @@ public class CalendarModel {
 	}
 
 	public HashMap<Person, ArrayList<Meeting>> getHasjmap() {
-		return hasjmap;
+		return personMeetingRelation;
 	}
 
 	public ArrayList<Boolean> getSelected() {
@@ -97,7 +97,7 @@ public class CalendarModel {
 		boolean meetingChanged = false;
 		int meetingID = meeting.getMeetingID();
 		Meeting oldMeeting = null;
-		for(ArrayList<Meeting> meetings: hasjmap.values()){
+		for(ArrayList<Meeting> meetings: personMeetingRelation.values()){
 			for (int i = 0; i < meetings.size(); i++) {
 				if (meetings.get(i).getMeetingID() == meetingID) {
 					meetingChanged = true;

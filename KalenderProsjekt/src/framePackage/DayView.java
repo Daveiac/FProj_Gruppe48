@@ -20,9 +20,11 @@ public class DayView extends JPanel implements CalendarView {
 	private DefaultTableModel tableModel;
 	private JTable dayTable;
 	private String[] columnHeaders;
+	
+	private CalendarModel calendarModel;
 
 	// ----- test code -----
-	ArrayList<Meeting> meetings;
+	ArrayList<Meeting> meetingsTest;
 	// ----- test code end -----
 
 	/**
@@ -30,11 +32,13 @@ public class DayView extends JPanel implements CalendarView {
 	 */
 	public DayView() {
 		calendar = new GregorianCalendar();
+//		calendarModel.getCalendarModel();
+//		meetingsTest = calendarModel.
 
 
 
 		// ----- test code -----
-		meetings = new ArrayList<Meeting>();
+		meetingsTest = new ArrayList<Meeting>();
 		ArrayList<Person> members = new ArrayList<Person>();
 		Team team = new Team(0, null, members);
 		MeetingRoom room = new MeetingRoom("0");
@@ -42,22 +46,22 @@ public class DayView extends JPanel implements CalendarView {
 		members.add(creator);
 		long startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
 		long endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
-		meetings.add(new Meeting(0, "suppemøte", "inHell", startTime, endTime, "This is a desc", team, room, creator));
+		meetingsTest.add(new Meeting(0, "suppemøte", "inHell", startTime, endTime, "This is a desc", team, room, creator));
 		startTime = new GregorianCalendar(2013, 2, 15, 10, 30).getTimeInMillis();
 		endTime = new GregorianCalendar(2013, 2, 15, 11, 00).getTimeInMillis();
-		meetings.add(new Meeting(0, "suppemøte2", "stillInHell", startTime, endTime, "This is a desc", team, room, creator));
+		meetingsTest.add(new Meeting(0, "suppemøte2", "stillInHell", startTime, endTime, "This is a desc", team, room, creator));
 		startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
 		endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
-		meetings.add(new Meeting(0, "suppemøte3", "wtfWhyInHell", startTime, endTime, "This is a desc", team, room, creator));
+		meetingsTest.add(new Meeting(0, "suppemøte3", "wtfWhyInHell", startTime, endTime, "This is a desc", team, room, creator));
 		startTime = new GregorianCalendar(2013, 2, 14, 12, 00).getTimeInMillis();
 		endTime = new GregorianCalendar(2013, 2, 14, 15, 30).getTimeInMillis();
-		meetings.add(new Meeting(0, "suppemøte4", "fuInHell", startTime, endTime, "This is a desc", team, room, creator));
+		meetingsTest.add(new Meeting(0, "suppemøte4", "fuInHell", startTime, endTime, "This is a desc", team, room, creator));
 		startTime = new GregorianCalendar(2013, 2, 16, 12, 00).getTimeInMillis();
 		endTime = new GregorianCalendar(2013, 2, 16, 15, 30).getTimeInMillis();
-		meetings.add(new Meeting(0, "suppemøte5", "careInHell", startTime, endTime, "This is a desc", team, room, creator));
+		meetingsTest.add(new Meeting(0, "suppemøte5", "careInHell", startTime, endTime, "This is a desc", team, room, creator));
 		startTime = new GregorianCalendar(2013, 2, 17, 03, 00).getTimeInMillis();
 		endTime = new GregorianCalendar(2013, 2, 17, 04, 30).getTimeInMillis();
-		meetings.add(new Meeting(0, "suppemøte6", "w00t?", startTime, endTime, "This is a desc", team, room, creator));
+		meetingsTest.add(new Meeting(0, "suppemøte6", "w00t?", startTime, endTime, "This is a desc", team, room, creator));
 		// ----- test code end -----
 
 
@@ -154,7 +158,7 @@ public class DayView extends JPanel implements CalendarView {
 		}
 
 		// Sets today's meetings
-		setMeetings(calendar, tableModel, dayOfWeek, meetings);
+		setMeetings(calendar, tableModel, dayOfWeek, meetingsTest);
 	}
 
 	/**
