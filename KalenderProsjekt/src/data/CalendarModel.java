@@ -135,4 +135,8 @@ public class CalendarModel {
 	public Color getColorOfPerson(Person person) {
 		return colors[persons.indexOf(person)];
 	}
+	
+	public void pushMeeting(Meeting meeting) {
+		data.pushMeeting(meeting);
+	}
 }
