@@ -1,13 +1,12 @@
 package data;
 
+import java.awt.Color;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import server.DBController;
 
 public class CalendarModel {
 	private List<Person> persons;
@@ -15,6 +14,7 @@ public class CalendarModel {
 	private ArrayList<Boolean> selected;
 	private FakeWhale data;
 	private PropertyChangeSupport pcs;
+	private static final Color[] colors = {Color.red,Color.blue,Color.green,Color.orange,Color.magenta,Color.gray,Color.pink};
 	public static final String SELECTED_Property = "SELECTED", MEETING_ADDED_Property = "NEW_M", 
 			MEETING_CHANGED_Property = "CHANGE", MEETING_REMOVED_Property = "REMOVE",
 			NOTIFICATION_ADDED_Property = "NEW_N", CALENDAR_LOADED_Property = "LOADED";
@@ -27,6 +27,11 @@ public class CalendarModel {
 		personMeetingRelation = new HashMap<Person,ArrayList<Meeting>>();
 		selected = new ArrayList<Boolean>();
 		data = new FakeWhale(this);
+		
+		data.requestEveryPerson();
+		for (Person p : persons) {
+			data.requestEveryMeetingForPerson(p);
+		}
 
 	}
 	/**
@@ -116,7 +121,18 @@ public class CalendarModel {
 			pcs.firePropertyChange(CALENDAR_LOADED_Property, null, personMeetingRelation);
 		}
 	}
-
-
-
+	
+	public List<Person> getSelectedPersons() {
+		List<Person> selectedPersons = new ArrayList<Person>();
+		for (int i = 0; i < selected.size(); i++) {
+			if(selected.get(i)) {
+				selectedPersons.add(persons.get(i));
+			}
+		}
+		return selectedPersons;
+	}
+	
+	public Color getColorOfPerson(Person person) {
+		return colors[persons.indexOf(person)];
+	}
 }
