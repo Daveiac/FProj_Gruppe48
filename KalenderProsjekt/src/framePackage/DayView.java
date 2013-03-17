@@ -1,6 +1,8 @@
 package framePackage;
 
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -13,7 +15,7 @@ import data.*;
  * This is the DayView Panel that shows the day planner.
  */
 @SuppressWarnings("serial")
-public class DayView extends JPanel implements CalendarView {
+public class DayView extends JPanel implements CalendarView, PropertyChangeListener {
 
 	private GregorianCalendar calendar;
 	private String title;
@@ -238,5 +240,10 @@ public class DayView extends JPanel implements CalendarView {
 	@Override
 	public JPanel getPanel() {
 		return this;
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+//		if (evt.getPropertyName() == CalendarModel)
 	}
 }
