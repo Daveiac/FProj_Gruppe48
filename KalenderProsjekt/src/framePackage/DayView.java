@@ -216,6 +216,9 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 		case CalendarModel.CALENDAR_LOADED_Property:
 			createDayTable();
 			break;
+		case CalendarModel.MEETING_ADDED_Property:
+			createDayTable();
+			break;
 		case CalendarModel.MEETING_CHANGED_Property:
 			createDayTable();
 			break;
