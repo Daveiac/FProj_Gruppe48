@@ -3,12 +3,10 @@ package data;
 import java.awt.Color;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import server.DBController;
 
 public class CalendarModel {
 	private List<Person> persons;
@@ -29,6 +27,11 @@ public class CalendarModel {
 		personMeetingRelation = new HashMap<Person,ArrayList<Meeting>>();
 		selected = new ArrayList<Boolean>();
 		data = new FakeWhale(this);
+		
+		data.requestEveryPerson();
+		for (Person p : persons) {
+			data.requestEveryMeetingForPerson(p);
+		}
 
 	}
 	/**

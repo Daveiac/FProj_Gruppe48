@@ -19,10 +19,6 @@ public class FakeWhale {
 		this.cModel = cModel;
 		persons = new ArrayList<Person>();
 		
-		requestEveryPerson();
-		for (Person p : persons) {
-			requestEveryMeetingForPerson(p);
-		}
 	}
 	/**
 	 * Just test code
