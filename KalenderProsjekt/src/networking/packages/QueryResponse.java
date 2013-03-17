@@ -8,7 +8,7 @@ public class QueryResponse extends Response {
 	private QueryResponseType queryResponseType;
 
 	public enum QueryResponseType {
-		NOTIFICATION_RESPONSE,
+		NOTIFICATION_RESPONSE, PERSON_RESPONSE, MEETING_RESPONSE, ALARM_RESPONSE, TEAM_RESPONSE
 	}
 
 	public QueryResponse(List data, QueryResponseType queryResponseType) {

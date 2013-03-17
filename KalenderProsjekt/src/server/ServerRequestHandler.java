@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import networking.packages.AuthenticationRequest;
 import networking.packages.AuthenticationResponse;
@@ -14,26 +16,33 @@ import networking.packages.QueryRequest;
 import networking.packages.QueryResponse;
 import networking.packages.QueryResponse.QueryResponseType;
 import networking.packages.Response;
+import networking.packages.UpdateRequest;
 import data.Alarm;
 import data.Meeting;
 import data.Notification;
 import data.Person;
+import data.Team;
 
 public class ServerRequestHandler implements Runnable {
 	/**
 	 * Will listen to a blockingqueue and when it is populated handle the
 	 * requests inside
 	 */
+	BlockingQueue<PendingResponse> responses;
 	BlockingQueue<ReceivedRequest> requests;
 	private DBController dbController;
 
-	public ServerRequestHandler(BlockingQueue<ReceivedRequest> requests) {
-		dbController = new DBController();
+
+	
+	
+
+	public ServerRequestHandler(BlockingQueue<PendingResponse> responses,
+			BlockingQueue<ReceivedRequest> requests, DBController dbController) {
+		super();
+		this.responses = responses;
 		this.requests = requests;
-		
+		this.dbController = dbController;
 	}
-	
-	
 
 	private AuthenticationResponse handleAuthenticationRequest(
 			AuthenticationRequest aRequest) {
@@ -55,19 +64,7 @@ public class ServerRequestHandler implements Runnable {
 
 	}
 
-	private void sendResponse(Response response, Socket clientSocket) {
-		ObjectOutputStream oos = null;
 
-		try {
-			oos = new ObjectOutputStream(clientSocket.getOutputStream());
-			oos.writeObject(response);
-			OutputController.output("Responded to "
-					+ clientSocket.getInetAddress() + " with " + response);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 	private QueryResponse getEveryPerson() {
 		List<Person> data = null;
@@ -77,7 +74,7 @@ public class ServerRequestHandler implements Runnable {
 			e.printStackTrace();
 		}
 		QueryResponse response = new QueryResponse(data,
-				QueryResponseType.NOTIFICATION_RESPONSE);
+				QueryResponseType.PERSON_RESPONSE);
 		return response;
 	}
 
@@ -101,7 +98,7 @@ public class ServerRequestHandler implements Runnable {
 			e.printStackTrace();
 		}
 		QueryResponse response = new QueryResponse(data,
-				QueryResponseType.NOTIFICATION_RESPONSE);
+				QueryResponseType.ALARM_RESPONSE);
 		return response;
 	}
 
@@ -114,10 +111,22 @@ public class ServerRequestHandler implements Runnable {
 			e.printStackTrace();
 		}
 		QueryResponse response = new QueryResponse(data,
-				QueryResponseType.NOTIFICATION_RESPONSE);
+				QueryResponseType.MEETING_RESPONSE);
 		return response;
 	}
-
+	
+	private QueryResponse getTeamsByMeeting(Meeting meeting){
+		List<Team> teams = null;
+		
+		try {
+			teams = dbController.getTeamsByMeeting(meeting.getMeetingID());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new QueryResponse(teams, QueryResponseType.MEETING_RESPONSE);
+	}
+	
 	private QueryResponse handleQueryRequest(QueryRequest request) {
 		QueryResponse response = null;
 
@@ -135,6 +144,10 @@ public class ServerRequestHandler implements Runnable {
 			response = getAlarms(request.getUsername());
 		case GET_EVERY_MEETING_BY_PERSON:
 			response = getMeetingsByPerson(request.getUsername());
+			break;
+		case GET_TEAMS_BY_MEETING:
+			response = getTeamsByMeeting(request.getMeeting());
+			break;
 		default:
 			break;
 		}
@@ -142,6 +155,8 @@ public class ServerRequestHandler implements Runnable {
 		return response;
 
 	}
+	
+	
 
 	private QueryResponse getNotificationsByPerson(String username) {
 		List<Notification> notifications = null;
@@ -157,6 +172,7 @@ public class ServerRequestHandler implements Runnable {
 
 	private void processRequest(ReceivedRequest request) {
 		Response response = null;
+		boolean respondToAll = false;
 		switch (request.networkRequest.getEventType()) {
 		case AUTHENTICATION:
 			response = handleAuthenticationRequest((AuthenticationRequest) request.networkRequest);
@@ -166,15 +182,42 @@ public class ServerRequestHandler implements Runnable {
 		case QUERY:
 			response = handleQueryRequest((QueryRequest) request.networkRequest);
 			break;
+		case UPDATE:
+			handleUpdateRequest((UpdateRequest) request.networkRequest);
+			break;
 		default:
 			OutputController
 					.output("Received a request, but unable to determine type: "
 							+ request);
 			break;
 		}
-		sendResponse(response, request.clientSocket);
+		try {
+			while(!responses.offer(new PendingResponse(response, request.clientSocket, respondToAll), 200, TimeUnit.MILLISECONDS));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
+	
+	private void addAlarm(UpdateRequest request){
+		try {
+			dbController.addAlarm(request.getAlarm());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void handleUpdateRequest(UpdateRequest request) {
+		switch(request.getUpdateType()){
+		case CREATE_ALARM:
+			addAlarm(request);
+		}
+		
+	}
+
+
 
 	public void run() {
 		while (true) {

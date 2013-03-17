@@ -11,10 +11,11 @@ public class QueryRequest extends NetworkRequest {
 
 	public enum QueryType {
 		GET_ALL_PERSONS, GET_EVERY_MEETING_BY_PERSON, GET_ALARMS_BY_PERSON, GET_NOTIFICATIONS_BY_MEETING, GET_NOTIFICATIONS_BY_PERSON, GET_TEAMS_BY_MEETING,
+		
 	}
 
 	public QueryRequest(Person person, Meeting meeting, QueryType queryType) {
-		super();
+		super(EventType.QUERY);
 		this.person = person;
 		this.meeting = meeting;
 		this.queryType = queryType;
