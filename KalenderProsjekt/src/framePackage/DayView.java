@@ -3,7 +3,6 @@ package framePackage;
 import java.awt.Dimension;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javax.swing.*;
@@ -57,6 +56,9 @@ public class DayView extends JPanel implements CalendarView {
 		startTime = new GregorianCalendar(2013, 2, 14, 12, 00).getTimeInMillis();
 		endTime = new GregorianCalendar(2013, 2, 14, 15, 30).getTimeInMillis();
 		meetings.add(new Meeting(0, "suppemøte4", "fuInHell", startTime, endTime, "This is a desc", team, room, creator));
+		startTime = new GregorianCalendar(2013, 2, 16, 12, 00).getTimeInMillis();
+		endTime = new GregorianCalendar(2013, 2, 16, 15, 30).getTimeInMillis();
+//		meetings.add(new Meeting(0, "suppemøte5", "careInHell", startTime, endTime, "This is a desc", team, room, creator));
 		// ----- test code end -----
 
 
@@ -115,36 +117,24 @@ public class DayView extends JPanel implements CalendarView {
 	 * Creates a new day view.
 	 */
 	public void createDayTable() {
-		createDay();
+
+		// Sets this day's title
+		setDayTitle();
+
+		// Sets table headers
+		int numberOfDays = 1;
+		SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE");
+		columnHeaders[numberOfDays] = dayFormat.format(calendar.getTime());
+		tableModel.setColumnIdentifiers(columnHeaders);
+
+		// Creates the day data
+		createDay(tableModel, numberOfDays);
 
 		// Sets the new week into the table
 		dayTable.setModel(tableModel);
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
 		dayTable.getColumnModel().getColumn(1).setCellRenderer(new DayTableCellRenderer());
-	}
-
-	/**
-	 * Creates a new day view.
-	 */
-	public void createDay() {
-
-		// Sets this day's title
-		setDayTitle();
-
-		// Sets table headers
-		SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE");
-
-		columnHeaders[1] = weekFormat.format(calendar.getTime());
-
-		tableModel.setColumnIdentifiers(columnHeaders);
-
-		for (int i = 0; i < tableModel.getRowCount(); i++) {
-			tableModel.setValueAt(null, i, 1);
-		}
-
-		// Sets today's meetings
-		setMeetings(meetings);
 	}
 
 	/**
@@ -156,10 +146,23 @@ public class DayView extends JPanel implements CalendarView {
 	}
 
 	/**
+	 * Creates the new day's data.
+	 */
+	public void createDay(DefaultTableModel tableModel, int dayOfWeek) {
+
+		for (int i = 0; i < tableModel.getRowCount(); i++) {
+			tableModel.setValueAt(null, i, dayOfWeek);
+		}
+
+		// Sets today's meetings
+		setMeetings(dayOfWeek, meetings);
+	}
+
+	/**
 	 * Attaches the meetings to the table.
 	 * @param meetings	a list of meeting objects
 	 */
-	public void setMeetings(ArrayList<Meeting> meetings) {
+	public void setMeetings(int dayOfWeek, ArrayList<Meeting> meetings) {
 
 		for (Meeting meeting : meetings) {
 			GregorianCalendar meetingCalendar = new GregorianCalendar();
@@ -180,14 +183,22 @@ public class DayView extends JPanel implements CalendarView {
 			int endMinute = meetingCalendar.get(GregorianCalendar.MINUTE);
 			int endTableTime = endHour * 4 + endMinute / 15;
 
+			// Sets the meetings at the given times
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
 			if (sdf.format(calendar.getTime()).equals(sdf.format(meetingCalendar.getTime()))) {
 				for (int time = startTableTime; time < endTableTime; time++) {
-					tableModel.setValueAt(meeting, time, 1);
+					tableModel.setValueAt(meeting, time, dayOfWeek);
 				}
 			}
 		}
-
+	}
+	
+	/**
+	 * Gets the day view.
+	 * @return this	The day view
+	 */
+	public DayView getDayView() {
+		return this;
 	}
 
 	/**
