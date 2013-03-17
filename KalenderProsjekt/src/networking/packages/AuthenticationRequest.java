@@ -10,7 +10,7 @@ public class AuthenticationRequest extends NetworkRequest{
 	
 	
 	public AuthenticationRequest(String username, String password) {
-		super();
+		super(EventType.AUTHENTICATION);
 		this.username = username;
 		this.password = password;
 	}

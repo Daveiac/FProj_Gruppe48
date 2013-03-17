@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import networking.packages.AuthenticationRequest;
 import networking.packages.AuthenticationResponse;
@@ -14,60 +16,63 @@ import networking.packages.QueryRequest;
 import networking.packages.QueryResponse;
 import networking.packages.QueryResponse.QueryResponseType;
 import networking.packages.Response;
+import networking.packages.UpdateRequest;
 import data.Alarm;
 import data.Meeting;
 import data.Notification;
 import data.Person;
+import data.Team;
 
 public class ServerRequestHandler implements Runnable {
 	/**
 	 * Will listen to a blockingqueue and when it is populated handle the
 	 * requests inside
 	 */
+	BlockingQueue<PendingResponse> responses;
 	BlockingQueue<ReceivedRequest> requests;
 	private DBController dbController;
 
-	public ServerRequestHandler(BlockingQueue<ReceivedRequest> requests) {
-		dbController = new DBController();
-		this.requests = requests;
-		
-	}
+
 	
 	
 
-	private AuthenticationResponse handleAuthenticationRequest(
-			AuthenticationRequest aRequest) {
+	public ServerRequestHandler(BlockingQueue<PendingResponse> responses,
+			BlockingQueue<ReceivedRequest> requests, DBController dbController) {
+		super();
+		this.responses = responses;
+		this.requests = requests;
+		this.dbController = dbController;
+	}
+
+	private void handleAuthenticationRequest(
+			AuthenticationRequest aRequest, Socket client) {
+		AuthenticationResponse aResponse;
 		try {
 			if (dbController.personExists(aRequest.getUsername())) {
 				if (dbController.authenticateUser(aRequest.getUsername(),
 						aRequest.getPassword())) {
-					return new AuthenticationResponse(
+					aResponse =  new AuthenticationResponse(
 							AuthenticationResponseType.APPROVED);
 				}
-				return new AuthenticationResponse(
+				aResponse = new AuthenticationResponse(
 						AuthenticationResponseType.WRONG_PASS);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return new AuthenticationResponse(
+		aResponse = new AuthenticationResponse(
 				AuthenticationResponseType.USER_NOEXIST);
-
-	}
-
-	private void sendResponse(Response response, Socket clientSocket) {
-		ObjectOutputStream oos = null;
-
+		
 		try {
-			oos = new ObjectOutputStream(clientSocket.getOutputStream());
-			oos.writeObject(response);
-			OutputController.output("Responded to "
-					+ clientSocket.getInetAddress() + " with " + response);
-
-		} catch (IOException e) {
+			while(!responses.offer(new PendingResponse(aResponse, client, false), 200, TimeUnit.MILLISECONDS));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 	}
+
+
 
 	private QueryResponse getEveryPerson() {
 		List<Person> data = null;
@@ -77,7 +82,7 @@ public class ServerRequestHandler implements Runnable {
 			e.printStackTrace();
 		}
 		QueryResponse response = new QueryResponse(data,
-				QueryResponseType.NOTIFICATION_RESPONSE);
+				QueryResponseType.PERSON_RESPONSE);
 		return response;
 	}
 
@@ -101,7 +106,7 @@ public class ServerRequestHandler implements Runnable {
 			e.printStackTrace();
 		}
 		QueryResponse response = new QueryResponse(data,
-				QueryResponseType.NOTIFICATION_RESPONSE);
+				QueryResponseType.ALARM_RESPONSE);
 		return response;
 	}
 
@@ -114,11 +119,23 @@ public class ServerRequestHandler implements Runnable {
 			e.printStackTrace();
 		}
 		QueryResponse response = new QueryResponse(data,
-				QueryResponseType.NOTIFICATION_RESPONSE);
+				QueryResponseType.MEETING_RESPONSE);
 		return response;
 	}
-
-	private QueryResponse handleQueryRequest(QueryRequest request) {
+	
+	private QueryResponse getTeamsByMeeting(Meeting meeting){
+		List<Team> teams = null;
+		
+		try {
+			teams = dbController.getTeamsByMeeting(meeting.getMeetingID());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new QueryResponse(teams, QueryResponseType.MEETING_RESPONSE);
+	}
+	
+	private void handleQueryRequest(QueryRequest request, Socket client) {
 		QueryResponse response = null;
 
 		switch (request.getQueryType()) {
@@ -135,13 +152,24 @@ public class ServerRequestHandler implements Runnable {
 			response = getAlarms(request.getUsername());
 		case GET_EVERY_MEETING_BY_PERSON:
 			response = getMeetingsByPerson(request.getUsername());
+			break;
+		case GET_TEAMS_BY_MEETING:
+			response = getTeamsByMeeting(request.getMeeting());
+			break;
 		default:
 			break;
 		}
 
-		return response;
+		try {
+			while(!responses.offer(new PendingResponse(response, client, false), 200, TimeUnit.MILLISECONDS));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
+	
+	
 
 	private QueryResponse getNotificationsByPerson(String username) {
 		List<Notification> notifications = null;
@@ -156,15 +184,18 @@ public class ServerRequestHandler implements Runnable {
 	}
 
 	private void processRequest(ReceivedRequest request) {
-		Response response = null;
+		
 		switch (request.networkRequest.getEventType()) {
 		case AUTHENTICATION:
-			response = handleAuthenticationRequest((AuthenticationRequest) request.networkRequest);
+			handleAuthenticationRequest((AuthenticationRequest) request.networkRequest, request.clientSocket);
 			break;
 		case LOGOUT:
 			break;
 		case QUERY:
-			response = handleQueryRequest((QueryRequest) request.networkRequest);
+			handleQueryRequest((QueryRequest) request.networkRequest, request.clientSocket);
+			break;
+		case UPDATE:
+			handleUpdateRequest((UpdateRequest) request.networkRequest, request.clientSocket);
 			break;
 		default:
 			OutputController
@@ -172,9 +203,42 @@ public class ServerRequestHandler implements Runnable {
 							+ request);
 			break;
 		}
-		sendResponse(response, request.clientSocket);
+		
 
 	}
+	
+	private Response addAlarm(UpdateRequest request){
+		Response response = null;
+		List<Alarm> alarms = null;
+		try {
+			int alarmID = dbController.addAlarm(request.getAlarm());
+			alarms = dbController.getAlarmsOfPerson(request.getSender().getUsername());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new QueryResponse(alarms, QueryResponseType.ALARM_RESPONSE);
+		
+	}
+
+	private void handleUpdateRequest(UpdateRequest request, Socket client) {
+		Response response =  null;
+		boolean respondToAllClients = false;
+		switch(request.getUpdateType()){
+		case CREATE_ALARM:
+			response = addAlarm(request);
+		}
+		
+		try {
+			while(!responses.offer(new PendingResponse(response, client, respondToAllClients), 200, TimeUnit.MILLISECONDS));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+
 
 	public void run() {
 		while (true) {

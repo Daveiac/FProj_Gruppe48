@@ -10,8 +10,17 @@ public abstract class NetworkRequest implements Serializable{
 	private EventType eventType;
 	
 	public static enum EventType{
-		AUTHENTICATION, QUERY, LOGOUT
+		AUTHENTICATION, QUERY, LOGOUT, UPDATE,
 	}
+	
+	
+
+	public NetworkRequest(EventType eventType) {
+		super();
+		this.eventType = eventType;
+	}
+
+
 
 	public EventType getEventType() {
 		return eventType;

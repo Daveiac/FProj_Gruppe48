@@ -1,11 +1,12 @@
 package server;
 
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import networking.ConnectionListener;
-import networking.packages.NetworkRequest;
 
 
 public class Server extends Thread{
@@ -16,6 +17,7 @@ public class Server extends Thread{
 	
 	private BlockingQueue<Socket> newClientQueue;
 	private BlockingQueue<ReceivedRequest> requestQueue;
+	public static List<Socket> clients;
 	
 	public Server(){
 		newClientQueue = new LinkedBlockingQueue<Socket>();
@@ -36,6 +38,7 @@ public class Server extends Thread{
 			try {
 				System.out.println(newClientQueue);
 				Socket nClient = newClientQueue.take();
+				clients.add(nClient);
 				OutputController.output("spawning new RequestListener thread");
 				(new Thread(new RequestListener(nClient, requestQueue))).start();
 			} catch (InterruptedException e) {
@@ -47,6 +50,7 @@ public class Server extends Thread{
 	
 	
 	public static void main(String args[]){
+		clients = Collections.synchronizedList(new ArrayList<Socket>());
 		(new Server()).start();
 	}
 
