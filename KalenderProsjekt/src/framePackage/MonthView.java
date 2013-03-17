@@ -1,6 +1,8 @@
 package framePackage;
 
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.GregorianCalendar;
 
 import javax.swing.JFrame;
@@ -11,7 +13,9 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-public class MonthView implements CalendarView{
+import data.CalendarModel;
+
+public class MonthView implements CalendarView, PropertyChangeListener{
 
 	private JTable monthTable;
 	private JPanel monthPanel;
@@ -126,5 +130,12 @@ public class MonthView implements CalendarView{
 			currentMonth--;
 		}
 		refreshCalendar();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if(evt.getPropertyName() == CalendarModel.MEETING_ADDED_Property) {
+			refreshCalendar();
+		}
 	}
 }

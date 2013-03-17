@@ -15,7 +15,7 @@ public class CalendarModel {
 	private ArrayList<Boolean> selected;
 	private FakeWhale data;
 	private PropertyChangeSupport pcs;
-	private static final String SELECTED_Property = "SELECTED", MEETING_ADDED_Property = "NEW_M", 
+	public static final String SELECTED_Property = "SELECTED", MEETING_ADDED_Property = "NEW_M", 
 			MEETING_CHANGED_Property = "CHANGE", MEETING_REMOVED_Property = "REMOVE",
 			NOTIFICATION_ADDED_Property = "NEW_N", NEW_PERSONS_Property = "NEW_P";
 
@@ -84,7 +84,6 @@ public class CalendarModel {
 		List<Person> oldValue = this.persons;
 		this.persons = persons;
 		pcs.firePropertyChange(NEW_PERSONS_Property, oldValue, persons);
-		
 	}
 	
 	/**
