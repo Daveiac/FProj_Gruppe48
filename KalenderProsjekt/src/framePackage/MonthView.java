@@ -3,7 +3,9 @@ package framePackage;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -14,6 +16,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 import data.CalendarModel;
+import data.Meeting;
+import data.Person;
 
 public class MonthView implements CalendarView, PropertyChangeListener{
 
@@ -135,8 +139,9 @@ public class MonthView implements CalendarView, PropertyChangeListener{
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		switch (evt.getPropertyName()) {
-		case CalendarModel.MEETING_ADDED_Property:
-			refreshCalendar();
+		case CalendarModel.CALENDAR_LOADED_Property:
+			HashMap<Person, ArrayList<Meeting>> pmr = (HashMap<Person, ArrayList<Meeting>>) evt.getNewValue();
+//			addAllShizz(pmr);
 			break;
 		case CalendarModel.MEETING_CHANGED_Property:
 			refreshCalendar();

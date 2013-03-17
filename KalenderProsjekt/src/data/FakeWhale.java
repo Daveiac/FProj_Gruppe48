@@ -30,13 +30,22 @@ public class FakeWhale {
 		
 		long startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
 		long endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
-		meetings.add(new Meeting(0, "suppemøtewwwwwwwwwwwwwwwwwwwwwwwww", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte", "inHell", startTime, endTime, "This is a desc", team, room, creator));
 		startTime = new GregorianCalendar(2013, 2, 15, 10, 30).getTimeInMillis();
 		endTime = new GregorianCalendar(2013, 2, 15, 11, 00).getTimeInMillis();
-		meetings.add(new Meeting(0, "suppemøte2", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte2", "stillInHell", startTime, endTime, "This is a desc", team, room, creator));
 		startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
 		endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
-		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
+		meetings.add(new Meeting(0, "suppemøte3", "wtfWhyInHell", startTime, endTime, "This is a desc", team, room, creator));
+		startTime = new GregorianCalendar(2013, 2, 14, 12, 00).getTimeInMillis();
+		endTime = new GregorianCalendar(2013, 2, 14, 15, 30).getTimeInMillis();
+		meetings.add(new Meeting(0, "suppemøte4", "fuInHell", startTime, endTime, "This is a desc", team, room, creator));
+		startTime = new GregorianCalendar(2013, 2, 16, 12, 00).getTimeInMillis();
+		endTime = new GregorianCalendar(2013, 2, 16, 15, 30).getTimeInMillis();
+		meetings.add(new Meeting(0, "suppemøte5", "careInHell", startTime, endTime, "This is a desc", team, room, creator));
+		startTime = new GregorianCalendar(2013, 2, 17, 03, 00).getTimeInMillis();
+		endTime = new GregorianCalendar(2013, 2, 17, 04, 30).getTimeInMillis();
+		meetings.add(new Meeting(0, "suppemøte6", "w00t?", startTime, endTime, "This is a desc", team, room, creator));
 		
 		
 		

@@ -17,7 +17,7 @@ public class CalendarModel {
 	private PropertyChangeSupport pcs;
 	public static final String SELECTED_Property = "SELECTED", MEETING_ADDED_Property = "NEW_M", 
 			MEETING_CHANGED_Property = "CHANGE", MEETING_REMOVED_Property = "REMOVE",
-			NOTIFICATION_ADDED_Property = "NEW_N", NEW_PERSONS_Property = "NEW_P";
+			NOTIFICATION_ADDED_Property = "NEW_N", CALENDAR_LOADED_Property = "LOADED";
 
 
 
@@ -81,9 +81,7 @@ public class CalendarModel {
 	 * @param persons
 	 */
 	public void setAllPersons(List<Person> persons) {
-		List<Person> oldValue = this.persons;
 		this.persons = persons;
-		pcs.firePropertyChange(NEW_PERSONS_Property, oldValue, persons);
 	}
 	
 	/**
@@ -109,6 +107,13 @@ public class CalendarModel {
 			pcs.firePropertyChange(MEETING_CHANGED_Property, oldMeeting, meeting);
 		} else {
 			pcs.firePropertyChange(MEETING_ADDED_Property, null, meeting);
+		}
+	}
+	
+	public void addAllMeetingsOfPerson(ArrayList<Meeting> meetings, Person person) {
+		personMeetingRelation.put(person, meetings);
+		if(personMeetingRelation.size() == persons.size()) {
+			pcs.firePropertyChange(CALENDAR_LOADED_Property, null, personMeetingRelation);
 		}
 	}
 
