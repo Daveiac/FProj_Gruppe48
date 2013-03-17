@@ -94,7 +94,7 @@ public class DBController {
 		}
 	}
 
-	public void addAlarm(Alarm alarm) throws SQLException {
+	public int addAlarm(Alarm alarm) throws SQLException {
 		String kind = "'" + Character.toString(alarm.getKind()) + "'";
 		String time = Long.toString(alarm.getTime());
 		String meetingID = Integer.toString(alarm.getMeeting().getMeetingID());
@@ -103,7 +103,7 @@ public class DBController {
 		sql += "VALUES (";
 		sql += kind + ", " + time + ", " + meetingID + ", " + username + ");";
 
-		dBConn.makeUpdate(sql);
+		return dBConn.makeUpdateReturnID(sql);
 
 	}
 

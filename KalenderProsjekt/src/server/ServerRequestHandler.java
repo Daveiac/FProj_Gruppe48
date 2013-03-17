@@ -44,23 +44,31 @@ public class ServerRequestHandler implements Runnable {
 		this.dbController = dbController;
 	}
 
-	private AuthenticationResponse handleAuthenticationRequest(
-			AuthenticationRequest aRequest) {
+	private void handleAuthenticationRequest(
+			AuthenticationRequest aRequest, Socket client) {
+		AuthenticationResponse aResponse;
 		try {
 			if (dbController.personExists(aRequest.getUsername())) {
 				if (dbController.authenticateUser(aRequest.getUsername(),
 						aRequest.getPassword())) {
-					return new AuthenticationResponse(
+					aResponse =  new AuthenticationResponse(
 							AuthenticationResponseType.APPROVED);
 				}
-				return new AuthenticationResponse(
+				aResponse = new AuthenticationResponse(
 						AuthenticationResponseType.WRONG_PASS);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return new AuthenticationResponse(
+		aResponse = new AuthenticationResponse(
 				AuthenticationResponseType.USER_NOEXIST);
+		
+		try {
+			while(!responses.offer(new PendingResponse(aResponse, client, false), 200, TimeUnit.MILLISECONDS));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -127,7 +135,7 @@ public class ServerRequestHandler implements Runnable {
 		return new QueryResponse(teams, QueryResponseType.MEETING_RESPONSE);
 	}
 	
-	private QueryResponse handleQueryRequest(QueryRequest request) {
+	private void handleQueryRequest(QueryRequest request, Socket client) {
 		QueryResponse response = null;
 
 		switch (request.getQueryType()) {
@@ -152,7 +160,12 @@ public class ServerRequestHandler implements Runnable {
 			break;
 		}
 
-		return response;
+		try {
+			while(!responses.offer(new PendingResponse(response, client, false), 200, TimeUnit.MILLISECONDS));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 	
@@ -171,19 +184,18 @@ public class ServerRequestHandler implements Runnable {
 	}
 
 	private void processRequest(ReceivedRequest request) {
-		Response response = null;
-		boolean respondToAll = false;
+		
 		switch (request.networkRequest.getEventType()) {
 		case AUTHENTICATION:
-			response = handleAuthenticationRequest((AuthenticationRequest) request.networkRequest);
+			handleAuthenticationRequest((AuthenticationRequest) request.networkRequest, request.clientSocket);
 			break;
 		case LOGOUT:
 			break;
 		case QUERY:
-			response = handleQueryRequest((QueryRequest) request.networkRequest);
+			handleQueryRequest((QueryRequest) request.networkRequest, request.clientSocket);
 			break;
 		case UPDATE:
-			handleUpdateRequest((UpdateRequest) request.networkRequest);
+			handleUpdateRequest((UpdateRequest) request.networkRequest, request.clientSocket);
 			break;
 		default:
 			OutputController
@@ -191,28 +203,37 @@ public class ServerRequestHandler implements Runnable {
 							+ request);
 			break;
 		}
-		try {
-			while(!responses.offer(new PendingResponse(response, request.clientSocket, respondToAll), 200, TimeUnit.MILLISECONDS));
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 
 	}
 	
-	private void addAlarm(UpdateRequest request){
+	private Response addAlarm(UpdateRequest request){
+		Response response = null;
+		List<Alarm> alarms = null;
 		try {
-			dbController.addAlarm(request.getAlarm());
+			int alarmID = dbController.addAlarm(request.getAlarm());
+			alarms = dbController.getAlarmsOfPerson(request.getSender().getUsername());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return new QueryResponse(alarms, QueryResponseType.ALARM_RESPONSE);
+		
 	}
 
-	private void handleUpdateRequest(UpdateRequest request) {
+	private void handleUpdateRequest(UpdateRequest request, Socket client) {
+		Response response =  null;
+		boolean respondToAllClients = false;
 		switch(request.getUpdateType()){
 		case CREATE_ALARM:
-			addAlarm(request);
+			response = addAlarm(request);
+		}
+		
+		try {
+			while(!responses.offer(new PendingResponse(response, client, respondToAllClients), 200, TimeUnit.MILLISECONDS));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}
