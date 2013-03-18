@@ -117,6 +117,7 @@ public class CalendarModel implements Serializable{
 			}
 		}
 		this.persons = persons;
+		System.out.println(persons);
 		pcs.firePropertyChange(PERSONS_ADDED_Property, null, persons);
 	}
 	

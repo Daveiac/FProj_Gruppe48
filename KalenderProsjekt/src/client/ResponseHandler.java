@@ -16,6 +16,7 @@ public class ResponseHandler implements Runnable{
 	
 	public ResponseHandler(BlockingQueue<Response> responseQueue) {
 		super();
+		System.out.println("responseHandler created");
 		this.responseQueue = responseQueue;
 	}
 	
@@ -24,7 +25,7 @@ public class ResponseHandler implements Runnable{
 		for (Object object : data) {
 			people.add((Person) object);
 		}
-		DefaultView.calendarModel.setAllPersons(data);
+		Program.calendarModel.setAllPersons(data);
 	}
 
 	private void handleResponse(Response response){

@@ -3,6 +3,7 @@ package client;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -17,15 +18,15 @@ import networking.packages.Response;
 
 public class Program {
 	private static InetAddress serverAddress;
-	private static Socket server;
+	public static Socket server;
 	private static BlockingQueue<Response> queueForHandlingResponses;
 	public final static CalendarModel calendarModel = new CalendarModel();
 	public static Client client;
 	public static RequestHandler reqHandler;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UnknownHostException {
 		queueForHandlingResponses = new LinkedBlockingQueue<Response>();
-		serverAddress = serverAddress;
+		serverAddress = InetAddress.getByName(Constants.serverIP);
 		try {
 			server = new Socket(serverAddress, Constants.port);
 		} catch (IOException e) {
@@ -43,7 +44,7 @@ public class Program {
 		JFrame frame = dw.getFrame();
 		frame.setBounds(0, 0, 1260, 768);
 		frame.setVisible(true);
-		
+		startThreads();
 		
 	}
 	

@@ -71,7 +71,7 @@ public class SharedCalendarView implements PropertyChangeListener{
 		switch (evt.getPropertyName()) {
 		case CalendarModel.PERSONS_ADDED_Property:
 			setCheckBox(calendarModel.getPersons());
-			System.out.println("cookie");
+			System.out.println("cookie " + calendarModel.getPersons());
 			break;
 
 		}
