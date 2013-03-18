@@ -66,6 +66,7 @@ public class DefaultView extends JPanel {
 		notiPanel = new NotiPanelView();
 		sharedCView = new SharedCalendarView(calendarModel);
 		initialize();
+		calendarModel.init();
 	}
 
 	private void initialize() {
@@ -102,24 +103,10 @@ public class DefaultView extends JPanel {
 		backGroundConstraints.gridx = 3;
 		backGroundConstraints.gridy = 0;
 		frame.add(logOut, backGroundConstraints);
-
-		sharedCalendar = new JPanel(new GridBagLayout());
-		sharedCalendar.setSize(100, 100);
-		sharedCalendar.setBorder(BorderFactory.createLineBorder(Color.black));
-		backGroundConstraints.anchor = GridBagConstraints.NORTH;
+		
 		backGroundConstraints.gridx = 0;
 		backGroundConstraints.gridy = 1;
-		frame.add(sharedCalendar, backGroundConstraints);
-
-		GridBagConstraints sharedCalendarContraints = new GridBagConstraints();
-		lblcalendar = new JLabel("kalender");
-		sharedCalendarContraints.gridx = 0;
-		sharedCalendarContraints.gridy = 0;
-		sharedCalendar.add(lblcalendar, sharedCalendarContraints);
-		
-		sharedCalendarContraints.gridx = 0;
-		sharedCalendarContraints.gridy = 1;
-		sharedCalendar.add(sharedCView.getPanel(),sharedCalendarContraints);
+		frame.add(sharedCView.getPanel(),backGroundConstraints);
 
 		backGroundConstraints.gridx = 0;
 		backGroundConstraints.gridy = 2;

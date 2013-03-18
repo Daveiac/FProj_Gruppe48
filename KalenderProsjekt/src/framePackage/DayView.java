@@ -22,8 +22,7 @@ import data.Person;
  * This is the DayView Panel that shows the day planner.
  */
 @SuppressWarnings("serial")
-public class DayView extends JPanel implements CalendarView,
-PropertyChangeListener {
+public class DayView extends JPanel implements CalendarView, PropertyChangeListener {
 
 	private GregorianCalendar calendar;
 	private String title;
@@ -89,7 +88,6 @@ PropertyChangeListener {
 		scrollPane.setPreferredSize(new Dimension(800, 407));
 
 		add(scrollPane);
-		this.calendarModel.init();
 	}
 
 	/**
@@ -176,8 +174,7 @@ PropertyChangeListener {
 
 			// Sets the meetings at the given times
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-			if (sdf.format(calendar.getTime()).equals(
-					sdf.format(meetingCalendar.getTime()))) {
+			if (sdf.format(calendar.getTime()).equals(sdf.format(meetingCalendar.getTime()))) {
 				for (int time = startTableTime; time < endTableTime; time++) {
 					tableModel.setValueAt(meeting, time, dayOfWeek);
 				}
