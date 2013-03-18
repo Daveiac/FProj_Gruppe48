@@ -14,7 +14,7 @@ import networking.packages.AuthenticationResponse;
 import networking.packages.AuthenticationResponse.AuthenticationResponseType;
 import networking.packages.QueryRequest;
 import networking.packages.DataResponse;
-import networking.packages.DataResponse.QueryResponseType;
+import networking.packages.DataResponse.DataResponseType;
 import networking.packages.Response;
 import networking.packages.UpdateRequest;
 import data.Alarm;
@@ -82,7 +82,7 @@ public class ServerRequestHandler implements Runnable {
 			e.printStackTrace();
 		}
 		DataResponse response = new DataResponse(data,
-				QueryResponseType.PERSON_RESPONSE);
+				DataResponseType.PERSON_RESPONSE);
 		return response;
 	}
 
@@ -94,7 +94,7 @@ public class ServerRequestHandler implements Runnable {
 			e.printStackTrace();
 		}
 		DataResponse response = new DataResponse(notifications,
-				QueryResponseType.NOTIFICATION_RESPONSE);
+				DataResponseType.NOTIFICATION_RESPONSE);
 		return response;
 	}
 
@@ -106,7 +106,7 @@ public class ServerRequestHandler implements Runnable {
 			e.printStackTrace();
 		}
 		DataResponse response = new DataResponse(data,
-				QueryResponseType.ALARM_RESPONSE);
+				DataResponseType.ALARM_RESPONSE);
 		return response;
 	}
 
@@ -119,7 +119,7 @@ public class ServerRequestHandler implements Runnable {
 			e.printStackTrace();
 		}
 		DataResponse response = new DataResponse(data,
-				QueryResponseType.MEETING_RESPONSE);
+				DataResponseType.MEETING_RESPONSE);
 		return response;
 	}
 	
@@ -132,7 +132,7 @@ public class ServerRequestHandler implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new DataResponse(teams, QueryResponseType.MEETING_RESPONSE);
+		return new DataResponse(teams, DataResponseType.MEETING_RESPONSE);
 	}
 	
 	private void handleQueryRequest(QueryRequest request, Socket client) {
@@ -179,7 +179,7 @@ public class ServerRequestHandler implements Runnable {
 			e.printStackTrace();
 		}
 		DataResponse response = new DataResponse(notifications,
-				QueryResponseType.NOTIFICATION_RESPONSE);
+				DataResponseType.NOTIFICATION_RESPONSE);
 		return response;
 	}
 
@@ -217,7 +217,7 @@ public class ServerRequestHandler implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new DataResponse(alarms, QueryResponseType.ALARM_RESPONSE);
+		return new DataResponse(alarms, DataResponseType.ALARM_RESPONSE);
 		
 	}
 
