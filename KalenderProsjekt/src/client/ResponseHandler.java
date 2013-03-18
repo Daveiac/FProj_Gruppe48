@@ -12,7 +12,6 @@ public class ResponseHandler implements Runnable{
 	private BlockingQueue<Response> responseQueue;
 	
 	
-	
 	public ResponseHandler(BlockingQueue<Response> responseQueue) {
 		super();
 		this.responseQueue = responseQueue;
