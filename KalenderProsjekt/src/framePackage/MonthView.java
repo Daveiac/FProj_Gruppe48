@@ -3,9 +3,7 @@ package framePackage;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -16,21 +14,20 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 import data.CalendarModel;
-import data.Meeting;
-import data.Person;
 
-public class MonthView implements CalendarView, PropertyChangeListener{
+public class MonthView implements CalendarView, PropertyChangeListener {
 
 	private JTable monthTable;
 	private JPanel monthPanel;
-	private int realDay,realMonth,realYear,currentMonth,currentYear;
+	private int realDay, realMonth, realYear, currentMonth, currentYear;
 	private DefaultTableModel tableModel;
 	private String title;
-	public static final String[] months = {"Januar","Februar", "Mars", "April", "Mai", "Juni", "Juli", 
-		"August", "September", "Oktober", "November", "Desember"};
+	public static final String[] months = { "Januar", "Februar", "Mars",
+			"April", "Mai", "Juni", "Juli", "August", "September", "Oktober",
+			"November", "Desember" };
 	private CalendarModel calendarModel;
 
-	public static void main(String args[]){
+	public static void main(String args[]) {
 		CalendarModel cm = new CalendarModel();
 		MonthView mw = new MonthView(cm);
 		cm.init();
@@ -41,32 +38,33 @@ public class MonthView implements CalendarView, PropertyChangeListener{
 		frame.setVisible(true);
 	}
 
-	public MonthView(CalendarModel calendarModel){
+	public MonthView(CalendarModel calendarModel) {
 		initialize(calendarModel);
 		refreshCalendar();
 	}
 
 	@SuppressWarnings("serial")
-	private void initialize(CalendarModel calendarModel){
+	private void initialize(CalendarModel calendarModel) {
 		this.calendarModel = calendarModel;
 		calendarModel.addPropertyChangeListener(this);
-		
-		GregorianCalendar cal =  new GregorianCalendar();
+
+		GregorianCalendar cal = new GregorianCalendar();
 
 		tableModel = new DefaultTableModel();
-		String[] headers = {"Uke", "Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag","Søndag"};
+		String[] headers = { "Uke", "Mandag", "Tirsdag", "Onsdag", "Torsdag",
+				"Fredag", "Lørdag", "Søndag" };
 		tableModel.setColumnIdentifiers(headers);
 		tableModel.setRowCount(6);
 
 		realDay = cal.get(GregorianCalendar.DAY_OF_MONTH);
 		realMonth = cal.get(GregorianCalendar.MONTH);
 		realYear = cal.get(GregorianCalendar.YEAR);
-		currentMonth =  realMonth;
+		currentMonth = realMonth;
 		currentYear = realYear;
 
 		monthTable = new JTable(tableModel) {
 			public boolean isCellEditable(int rowIndex, int colIndex) {
-				return false; //Disable the editing of any cell
+				return false; // Disable the editing of any cell
 			}
 		};
 		monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -74,24 +72,27 @@ public class MonthView implements CalendarView, PropertyChangeListener{
 		monthTable.setRowHeight(64);
 		monthTable.getColumnModel().getColumn(0).setPreferredWidth(10);
 		for (int i = 1; i < 8; i++) {
-			monthTable.getColumnModel().getColumn(i).setCellRenderer(new MonthTableCellRenderer());
+			monthTable.getColumnModel().getColumn(i)
+					.setCellRenderer(new MonthTableCellRenderer());
 		}
 
 		monthPanel = new JPanel();
 		monthPanel.setSize(600, 500);
 		JScrollPane jsp = new JScrollPane(monthTable);
-		jsp.setPreferredSize(new Dimension(800,407));
+		jsp.setPreferredSize(new Dimension(800, 407));
 		monthPanel.add(jsp);
 
-		title = months[currentMonth]+", "+currentYear;
+		title = months[currentMonth] + ", " + currentYear;
 	}
+
 	private void refreshCalendar() {
 		int nDays, monthStart, weekStart;
-		title = months[currentMonth]+", "+currentYear;
-		GregorianCalendar cal = new GregorianCalendar(currentYear, currentMonth, 1);
+		title = months[currentMonth] + ", " + currentYear;
+		GregorianCalendar cal = new GregorianCalendar(currentYear,
+				currentMonth, 1);
 		nDays = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
 		monthStart = cal.get(GregorianCalendar.DAY_OF_WEEK);
-		monthStart = (monthStart == 1) ? 6 : monthStart-2;
+		monthStart = (monthStart == 1) ? 6 : monthStart - 2;
 		weekStart = cal.get(GregorianCalendar.WEEK_OF_YEAR);
 		// Clear table
 		for (int i = 0; i < 6; i++) {
@@ -99,20 +100,21 @@ public class MonthView implements CalendarView, PropertyChangeListener{
 				tableModel.setValueAt(null, i, j);
 			}
 		}
-		//Draw calendar
+		// Draw calendar
 		for (int i = 0; i < 6; i++) {
-			tableModel.setValueAt(weekStart+i, i, 0);			
+			tableModel.setValueAt(weekStart + i, i, 0);
 		}
-		for (int i=0; i<nDays; i++){
-			int row = new Integer((i+monthStart)/7);
-			int column  =  (i+monthStart)%7 +1 ;
-			tableModel.setValueAt(
-					new JList<String>(new String[]{i+1+". "+"Møte 1","AvtaleYO","zomg"})
-					, row, column);
+		for (int i = 0; i < nDays; i++) {
+			int row = new Integer((i + monthStart) / 7);
+			int column = (i + monthStart) % 7 + 1;
+			tableModel
+					.setValueAt(new JList<String>(new String[] {
+							i + 1 + ". " + "Møte 1", "AvtaleYO", "zomg" }),
+							row, column);
 		}
 	}
 
-	public JPanel getPanel(){
+	public JPanel getPanel() {
 		return monthPanel;
 	}
 
@@ -122,7 +124,7 @@ public class MonthView implements CalendarView, PropertyChangeListener{
 
 	@Override
 	public void next() {
-		if(currentMonth == 11) {
+		if (currentMonth == 11) {
 			currentMonth = 0;
 			currentYear++;
 		} else {
@@ -133,7 +135,7 @@ public class MonthView implements CalendarView, PropertyChangeListener{
 
 	@Override
 	public void prev() {
-		if(currentMonth == 0) {
+		if (currentMonth == 0) {
 			currentMonth = 11;
 			currentYear--;
 		} else {
