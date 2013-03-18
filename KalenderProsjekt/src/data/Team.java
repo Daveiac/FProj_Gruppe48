@@ -1,9 +1,10 @@
 package data;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
-public class Team {
+public class Team implements Serializable{
 	private int teamID;
 	private String email;
 	private List<Person> members;
