@@ -32,10 +32,6 @@ public class ServerRequestHandler implements Runnable {
 	BlockingQueue<ReceivedRequest> requests;
 	private DBController dbController;
 
-
-	
-	
-
 	public ServerRequestHandler(BlockingQueue<PendingResponse> responses,
 			BlockingQueue<ReceivedRequest> requests, DBController dbController) {
 		super();
@@ -66,7 +62,6 @@ public class ServerRequestHandler implements Runnable {
 		try {
 			while(!responses.offer(new PendingResponse(aResponse, client, false), 200, TimeUnit.MILLISECONDS));
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -129,7 +124,6 @@ public class ServerRequestHandler implements Runnable {
 		try {
 			teams = dbController.getTeamsByMeeting(meeting.getMeetingID());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return new DataResponse(teams, DataResponseType.MEETING_RESPONSE, true);
@@ -163,7 +157,6 @@ public class ServerRequestHandler implements Runnable {
 		try {
 			while(!responses.offer(new PendingResponse(response, client, false), 200, TimeUnit.MILLISECONDS));
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -213,7 +206,6 @@ public class ServerRequestHandler implements Runnable {
 			int alarmID = dbController.addAlarm(request.getAlarm());
 			alarms = dbController.getAlarmsOfPerson(request.getSender().getUsername());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return new DataResponse(alarms, DataResponseType.ALARM_RESPONSE, false);
@@ -226,7 +218,6 @@ public class ServerRequestHandler implements Runnable {
 			Meeting newMeeting = dbController.addMeeting(meeting);
 			notifications = dbController.getNotifications(newMeeting);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -256,7 +247,6 @@ public class ServerRequestHandler implements Runnable {
 		try {
 			while(!responses.offer(new PendingResponse(response, client, respondToAllClients), 200, TimeUnit.MILLISECONDS));
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -270,7 +260,6 @@ public class ServerRequestHandler implements Runnable {
 			try {
 				processRequest(requests.take());
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

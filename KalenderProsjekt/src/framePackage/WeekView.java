@@ -72,7 +72,7 @@ public class WeekView extends JPanel implements CalendarView {
 		calendar.add(GregorianCalendar.MINUTE, thisMinuteOfDay);
 
 		// Creates the new week
-		createWeekTable();
+//		createWeekTable();
 
 		// Sets the new day into the table
 		weekTable.setModel(tableModel);

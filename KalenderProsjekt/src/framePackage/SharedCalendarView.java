@@ -69,23 +69,11 @@ public class SharedCalendarView implements PropertyChangeListener{
 
 	public void propertyChange(PropertyChangeEvent evt) {
 		switch (evt.getPropertyName()) {
-		case CalendarModel.CALENDAR_LOADED_Property:
+		case CalendarModel.PERSONS_ADDED_Property:
 			setCheckBox(calendarModel.getPersons());
-			System.out.println("cookie");
+			System.out.println("cookie " + calendarModel.getPersons());
 			break;
 
 		}
-	}
-	
-//	public static void main(String[] args){
-//		CalendarModel cm = new CalendarModel();
-//		SharedCalendarView mw = new SharedCalendarView(cm);
-//		cm.init();
-//		JFrame frame = new JFrame("monthView test: ");
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		frame.setContentPane(mw.getPanel());
-//		frame.setSize(700, 600);
-//		frame.setVisible(true); 
-//	}
-	
+	}	
 }

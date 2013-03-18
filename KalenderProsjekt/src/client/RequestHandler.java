@@ -7,12 +7,18 @@ import networking.packages.QueryRequest.QueryType;
 import networking.*;
 import java.net.*;
 
+import framePackage.DefaultView;
+
 public class RequestHandler {
 	
-	public void Run() throws IOException, InterruptedException{
-		Client client = new Client( InetAddress.getByName(Constants.serverIP) );
+//	public void Run() throws IOException, InterruptedException{
+//		Client client = new Client( InetAddress.getByName(Constants.serverIP) );
+//		sendGetAllPersonsRequest(client);
+//	}
+
+	public void sendGetAllPersonsRequest() throws IOException {
 		QueryRequest qReqGetAllPersons = new QueryRequest(null, null, QueryType.GET_ALL_PERSONS);
-		client.sendRequest(qReqGetAllPersons);
+		Program.client.sendRequest(qReqGetAllPersons);
 	}
 	
 	/*
