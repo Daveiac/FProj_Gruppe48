@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
@@ -23,7 +24,7 @@ import data.Notification;
 import data.Person;
 import data.Team;
 
-public class VarselPanelView {
+public class NotiPanelView extends JPanel{
 	
 	private JFrame frame;
 	private JPanel varselPanel;
@@ -32,9 +33,9 @@ public class VarselPanelView {
 	private DefaultListModel listModel;
 	private List<Notification> notifications;
 	
-	public VarselPanelView(Notification noti){
+	public NotiPanelView(){
 		notifications = new ArrayList<Notification>();
-		notifications.add(noti);
+//		notifications.add(noti);
 		initialize();
 	}
 	
@@ -42,6 +43,7 @@ public class VarselPanelView {
 		varselPanel = new JPanel(new GridBagLayout());
 		varselPanel.setPreferredSize(new Dimension(250, 300));
 		varselPanel.setVisible(true);
+		varselPanel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 		GridBagConstraints c = new GridBagConstraints();
 		
 		lblWarning = new JLabel("Varsel");
@@ -51,8 +53,10 @@ public class VarselPanelView {
 		varselPanel.add(lblWarning, c);
 		
 		listModel = new DefaultListModel();
-		listModel.addElement(notifications.get(0));
+//		listModel.addElement(notifications.get(0));
 		warningList = new JList<Notification>(listModel);
+		warningList.setFixedCellWidth(15);
+		warningList.setCellRenderer(new NotiViewRender());
 		JScrollPane scrollPane = new JScrollPane(warningList);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -63,28 +67,28 @@ public class VarselPanelView {
 		
 	}
 	
-	public static void main(String args[]){
-		ArrayList<Person> members = new ArrayList<Person>();
-		Team team = new Team(0, null, members);
-		MeetingRoom room = new MeetingRoom("Soverommet");
-		Person creator = new Person(null, 00000000, "Dav", "Hov", "dave",
-				"1234");
-		members.add(creator);
-		long startTime = new GregorianCalendar(2013, 2, 14, 16, 30)
-		.getTimeInMillis();
-		long endTime = new GregorianCalendar(2013, 2, 14, 17, 30)
-		.getTimeInMillis();
-		Meeting meetings = new Meeting(0, "suppemøtewwwwwwwwwwwwwwwwwwwwwwwww",
-				"kontoret", startTime, endTime, "This is a desc", team, room,
-				creator);
-		Notification notification = new Notification(0, 'y', 'c', meetings,
-				creator);
-		JFrame frame = new JFrame("APPointmenOverViewTest");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setContentPane(new VarselPanelView(notification).getPanel());
-		frame.pack();
-		frame.setVisible(true);
-	}
+//	public static void main(String args[]){
+//		ArrayList<Person> members = new ArrayList<Person>();
+//		Team team = new Team(0, null, members);
+//		MeetingRoom room = new MeetingRoom("Soverommet");
+//		Person creator = new Person(null, 00000000, "Dav", "Hov", "dave",
+//				"1234");
+//		members.add(creator);
+//		long startTime = new GregorianCalendar(2013, 2, 14, 16, 30)
+//		.getTimeInMillis();
+//		long endTime = new GregorianCalendar(2013, 2, 14, 17, 30)
+//		.getTimeInMillis();
+//		Meeting meetings = new Meeting(0, "suppemøtewwwwwwwwwwwwwwwwwwwwwwwww",
+//				"kontoret", startTime, endTime, "This is a desc", team, room,
+//				creator);
+//		Notification notification = new Notification(0, 'y', 'c', meetings,
+//				creator);
+//		JFrame frame = new JFrame("APPointmenOverViewTest");
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		frame.setContentPane(new NotiPanelView(notification).getPanel());
+//		frame.pack();
+//		frame.setVisible(true);
+//	}
 	
 	private JPanel getPanel(){
 		return varselPanel;

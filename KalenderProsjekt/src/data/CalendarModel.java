@@ -1,32 +1,37 @@
 package data;
 
+import java.awt.Color;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import server.DBController;
 
 public class CalendarModel {
 	private List<Person> persons;
-	private HashMap<Person, ArrayList<Meeting>> hasjmap;
+	private HashMap<Person, ArrayList<Meeting>> personMeetingRelation;
 	private ArrayList<Boolean> selected;
 	private FakeWhale data;
 	private PropertyChangeSupport pcs;
-	private static final String SELECTED_Property = "SELECTED", MEETING_ADDED_Property = "NEW_M", 
+	private static final Color[] colors = {Color.red,Color.blue,Color.green,Color.orange,Color.magenta,Color.gray,Color.pink};
+	public static final String SELECTED_Property = "SELECTED", MEETING_ADDED_Property = "NEW_M", 
 			MEETING_CHANGED_Property = "CHANGE", MEETING_REMOVED_Property = "REMOVE",
-			NOTIFICATION_ADDED_Property = "NEW_N", NEW_PERSONS_Property = "NEW_P";
+			NOTIFICATION_ADDED_Property = "NEW_N", CALENDAR_LOADED_Property = "LOADED";
 
 
 
 	public CalendarModel() {
 		pcs = new PropertyChangeSupport(this);
 		persons = new ArrayList<Person>();
-		hasjmap = new HashMap<Person,ArrayList<Meeting>>();
+		personMeetingRelation = new HashMap<Person,ArrayList<Meeting>>();
 		selected = new ArrayList<Boolean>();
 		data = new FakeWhale(this);
+		
+		data.requestEveryPerson();
+		for (Person p : persons) {
+			data.requestEveryMeetingForPerson(p);
+		}
 
 	}
 	/**
@@ -35,7 +40,7 @@ public class CalendarModel {
 	 * @return all the meetings of the given person
 	 */
 	public ArrayList<Meeting> getMeetings(Person person) {
-		return hasjmap.get(person);
+		return personMeetingRelation.get(person);
 	}
 	/**
 	 * Gets ALL of the meetings of a person in the given time interval
@@ -45,7 +50,7 @@ public class CalendarModel {
 	 * @return all the meetings of the given person within the given time interval.
 	 */
 	public ArrayList<Meeting> getMeetings(Person person, long start, long end) {
-		ArrayList<Meeting> meetings = hasjmap.get(person);
+		ArrayList<Meeting> meetings = personMeetingRelation.get(person);
 		ArrayList<Meeting> newMeetings = new ArrayList<Meeting>();
 		for (Meeting meeting : meetings) {
 			if (meeting.getStartTime() >= start && meeting.getEndTime() < end) {
@@ -60,7 +65,7 @@ public class CalendarModel {
 	}
 
 	public HashMap<Person, ArrayList<Meeting>> getHasjmap() {
-		return hasjmap;
+		return personMeetingRelation;
 	}
 
 	public ArrayList<Boolean> getSelected() {
@@ -81,10 +86,7 @@ public class CalendarModel {
 	 * @param persons
 	 */
 	public void setAllPersons(List<Person> persons) {
-		List<Person> oldValue = this.persons;
 		this.persons = persons;
-		pcs.firePropertyChange(NEW_PERSONS_Property, oldValue, persons);
-		
 	}
 	
 	/**
@@ -97,7 +99,7 @@ public class CalendarModel {
 		boolean meetingChanged = false;
 		int meetingID = meeting.getMeetingID();
 		Meeting oldMeeting = null;
-		for(ArrayList<Meeting> meetings: hasjmap.values()){
+		for(ArrayList<Meeting> meetings: personMeetingRelation.values()){
 			for (int i = 0; i < meetings.size(); i++) {
 				if (meetings.get(i).getMeetingID() == meetingID) {
 					meetingChanged = true;
@@ -112,7 +114,31 @@ public class CalendarModel {
 			pcs.firePropertyChange(MEETING_ADDED_Property, null, meeting);
 		}
 	}
-
-
-
+	
+	public void addAllMeetingsOfPerson(ArrayList<Meeting> meetings, Person person) {
+		personMeetingRelation.put(person, meetings);
+		System.out.println("me, pick me!");
+		if(personMeetingRelation.size() == persons.size()) {
+			pcs.firePropertyChange(CALENDAR_LOADED_Property, null, personMeetingRelation);
+			System.out.println("Da shit in da kalendar!");
+		}
+	}
+	
+	public List<Person> getSelectedPersons() {
+		List<Person> selectedPersons = new ArrayList<Person>();
+		for (int i = 0; i < selected.size(); i++) {
+			if(selected.get(i)) {
+				selectedPersons.add(persons.get(i));
+			}
+		}
+		return selectedPersons;
+	}
+	
+	public Color getColorOfPerson(Person person) {
+		return colors[persons.indexOf(person)];
+	}
+	
+	public void pushMeeting(Meeting meeting) {
+		data.pushMeeting(meeting);
+	}
 }
