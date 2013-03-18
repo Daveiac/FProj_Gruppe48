@@ -1,6 +1,8 @@
 package data;
 
-public class Alarm {
+import java.io.Serializable;
+
+public class Alarm implements Serializable{
 	/*
 	 * A class that represents an entry in the alarm table in the database.
 	 */
