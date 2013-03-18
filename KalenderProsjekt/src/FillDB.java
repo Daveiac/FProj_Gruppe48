@@ -36,13 +36,6 @@ public class FillDB {
 	}
 	
 	public static void addMeetings() throws SQLException{
-		ArrayList<Person> members = new ArrayList<Person>();
-		try {
-			members.add(control.getPerson("batman"));
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		Team team = null;
 		MeetingRoom room = new MeetingRoom("Roomsa");
 		Person creator = control.getPerson("batman");
@@ -55,6 +48,10 @@ public class FillDB {
 		meetings.add(new Meeting(0, "suppemøte2", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
 		startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
 		endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
+		
+		List<Person> members = new ArrayList<Person>();
+		members.add(control.getPerson("karitr"));
+		team = new Team(-1, "team1@hotmail.com", members);
 		meetings.add(new Meeting(0, "suppemøte3", "kontoret", startTime, endTime, "This is a desc", team, room, creator));
 		
 		for (Meeting meeting : meetings) {

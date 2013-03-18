@@ -86,13 +86,14 @@ public class DBController {
 		dBConn.makeUpdate(sql);
 	}
 
-	public void addTeam(Team team) throws SQLException {
+	public int addTeam(Team team) throws SQLException {
 		String sql = "INSERT INTO Team (email) ";
 		sql += "VALUES ('" + team.getEmail() + "');";
 		int teamID = dBConn.makeUpdateReturnID(sql);
 		for (Person person : team.getMembers()) {
 			addMemberOf(person.getUsername(), teamID);
 		}
+		return teamID;
 	}
 
 	public int addAlarm(Alarm alarm) throws SQLException {
@@ -195,7 +196,11 @@ public class DBController {
 		// Checks if the team has been set or not. This is the main difference
 		// between appointments and meetings.
 		if (meeting.getTeam() != null) {
-			teamID = Integer.toString(meeting.getTeam().getTeamID());
+			if(meeting.getTeam().getTeamID() == -1){
+				teamID = Integer.toString(addTeam(meeting.getTeam()));
+			}else{
+				teamID = Integer.toString(meeting.getTeam().getTeamID());				
+			}
 		}
 
 		String sql = "INSERT INTO Meeting (title, location, startTime, endTime, description, username, teamID) ";
@@ -208,15 +213,17 @@ public class DBController {
 		sql += ");";
 		System.out.println(sql);
 		
+		int meetingID = dBConn.makeUpdateReturnID(sql);
 		//add notifications
+		System.out.println(meetingID);
+		Meeting newMeeting = getMeeting(meetingID);
 		if(meeting.getTeam() != null){
 			for (Person p : meeting.getTeam().getMembers()) {
-				addNotification(new Notification(Calendar.getInstance().getTimeInMillis(), 'w', 'm', meeting, p));
+				addNotification(new Notification(Calendar.getInstance().getTimeInMillis(), 'w', 'm', newMeeting, p));
 			}
 		}
 		
-		int meetingID = dBConn.makeUpdateReturnID(sql);
-		return getMeeting(meetingID);
+		return newMeeting;
 	}
 
 	private Alarm getAlarmFromResultSet(ResultSet alarmResultSet)
@@ -247,7 +254,14 @@ public class DBController {
 	}
 
 	private Meeting getMeetingFromResultSet(ResultSet rs) throws SQLException {
-		Team team = getTeam(rs.getInt("teamID"));
+		Team team = null;
+		try{
+			int teamID = rs.getInt("teamID");
+			team = getTeam(teamID);
+			
+		}catch(Exception e){
+			//Do nothing. The meeting does not exist, therefore this is technically an 'appointment'
+		}
 		return new Meeting(rs.getInt("meetingID"), rs.getString("title"),
 				rs.getString("location"), rs.getLong("startTime"),
 				rs.getLong("endTime"), rs.getString("description"), team,
