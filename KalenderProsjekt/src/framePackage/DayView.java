@@ -4,18 +4,26 @@ import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-import data.*;
+import data.CalendarModel;
+import data.Meeting;
+import data.Person;
 
 /**
  * This is the DayView Panel that shows the day planner.
  */
 @SuppressWarnings("serial")
-public class DayView extends JPanel implements CalendarView, PropertyChangeListener {
+public class DayView extends JPanel implements CalendarView,
+PropertyChangeListener {
 
 	private GregorianCalendar calendar;
 	private String title;
@@ -70,7 +78,7 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 		calendar.add(GregorianCalendar.MINUTE, thisMinuteOfDay);
 
 		// Creates the new day
-//		createDayTable();
+		// createDayTable();
 
 		// Sets the new day into the table
 		dayTable.setModel(tableModel);
@@ -105,7 +113,10 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 		dayTable.setModel(tableModel);
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
-		dayTable.getColumnModel().getColumn(1).setCellRenderer(new DayTableCellRenderer(calendarModel, persons));
+		dayTable.getColumnModel()
+		.getColumn(1)
+		.setCellRenderer(
+				new DayTableCellRenderer(calendarModel, persons));
 	}
 
 	/**
@@ -119,7 +130,8 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 	/**
 	 * Creates the new day's data.
 	 */
-	public void createDay(GregorianCalendar calendar, DefaultTableModel tableModel, int dayOfWeek) {
+	public void createDay(GregorianCalendar calendar,
+			DefaultTableModel tableModel, int dayOfWeek) {
 
 		for (int i = 0; i < tableModel.getRowCount(); i++) {
 			tableModel.setValueAt(null, i, dayOfWeek);
@@ -135,9 +147,13 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 
 	/**
 	 * Attaches the meetings to the table.
-	 * @param meetings	a list of meeting objects
+	 * 
+	 * @param meetings
+	 *            a list of meeting objects
 	 */
-	public void setMeetings(GregorianCalendar calendar, DefaultTableModel tableModel, int dayOfWeek, ArrayList<Meeting> meetings) {
+	public void setMeetings(GregorianCalendar calendar,
+			DefaultTableModel tableModel, int dayOfWeek,
+			ArrayList<Meeting> meetings) {
 
 		for (Meeting meeting : meetings) {
 			GregorianCalendar meetingCalendar = new GregorianCalendar();
@@ -160,7 +176,8 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 
 			// Sets the meetings at the given times
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-			if (sdf.format(calendar.getTime()).equals(sdf.format(meetingCalendar.getTime()))) {
+			if (sdf.format(calendar.getTime()).equals(
+					sdf.format(meetingCalendar.getTime()))) {
 				for (int time = startTableTime; time < endTableTime; time++) {
 					tableModel.setValueAt(meeting, time, dayOfWeek);
 				}
@@ -170,7 +187,8 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 
 	/**
 	 * Gets the day view.
-	 * @return this	The day view
+	 * 
+	 * @return this The day view
 	 */
 	public DayView getDayView() {
 		return this;
@@ -178,6 +196,7 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 
 	/**
 	 * Generates the title of day panel.
+	 * 
 	 * @return the title of day panel.
 	 */
 	@Override
@@ -205,6 +224,7 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 
 	/**
 	 * Gets the day panel.
+	 * 
 	 * @return day panel.
 	 */
 	@Override
@@ -214,23 +234,18 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		System.out.println("doing da pcs in dayView!");
 		switch (evt.getPropertyName()) {
 		case CalendarModel.CALENDAR_LOADED_Property:
 			createDayTable();
-			System.out.println("cal load");
 			break;
 		case CalendarModel.MEETING_ADDED_Property:
 			createDayTable();
-			System.out.println("meet add");
 			break;
 		case CalendarModel.MEETING_CHANGED_Property:
 			createDayTable();
-			System.out.println("meet chg");
 			break;
 		case CalendarModel.MEETING_REMOVED_Property:
 			createDayTable();
-			System.out.println("meet rem");
 			break;
 		default:
 			break;

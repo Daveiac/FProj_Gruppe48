@@ -125,7 +125,6 @@ public class CalendarModel implements Serializable{
 		personMeetingRelation.put(person, meetings);
 		if(personMeetingRelation.size() == persons.size()) {
 			pcs.firePropertyChange(CALENDAR_LOADED_Property, null, personMeetingRelation);
-			System.out.println("Da shit in da kalendar!");
 		}
 	}
 	
