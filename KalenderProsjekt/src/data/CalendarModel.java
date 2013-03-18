@@ -118,7 +118,6 @@ public class CalendarModel {
 	
 	public void addAllMeetingsOfPerson(ArrayList<Meeting> meetings, Person person) {
 		personMeetingRelation.put(person, meetings);
-		System.out.println("me, pick me!");
 		if(personMeetingRelation.size() == persons.size()) {
 			pcs.firePropertyChange(CALENDAR_LOADED_Property, null, personMeetingRelation);
 			System.out.println("Da shit in da kalendar!");
