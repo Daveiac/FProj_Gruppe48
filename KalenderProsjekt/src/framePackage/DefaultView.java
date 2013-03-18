@@ -66,6 +66,7 @@ public class DefaultView extends JPanel {
 		notiPanel = new NotiPanelView();
 		sharedCView = new SharedCalendarView(calendarModel);
 		initialize();
+		calendarModel.init();
 	}
 
 	private void initialize() {
