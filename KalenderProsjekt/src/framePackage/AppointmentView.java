@@ -60,6 +60,7 @@ public class AppointmentView implements PropertyChangeListener {
 		mainPanel.add(headerPanel, BorderLayout.NORTH);
 		mainPanel.add(jsp, BorderLayout.CENTER);
 		mainPanel.add(legendPanel, BorderLayout.SOUTH);
+		mainPanel.setBorder(new LineBorder(Color.black));
 		mainPanel.setPreferredSize(new Dimension(814, 457));
 		// refreshMeetings();
 
@@ -99,7 +100,7 @@ public class AppointmentView implements PropertyChangeListener {
 		mc.anchor = GridBagConstraints.LINE_END;
 		for (int i = 0; i < headers.length; i++) {
 			headers[i].setPreferredSize(new Dimension(sizes[i], 20));
-			mc.gridx = i;
+			mc.gridx += i;
 			headerPanel.add(headers[i]);
 		}
 	}
@@ -147,7 +148,7 @@ public class AppointmentView implements PropertyChangeListener {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		CalendarModel cm = new CalendarModel();
 		frame.setContentPane(new AppointmentView(cm).getPanel());
-		cm.init();
+//		cm.init();
 		frame.pack();
 		frame.setVisible(true);
 	}

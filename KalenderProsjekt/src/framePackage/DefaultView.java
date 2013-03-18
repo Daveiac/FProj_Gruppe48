@@ -122,6 +122,8 @@ public class DefaultView extends JPanel {
 		backGroundConstraints.gridheight = 2;
 		backGroundConstraints.gridwidth = 2;
 		backGroundConstraints.fill = GridBagConstraints.HORIZONTAL;
+		backGroundConstraints.weightx = 1;
+		backGroundConstraints.weighty = 1;
 		frame.add(timePanel, backGroundConstraints);
 
 		timePanelContraints = new GridBagConstraints();
@@ -211,10 +213,17 @@ public class DefaultView extends JPanel {
 		}
 	}
 	private class CalendarMeetingListener implements ActionListener {
-		public void actionPerformed(ActionEvent arg0) {
-			frame.remove(timePanel);
-			timePanel = appointmentView.getPanel();
-			frame.add(timePanel,backGroundConstraints);
+		public void actionPerformed(ActionEvent e) {
+			if(e.getSource() == calendar) {
+				frame.remove(appointmentView.getPanel());
+				frame.add(timePanel,backGroundConstraints);
+				timePanel.repaint();
+			} else if(e.getSource() == meeting) {
+				frame.remove(timePanel);
+				frame.add(appointmentView.getPanel(),backGroundConstraints);
+				appointmentView.getPanel().repaint();
+			}
+			frame.validate();
 		}
 	}
 }
