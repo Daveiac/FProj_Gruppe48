@@ -29,5 +29,13 @@ public class Client{
 //		server.close();
 	}
 	
+	public static void main (String[] args) throws InterruptedException, UnknownHostException, IOException{
+		Client client = new Client( InetAddress.getByName(Constants.serverIP) );
+		Thread t = new Thread(new ResponseListener(client.server, null));
+		t.start();
+		t.join();
+		
+	}
+	
 
 }
