@@ -1,6 +1,8 @@
 package data;
 
-public class Notification {
+import java.io.Serializable;
+
+public class Notification implements Serializable{
 	private long time;
 	private char approved;
 	private char kind;

@@ -1,6 +1,5 @@
 package framePackage;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.util.List;
 
@@ -15,26 +14,30 @@ import data.Person;
 public class DayTableCellRenderer extends DefaultTableCellRenderer {
 
 	private CalendarModel calendarModel;
-	private List<Person> persons;
 
-	public DayTableCellRenderer(CalendarModel calendarModel, List<Person> persons) {
+	public DayTableCellRenderer(CalendarModel calendarModel,
+			List<Person> persons) {
 		this.calendarModel = calendarModel;
-		this.persons = persons;
 	}
 
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+	public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column) {
 
-		Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		Component component = super.getTableCellRendererComponent(table, value,
+				isSelected, hasFocus, row, column);
 
 		Meeting meeting = (Meeting) value;
 
 		if (meeting != null) {
-			for (Person person : persons) {
-				component.setBackground(calendarModel.getColorOfPerson(person));
+			for (Person selectedPerson : calendarModel.getSelectedPersons()) {
+				for (Person teamMember : meeting.getTeam().getMembers()) {
+					if (selectedPerson.equals(teamMember)) {
+						component.setBackground(calendarModel.getColorOfPerson(selectedPerson));
+					}
+				}
 			}
 			setText(meeting.getTitle());
-		}
-		else {
+		} else {
 			component.setBackground(table.getBackground());
 		}
 
