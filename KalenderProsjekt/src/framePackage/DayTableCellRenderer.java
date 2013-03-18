@@ -1,7 +1,6 @@
 package framePackage;
 
 import java.awt.Component;
-import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -15,8 +14,7 @@ public class DayTableCellRenderer extends DefaultTableCellRenderer {
 
 	private CalendarModel calendarModel;
 
-	public DayTableCellRenderer(CalendarModel calendarModel,
-			List<Person> persons) {
+	public DayTableCellRenderer(CalendarModel calendarModel) {
 		this.calendarModel = calendarModel;
 	}
 
@@ -32,7 +30,8 @@ public class DayTableCellRenderer extends DefaultTableCellRenderer {
 			for (Person selectedPerson : calendarModel.getSelectedPersons()) {
 				for (Person teamMember : meeting.getTeam().getMembers()) {
 					if (selectedPerson.equals(teamMember)) {
-						component.setBackground(calendarModel.getColorOfPerson(selectedPerson));
+						component.setBackground(calendarModel
+								.getColorOfPerson(selectedPerson));
 					}
 				}
 			}

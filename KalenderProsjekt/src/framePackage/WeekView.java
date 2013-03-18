@@ -5,13 +5,14 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
-import java.util.List;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 import data.CalendarModel;
-import data.Person;
 
 /**
  * This is the WeekView Panel that shows the week planner.
@@ -20,15 +21,13 @@ import data.Person;
 public class WeekView extends JPanel implements CalendarView,
 		PropertyChangeListener {
 
+	private JTable weekTable;
+	private DefaultTableModel tableModel;
+	private CalendarModel calendarModel;
 	private GregorianCalendar calendar;
 	private String title;
-	private DefaultTableModel tableModel;
-	private JTable weekTable;
 	private String[] columnHeaders;
 	private DayView dayView;
-
-	private CalendarModel calendarModel;
-	private List<Person> persons;
 
 	/**
 	 * Constructs the WeekView Panel.
@@ -40,7 +39,7 @@ public class WeekView extends JPanel implements CalendarView,
 		dayView = new DayView(calendarModel);
 		dayView.getDayView();
 
-		// Creating a non-editable table
+		// Creating a non-editable week table
 		weekTable = new JTable() {
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
 				return false;
@@ -112,11 +111,8 @@ public class WeekView extends JPanel implements CalendarView,
 		weekTable.setRowSelectionAllowed(false);
 		weekTable.getSelectionModel();
 		for (int i = 1; i < 8; i++) {
-			weekTable
-					.getColumnModel()
-					.getColumn(i)
-					.setCellRenderer(
-							new DayTableCellRenderer(calendarModel, persons));
+			weekTable.getColumnModel().getColumn(i)
+					.setCellRenderer(new DayTableCellRenderer(calendarModel));
 		}
 	}
 
