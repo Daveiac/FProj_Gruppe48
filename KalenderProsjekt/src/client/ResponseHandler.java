@@ -7,6 +7,7 @@ import java.util.concurrent.BlockingQueue;
 import networking.packages.DataResponse;
 import networking.packages.Response;
 import data.Person;
+import framePackage.DefaultView;
 
 public class ResponseHandler implements Runnable{
 	private BlockingQueue<Response> responseQueue;
@@ -23,7 +24,7 @@ public class ResponseHandler implements Runnable{
 		for (Object object : data) {
 			people.add((Person) object);
 		}
-		//TODO where should this list go?
+		DefaultView.calendarModel.setAllPersons(data);
 	}
 
 	private void handleResponse(Response response){

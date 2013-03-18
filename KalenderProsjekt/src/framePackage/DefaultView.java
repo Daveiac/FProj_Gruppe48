@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
-import data.CalendarModel;
+import client.Program;
 
 @SuppressWarnings("serial")
 public class DefaultView extends JPanel {
@@ -49,27 +49,21 @@ public class DefaultView extends JPanel {
 	private JPanel calendarPanel;
 	private GridBagConstraints timePanelContraints;
 
-	private CalendarModel calendarModel;
+
 	private GridBagConstraints backGroundConstraints;
 
-	public static void main(String[] args) {
-		DefaultView dw = new DefaultView();
-		JFrame frame = dw.getFrame();
-		frame.setBounds(0, 0, 1260, 768);
-		frame.setVisible(true);
-	}
+
 
 	public DefaultView() {
-		calendarModel = new CalendarModel();
 		dato = new Dato();
-		dayView = new DayView(calendarModel);
-		weekView = new WeekView(calendarModel);
-		monthView = new MonthView(calendarModel);
+		dayView = new DayView(Program.calendarModel);
+		weekView = new WeekView(Program.calendarModel);
+		monthView = new MonthView(Program.calendarModel);
 		notiPanel = new NotiPanelView();
-		sharedCView = new SharedCalendarView(calendarModel);
-		appointmentView = new AppointmentView(calendarModel);
+		sharedCView = new SharedCalendarView(Program.calendarModel);
+		appointmentView = new AppointmentView(Program.calendarModel);
 		initialize();
-		calendarModel.init();
+		Program.calendarModel.init();
 	}
 
 	private void initialize() {
@@ -187,6 +181,8 @@ public class DefaultView extends JPanel {
 	public JFrame getFrame() {
 		return frame;
 	}
+	
+
 
 	private class PrevNextListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
