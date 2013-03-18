@@ -42,13 +42,15 @@ public class DefaultView extends JPanel {
 	private DayView dayView;
 	private WeekView weekView;
 	private MonthView monthView;
+	private SharedCalendarView sharedCView;
+	private AppointmentView appointmentView;
 	private NotiPanelView notiPanel;
 	private Dato dato;
 	private JPanel calendarPanel;
 	private GridBagConstraints timePanelContraints;
-	private SharedCalendarView sharedCView;
 
 	private CalendarModel calendarModel;
+	private GridBagConstraints backGroundConstraints;
 
 	public static void main(String[] args) {
 		DefaultView dw = new DefaultView();
@@ -65,6 +67,7 @@ public class DefaultView extends JPanel {
 		monthView = new MonthView(calendarModel);
 		notiPanel = new NotiPanelView();
 		sharedCView = new SharedCalendarView(calendarModel);
+		appointmentView = new AppointmentView(calendarModel);
 		initialize();
 	}
 
@@ -73,7 +76,7 @@ public class DefaultView extends JPanel {
 		frame.setLayout(new GridBagLayout());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		GridBagConstraints backGroundConstraints = new GridBagConstraints();
+		backGroundConstraints = new GridBagConstraints();
 		backGroundConstraints.anchor = GridBagConstraints.LINE_END;
 		lblday = new JLabel("Idag: " + dato.getDate());
 		backGroundConstraints.gridx = 0;
@@ -82,10 +85,12 @@ public class DefaultView extends JPanel {
 
 		calendar = new JToggleButton("Kalender");
 		calendar.setSelected(true);
-		meeting = new JToggleButton("møte");
+		meeting = new JToggleButton("Avtale");
 		calendarSelect = new ButtonGroup();
 		calendarSelect.add(calendar);
 		calendarSelect.add(meeting);
+		calendar.addActionListener(new CalendarMeetingListener());
+		meeting.addActionListener(new CalendarMeetingListener());
 
 		backGroundConstraints.gridx = 1;
 		backGroundConstraints.gridy = 0;
@@ -188,6 +193,7 @@ public class DefaultView extends JPanel {
 		timePanelContraints.gridy = 1;
 		calendarPanel = mainView.getPanel();
 		timePanel.add(calendarPanel, timePanelContraints);
+		System.out.println(timePanel.getPreferredSize());
 		//		
 	}
 
@@ -219,6 +225,13 @@ public class DefaultView extends JPanel {
 			calendarPanel = mainView.getPanel();
 			timePanel.add(calendarPanel, timePanelContraints);
 			timePanel.validate();
+		}
+	}
+	private class CalendarMeetingListener implements ActionListener {
+		public void actionPerformed(ActionEvent arg0) {
+			frame.remove(timePanel);
+			timePanel = appointmentView.getPanel();
+			frame.add(timePanel,backGroundConstraints);
 		}
 	}
 }

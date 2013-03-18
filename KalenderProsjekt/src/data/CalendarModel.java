@@ -10,11 +10,18 @@ import java.util.List;
 
 
 public class CalendarModel implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1762790448612918057L;
 	private List<Person> persons;
 	private HashMap<Person, ArrayList<Meeting>> personMeetingRelation;
 	private ArrayList<Boolean> selected;
 	private FakeWhale data;
 	private PropertyChangeSupport pcs;
+	private ArrayList<Notification> notificationsOfUser;
+	private String username;
+	private Person user;
 	private static final Color[] colors = {Color.red,Color.blue,Color.green,Color.orange,Color.magenta,Color.gray,Color.pink};
 	public static final String SELECTED_Property = "SELECTED", MEETING_ADDED_Property = "NEW_M", 
 			MEETING_CHANGED_Property = "CHANGE", MEETING_REMOVED_Property = "REMOVE",
@@ -26,9 +33,11 @@ public class CalendarModel implements Serializable{
 		pcs = new PropertyChangeSupport(this);
 	}
 	public void init() {
+		username = "davhov";
 		persons = new ArrayList<Person>();
 		personMeetingRelation = new HashMap<Person,ArrayList<Meeting>>();
 		selected = new ArrayList<Boolean>();
+		notificationsOfUser = new ArrayList<Notification>();
 		data = new FakeWhale(this);
 		
 		data.requestEveryPerson();
@@ -92,6 +101,11 @@ public class CalendarModel implements Serializable{
 	 * @param persons
 	 */
 	public void setAllPersons(List<Person> persons) {
+		for (Person person : persons) {
+			if(person.getUsername() == username) {
+				user = person;
+			}
+		}
 		this.persons = persons;
 	}
 	
@@ -144,5 +158,11 @@ public class CalendarModel implements Serializable{
 	
 	public void pushMeeting(Meeting meeting) {
 		data.pushMeeting(meeting);
+	}
+	public ArrayList<Notification> getNotifications(Person user) {
+		return notificationsOfUser;
+	}
+	public Person getUser() {
+		return user;
 	}
 }
