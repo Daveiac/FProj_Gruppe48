@@ -30,7 +30,6 @@ public class Program {
 		try {
 			server = new Socket(serverAddress, Constants.port);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

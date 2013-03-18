@@ -31,6 +31,7 @@ public class DBController {
 			dBConn.initialize();
 		} catch (ClassNotFoundException e) {
 		} catch (SQLException e) {
+			OutputController.output("No connection to database established!");
 		}
 	}
 
@@ -39,6 +40,16 @@ public class DBController {
 			string = "'" + string + "'";
 		}
 		return string;
+	}
+
+	public void updateNotification(Notification notification) throws SQLException {
+		String sql = String.format("UPDATE notification "
+				+ "SET approved = '%s' "
+				+ "WHERE notification.meetingID = %d AND username = '%s' ",
+				Character.toString(notification.getApproved()), notification
+						.getMeeting().getMeetingID(), notification.getPerson()
+						.getUsername());
+		dBConn.makeUpdate(sql);
 	}
 
 	public void updateMeeting(Meeting meeting) throws SQLException {
@@ -196,10 +207,10 @@ public class DBController {
 		// Checks if the team has been set or not. This is the main difference
 		// between appointments and meetings.
 		if (meeting.getTeam() != null) {
-			if(meeting.getTeam().getTeamID() == -1){
+			if (meeting.getTeam().getTeamID() == -1) {
 				teamID = Integer.toString(addTeam(meeting.getTeam()));
-			}else{
-				teamID = Integer.toString(meeting.getTeam().getTeamID());				
+			} else {
+				teamID = Integer.toString(meeting.getTeam().getTeamID());
 			}
 		}
 
@@ -212,17 +223,18 @@ public class DBController {
 		sql += teamID;
 		sql += ");";
 		System.out.println(sql);
-		
+
 		int meetingID = dBConn.makeUpdateReturnID(sql);
-		//add notifications
+		// add notifications
 		System.out.println(meetingID);
 		Meeting newMeeting = getMeeting(meetingID);
-		if(meeting.getTeam() != null){
+		if (meeting.getTeam() != null) {
 			for (Person p : meeting.getTeam().getMembers()) {
-				addNotification(new Notification(Calendar.getInstance().getTimeInMillis(), 'w', 'm', newMeeting, p));
+				addNotification(new Notification(Calendar.getInstance()
+						.getTimeInMillis(), 'w', 'm', newMeeting, p));
 			}
 		}
-		
+
 		return newMeeting;
 	}
 
@@ -255,12 +267,13 @@ public class DBController {
 
 	private Meeting getMeetingFromResultSet(ResultSet rs) throws SQLException {
 		Team team = null;
-		try{
+		try {
 			int teamID = rs.getInt("teamID");
 			team = getTeam(teamID);
-			
-		}catch(Exception e){
-			//Do nothing. The meeting does not exist, therefore this is technically an 'appointment'
+
+		} catch (Exception e) {
+			// Do nothing. The meeting does not exist, therefore this is
+			// technically an 'appointment'
 		}
 		return new Meeting(rs.getInt("meetingID"), rs.getString("title"),
 				rs.getString("location"), rs.getLong("startTime"),
@@ -381,11 +394,11 @@ public class DBController {
 		personList.add(david);
 		personList.add(hakon);
 
-		 Team team = new Team(-1, "anyone", personList);
-		 dbc.addTeam(team);
-		 Notification notification = new Notification(10000, 'n', 'n',
-		 meeting, stian);
-		 dbc.addNotification(notification);
+		Team team = new Team(-1, "anyone", personList);
+		dbc.addTeam(team);
+		Notification notification = new Notification(10000, 'n', 'n', meeting,
+				stian);
+		dbc.addNotification(notification);
 
 		for (Notification notificatio : dbc.getNotifications(meeting)) {
 			System.out.println(notificatio);

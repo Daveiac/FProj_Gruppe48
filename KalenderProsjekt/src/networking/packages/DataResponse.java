@@ -13,7 +13,7 @@ public class DataResponse extends Response {
 	}
 
 	public DataResponse(List data, DataResponseType dataResponseType, boolean requested) {
-		super(ResponseType.QUERY_RESPONSE);
+		super(ResponseType.DATA_RESPONSE);
 		this.requested = requested;
 		this.data = data;
 		this.dataResponseType = dataResponseType;

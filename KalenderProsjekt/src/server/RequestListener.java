@@ -40,6 +40,7 @@ public class RequestListener implements Runnable {
 			}
 		} catch (IOException | InterruptedException | ClassNotFoundException e) {
 			OutputController.output("Client disconnected " + clientSocket.getInetAddress().toString());
+			Server.clients.remove(clientSocket);
 			
 		}
 

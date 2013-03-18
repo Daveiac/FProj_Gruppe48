@@ -224,6 +224,27 @@ public class ServerRequestHandler implements Runnable {
 		return new DataResponse(notifications, DataResponseType.NOTIFICATION_RESPONSE, false);
 	}
 	
+	private void sendAllMeetings(){
+		List<Meeting> meetings = null;
+		try {
+			meetings = dbController.getEveryMeeting();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		DataResponse response = new DataResponse(meetings,DataResponseType.MEETING_RESPONSE, false);
+		try {
+			while(!responses.offer(new PendingResponse(response, null, true), 200, TimeUnit.MILLISECONDS));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public DataResponse editNotification(Notification notification){
+		
+		
+	}
+	
 	private void handleUpdateRequest(UpdateRequest request, Socket client) {
 		DataResponse response =  null;
 		boolean respondToAllClients = false;
@@ -233,12 +254,14 @@ public class ServerRequestHandler implements Runnable {
 			break;
 		case CREATE_MEETING:
 			response = addMeeting(request.getMeeting());
+			sendAllMeetings();
 			respondToAllClients = true;
 			break;
 		case UPDATE_METING:
 			//TODO implement
 			break;
 		case UPDATE_NOTIFICATION:
+			editNotification(request.getNotification());
 			break;
 		default:
 			break;

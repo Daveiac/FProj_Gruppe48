@@ -31,7 +31,7 @@ public class ResponseHandler implements Runnable{
 		switch(response.getResponseType()){
 		case AUTHENTICATION_RESPONSE:
 			break;
-		case QUERY_RESPONSE:
+		case DATA_RESPONSE:
 			DataResponse dataResponse = (DataResponse) response;
 			switch (dataResponse.getQueryResponseType()){
 			case ALARM_RESPONSE:
