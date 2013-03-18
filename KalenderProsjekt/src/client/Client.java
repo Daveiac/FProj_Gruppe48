@@ -32,6 +32,8 @@ public class Client{
 	public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException{
 		Client client = new Client(InetAddress.getByName(Constants.serverIP));
 //		client.sendRequest(new AuthenticationRequest("haakondi", "pass"));
+		
+		// Change first argument to Person object!
 		QueryRequest qReq = new QueryRequest("haakondi", null, QueryType.GET_NOTIFICATIONS_BY_PERSON);
 		client.sendRequest(qReq);
 	}
