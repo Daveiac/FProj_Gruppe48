@@ -75,17 +75,5 @@ public class SharedCalendarView implements PropertyChangeListener{
 			break;
 
 		}
-	}
-	
-//	public static void main(String[] args){
-//		CalendarModel cm = new CalendarModel();
-//		SharedCalendarView mw = new SharedCalendarView(cm);
-//		cm.init();
-//		JFrame frame = new JFrame("monthView test: ");
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		frame.setContentPane(mw.getPanel());
-//		frame.setSize(700, 600);
-//		frame.setVisible(true); 
-//	}
-	
+	}	
 }
