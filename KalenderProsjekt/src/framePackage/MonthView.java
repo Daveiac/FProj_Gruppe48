@@ -203,6 +203,7 @@ PropertyChangeListener {
 			
 			JList<Meeting> meetingList = new JList<Meeting>();
 			DefaultListModel<Meeting> listModel = new DefaultListModel<Meeting>();
+			meetingList.setModel(listModel);
 
 			List<Person> persons = calendarModel.getSelectedPersons();
 			for (Person person : persons) {

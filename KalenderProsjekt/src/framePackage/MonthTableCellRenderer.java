@@ -41,23 +41,23 @@ class MonthTableCellRenderer extends DefaultTableCellRenderer {
 			}
 		}
 		
-		DefaultListModel<Meeting> listModel = (DefaultListModel<Meeting>) list.getModel();
-		
-		for (int i = 0; i < listModel.size(); i++) {
-			Meeting meeting = listModel.elementAt(i);
-			if (meeting != null) {
-				for (Person selectedPerson : calendarModel.getSelectedPersons()) {
-					for (Person teamMember : meeting.getTeam().getMembers()) {
-						if (selectedPerson.equals(teamMember)) {
-							component.setBackground(calendarModel.getColorOfPerson(selectedPerson));
-						}
-					}
-				}
-				setText(meeting.getTitle());
-			} else {
-				component.setBackground(table.getBackground());
-			}
-		}
+//		DefaultListModel<Meeting> listModel = (DefaultListModel<Meeting>) list.getModel();
+//		
+//		for (int i = 0; i < listModel.size(); i++) {
+//			Meeting meeting = listModel.elementAt(i);
+//			if (meeting != null) {
+//				for (Person selectedPerson : calendarModel.getSelectedPersons()) {
+//					for (Person teamMember : meeting.getTeam().getMembers()) {
+//						if (selectedPerson.equals(teamMember)) {
+//							component.setBackground(calendarModel.getColorOfPerson(selectedPerson));
+//						}
+//					}
+//				}
+//				setText(meeting.getTitle());
+//			} else {
+//				component.setBackground(table.getBackground());
+//			}
+//		}
 		return list;
 	}
 }
