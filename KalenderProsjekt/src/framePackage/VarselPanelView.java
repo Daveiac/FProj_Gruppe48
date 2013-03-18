@@ -53,6 +53,8 @@ public class VarselPanelView {
 		listModel = new DefaultListModel();
 		listModel.addElement(notifications.get(0));
 		warningList = new JList<Notification>(listModel);
+		warningList.setFixedCellWidth(15);
+		warningList.setCellRenderer(new VarselViewRender());
 		JScrollPane scrollPane = new JScrollPane(warningList);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
