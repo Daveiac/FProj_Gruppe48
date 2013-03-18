@@ -25,12 +25,12 @@ public class ResponseListener implements Runnable{
 				ois = new ObjectInputStream(server.getInputStream());
 				Response response = (Response) ois.readObject();
 				System.out.println(response);
-				while(!responses.offer(response, 200, TimeUnit.MILLISECONDS));
+//				while(!responses.offer(response, 200, TimeUnit.MILLISECONDS));
 			}
 			
 		} catch (IOException e) {
 			// TODO Handle the server going away
-		} catch (ClassNotFoundException | InterruptedException e) {
+		} catch (ClassNotFoundException e) {
 			// TODO Go home and cry yourself to sleep :(
 			e.printStackTrace();
 		}

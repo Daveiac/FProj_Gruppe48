@@ -3,6 +3,7 @@ package server;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import data.Alarm;
@@ -189,7 +190,7 @@ public class DBController {
 		dBConn.makeUpdate(sql);
 	}
 
-	public void addMeeting(Meeting meeting) throws SQLException {
+	public Meeting addMeeting(Meeting meeting) throws SQLException {
 		String teamID = "null";
 		// Checks if the team has been set or not. This is the main difference
 		// between appointments and meetings.
@@ -206,7 +207,16 @@ public class DBController {
 		sql += teamID;
 		sql += ");";
 		System.out.println(sql);
-		dBConn.makeUpdate(sql);
+		
+		//add notifications
+		if(meeting.getTeam() != null){
+			for (Person p : meeting.getTeam().getMembers()) {
+				addNotification(new Notification(Calendar.getInstance().getTimeInMillis(), 'w', 'm', meeting, p));
+			}
+		}
+		
+		int meetingID = dBConn.makeUpdateReturnID(sql);
+		return getMeeting(meetingID);
 	}
 
 	private Alarm getAlarmFromResultSet(ResultSet alarmResultSet)
