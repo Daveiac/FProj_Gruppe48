@@ -73,7 +73,7 @@ public class CalendarModel {
 		return selected;
 	}
 
-	public void setSelected(ArrayList<Boolean> selected) {
+	public void setAllSelected(ArrayList<Boolean> selected) {
 		this.selected = selected;
 	}
 	

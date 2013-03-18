@@ -100,6 +100,12 @@ public class FakeWhale {
 		persons.add(chris);
 		persons.add(david);
 		persons.add(batman);
+		
+		ArrayList<Boolean> selected = new ArrayList<Boolean>();
+		for (Person p : persons) {
+			selected.add(true);
+		}
+		cModel.setAllSelected(selected);
 		cModel.setAllPersons(persons);
 	}
 	/**
