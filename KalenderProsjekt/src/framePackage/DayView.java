@@ -55,29 +55,22 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 		tableModel = new DefaultTableModel(columnHeaders, quarters);
 
 		// Sets the clock every 15 minutes in the 1st column
-		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-		// Saves this hour and minute
-		int thisHourOfDay = calendar.get(GregorianCalendar.HOUR_OF_DAY);
-		calendar.add(GregorianCalendar.HOUR_OF_DAY, -thisHourOfDay);
-		int thisMinuteOfDay = calendar.get(GregorianCalendar.MINUTE);
-		calendar.add(GregorianCalendar.MINUTE, -thisMinuteOfDay);
+		GregorianCalendar timeCalendar = new GregorianCalendar();
+		timeCalendar.setTimeInMillis(calendar.getTimeInMillis());
+		int thisHourOfDay = timeCalendar.get(GregorianCalendar.HOUR_OF_DAY);
+		int thisMinuteOfDay = timeCalendar.get(GregorianCalendar.MINUTE);
+		timeCalendar.add(GregorianCalendar.HOUR_OF_DAY, -thisHourOfDay);
+		timeCalendar.add(GregorianCalendar.MINUTE, -thisMinuteOfDay);
 
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 		for (int i = 0; i < quarters; i++) {
-			String time = timeFormat.format(calendar.getTime());
-			tableModel.setValueAt(time, i, 0);
-			calendar.add(GregorianCalendar.MINUTE, 15);
+			String timeText = timeFormat.format(timeCalendar.getTime());
+			tableModel.setValueAt(timeText, i, 0);
+			timeCalendar.add(GregorianCalendar.MINUTE, 15);
 		}
 
-		// Sets this hour and minute
-		int hoursOfDay = 23;
-		thisHourOfDay -= hoursOfDay;
-		calendar.add(GregorianCalendar.HOUR_OF_DAY, thisHourOfDay);
-		int minutesOfHour = 60;
-		thisMinuteOfDay -= minutesOfHour;
-		calendar.add(GregorianCalendar.MINUTE, thisMinuteOfDay);
-
-		// Creates the new day
-		// createDayTable();
+		// Sets this day's title
+		setDayTitle();
 
 		// Sets the new day into the table
 		dayTable.setModel(tableModel);

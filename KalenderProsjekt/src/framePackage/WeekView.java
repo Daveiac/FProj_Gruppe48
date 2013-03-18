@@ -1,6 +1,8 @@
 package framePackage;
 
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -15,7 +17,8 @@ import data.Person;
  * This is the WeekView Panel that shows the week planner.
  */
 @SuppressWarnings("serial")
-public class WeekView extends JPanel implements CalendarView {
+public class WeekView extends JPanel implements CalendarView,
+		PropertyChangeListener {
 
 	private GregorianCalendar calendar;
 	private String title;
@@ -33,6 +36,7 @@ public class WeekView extends JPanel implements CalendarView {
 	public WeekView(CalendarModel calendarModel) {
 		calendar = new GregorianCalendar();
 		this.calendarModel = calendarModel;
+		this.calendarModel.addPropertyChangeListener(this);
 		dayView = new DayView(calendarModel);
 		dayView.getDayView();
 
@@ -50,31 +54,24 @@ public class WeekView extends JPanel implements CalendarView {
 		tableModel = new DefaultTableModel(columnHeaders, quarters);
 
 		// Sets the clock every 15 minutes in the 1st column
-		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-		// Saves this hour and minute
-		int thisHourOfDay = calendar.get(GregorianCalendar.HOUR_OF_DAY);
-		calendar.add(GregorianCalendar.HOUR_OF_DAY, -thisHourOfDay);
-		int thisMinuteOfDay = calendar.get(GregorianCalendar.MINUTE);
-		calendar.add(GregorianCalendar.MINUTE, -thisMinuteOfDay);
+		GregorianCalendar timeCalendar = new GregorianCalendar();
+		timeCalendar.setTimeInMillis(calendar.getTimeInMillis());
+		int thisHourOfDay = timeCalendar.get(GregorianCalendar.HOUR_OF_DAY);
+		int thisMinuteOfDay = timeCalendar.get(GregorianCalendar.MINUTE);
+		timeCalendar.add(GregorianCalendar.HOUR_OF_DAY, -thisHourOfDay);
+		timeCalendar.add(GregorianCalendar.MINUTE, -thisMinuteOfDay);
 
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 		for (int i = 0; i < quarters; i++) {
-			String time = timeFormat.format(calendar.getTime());
-			tableModel.setValueAt(time, i, 0);
-			calendar.add(GregorianCalendar.MINUTE, 15);
+			String timeText = timeFormat.format(timeCalendar.getTime());
+			tableModel.setValueAt(timeText, i, 0);
+			timeCalendar.add(GregorianCalendar.MINUTE, 15);
 		}
 
-		// Sets this hour and minute
-		int hoursOfDay = 23;
-		thisHourOfDay -= hoursOfDay;
-		calendar.add(GregorianCalendar.HOUR_OF_DAY, thisHourOfDay);
-		int minutesOfHour = 60;
-		thisMinuteOfDay -= minutesOfHour;
-		calendar.add(GregorianCalendar.MINUTE, thisMinuteOfDay);
+		// Sets this week's title
+		setWeekTitle();
 
-		// Creates the new week
-//		createWeekTable();
-
-		// Sets the new day into the table
+		// Sets the new week into the table
 		weekTable.setModel(tableModel);
 		weekTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		weekTable.setRowSelectionAllowed(false);
@@ -93,33 +90,20 @@ public class WeekView extends JPanel implements CalendarView {
 		// Sets this week's title
 		setWeekTitle();
 
-		// Saves this day
-		int thisDayOfWeek = calendar.get(GregorianCalendar.DAY_OF_WEEK);
-		// Sets the day to Monday
-		int firstDayOfWeek = -calendar.get(GregorianCalendar.DAY_OF_WEEK) + 2;
-		// If Sunday (1st day of the week in the Gregorian calendar), then go back to previous week
-		if (thisDayOfWeek == 1)
-			firstDayOfWeek -= 7;
-		calendar.add(GregorianCalendar.DAY_OF_WEEK, firstDayOfWeek);
-
 		// Sets table headers with corresponding days and creates the week data
-		SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE dd. MMM.");
+		GregorianCalendar weekCalendar = new GregorianCalendar();
+		weekCalendar.setTimeInMillis(calendar.getTimeInMillis());
+		int firstDayOfWeek = -weekCalendar.get(GregorianCalendar.DAY_OF_WEEK) + 2;
+		weekCalendar.add(GregorianCalendar.DAY_OF_WEEK, firstDayOfWeek);
+
+		SimpleDateFormat weekDay = new SimpleDateFormat("EEEE dd. MMM.");
 		int daysInWeek = 7;
 		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {
-			columnHeaders[dayOfWeek] = weekFormat.format(calendar.getTime());
-			dayView.createDay(calendar, tableModel, dayOfWeek);
-			calendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
+			columnHeaders[dayOfWeek] = weekDay.format(weekCalendar.getTime());
+			dayView.createDay(weekCalendar, tableModel, dayOfWeek);
+			weekCalendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
 		}
 		tableModel.setColumnIdentifiers(columnHeaders);
-
-		// Sets the day today
-		// If Sunday (1st day of the week in the Gregorian calendar), then go forth to this week
-		if (thisDayOfWeek == 1)
-			thisDayOfWeek -= 2;
-		else
-			thisDayOfWeek -= 9;
-
-		calendar.add(GregorianCalendar.DAY_OF_WEEK, thisDayOfWeek);
 
 		// Sets the new week into the table
 		weekTable.setModel(tableModel);
@@ -128,24 +112,29 @@ public class WeekView extends JPanel implements CalendarView {
 		weekTable.setRowSelectionAllowed(false);
 		weekTable.getSelectionModel();
 		for (int i = 1; i < 8; i++) {
-			weekTable.getColumnModel().getColumn(i).setCellRenderer(new DayTableCellRenderer(calendarModel, persons));
+			weekTable
+					.getColumnModel()
+					.getColumn(i)
+					.setCellRenderer(
+							new DayTableCellRenderer(calendarModel, persons));
 		}
 	}
 
 	/**
 	 * Sets this week's title.
 	 */
-	public void setWeekTitle() {
+	private void setWeekTitle() {
 		SimpleDateFormat titleFormat = new SimpleDateFormat("ww, MMMMM yyyy");
 		title = "Uke " + titleFormat.format(calendar.getTime());
 	}
 
 	/**
 	 * Generates the title of week panel.
+	 * 
 	 * @return the title of week panel.
 	 */
 	@Override
-	public String getTitle(){
+	public String getTitle() {
 		return title;
 	}
 
@@ -169,10 +158,31 @@ public class WeekView extends JPanel implements CalendarView {
 
 	/**
 	 * Gets the week panel.
+	 * 
 	 * @return week panel.
 	 */
 	@Override
 	public JPanel getPanel() {
 		return this;
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		switch (evt.getPropertyName()) {
+		case CalendarModel.CALENDAR_LOADED_Property:
+			createWeekTable();
+			break;
+		case CalendarModel.MEETING_ADDED_Property:
+			createWeekTable();
+			break;
+		case CalendarModel.MEETING_CHANGED_Property:
+			createWeekTable();
+			break;
+		case CalendarModel.MEETING_REMOVED_Property:
+			createWeekTable();
+			break;
+		default:
+			break;
+		}
 	}
 }
