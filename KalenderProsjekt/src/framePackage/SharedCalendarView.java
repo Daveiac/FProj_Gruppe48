@@ -6,6 +6,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -15,66 +18,51 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import data.CalendarModel;
 import data.Person;
 
-public class SharedCalendarView {
+public class SharedCalendarView implements PropertyChangeListener{
 	private JPanel sharedCPanel;
-	private JComboBox<String> personBox;
-	private JButton addButton;
-	private ButtonGroup buttonGroup;
 	private Person person;
-	private JPanel checkBoxPanel;
+	private CalendarModel calendarModel;
 
 	
-	public SharedCalendarView(){
-		initialize();
+	public SharedCalendarView(CalendarModel calendarModel){
+		initialize(calendarModel);
 //		person = new Person();
 	}
 	
 	
-	private void initialize(){
+	private void initialize(CalendarModel calendarModel){
+		this.calendarModel = calendarModel;
+		calendarModel.addPropertyChangeListener(this);
 		sharedCPanel = new JPanel(new GridBagLayout());
 		sharedCPanel.setPreferredSize(new Dimension(250, 200));
 		sharedCPanel.setVisible(true);
-		sharedCPanel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-		GridBagConstraints c = new GridBagConstraints();
+		sharedCPanel.setBorder(BorderFactory.createLineBorder(Color.black, 1));		
 		
-		personBox = new JComboBox<String>();
-		personBox.addItem("Shimin Sun");
-		personBox.addItem("andre folk");
-		personBox.setSelectedItem(null);
-		c.gridx = 0;
-		c.gridy = 0;
-		sharedCPanel.add(personBox, c);
-		
-		addButton = new JButton("Legg til");
-		c.gridx = 1;
-		c.gridy = 0;
-		sharedCPanel.add(addButton,c);
-		
-		checkBoxPanel = new JPanel(new GridBagLayout());
-		final GridBagConstraints cbpCon = new GridBagConstraints();
-		cbpCon.gridx = 0;
-		cbpCon.gridy = 0;
-		JScrollPane scrollPane = new JScrollPane(checkBoxPanel);
-		scrollPane.setPreferredSize(new Dimension(150, 150));
-		c.gridx = 0;
-		c.gridy = 1;
-		sharedCPanel.add(scrollPane, c);
-		
-		addButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if(personBox.getSelectedItem() != null){
-					JCheckBox checkbox = new JCheckBox(personBox.getSelectedItem().toString());
-					personBox.removeItem(personBox.getSelectedItem());
-					checkBoxPanel.add(checkbox,cbpCon);
-					cbpCon.gridy += 1;
-				}
-			}
-		});
+	}
+	
+	private void setCheckBox(List<Person> list){
+		for(int i = 0; i < list.size(); i++){
+			JCheckBox checkBox = new JCheckBox(list.get(i).getFirstName() + list.get(i).getLastName());
+			GridBagConstraints c = new GridBagConstraints();
+			c.gridx = 0;
+			c.gridy = i;
+			sharedCPanel.add(checkBox,c);
+		}
 	}
 	
 	public JPanel getPanel(){
 		return sharedCPanel;
+	}
+
+	public void propertyChange(PropertyChangeEvent evt) {
+		switch (evt.getPropertyName()) {
+		case CalendarModel.CALENDAR_LOADED_Property:
+			setCheckBox(calendarModel.getPersons());
+			break;
+
+		}
 	}
 }

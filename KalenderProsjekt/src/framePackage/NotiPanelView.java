@@ -35,7 +35,6 @@ public class NotiPanelView extends JPanel{
 	
 	public NotiPanelView(){
 		notifications = new ArrayList<Notification>();
-//		notifications.add(noti);
 		initialize();
 	}
 	
@@ -53,7 +52,6 @@ public class NotiPanelView extends JPanel{
 		varselPanel.add(lblWarning, c);
 		
 		listModel = new DefaultListModel();
-//		listModel.addElement(notifications.get(0));
 		warningList = new JList<Notification>(listModel);
 		warningList.setFixedCellWidth(15);
 		warningList.setCellRenderer(new NotiViewRender());
@@ -67,28 +65,6 @@ public class NotiPanelView extends JPanel{
 		
 	}
 	
-//	public static void main(String args[]){
-//		ArrayList<Person> members = new ArrayList<Person>();
-//		Team team = new Team(0, null, members);
-//		MeetingRoom room = new MeetingRoom("Soverommet");
-//		Person creator = new Person(null, 00000000, "Dav", "Hov", "dave",
-//				"1234");
-//		members.add(creator);
-//		long startTime = new GregorianCalendar(2013, 2, 14, 16, 30)
-//		.getTimeInMillis();
-//		long endTime = new GregorianCalendar(2013, 2, 14, 17, 30)
-//		.getTimeInMillis();
-//		Meeting meetings = new Meeting(0, "suppemøtewwwwwwwwwwwwwwwwwwwwwwwww",
-//				"kontoret", startTime, endTime, "This is a desc", team, room,
-//				creator);
-//		Notification notification = new Notification(0, 'y', 'c', meetings,
-//				creator);
-//		JFrame frame = new JFrame("APPointmenOverViewTest");
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		frame.setContentPane(new NotiPanelView(notification).getPanel());
-//		frame.pack();
-//		frame.setVisible(true);
-//	}
 	
 	public JPanel getPanel(){
 		return varselPanel;
