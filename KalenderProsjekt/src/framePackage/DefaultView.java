@@ -1,30 +1,15 @@
 package framePackage;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.LayoutManager;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,6 +17,7 @@ import javax.swing.JToggleButton;
 
 import data.CalendarModel;
 
+@SuppressWarnings("serial")
 public class DefaultView extends JPanel {
 
 	// her er main frame work, som kan brukes p�year og month views ogs�
@@ -43,9 +29,6 @@ public class DefaultView extends JPanel {
 	private ButtonGroup calendarSelect;
 	private JButton logOut;
 	private JPanel sharedCalendar;
-	private JComboBox<String> calendarVisible;
-	private JButton addCalendar;
-	private JCheckBox otherCalendar;
 
 	private JPanel timePanel;
 	private JLabel calendarTitle;
@@ -55,7 +38,6 @@ public class DefaultView extends JPanel {
 	private JToggleButton dayBtn;
 	private JToggleButton weekBtn;
 	private JToggleButton monthBtn;
-	private Date date;
 	private CalendarView mainView;
 	private DayView dayView;
 	private WeekView weekView;
@@ -83,8 +65,8 @@ public class DefaultView extends JPanel {
 		monthView = new MonthView(calendarModel);
 		notiPanel = new NotiPanelView();
 		sharedCView = new SharedCalendarView(calendarModel);
-		date = new Date();
 		initialize();
+		calendarModel.init();
 	}
 
 	private void initialize() {
@@ -121,24 +103,10 @@ public class DefaultView extends JPanel {
 		backGroundConstraints.gridx = 3;
 		backGroundConstraints.gridy = 0;
 		frame.add(logOut, backGroundConstraints);
-
-		sharedCalendar = new JPanel(new GridBagLayout());
-		sharedCalendar.setSize(100, 100);
-		sharedCalendar.setBorder(BorderFactory.createLineBorder(Color.black));
-		backGroundConstraints.anchor = GridBagConstraints.NORTH;
+		
 		backGroundConstraints.gridx = 0;
 		backGroundConstraints.gridy = 1;
-		frame.add(sharedCalendar, backGroundConstraints);
-
-		GridBagConstraints sharedCalendarContraints = new GridBagConstraints();
-		lblcalendar = new JLabel("kalender");
-		sharedCalendarContraints.gridx = 0;
-		sharedCalendarContraints.gridy = 0;
-		sharedCalendar.add(lblcalendar, sharedCalendarContraints);
-		
-		sharedCalendarContraints.gridx = 0;
-		sharedCalendarContraints.gridy = 1;
-		sharedCalendar.add(sharedCView.getPanel(),sharedCalendarContraints);
+		frame.add(sharedCView.getPanel(),backGroundConstraints);
 
 		backGroundConstraints.gridx = 0;
 		backGroundConstraints.gridy = 2;

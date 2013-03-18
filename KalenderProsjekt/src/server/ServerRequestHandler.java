@@ -207,8 +207,7 @@ public class ServerRequestHandler implements Runnable {
 
 	}
 	
-	private Response addAlarm(UpdateRequest request){
-		Response response = null;
+	private DataResponse addAlarm(UpdateRequest request){
 		List<Alarm> alarms = null;
 		try {
 			int alarmID = dbController.addAlarm(request.getAlarm());
@@ -235,7 +234,7 @@ public class ServerRequestHandler implements Runnable {
 	}
 	
 	private void handleUpdateRequest(UpdateRequest request, Socket client) {
-		Response response =  null;
+		DataResponse response =  null;
 		boolean respondToAllClients = false;
 		switch(request.getUpdateType()){
 		case CREATE_ALARM:
@@ -247,6 +246,10 @@ public class ServerRequestHandler implements Runnable {
 			break;
 		case UPDATE_METING:
 			//TODO implement
+			break;
+		case UPDATE_NOTIFICATION:
+			break;
+		default:
 			break;
 		}
 		

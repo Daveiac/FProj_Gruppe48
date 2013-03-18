@@ -1,6 +1,5 @@
 package framePackage;
 
-import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -13,28 +12,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import data.CalendarModel;
 import data.Person;
 
 public class SharedCalendarView implements PropertyChangeListener{
 	private JPanel sharedCPanel;
-	private Person person;
 	private CalendarModel calendarModel;
 	private JCheckBox checkBox;
-	private List personList;
-	private List checkBoxList;
+	private List<Person> personList;
+	private List<JCheckBox> checkBoxList;
 
 	
 	public SharedCalendarView(CalendarModel calendarModel){
 		initialize(calendarModel);
-//		person = new Person();
 	}
 	
 	
@@ -44,16 +39,18 @@ public class SharedCalendarView implements PropertyChangeListener{
 		sharedCPanel = new JPanel(new GridBagLayout());
 		sharedCPanel.setPreferredSize(new Dimension(250, 200));
 		sharedCPanel.setVisible(true);
-		sharedCPanel.setBorder(BorderFactory.createLineBorder(Color.black, 1));	
+		sharedCPanel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 		checkBoxList = new ArrayList<JCheckBox>();
 		personList = new ArrayList<Person>();
 	}
 	
 	private void setCheckBox(List<Person> list){
+		GridBagConstraints c = new GridBagConstraints();
+		c.anchor = GridBagConstraints.LINE_START;
 		for(int i = 0; i < list.size(); i++){
 			personList.add(list.get(i));
 			checkBox = new JCheckBox(list.get(i).getFirstName() + list.get(i).getLastName());
-			GridBagConstraints c = new GridBagConstraints();
+			checkBox.setBackground(calendarModel.getColorOfPerson(list.get(i)));
 			c.gridx = 0;
 			c.gridy = i;
 			sharedCPanel.add(checkBox,c);
@@ -74,11 +71,21 @@ public class SharedCalendarView implements PropertyChangeListener{
 		switch (evt.getPropertyName()) {
 		case CalendarModel.CALENDAR_LOADED_Property:
 			setCheckBox(calendarModel.getPersons());
+			System.out.println("cookie");
 			break;
 
 		}
 	}
 	
-	
+//	public static void main(String[] args){
+//		CalendarModel cm = new CalendarModel();
+//		SharedCalendarView mw = new SharedCalendarView(cm);
+//		cm.init();
+//		JFrame frame = new JFrame("monthView test: ");
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		frame.setContentPane(mw.getPanel());
+//		frame.setSize(700, 600);
+//		frame.setVisible(true); 
+//	}
 	
 }
