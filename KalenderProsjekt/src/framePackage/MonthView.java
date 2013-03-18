@@ -47,6 +47,8 @@ public class MonthView implements CalendarView, PropertyChangeListener{
 	@SuppressWarnings("serial")
 	private void initialize(CalendarModel calendarModel){
 		this.calendarModel = calendarModel;
+		calendarModel.addPropertyChangeListener(this);
+		calendarModel.sysoutListeners();
 		
 		GregorianCalendar cal =  new GregorianCalendar();
 
@@ -141,20 +143,6 @@ public class MonthView implements CalendarView, PropertyChangeListener{
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		System.out.println("in the pooper");
-		switch (evt.getPropertyName()) {
-		case CalendarModel.CALENDAR_LOADED_Property:
-			HashMap<Person, ArrayList<Meeting>> pmr = (HashMap<Person, ArrayList<Meeting>>) evt.getNewValue();
-//			addAllShizz(pmr);
-			break;
-		case CalendarModel.MEETING_CHANGED_Property:
-			refreshCalendar();
-			break;
-		case CalendarModel.MEETING_REMOVED_Property:
-			refreshCalendar();
-			break;
-		default:
-			break;
-		}
+		System.out.println("LØL");
 	}
 }
