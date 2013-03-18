@@ -28,9 +28,12 @@ public class MonthView implements CalendarView, PropertyChangeListener{
 	private String title;
 	public static final String[] months = {"Januar","Februar", "Mars", "April", "Mai", "Juni", "Juli", 
 		"August", "September", "Oktober", "November", "Desember"};
+	private CalendarModel calendarModel;
 
 	public static void main(String args[]){
-		MonthView mw = new MonthView();
+		CalendarModel cm = new CalendarModel();
+		MonthView mw = new MonthView(cm);
+		cm.init();
 		JFrame frame = new JFrame("monthView test: ");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setContentPane(mw.getPanel());
@@ -38,13 +41,16 @@ public class MonthView implements CalendarView, PropertyChangeListener{
 		frame.setVisible(true);
 	}
 
-	public MonthView(){
-		initialize();
+	public MonthView(CalendarModel calendarModel){
+		initialize(calendarModel);
 		refreshCalendar();
 	}
 
 	@SuppressWarnings("serial")
-	private void initialize(){
+	private void initialize(CalendarModel calendarModel){
+		this.calendarModel = calendarModel;
+		calendarModel.addPropertyChangeListener(this);
+		
 		GregorianCalendar cal =  new GregorianCalendar();
 
 		tableModel = new DefaultTableModel();
@@ -138,19 +144,6 @@ public class MonthView implements CalendarView, PropertyChangeListener{
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		switch (evt.getPropertyName()) {
-		case CalendarModel.CALENDAR_LOADED_Property:
-			HashMap<Person, ArrayList<Meeting>> pmr = (HashMap<Person, ArrayList<Meeting>>) evt.getNewValue();
-//			addAllShizz(pmr);
-			break;
-		case CalendarModel.MEETING_CHANGED_Property:
-			refreshCalendar();
-			break;
-		case CalendarModel.MEETING_REMOVED_Property:
-			refreshCalendar();
-			break;
-		default:
-			break;
-		}
+		System.out.println("LØL");
 	}
 }
