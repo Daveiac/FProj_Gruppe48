@@ -3,12 +3,13 @@ package data;
 import java.awt.Color;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 
-public class CalendarModel {
+public class CalendarModel implements Serializable{
 	private List<Person> persons;
 	private HashMap<Person, ArrayList<Meeting>> personMeetingRelation;
 	private ArrayList<Boolean> selected;
@@ -77,6 +78,10 @@ public class CalendarModel {
 		this.selected = selected;
 	}
 	
+	public void setSelected(Person person, boolean sel) {
+		selected.set(persons.indexOf(person), sel);
+		pcs.firePropertyChange(SELECTED_Property, person, person);
+	}
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		pcs.addPropertyChangeListener(listener);
 	}

@@ -82,7 +82,7 @@ public class DefaultView extends JPanel {
 		weekView = new WeekView(calendarModel);
 		monthView = new MonthView(calendarModel);
 		notiPanel = new NotiPanelView();
-		sharedCView = new SharedCalendarView();
+		sharedCView = new SharedCalendarView(calendarModel);
 		date = new Date();
 		initialize();
 	}

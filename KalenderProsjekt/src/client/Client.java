@@ -25,16 +25,9 @@ public class Client{
 	public void sendRequest(NetworkRequest request) throws IOException{
 		ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
 		out.writeObject(request);
-		out.close();
-		server.close();
+//		out.close();
+//		server.close();
 	}
 	
-	public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException{
-		Client client = new Client(InetAddress.getByName(Constants.serverIP));
-//		client.sendRequest(new AuthenticationRequest("haakondi", "pass"));
-		
-		//First argument must be a Person object
-		QueryRequest qReq = new QueryRequest("haakondi", null, QueryType.GET_NOTIFICATIONS_BY_PERSON);
-		client.sendRequest(qReq);
-	}
+
 }

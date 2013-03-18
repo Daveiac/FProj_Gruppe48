@@ -1,9 +1,10 @@
 package data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-public class FakeWhale {
+public class FakeWhale implements Serializable{
 
 	/**
 	 * A fake class to simulate connection to server
