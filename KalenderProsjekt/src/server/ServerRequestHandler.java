@@ -13,8 +13,8 @@ import networking.packages.AuthenticationRequest;
 import networking.packages.AuthenticationResponse;
 import networking.packages.AuthenticationResponse.AuthenticationResponseType;
 import networking.packages.QueryRequest;
-import networking.packages.QueryResponse;
-import networking.packages.QueryResponse.QueryResponseType;
+import networking.packages.DataResponse;
+import networking.packages.DataResponse.DataResponseType;
 import networking.packages.Response;
 import networking.packages.UpdateRequest;
 import data.Alarm;
@@ -74,43 +74,43 @@ public class ServerRequestHandler implements Runnable {
 
 
 
-	private QueryResponse getEveryPerson() {
+	private DataResponse getEveryPerson() {
 		List<Person> data = null;
 		try {
 			data = dbController.getEveryPerson();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		QueryResponse response = new QueryResponse(data,
-				QueryResponseType.PERSON_RESPONSE);
+		DataResponse response = new DataResponse(data,
+				DataResponseType.PERSON_RESPONSE);
 		return response;
 	}
 
-	private QueryResponse getNotificationsByMeeting(Meeting meeting) {
+	private DataResponse getNotificationsByMeeting(Meeting meeting) {
 		List<Notification> notifications = null;
 		try {
 			notifications = dbController.getNotifications(meeting);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		QueryResponse response = new QueryResponse(notifications,
-				QueryResponseType.NOTIFICATION_RESPONSE);
+		DataResponse response = new DataResponse(notifications,
+				DataResponseType.NOTIFICATION_RESPONSE);
 		return response;
 	}
 
-	private QueryResponse getAlarms(String username) {
+	private DataResponse getAlarms(String username) {
 		List<Alarm> data = null;
 		try {
 			data = dbController.getAlarmsOfPerson(username);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		QueryResponse response = new QueryResponse(data,
-				QueryResponseType.ALARM_RESPONSE);
+		DataResponse response = new DataResponse(data,
+				DataResponseType.ALARM_RESPONSE);
 		return response;
 	}
 
-	private QueryResponse getMeetingsByPerson(String username) {
+	private DataResponse getMeetingsByPerson(String username) {
 		List<Meeting> data = null;
 		try {
 			data = dbController.getEveryMeetingOwnedByPerson(new Person(null,
@@ -118,12 +118,12 @@ public class ServerRequestHandler implements Runnable {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		QueryResponse response = new QueryResponse(data,
-				QueryResponseType.MEETING_RESPONSE);
+		DataResponse response = new DataResponse(data,
+				DataResponseType.MEETING_RESPONSE);
 		return response;
 	}
 	
-	private QueryResponse getTeamsByMeeting(Meeting meeting){
+	private DataResponse getTeamsByMeeting(Meeting meeting){
 		List<Team> teams = null;
 		
 		try {
@@ -132,11 +132,11 @@ public class ServerRequestHandler implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new QueryResponse(teams, QueryResponseType.MEETING_RESPONSE);
+		return new DataResponse(teams, DataResponseType.MEETING_RESPONSE);
 	}
 	
 	private void handleQueryRequest(QueryRequest request, Socket client) {
-		QueryResponse response = null;
+		DataResponse response = null;
 
 		switch (request.getQueryType()) {
 		case GET_NOTIFICATIONS_BY_PERSON:
@@ -171,15 +171,15 @@ public class ServerRequestHandler implements Runnable {
 	
 	
 
-	private QueryResponse getNotificationsByPerson(String username) {
+	private DataResponse getNotificationsByPerson(String username) {
 		List<Notification> notifications = null;
 		try {
 			notifications = dbController.getNotifications(username);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		QueryResponse response = new QueryResponse(notifications,
-				QueryResponseType.NOTIFICATION_RESPONSE);
+		DataResponse response = new DataResponse(notifications,
+				DataResponseType.NOTIFICATION_RESPONSE);
 		return response;
 	}
 
@@ -217,16 +217,23 @@ public class ServerRequestHandler implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new QueryResponse(alarms, QueryResponseType.ALARM_RESPONSE);
+		return new DataResponse(alarms, DataResponseType.ALARM_RESPONSE);
 		
 	}
 
+	private void addMeeting(Meeting meeting){
+		
+	}
+	
 	private void handleUpdateRequest(UpdateRequest request, Socket client) {
 		Response response =  null;
 		boolean respondToAllClients = false;
 		switch(request.getUpdateType()){
 		case CREATE_ALARM:
 			response = addAlarm(request);
+			break;
+		case CREATE_MEETING:
+			break;
 		}
 		
 		try {
