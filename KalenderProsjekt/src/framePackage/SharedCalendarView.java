@@ -28,8 +28,8 @@ public class SharedCalendarView implements PropertyChangeListener{
 	private Person person;
 	private CalendarModel calendarModel;
 	private JCheckBox checkBox;
-	private List personList;
-	private List checkBoxList;
+	private List<Person> personList;
+	private List<JCheckBox> checkBoxList;
 
 	
 	public SharedCalendarView(CalendarModel calendarModel){
@@ -55,7 +55,7 @@ public class SharedCalendarView implements PropertyChangeListener{
 			checkBox = new JCheckBox(list.get(i).getFirstName() + list.get(i).getLastName());
 			GridBagConstraints c = new GridBagConstraints();
 			c.gridx = 0;
-			c.gridy = i;
+			c.gridy = i;	
 			sharedCPanel.add(checkBox,c);
 			checkBoxList.add(checkBox);
 			checkBox.addActionListener(new ActionListener() {
