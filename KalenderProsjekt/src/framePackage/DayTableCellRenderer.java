@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import data.CalendarModel;
 import data.Meeting;
 import data.Person;
+import data.Team;
 
 @SuppressWarnings("serial")
 public class DayTableCellRenderer extends DefaultTableCellRenderer {
@@ -29,9 +30,18 @@ public class DayTableCellRenderer extends DefaultTableCellRenderer {
 		Meeting meeting = (Meeting) value;
 
 		if (meeting != null) {
-			for (Person person : persons) {
-				component.setBackground(calendarModel.getColorOfPerson(person));
+			for (Person selectedPerson : calendarModel.getSelectedPersons()) {
+				for (Person teamMember : meeting.getTeam().getMembers()) {
+					if (selectedPerson.equals(teamMember)) {
+						component.setBackground(calendarModel.getColorOfPerson(selectedPerson));
+					}
+				}
 			}
+			//			for (Person person : persons) {
+			//				component.setBackground(calendarModel.getColorOfPerson(person));
+			//				System.out.println(calendarModel.getColorOfPerson(person).toString());
+			//			}
+			System.out.println("troll!: " + component.getBackground());
 			setText(meeting.getTitle());
 		}
 		else {
