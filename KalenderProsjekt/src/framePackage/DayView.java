@@ -32,6 +32,7 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 	public DayView(CalendarModel calendarModel) {
 		calendar = new GregorianCalendar();
 		this.calendarModel = calendarModel;
+		calendarModel.addPropertyChangeListener(this);
 
 		// Creating a non-editable table
 		dayTable = new JTable() {
@@ -212,18 +213,23 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		System.out.println("doing ta pcs!");
 		switch (evt.getPropertyName()) {
 		case CalendarModel.CALENDAR_LOADED_Property:
 			createDayTable();
+			System.out.println("cal load");
 			break;
 		case CalendarModel.MEETING_ADDED_Property:
 			createDayTable();
+			System.out.println("meet add");
 			break;
 		case CalendarModel.MEETING_CHANGED_Property:
 			createDayTable();
+			System.out.println("meet chg");
 			break;
 		case CalendarModel.MEETING_REMOVED_Property:
 			createDayTable();
+			System.out.println("meet rem");
 			break;
 		default:
 			break;
