@@ -78,6 +78,10 @@ public class CalendarModel implements Serializable{
 		this.selected = selected;
 	}
 	
+	public void setSelected(Person person, boolean sel) {
+		selected.set(persons.indexOf(person), sel);
+		pcs.firePropertyChange(SELECTED_Property, person, person);
+	}
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		pcs.addPropertyChangeListener(listener);
 	}
