@@ -46,9 +46,6 @@ public class DefaultView extends JPanel {
 	private JComboBox<String> calendarVisible;
 	private JButton addCalendar;
 	private JCheckBox otherCalendar;
-	private JButton warning;
-	private JLabel lblvarsel;
-	private int warningCounter = 1;
 
 	private JPanel timePanel;
 	private JLabel calendarTitle;
@@ -63,10 +60,11 @@ public class DefaultView extends JPanel {
 	private DayView dayView;
 	private WeekView weekView;
 	private MonthView monthView;
-	private NotiPanelView warningPanel;
+	private NotiPanelView notiPanel;
 	private Dato dato;
 	private JPanel calendarPanel;
 	private GridBagConstraints timePanelContraints;
+	private SharedCalendarView sharedCView;
 
 	private CalendarModel calendarModel;
 
@@ -82,8 +80,9 @@ public class DefaultView extends JPanel {
 		dato = new Dato();
 		dayView = new DayView(calendarModel);
 		weekView = new WeekView(calendarModel);
-		monthView = new MonthView();
-		warningPanel = new NotiPanelView();
+		monthView = new MonthView(calendarModel);
+		notiPanel = new NotiPanelView();
+		sharedCView = new SharedCalendarView();
 		date = new Date();
 		initialize();
 	}
@@ -136,34 +135,14 @@ public class DefaultView extends JPanel {
 		sharedCalendarContraints.gridx = 0;
 		sharedCalendarContraints.gridy = 0;
 		sharedCalendar.add(lblcalendar, sharedCalendarContraints);
-		calendarVisible = new JComboBox<String>();
-		calendarVisible.addItem("David Hovind");
-		calendarVisible.addItem("Aina Elisabeth Thunestveit");
-		calendarVisible.addItem("Christoffer Pram");
-		calendarVisible.addItem("Håkon Dissen");
-		calendarVisible.addItem("Vegar Lerpoll");
-		calendarVisible.setSelectedItem(null);
+		
 		sharedCalendarContraints.gridx = 0;
 		sharedCalendarContraints.gridy = 1;
-		sharedCalendar.add(calendarVisible, sharedCalendarContraints);
-		addCalendar = new JButton("Legg til");
-		sharedCalendarContraints.gridx = 1;
-		sharedCalendarContraints.gridy = 1;
-		sharedCalendar.add(addCalendar, sharedCalendarContraints);
-		otherCalendar = new JCheckBox("Shimin Sun");
-		sharedCalendarContraints.gridx = 0;
-		sharedCalendarContraints.gridy = 2;
-		sharedCalendar.add(otherCalendar, sharedCalendarContraints);
+		sharedCalendar.add(sharedCView.getPanel(),sharedCalendarContraints);
 
 		backGroundConstraints.gridx = 0;
 		backGroundConstraints.gridy = 2;
-		frame.add(warningPanel, backGroundConstraints);
-		GridBagConstraints varselPanelContraints = new GridBagConstraints();
-		lblvarsel = new JLabel("varsel");
-		varselPanelContraints.gridx = 0;
-		varselPanelContraints.gridy = 0;
-		warningPanel.add(lblvarsel, varselPanelContraints);
-		varselPanelContraints.gridy = warningCounter;
+		frame.add(notiPanel.getPanel(), backGroundConstraints);
 
 		// her i fra kommer selve dayView delen, tar vekk lbltid s�kan dette
 		// brukes p�andre frames

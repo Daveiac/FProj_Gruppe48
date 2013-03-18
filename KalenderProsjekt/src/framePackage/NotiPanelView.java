@@ -90,7 +90,7 @@ public class NotiPanelView extends JPanel{
 //		frame.setVisible(true);
 //	}
 	
-	private JPanel getPanel(){
+	public JPanel getPanel(){
 		return varselPanel;
 	}
 	
