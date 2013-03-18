@@ -18,7 +18,7 @@ public class FakeWhale {
 	public FakeWhale(CalendarModel cModel) {
 		this.cModel = cModel;
 		persons = new ArrayList<Person>();
-		
+
 	}
 	/**
 	 * Just test code
@@ -30,7 +30,7 @@ public class FakeWhale {
 		Team team = new Team(0, null, members);
 		MeetingRoom room = new MeetingRoom("Roomsa");
 		members.add(person);
-		
+
 		long startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
 		long endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
 		meetings.add(new Meeting(0, "suppemy", "inHell", startTime, endTime, "This is a desc", team, room, person));
@@ -49,8 +49,9 @@ public class FakeWhale {
 		startTime = new GregorianCalendar(2013, 2, 17, 03, 00).getTimeInMillis();
 		endTime = new GregorianCalendar(2013, 2, 17, 04, 30).getTimeInMillis();
 		meetings.add(new Meeting(0, "suppemøte6", "w00t?", startTime, endTime, "This is a desc", team, room, person));
-		// TODO Auto-generated method stub
-		
+
+		cModel.addAllMeetingsOfPerson(meetings, person);
+
 	}
 	/**
 	 * Just test code
@@ -62,7 +63,7 @@ public class FakeWhale {
 		Team team = new Team(0, null, members);
 		MeetingRoom room = new MeetingRoom("Roomsa");
 		members.add(person);
-		
+
 		long startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
 		long endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
 		meetings.add(new Meeting(0, "suppemøte", "inHell", startTime, endTime, "This is a desc", team, room, person));
@@ -81,9 +82,9 @@ public class FakeWhale {
 		startTime = new GregorianCalendar(2013, 2, 17, 03, 00).getTimeInMillis();
 		endTime = new GregorianCalendar(2013, 2, 17, 04, 30).getTimeInMillis();
 		meetings.add(new Meeting(0, "suppemøte6", "w00t?", startTime, endTime, "This is a desc", team, room, person));
-		
+
 		cModel.addAllMeetingsOfPerson(meetings, person);
-		
+
 	}
 	/**
 	 * Just test code
@@ -106,7 +107,7 @@ public class FakeWhale {
 	 * @param person the persons whose meetings to request.
 	 */
 	public void requestEveryMeetingForPerson(Person person){ 
-		if(persons.indexOf(person) %2 == 0) {
+		if(persons.indexOf(person) % 2 == 0) {
 			reccieveMeetingsFromPerson1(person);
 		} else {
 			reccieveMeetingsFromPerson2(person);
@@ -118,12 +119,12 @@ public class FakeWhale {
 	public void requestEveryPerson(){
 		receiveAllPersons();
 	}
-	
+
 	public void pushMeeting(Meeting meeting) {
 		reccieveMeeting(meeting);
 	}
-	
-	
+
+
 	private void reccieveMeeting(Meeting meeting) {
 		cModel.addMeeting(meeting);
 	}

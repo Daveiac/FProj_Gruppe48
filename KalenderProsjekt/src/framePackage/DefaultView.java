@@ -83,7 +83,7 @@ public class DefaultView extends JPanel {
 		dayView = new DayView(calendarModel);
 		weekView = new WeekView(calendarModel);
 		monthView = new MonthView();
-		 warningPanel = new NotiPanelView();
+		warningPanel = new NotiPanelView();
 		date = new Date();
 		initialize();
 	}
