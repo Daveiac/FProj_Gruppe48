@@ -241,6 +241,7 @@ public class ServerRequestHandler implements Runnable {
 
 
 	public void run() {
+		OutputController.output("RequestHandler initialized");
 		while (true) {
 			try {
 				processRequest(requests.take());

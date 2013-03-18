@@ -15,6 +15,13 @@ public class ResponseSender implements Runnable{
 	
 	
 	
+	public ResponseSender(BlockingQueue<PendingResponse> pendingResponses,
+			List<Socket> clients) {
+		super();
+		this.pendingResponses = pendingResponses;
+		this.clients = clients;
+	}
+
 	@Override
 	public void run() {
 		while(true){
