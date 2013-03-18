@@ -31,7 +31,9 @@ public class MonthView implements CalendarView, PropertyChangeListener{
 	private CalendarModel calendarModel;
 
 	public static void main(String args[]){
-		MonthView mw = new MonthView(new CalendarModel());
+		CalendarModel cm = new CalendarModel();
+		MonthView mw = new MonthView(cm);
+		cm.init();
 		JFrame frame = new JFrame("monthView test: ");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setContentPane(mw.getPanel());
@@ -48,7 +50,6 @@ public class MonthView implements CalendarView, PropertyChangeListener{
 	private void initialize(CalendarModel calendarModel){
 		this.calendarModel = calendarModel;
 		calendarModel.addPropertyChangeListener(this);
-		calendarModel.sysoutListeners();
 		
 		GregorianCalendar cal =  new GregorianCalendar();
 

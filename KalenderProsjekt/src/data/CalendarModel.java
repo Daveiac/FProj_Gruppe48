@@ -23,6 +23,8 @@ public class CalendarModel {
 
 	public CalendarModel() {
 		pcs = new PropertyChangeSupport(this);
+	}
+	public void init() {
 		persons = new ArrayList<Person>();
 		personMeetingRelation = new HashMap<Person,ArrayList<Meeting>>();
 		selected = new ArrayList<Boolean>();
@@ -32,7 +34,6 @@ public class CalendarModel {
 		for (Person p : persons) {
 			data.requestEveryMeetingForPerson(p);
 		}
-
 	}
 	/**
 	 * Gets ALL of the meetings of a person
