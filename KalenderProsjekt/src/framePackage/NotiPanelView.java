@@ -23,7 +23,7 @@ import data.Notification;
 import data.Person;
 import data.Team;
 
-public class NotiPanelView {
+public class NotiPanelView extends JPanel{
 	
 	private JFrame frame;
 	private JPanel varselPanel;
