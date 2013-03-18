@@ -83,6 +83,7 @@ public class DefaultView extends JPanel {
 		dayView = new DayView(calendarModel);
 		weekView = new WeekView(calendarModel);
 		monthView = new MonthView();
+		 warningPanel = new NotiPanelView();
 		date = new Date();
 		initialize();
 	}
@@ -153,10 +154,6 @@ public class DefaultView extends JPanel {
 		sharedCalendarContraints.gridx = 0;
 		sharedCalendarContraints.gridy = 2;
 		sharedCalendar.add(otherCalendar, sharedCalendarContraints);
-
-		warningPanel = new JPanel(new GridBagLayout());
-		warningPanel.setSize(100, 300);
-		warningPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 
 		backGroundConstraints.gridx = 0;
 		backGroundConstraints.gridy = 2;
