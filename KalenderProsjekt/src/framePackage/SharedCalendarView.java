@@ -1,5 +1,6 @@
 package framePackage;
 
+import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -8,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -25,6 +27,9 @@ public class SharedCalendarView implements PropertyChangeListener{
 	private JPanel sharedCPanel;
 	private Person person;
 	private CalendarModel calendarModel;
+	private JCheckBox checkBox;
+	private List personList;
+	private List checkBoxList;
 
 	
 	public SharedCalendarView(CalendarModel calendarModel){
@@ -39,17 +44,25 @@ public class SharedCalendarView implements PropertyChangeListener{
 		sharedCPanel = new JPanel(new GridBagLayout());
 		sharedCPanel.setPreferredSize(new Dimension(250, 200));
 		sharedCPanel.setVisible(true);
-		sharedCPanel.setBorder(BorderFactory.createLineBorder(Color.black, 1));		
-		
+		sharedCPanel.setBorder(BorderFactory.createLineBorder(Color.black, 1));	
+		checkBoxList = new ArrayList<JCheckBox>();
+		personList = new ArrayList<Person>();
 	}
 	
 	private void setCheckBox(List<Person> list){
 		for(int i = 0; i < list.size(); i++){
-			JCheckBox checkBox = new JCheckBox(list.get(i).getFirstName() + list.get(i).getLastName());
+			personList.add(list.get(i));
+			checkBox = new JCheckBox(list.get(i).getFirstName() + list.get(i).getLastName());
 			GridBagConstraints c = new GridBagConstraints();
 			c.gridx = 0;
 			c.gridy = i;
 			sharedCPanel.add(checkBox,c);
+			checkBoxList.add(checkBox);
+			checkBox.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					calendarModel.setSelected(personList.get(checkBoxList.indexOf(checkBox)),checkBox.isSelected());
+				}
+			});
 		}
 	}
 	
@@ -65,4 +78,7 @@ public class SharedCalendarView implements PropertyChangeListener{
 
 		}
 	}
+	
+	
+	
 }
