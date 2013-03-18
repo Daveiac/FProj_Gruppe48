@@ -22,16 +22,15 @@ import data.Person;
  * This is the DayView Panel that shows the day planner.
  */
 @SuppressWarnings("serial")
-public class DayView extends JPanel implements CalendarView, PropertyChangeListener {
+public class DayView extends JPanel implements CalendarView,
+		PropertyChangeListener {
 
+	private JTable dayTable;
+	private DefaultTableModel tableModel;
+	private CalendarModel calendarModel;
 	private GregorianCalendar calendar;
 	private String title;
-	private DefaultTableModel tableModel;
-	private JTable dayTable;
 	private String[] columnHeaders;
-
-	private CalendarModel calendarModel;
-	private List<Person> persons;
 
 	/**
 	 * Constructs the DayView Panel.
@@ -92,22 +91,20 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 		setDayTitle();
 
 		// Sets table headers
-		int numberOfDays = 1;
+		int dayOfWeek = 1;
 		SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE");
-		columnHeaders[numberOfDays] = dayFormat.format(calendar.getTime());
+		columnHeaders[dayOfWeek] = dayFormat.format(calendar.getTime());
 		tableModel.setColumnIdentifiers(columnHeaders);
 
 		// Creates the day data
-		createDay(calendar, tableModel, numberOfDays);
+		createDay(calendar, tableModel, dayOfWeek);
 
 		// Sets the new week into the table
 		dayTable.setModel(tableModel);
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
-		dayTable.getColumnModel()
-		.getColumn(1)
-		.setCellRenderer(
-				new DayTableCellRenderer(calendarModel, persons));
+		dayTable.getColumnModel().getColumn(1)
+				.setCellRenderer(new DayTableCellRenderer(calendarModel));
 	}
 
 	/**
@@ -129,7 +126,7 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 		}
 
 		// Sets today's meetings
-		persons = calendarModel.getSelectedPersons();
+		List<Person> persons = calendarModel.getSelectedPersons();
 		for (Person person : persons) {
 			ArrayList<Meeting> meetings = calendarModel.getMeetings(person);
 			setMeetings(calendar, tableModel, dayOfWeek, meetings);
@@ -167,7 +164,8 @@ public class DayView extends JPanel implements CalendarView, PropertyChangeListe
 
 			// Sets the meetings at the given times
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-			if (sdf.format(calendar.getTime()).equals(sdf.format(meetingCalendar.getTime()))) {
+			if (sdf.format(calendar.getTime()).equals(
+					sdf.format(meetingCalendar.getTime()))) {
 				for (int time = startTableTime; time < endTableTime; time++) {
 					tableModel.setValueAt(meeting, time, dayOfWeek);
 				}
