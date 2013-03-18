@@ -2,7 +2,7 @@ package networking.packages;
 
 import java.util.List;
 
-public class QueryResponse extends Response {
+public class DataResponse extends Response {
 	private static final long serialVersionUID = -1664992392938826860L;
 	private List data;
 	private QueryResponseType queryResponseType;
@@ -11,7 +11,7 @@ public class QueryResponse extends Response {
 		NOTIFICATION_RESPONSE, PERSON_RESPONSE, MEETING_RESPONSE, ALARM_RESPONSE, TEAM_RESPONSE
 	}
 
-	public QueryResponse(List data, QueryResponseType queryResponseType) {
+	public DataResponse(List data, QueryResponseType queryResponseType) {
 		super(ResponseType.QUERY_RESPONSE);
 		this.data = data;
 		this.queryResponseType = queryResponseType;
