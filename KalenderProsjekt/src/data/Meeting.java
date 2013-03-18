@@ -1,6 +1,8 @@
 package data;
 
-public class Meeting {
+import java.io.Serializable;
+
+public class Meeting implements Serializable{
 	private int meetingID;
 	private String title;
 	private String location;

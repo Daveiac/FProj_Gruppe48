@@ -1,6 +1,8 @@
 package data;
 
-public class TimeInterval {
+import java.io.Serializable;
+
+public class TimeInterval implements Serializable{
 	public final long startTime;
 	public final long endTime;
 	

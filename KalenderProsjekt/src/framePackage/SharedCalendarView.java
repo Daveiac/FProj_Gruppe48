@@ -1,6 +1,5 @@
 package framePackage;
 
-import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -13,19 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import data.CalendarModel;
 import data.Person;
 
 public class SharedCalendarView implements PropertyChangeListener{
 	private JPanel sharedCPanel;
-	private Person person;
 	private CalendarModel calendarModel;
 	private JCheckBox checkBox;
 	private List<Person> personList;

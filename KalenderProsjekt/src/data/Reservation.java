@@ -1,6 +1,8 @@
 package data;
 
-public class Reservation {
+import java.io.*;
+
+public class Reservation implements Serializable{
 	private TimeInterval timeInterval;
 	private MeetingRoom meetingRoom;
 	private Meeting meeting;
