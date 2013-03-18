@@ -23,7 +23,7 @@ import data.Notification;
 import data.Person;
 import data.Team;
 
-public class VarselPanelView {
+public class NotiPanelView {
 	
 	private JFrame frame;
 	private JPanel varselPanel;
@@ -32,7 +32,7 @@ public class VarselPanelView {
 	private DefaultListModel listModel;
 	private List<Notification> notifications;
 	
-	public VarselPanelView(Notification noti){
+	public NotiPanelView(Notification noti){
 		notifications = new ArrayList<Notification>();
 		notifications.add(noti);
 		initialize();
@@ -54,7 +54,7 @@ public class VarselPanelView {
 		listModel.addElement(notifications.get(0));
 		warningList = new JList<Notification>(listModel);
 		warningList.setFixedCellWidth(15);
-		warningList.setCellRenderer(new VarselViewRender());
+		warningList.setCellRenderer(new NotiViewRender());
 		JScrollPane scrollPane = new JScrollPane(warningList);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -83,7 +83,7 @@ public class VarselPanelView {
 				creator);
 		JFrame frame = new JFrame("APPointmenOverViewTest");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setContentPane(new VarselPanelView(notification).getPanel());
+		frame.setContentPane(new NotiPanelView(notification).getPanel());
 		frame.pack();
 		frame.setVisible(true);
 	}

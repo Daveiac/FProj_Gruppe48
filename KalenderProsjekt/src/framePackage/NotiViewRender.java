@@ -8,7 +8,7 @@ import javax.swing.JList;
 
 import data.Notification;
 
-public class VarselViewRender extends DefaultListCellRenderer{
+public class NotiViewRender extends DefaultListCellRenderer{
 
 	public Component getListCellRendererComponent(JList list, Object value,
 			int index, boolean isSelected, boolean cellHasFocus) {		
