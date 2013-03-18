@@ -1,10 +1,16 @@
 package data;
 
-public class Person {
+import java.io.Serializable;
+
+public class Person implements Serializable{
 	/*
 	 * A class that represents an entry in the Person table in the database.
 	 */
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 368839089505185389L;
 	private String email;
 	private int phone;
 	private String firstName;

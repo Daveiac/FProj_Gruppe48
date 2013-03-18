@@ -9,9 +9,13 @@ import java.net.*;
 
 public class RequestHandler {
 	
-	public static void main(String[] args) throws IOException{
+	public static void main(String[] args) throws IOException, InterruptedException{
+		
 		Client client = new Client( InetAddress.getByName(Constants.serverIP) );
+		Thread t = new Thread(new ResponseListener(client.server, null));
+		t.start();
 		QueryRequest qReqGetAllPersons = new QueryRequest(null, null, QueryType.GET_ALL_PERSONS);
 		client.sendRequest(qReqGetAllPersons);
+		t.join();
 	}
 }
