@@ -3,12 +3,21 @@ package framePackage;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import javax.swing.*;
 
-public class AvtaleView extends JPanel {
+import data.CalendarModel;
+import data.Meeting;
+import data.MeetingRoom;
+import data.Person;
+import data.Team;
+
+public class NewAppointmentView extends JPanel {
 	private static final long serialVersionUID = 1L;
+	
+	private CalendarModel calendarModel;
 
 	// Alle labels
 	private JLabel headline = new JLabel("Avtale for:                  ");
@@ -27,8 +36,7 @@ public class AvtaleView extends JPanel {
 	String[] hour = new String[] { "00", "01", "02", "03", "04", "05", "06",
 			"07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17",
 			"18", "19", "20", "21", "22", "23" };
-	String[] min = new String[] { "00", "05", "10", "15", "20", "25", "30",
-			"35", "40", "45", "50", "55" };
+	String[] min = new String[] { "00", "15", "30", "45"};
 
 	// Alle tekstfelt og ComboBoxar
 	private JTextField tittelComponent = new JTextField();
@@ -58,23 +66,20 @@ public class AvtaleView extends JPanel {
 	private JButton endreKnapp = new JButton("Endre avtale");
 	private JButton slettKnapp = new JButton("Slett avtale");
 
-	public AvtaleView() {
-
+	public NewAppointmentView(Meeting meeting, CalendarModel calendarModel) {
+		
+		
+		this.calendarModel = calendarModel;
+		GregorianCalendar greCalendar = new GregorianCalendar();
 		this.setPreferredSize(new Dimension(1000, 1000));
-
-		// beskrivelseComponent
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane
-				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		infoComponent.setLineWrap(true);
 		infoComponent.setWrapStyleWord(true);
 		infoComponent.setColumns(8);
 		infoComponent.setRows(8);
 		scrollPane.setViewportView(infoComponent);
-
 		participantList.setPreferredSize(new Dimension(200, 200));
-
-		// Tilpassar storleiken på tekstfelta
 		tittelComponent.setPreferredSize(new Dimension(300, 20));
 		startHourComponent.setPreferredSize(new Dimension(100, 20));
 		startMinComponent.setPreferredSize(new Dimension(100, 20));
@@ -87,8 +92,6 @@ public class AvtaleView extends JPanel {
 		opprettKnapp.setPreferredSize(new Dimension(150, 30));
 		endreKnapp.setPreferredSize(new Dimension(150, 30));
 		slettKnapp.setPreferredSize(new Dimension(150, 30));
-
-		// Legg til deltakere i deltakerlista
 		leggTilDeltakerKnapp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				listModel.addElement(new data.Person("Per", 5, "sd", "sd",
@@ -96,23 +99,67 @@ public class AvtaleView extends JPanel {
 			}
 		});
 		participantList = new JList<data.Person>(listModel);
-		
-		
 		monthComponent = new JComboBox();
 		yearComponent = new JComboBox();
-
-		// Lagar layout
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-
 		GridBagConstraints d = new GridBagConstraints();
 		d.anchor = GridBagConstraints.PAGE_END;
-
+		
+		//Alle labels
+		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
 		this.add(headline, c);
 		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.gridy = 2;
+		this.add(titel, c);
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.gridy = 3;
+		this.add(startTime, c);
+	
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 4;
+		c.gridy = 3;
+		c.gridwidth = 1;
+		this.add(endTime, c);
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.gridy = 4;
+		this.add(location, c);
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.gridy = 5;
+		this.add(meetingRom, c);
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.gridy = 6;
+		this.add(participant, c);
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.gridy = 10;
+		this.add(info, c);
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.gridy = 16;
+		this.add(alarm, c);
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.gridy = 17;
+		this.add(alarmTime, c);
+		
+		//her i fra er det bare jeg(Shimin) som greier å lese....
 		c.gridx = 1;
 		c.gridy = 0;
 		addDay(nDays);
@@ -136,10 +183,6 @@ public class AvtaleView extends JPanel {
 
 		c.insets = new Insets(10, 0, 0, 0);
 
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
-		c.gridy = 2;
-		this.add(titel, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 2;
@@ -147,10 +190,6 @@ public class AvtaleView extends JPanel {
 		c.gridwidth = 5;
 		this.add(tittelComponent, c);
 
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
-		c.gridy = 3;
-		this.add(startTime, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 2;
@@ -164,11 +203,6 @@ public class AvtaleView extends JPanel {
 		c.gridwidth = 1;
 		this.add(startMinComponent, c);
 
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 4;
-		c.gridy = 3;
-		c.gridwidth = 1;
-		this.add(endTime, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 5;
@@ -182,10 +216,6 @@ public class AvtaleView extends JPanel {
 		c.gridwidth = 1;
 		this.add(endMinComponent, c);
 
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
-		c.gridy = 4;
-		this.add(location, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 2;
@@ -210,10 +240,6 @@ public class AvtaleView extends JPanel {
 			}
 		});
 
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
-		c.gridy = 5;
-		this.add(meetingRom, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 2;
@@ -234,10 +260,6 @@ public class AvtaleView extends JPanel {
 			}
 		});
 		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
-		c.gridy = 6;
-		this.add(participant, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 2;
@@ -274,10 +296,6 @@ public class AvtaleView extends JPanel {
 			}
 		}});
 
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
-		c.gridy = 10;
-		this.add(info, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 2;
@@ -285,20 +303,12 @@ public class AvtaleView extends JPanel {
 		c.gridwidth = 5;
 		this.add(scrollPane, c);
 
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
-		c.gridy = 16;
-		this.add(alarm, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 2;
 		c.gridy = 16;
 		this.add(alarmComponent, c);
 
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
-		c.gridy = 17;
-		this.add(alarmTime, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 2;
@@ -350,6 +360,40 @@ public class AvtaleView extends JPanel {
 		d.gridy = 18;
 		d.gridwidth = 9;
 		this.add(slettKnapp, d);
+		
+		if(meeting != null){
+			tittelComponent.setText(meeting.getTitle());
+			greCalendar.setTimeInMillis(meeting.getStartTime());
+			startHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
+			startMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
+			greCalendar.setTimeInMillis(meeting.getEndTime());
+			endHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
+			endMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
+			if(meeting.getLocation() != null){
+				locComponent.setText(meeting.getLocation());
+				romComponent.setEnabled(false);
+			}
+			if(meeting.getLocation() == null){
+				romComponent.setEnabled(true);
+				locComponent.setEnabled(false);
+				romComponent.addItem(meeting.getRoom().getRoomName());
+				romComponent.setSelectedItem(meeting.getRoom().getRoomName());
+			}
+			//SER PÅ DEN HER
+			for(int i = 0; i<calendarModel.getPersons().size();i++ ){
+				for(int j = 0; j < participantList.getModel().getSize(); j++){
+					participantList.setSelectedIndex(j);
+					if(calendarModel.getPersons().get(i) != participantList.getSelectedValue()){
+						participantComponent.addItem(calendarModel.getPersons().get(i).getFirstName() +calendarModel.getPersons().get(i).getLastName());
+					}
+					if(calendarModel.getPersons().get(i) != participantList.getSelectedValue()){
+						listModel.addElement(calendarModel.getPersons().get(i));
+					}
+				}
+			}
+			infoComponent.setText(meeting.getDescription());
+			meeting.getTeam();
+		}
 	}
 
 	private void addDay(int nDays) {
@@ -418,13 +462,22 @@ public class AvtaleView extends JPanel {
 	}
 
 	public static void main(String[] args) {
+		Person kari = new Person("karitr@ggk.no", 81549300, "Kari", "Traa", "karitr", "123456");
+		ArrayList<Person> members = new ArrayList<Person>();
+		Team team = new Team(0, null, members);
+		MeetingRoom room = new MeetingRoom("Roomsa");
+		members.add(kari);
+		long startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
+		long endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
+		Meeting meeting = new Meeting(0, "suppe1", null, startTime, endTime, "This is a desc", team, room, kari);
 		JFrame frame = new JFrame("Avtale");
 		frame.setPreferredSize(new Dimension(850, 700));
 		frame.setResizable(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().add(new AvtaleView());
+		CalendarModel calendarModel2 = new CalendarModel();
+		calendarModel2.init();
+		frame.getContentPane().add(new NewAppointmentView(meeting,calendarModel2));
 		frame.pack();
 		frame.setVisible(true);
 	}
-
 }

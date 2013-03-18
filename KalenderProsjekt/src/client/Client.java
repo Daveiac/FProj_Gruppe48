@@ -6,19 +6,31 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import networking.Constants;
-import networking.packages.AuthenticationRequest;
-import networking.packages.NetworkRequest;
-import networking.packages.QueryRequest;
-import networking.packages.QueryRequest.QueryType;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
-public class Client{
+import networking.*;
+import networking.packages.*;
+
+public class Client extends Thread{
 	InetAddress serverAddress;
 	Socket server;
+	private BlockingQueue<Response> queueForHandlingResponses;
+	
+	public void startThreads(){
+		Thread t = new Thread(new ResponseListener(server, queueForHandlingResponses));
+		t.start();
+		Thread t2 = new Thread(new ResponseHandler(queueForHandlingResponses));
+		t2.start();
+	}
 	
 	public Client(InetAddress serverAddress) throws IOException{
+		queueForHandlingResponses = new LinkedBlockingQueue<Response>();
+		
+		
 		this.serverAddress = serverAddress;
 		server = new Socket(serverAddress, Constants.port);
+		
 	}
 	
 	
@@ -29,5 +41,14 @@ public class Client{
 //		server.close();
 	}
 	
+	
+	public static void main (String[] args) throws InterruptedException, UnknownHostException, IOException{
+		Client client = new Client( InetAddress.getByName(Constants.serverIP) );
+		Thread t = new Thread(new ResponseListener(client.server, null));
+		t.start();
+		t.join();
+		
+	}
 
 }
+

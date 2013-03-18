@@ -48,7 +48,13 @@ public class DBConnection {
 	 */
 	public int makeUpdateReturnID(String sql) throws SQLException {
 		Statement st = connection.createStatement();
-		return st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+		st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+		ResultSet keys = st.getGeneratedKeys();
+		if(keys.next())
+			return keys.getInt(1);
+		else{
+			throw new SQLException();
+		}
 	}
 
 }
