@@ -25,14 +25,14 @@ public class Client{
 	public void sendRequest(NetworkRequest request) throws IOException{
 		ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
 		out.writeObject(request);
-		out.close();
+		out.flush();
 		server.close();
 	}
 	
 	public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException{
 		Client client = new Client(InetAddress.getByName(Constants.serverIP));
 //		client.sendRequest(new AuthenticationRequest("haakondi", "pass"));
-		QueryRequest qReq = new QueryRequest("haakondi", null, QueryType.GET_NOTIFICATIONS_BY_PERSON);
+		QueryRequest qReq = new QueryRequest(null, null, QueryType.GET_ALL_PERSONS);
 		client.sendRequest(qReq);
 	}
 }
