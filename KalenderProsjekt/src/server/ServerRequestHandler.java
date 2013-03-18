@@ -82,7 +82,7 @@ public class ServerRequestHandler implements Runnable {
 			e.printStackTrace();
 		}
 		DataResponse response = new DataResponse(data,
-				DataResponseType.PERSON_RESPONSE);
+				DataResponseType.PERSON_RESPONSE, true);
 		return response;
 	}
 
@@ -94,7 +94,7 @@ public class ServerRequestHandler implements Runnable {
 			e.printStackTrace();
 		}
 		DataResponse response = new DataResponse(notifications,
-				DataResponseType.NOTIFICATION_RESPONSE);
+				DataResponseType.NOTIFICATION_RESPONSE, true);
 		return response;
 	}
 
@@ -106,7 +106,7 @@ public class ServerRequestHandler implements Runnable {
 			e.printStackTrace();
 		}
 		DataResponse response = new DataResponse(data,
-				DataResponseType.ALARM_RESPONSE);
+				DataResponseType.ALARM_RESPONSE, true);
 		return response;
 	}
 
@@ -119,7 +119,7 @@ public class ServerRequestHandler implements Runnable {
 			e.printStackTrace();
 		}
 		DataResponse response = new DataResponse(data,
-				DataResponseType.MEETING_RESPONSE);
+				DataResponseType.MEETING_RESPONSE, true);
 		return response;
 	}
 	
@@ -132,7 +132,7 @@ public class ServerRequestHandler implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new DataResponse(teams, DataResponseType.MEETING_RESPONSE);
+		return new DataResponse(teams, DataResponseType.MEETING_RESPONSE, true);
 	}
 	
 	private void handleQueryRequest(QueryRequest request, Socket client) {
@@ -179,7 +179,7 @@ public class ServerRequestHandler implements Runnable {
 			e.printStackTrace();
 		}
 		DataResponse response = new DataResponse(notifications,
-				DataResponseType.NOTIFICATION_RESPONSE);
+				DataResponseType.NOTIFICATION_RESPONSE, true);
 		return response;
 	}
 
@@ -217,12 +217,21 @@ public class ServerRequestHandler implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new DataResponse(alarms, DataResponseType.ALARM_RESPONSE);
+		return new DataResponse(alarms, DataResponseType.ALARM_RESPONSE, false);
 		
 	}
 
-	private void addMeeting(Meeting meeting){
+	private DataResponse addMeeting(Meeting meeting){
+		List<Notification> notifications = new ArrayList<Notification>();
+		try {
+			Meeting newMeeting = dbController.addMeeting(meeting);
+			notifications = dbController.getNotifications(newMeeting);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		return new DataResponse(notifications, DataResponseType.NOTIFICATION_RESPONSE, false);
 	}
 	
 	private void handleUpdateRequest(UpdateRequest request, Socket client) {
@@ -233,6 +242,11 @@ public class ServerRequestHandler implements Runnable {
 			response = addAlarm(request);
 			break;
 		case CREATE_MEETING:
+			response = addMeeting(request.getMeeting());
+			respondToAllClients = true;
+			break;
+		case UPDATE_METING:
+			//TODO implement
 			break;
 		}
 		

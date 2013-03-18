@@ -20,6 +20,7 @@ public class ResponseSender implements Runnable{
 		super();
 		this.pendingResponses = pendingResponses;
 		this.clients = clients;
+		OutputController.output("ResponseSender initialized");
 	}
 
 	@Override
