@@ -21,8 +21,6 @@ public class ResponseListener implements Runnable{
 		this.responses = responses;
 	}
 
-
-
 	@Override
 	public void run() {
 		ObjectInputStream ois = null;
