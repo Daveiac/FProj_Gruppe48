@@ -162,7 +162,7 @@ public class AppointmentView implements PropertyChangeListener {
 		switch (evt.getPropertyName()) {
 		case CalendarModel.CALENDAR_LOADED_Property:
 			user = calendarModel.getUser();
-			meetings = calendarModel.getMeetings(user);
+			meetings = calendarModel.getAllMeetingsOfPerson(user, false);
 //			notifications = calendarModel.getNotifications(user);
 //			refreshMeetings();
 			break;
