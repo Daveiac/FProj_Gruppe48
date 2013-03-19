@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 
+import networking.packages.AuthenticationResponse;
+import networking.packages.AuthenticationResponse.AuthenticationResponseType;
 import networking.packages.DataResponse;
 import networking.packages.Response;
+import networking.packages.*;
 import data.*;
 
 public class ResponseHandler implements Runnable{
@@ -61,6 +64,10 @@ public class ResponseHandler implements Runnable{
 	private void handleResponse(Response response){
 		switch(response.getResponseType()){
 		case AUTHENTICATION_RESPONSE:
+			//TODO
+			switch(authenticationResponse.getResponseType()){
+			
+			}
 			break;
 		case DATA_RESPONSE:
 			DataResponse dataResponse = (DataResponse) response;

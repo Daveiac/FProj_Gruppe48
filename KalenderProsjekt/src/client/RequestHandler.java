@@ -7,6 +7,8 @@ import networking.packages.QueryRequest.QueryType;
 import networking.*;
 import java.net.*;
 
+import data.Person;
+
 import framePackage.DefaultView;
 
 public class RequestHandler {
@@ -21,16 +23,13 @@ public class RequestHandler {
 		Program.client.sendRequest(qReqGetAllPersons);
 	}
 	
-	/*
-	//TODO
-	//Add PersonObject and MeetingObject
-	public void sendGetEvryMeetingByPersonRequest(){
-		Client client = new Client( InetAddress.getByName(Constants.serverIP) );
-		QueryRequest qReqGetEveryMeetingByPerson = new QueryRequest(PersonObject, null, QueryType.GET_EVERY_MEETING_BY_PERSON);
-		client.sendRequest(qReqGetEveryMeetingByPerson);
+	public void sendGetEvryMeetingByPersonRequest(Person p) throws IOException{
+		QueryRequest qReqGetEveryMeetingByPerson = new QueryRequest(p, null, QueryType.GET_EVERY_MEETING_BY_PERSON);
+		Program.client.sendRequest(qReqGetEveryMeetingByPerson);
 	}
 	
-	public void sendGetAlarmsByPersonRequest(){
+	/*
+	public void sendGetAlarmsByPersonRequest() throws IOExeption{
 		Client client = new Client( InetAddress.getByName(Constants.serverIP) );
 		QueryRequest qReqGetAlarmsByPerson = new QueryRequest(PersonObject, null, QueryType.GET_ALARMS_BY_PERSON);
 		client.sendRequest(qReqGetAlarmsByPerson);
@@ -54,6 +53,6 @@ public class RequestHandler {
 		client.sendRequest(qReqGetTeamsByMeeting);
 	}
 	*/
-		
+	
 }
 

@@ -1,6 +1,8 @@
 package networking.packages;
 
 public class AuthenticationResponse extends Response{
+	private static final long serialVersionUID = 1L;
+
 	public enum AuthenticationResponseType{
 		APPROVED, USER_NOEXIST, WRONG_PASS
 	}
