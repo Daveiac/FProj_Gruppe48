@@ -33,7 +33,7 @@ public class ResponseHandler implements Runnable{
 		for (Object object : data) {
 			notifications.add((Notification) object);
 		}
-		Program.calendarModel.addAllNotificationsOfUser(notifications);
+		Program.calendarModel.setAllNotifications(notifications);
 	}
 	
 	private void receivedMeeting(List<Meeting> data) {
@@ -41,7 +41,7 @@ public class ResponseHandler implements Runnable{
 		for (Object object : data) {
 			meetings.add((Meeting) object);
 		}
-		Program.calendarModel.addAllMeetingsOfPerson(meetings);
+		Program.calendarModel.setAllMeetingsOfPerson(meetings);
 	}
 	
 	private void receivedPeople(List<Person> data){

@@ -26,10 +26,12 @@ public class CalendarModel implements Serializable{
 //	private FakeWhale data;
 	private PropertyChangeSupport pcs;
 	private ArrayList<Notification> notificationsOfUser;
+	private ArrayList<Notification> notifications;
+	private ArrayList<Alarm> alarms;
 	private String username;
 	private int responseCount;
-	private Person requestPerson;
 	private Person user;
+	private ArrayList<MeetingRoom> meetingRooms;
 	private static final Color[] colors = {Color.red,Color.blue,Color.darkGray,Color.orange,Color.magenta,Color.gray,Color.pink};
 	public static final String SELECTED_Property = "SELECTED", MEETING_ADDED_Property = "NEW_M", 
 			MEETING_CHANGED_Property = "CHANGE", MEETING_REMOVED_Property = "REMOVE",
@@ -45,17 +47,11 @@ public class CalendarModel implements Serializable{
 		persons = new ArrayList<Person>();
 		personMeetingRelation = new HashMap<Person,ArrayList<Meeting>>();
 		selected = new ArrayList<Boolean>();
+		notifications = new ArrayList<Notification>();
 		notificationsOfUser = new ArrayList<Notification>();
-//		data = new FakeWhale(this);
-		
-		try {
-			if(Program.reqHandler != null){
-				Program.reqHandler.sendGetAllPersonsRequest();
-				responseCount = 0;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		alarms = new ArrayList<Alarm>();
+		meetingRooms = new ArrayList<MeetingRoom>();
+		requestAllPersons();
 	}
 	/**
 	 * Gets ALL of the meetings of a person
@@ -103,6 +99,46 @@ public class CalendarModel implements Serializable{
 		selected.set(persons.indexOf(person), sel);
 		pcs.firePropertyChange(SELECTED_Property, person, person);
 	}
+	private void requestEverything() {
+		requestAllMeetings();
+		requestAllNotifications();
+		requestAlarmsOfUser();
+		requestAllRooms();
+		
+	}
+	private void requestAllRooms() {
+		// TODO Auto-generated method stub
+		
+	}
+	private void requestAlarmsOfUser() {
+		// TODO Auto-generated method stub
+		
+	}
+	private void requestAllNotifications() {
+		// TODO Auto-generated method stub
+		
+	}
+	private void requestAllPersons() {
+		try {
+			if(Program.reqHandler != null){
+				Program.reqHandler.sendGetAllPersonsRequest();
+				responseCount = 0;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void requestAllMeetings() {
+		for (Person p : persons) {
+			try {
+				Program.reqHandler.sendGetEvryMeetingByPersonRequest(p);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	/**
 	 * Sets all the persons of the model.
 	 * This method will only be called once by the server at startup
@@ -120,18 +156,8 @@ public class CalendarModel implements Serializable{
 			}
 		}
 		pcs.firePropertyChange(PERSONS_ADDED_Property, null, persons);
-		requestAllMeetings(persons);
+		requestEverything();
 	}
-	private void requestAllMeetings(List<Person> persons) {
-		for (Person p : persons) {
-			try {
-				Program.reqHandler.sendGetEvryMeetingByPersonRequest(p);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
 	/**
 	 * This method will add a meeting to the model.
 	 * If the meeting already exists this method will fire a MEETING_CHANGED_Property,
@@ -158,15 +184,25 @@ public class CalendarModel implements Serializable{
 		}
 	}
 	
-	public void addAllMeetingsOfPerson(List<Meeting> meetings) {
+	public void setAllMeetingsOfPerson(List<Meeting> meetings) {
 		personMeetingRelation.put(persons.get(responseCount++), (ArrayList<Meeting>) meetings);
 		if(personMeetingRelation.size() == persons.size()) {
 			pcs.firePropertyChange(CALENDAR_LOADED_Property, null, personMeetingRelation);
 		}
 	}
-	
-	public void addAllNotificationsOfUser(List<Notification> notis) {
-		notificationsOfUser = (ArrayList<Notification>) notis;
+	public void setAllRooms(List<MeetingRoom> rooms) {
+		meetingRooms = (ArrayList<MeetingRoom>) rooms;
+	}
+	public void setAlarmsOfUser(List<Alarm> alarms) {
+		this.alarms = (ArrayList<Alarm>) alarms;
+	}
+	public void setAllNotifications(List<Notification> notifications) {
+		this.notifications = (ArrayList<Notification>) notifications;
+		for (Notification notification : notifications) {
+			if (notification.getPerson().getUsername().equals(user.getEmail())) {
+				notificationsOfUser.add(notification);
+			}
+		}
 	}
 	
 	public List<Person> getSelectedPersons() {
@@ -182,9 +218,31 @@ public class CalendarModel implements Serializable{
 	public Color getColorOfPerson(Person person) {
 		return colors[persons.indexOf(person)];
 	}
-	//TODO
 	public void pushMeeting(Meeting meeting) {
-		//TOFO
+		//TODO
+	}
+	public void changeMeeting(Meeting meeting) {
+		//TODO
+	}
+	public void removeMeeting(String meetingID) {
+		//TODO
+	}
+	public ArrayList<MeetingRoom> getRooms(){
+		return meetingRooms;
+	}
+	public ArrayList<MeetingRoom> getAvailableRooms(long startTime, long endTime){
+		ArrayList<MeetingRoom> rooms = new ArrayList<MeetingRoom>();
+		rooms.addAll(meetingRooms);
+		for(ArrayList<Meeting> meetings: personMeetingRelation.values()){
+			for (int i = 0; i < meetings.size(); i++) {
+				long meetStart = meetings.get(i).getStartTime();
+				long meetEnd = meetings.get(i).getEndTime();
+				if ((meetStart >= startTime && meetStart < endTime) || (meetEnd > startTime && meetEnd < endTime)) {
+					rooms.remove(meetings.get(i).getRoom());
+				}
+			}
+		}
+		return rooms;
 	}
 	public ArrayList<Notification> getNotifications(Person user) {
 		return notificationsOfUser;
