@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import data.CalendarModel;
 
 import framePackage.DefaultView;
+import framePackage.Login;
 
 import networking.Constants;
 import networking.packages.Response;
@@ -35,10 +36,17 @@ public class Program {
 		} catch (IOException e) {
 			System.out.println("The server is down");
 		}
-		DefaultView dw = new DefaultView();
-		JFrame frame = dw.getFrame();
-		frame.setBounds(0, 0, 1260, 768);
-		frame.setVisible(true);
+		Login login = new Login();
+		JFrame loginFrame = new JFrame("SUPA CALENDA!");
+		loginFrame.setContentPane(login);
+		loginFrame.pack();
+		loginFrame.setLocationRelativeTo(null);
+		loginFrame.setVisible(true);
+//		
+//		DefaultView dw = new DefaultView();
+//		JFrame frame = dw.getFrame();
+//		frame.setBounds(0, 0, 1260, 768);
+//		frame.setVisible(true);
 		
 	}
 	
@@ -49,5 +57,15 @@ public class Program {
 		t.start();
 		Thread t2 = new Thread(new ResponseHandler(queueForHandlingResponses));
 		t2.start();
+	}
+	
+	public static void loginOK() {
+		
+	}
+	public static void loginWrong() {
+		
+	}
+	public static void loginNoExist() {
+		
 	}
 }
