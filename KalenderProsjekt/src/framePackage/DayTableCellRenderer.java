@@ -28,11 +28,17 @@ public class DayTableCellRenderer extends DefaultTableCellRenderer {
 
 		if (meeting != null) {
 			for (Person selectedPerson : calendarModel.getSelectedPersons()) {
-				for (Person teamMember : meeting.getTeam().getMembers()) {
-					if (selectedPerson.equals(teamMember)) {
-						component.setBackground(calendarModel
-								.getColorOfPerson(selectedPerson));
+				if (meeting.getTeam() != null) {
+					for (Person teamMember : meeting.getTeam().getMembers()) {
+						if (selectedPerson.equals(teamMember)) {
+							component.setBackground(calendarModel
+									.getColorOfPerson(selectedPerson));
+						}
 					}
+				} else {
+
+					component.setBackground(calendarModel
+							.getColorOfPerson(selectedPerson));
 				}
 			}
 			setText(meeting.getTitle());
