@@ -111,10 +111,10 @@ public class ServerRequestHandler implements Runnable {
 		return response;
 	}
 
-	private DataResponse getMeetingsByPerson(Person person) {
+	private DataResponse getMeetingsByPerson() {
 		List<Meeting> data = null;
 		try {
-			data = dbController.getEveryMeetingOwnedByPerson(person);
+			data = dbController.getEveryMeeting();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -161,8 +161,8 @@ public class ServerRequestHandler implements Runnable {
 			break;
 		case GET_ALARMS_BY_PERSON:
 			response = getAlarms(request.getUsername());
-		case GET_EVERY_MEETING_BY_PERSON:
-			response = getMeetingsByPerson(request.getPerson());
+		case GET_EVERY_MEETING:
+			response = getMeetingsByPerson();
 			break;
 		case GET_TEAMS_BY_MEETING:
 			response = getTeamsByMeeting(request.getMeeting());
