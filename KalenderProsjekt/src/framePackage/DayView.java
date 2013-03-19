@@ -145,7 +145,7 @@ public class DayView extends JPanel implements CalendarView,
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
 		dayTable.getColumnModel().getColumn(1)
-		.setCellRenderer(new DayTableCellRenderer(this.calendarModel));
+				.setCellRenderer(new DayTableCellRenderer(this.calendarModel));
 	}
 
 	/**
@@ -248,6 +248,10 @@ public class DayView extends JPanel implements CalendarView,
 			createDayTable();
 			break;
 		case CalendarModel.MEETING_REMOVED_Property:
+			createDayTable();
+			break;
+		case CalendarModel.SELECTED_Property:
+			System.out.println("motherfucker!");
 			createDayTable();
 			break;
 		default:

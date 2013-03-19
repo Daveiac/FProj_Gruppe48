@@ -141,7 +141,7 @@ public class WeekView extends JPanel implements CalendarView,
 		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {
 			dayView.createDay(weekCalendar, tableModel, dayOfWeek);
 			weekTable.getColumnModel().getColumn(dayOfWeek)
-			.setCellRenderer(new DayTableCellRenderer(calendarModel));
+					.setCellRenderer(new DayTableCellRenderer(calendarModel));
 			weekCalendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
 		}
 	}
@@ -210,6 +210,9 @@ public class WeekView extends JPanel implements CalendarView,
 			createWeekTable();
 			break;
 		case CalendarModel.MEETING_REMOVED_Property:
+			createWeekTable();
+			break;
+		case CalendarModel.SELECTED_Property:
 			createWeekTable();
 			break;
 		default:
