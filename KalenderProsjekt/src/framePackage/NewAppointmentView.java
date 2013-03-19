@@ -8,6 +8,7 @@ import java.util.GregorianCalendar;
 
 import javax.swing.*;
 
+import data.Alarm;
 import data.CalendarModel;
 import data.Meeting;
 import data.MeetingRoom;
@@ -29,7 +30,7 @@ public class NewAppointmentView extends JPanel {
 	private JLabel meetingRom = new JLabel("Møterom: ");
 	private JLabel participant = new JLabel("Deltaker: ");
 	private JLabel info = new JLabel("Beskrivelse: ");
-	private JLabel alarm = new JLabel("Alarm: ");
+	private JLabel lblalarm = new JLabel("Alarm: ");
 	private JLabel alarmTime = new JLabel("Tidspunkt for alarm: ");
 
 	// Lagar alternativ for TidsComboBoxane
@@ -66,7 +67,7 @@ public class NewAppointmentView extends JPanel {
 	private JButton endreKnapp = new JButton("Endre avtale");
 	private JButton slettKnapp = new JButton("Slett avtale");
 
-	public NewAppointmentView(Meeting meeting, CalendarModel calendarModel) {
+	public NewAppointmentView(Meeting meeting, CalendarModel calendarModel,Alarm alarm) {
 		
 		
 		this.calendarModel = calendarModel;
@@ -152,7 +153,7 @@ public class NewAppointmentView extends JPanel {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
 		c.gridy = 16;
-		this.add(alarm, c);
+		this.add(lblalarm, c);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
@@ -366,6 +367,9 @@ public class NewAppointmentView extends JPanel {
 			greCalendar.setTimeInMillis(meeting.getStartTime());
 			startHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
 			startMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
+			monthComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MONTH)-1);
+			yearComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.YEAR)%2013);
+			dayComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.DAY_OF_MONTH));
 			greCalendar.setTimeInMillis(meeting.getEndTime());
 			endHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
 			endMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
@@ -379,20 +383,23 @@ public class NewAppointmentView extends JPanel {
 				romComponent.addItem(meeting.getRoom().getRoomName());
 				romComponent.setSelectedItem(meeting.getRoom().getRoomName());
 			}
-			//SER PÅ DEN HER
 			for(int i = 0; i<calendarModel.getPersons().size();i++ ){
-				for(int j = 0; j < participantList.getModel().getSize(); j++){
-					participantList.setSelectedIndex(j);
-					if(calendarModel.getPersons().get(i) != participantList.getSelectedValue()){
-						participantComponent.addItem(calendarModel.getPersons().get(i).getFirstName() +calendarModel.getPersons().get(i).getLastName());
-					}
-					if(calendarModel.getPersons().get(i) != participantList.getSelectedValue()){
-						listModel.addElement(calendarModel.getPersons().get(i));
-					}
+				if(meeting.getTeam().getMembers().contains(calendarModel.getPersons().get(i)) == false){
+					participantComponent.addItem(calendarModel.getPersons().get(i).getFirstName() + calendarModel.getPersons().get(i).getLastName());
+				}
+				else{
+					listModel.addElement(calendarModel.getPersons().get(i));
 				}
 			}
 			infoComponent.setText(meeting.getDescription());
-			meeting.getTeam();
+			greCalendar.setTimeInMillis(alarm.getTime());
+			if(greCalendar.getTime() != null){
+				alarmComponent.setSelected(true);
+				alarmHourComponent.setEnabled(true);
+				alarmMinComponent.setEnabled(true);
+				alarmHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
+				alarmMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
+			}
 		}
 	}
 
@@ -402,7 +409,8 @@ public class NewAppointmentView extends JPanel {
 		for(int i=0; i<nDays;i++){
 			dayComponent.addItem(i+1);
 		}
-		dayComponent.setSelectedIndex(cal.get(GregorianCalendar.DAY_OF_MONTH));
+		System.out.println("first");
+		dayComponent.setSelectedIndex(cal.get(GregorianCalendar.DAY_OF_MONTH)-1);
 	}
 	
 	private JComboBox addMonth(){
@@ -462,21 +470,23 @@ public class NewAppointmentView extends JPanel {
 	}
 
 	public static void main(String[] args) {
+		long alarmTime =  new GregorianCalendar(2013,2,14,15,30).getTimeInMillis();
 		Person kari = new Person("karitr@ggk.no", 81549300, "Kari", "Traa", "karitr", "123456");
 		ArrayList<Person> members = new ArrayList<Person>();
 		Team team = new Team(0, null, members);
 		MeetingRoom room = new MeetingRoom("Roomsa");
 		members.add(kari);
-		long startTime = new GregorianCalendar(2013, 2, 14, 16, 30).getTimeInMillis();
-		long endTime = new GregorianCalendar(2013, 2, 14, 17, 30).getTimeInMillis();
+		long startTime = new GregorianCalendar(2013, 2,11, 16, 30).getTimeInMillis();
+		long endTime = new GregorianCalendar(2013, 2, 11, 17, 30).getTimeInMillis();
 		Meeting meeting = new Meeting(0, "suppe1", null, startTime, endTime, "This is a desc", team, room, kari);
 		JFrame frame = new JFrame("Avtale");
 		frame.setPreferredSize(new Dimension(850, 700));
 		frame.setResizable(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		CalendarModel calendarModel2 = new CalendarModel();
+		Alarm alarm = new Alarm(0,'a',alarmTime,meeting);
 		calendarModel2.init();
-		frame.getContentPane().add(new NewAppointmentView(meeting,calendarModel2));
+		frame.getContentPane().add(new NewAppointmentView(meeting,calendarModel2,alarm));
 		frame.pack();
 		frame.setVisible(true);
 	}
