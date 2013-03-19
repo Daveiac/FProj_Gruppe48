@@ -25,6 +25,13 @@ public abstract class NetworkRequest implements Serializable{
 	public EventType getEventType() {
 		return eventType;
 	}
+
+
+
+	@Override
+	public String toString() {
+		return "NetworkRequest [eventType=" + eventType + "]";
+	}
 	
 	
 }

@@ -83,7 +83,15 @@ public class DBController {
 		}
 		return teams;
 	}
+	
 
+	public void deleteMeeting(Meeting meeting) throws SQLException{
+		String sql = String.format(
+				"DELETE FROM Meeting " +
+				"WHERE Meeting.meetingID = %d", meeting.getMeetingID());
+		dBConn.makeUpdate(sql);
+	}
+	
 	public boolean personExists(String username) throws SQLException {
 		String sql = String.format("SELECT * FROM Person "
 				+ "WHERE username = '%s'", username);
@@ -122,6 +130,10 @@ public class DBController {
 
 	}
 
+	private MeetingRoom getMeetingRoomFromResultSet(ResultSet rs) throws SQLException{
+		return new MeetingRoom(rs.getString("roomName"));
+	}
+	
 	public MeetingRoom getMeetingRoom(String roomName) throws SQLException {
 		String sql = String.format("SELECT * FROM MeetingRoom "
 				+ "WHERE MeetingRoom.roomName = %d", roomName);
@@ -183,7 +195,7 @@ public class DBController {
 		ResultSet rs = dBConn.makeQuery(sql);
 
 		while (rs.next()) {
-			getMeetingFromResultSet(rs);
+			meetings.add(getMeetingFromResultSet(rs));
 		}
 		return meetings;
 	}
@@ -415,5 +427,15 @@ public class DBController {
 		for (Notification notificatio : dbc.getNotifications(meeting)) {
 			System.out.println(notificatio);
 		}
+	}
+
+	public List<MeetingRoom> getAllMeetingRooms() throws SQLException {
+		List<MeetingRoom> rooms = new ArrayList<MeetingRoom>();
+		String sql = "SELECT * FROM MeetingRoom";
+		ResultSet rs = dBConn.makeQuery(sql);
+		while(rs.next()){
+			rooms.add(getMeetingRoomFromResultSet(rs));
+		}
+		return rooms;
 	}
 }
