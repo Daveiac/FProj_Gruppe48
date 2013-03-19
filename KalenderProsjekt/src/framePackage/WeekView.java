@@ -19,7 +19,7 @@ import data.CalendarModel;
  * This is the WeekView Panel that shows the week planner.
  */
 @SuppressWarnings("serial")
-public class WeekView extends JPanel implements CalendarView,
+public class WeekView implements CalendarView,
 		PropertyChangeListener {
 
 	private JTable weekTable;
@@ -87,8 +87,6 @@ public class WeekView extends JPanel implements CalendarView,
 		}
 
 		scrollPane = new JScrollPane(weekTable);
-
-		add(scrollPane);
 	}
 
 	/**

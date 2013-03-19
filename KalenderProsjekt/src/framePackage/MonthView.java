@@ -23,7 +23,7 @@ import data.Person;
  * This is the MonthView Panel that shows the month planner.
  */
 @SuppressWarnings("serial")
-public class MonthView extends JPanel implements CalendarView,
+public class MonthView implements CalendarView,
 		PropertyChangeListener {
 
 	private JTable monthTable;
@@ -109,9 +109,6 @@ public class MonthView extends JPanel implements CalendarView,
 		}
 
 		scrollPane = new JScrollPane(monthTable);
-
-		add(scrollPane);
-
 		//
 		// realDay = cal.get(GregorianCalendar.DAY_OF_MONTH);
 		// realMonth = cal.get(GregorianCalendar.MONTH);

@@ -23,7 +23,7 @@ import data.Person;
  * This is the DayView Panel that shows the day planner.
  */
 @SuppressWarnings("serial")
-public class DayView extends JPanel implements CalendarView,
+public class DayView implements CalendarView,
 		PropertyChangeListener {
 
 	private JTable dayTable;
@@ -89,9 +89,6 @@ public class DayView extends JPanel implements CalendarView,
 				.setCellRenderer(new DayTableCellRenderer(this.calendarModel));
 
 		scrollPane = new JScrollPane(dayTable);
-//		scrollPane.setPreferredSize(new Dimension(800, 407));
-
-		add(scrollPane);
 	}
 
 	/**
