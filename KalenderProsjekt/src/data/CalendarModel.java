@@ -65,6 +65,7 @@ public class CalendarModel implements Serializable{
 				allMeetings.add(meeting);
 			}
 		}
+		return allMeetings;
 	}
 	/**
 	 * Gets ALL of the meetings of a person in the given time interval
@@ -73,16 +74,17 @@ public class CalendarModel implements Serializable{
 	 * @param end the maximum end time of the meeting
 	 * @return all the meetings of the given person within the given time interval.
 	 */
-	public ArrayList<Meeting> getMeetings(Person person, long start, long end) {
-		ArrayList<Meeting> meetings = meetings.get(person);
-		ArrayList<Meeting> newMeetings = new ArrayList<Meeting>();
-		for (Meeting meeting : meetings) {
-			if (meeting.getStartTime() >= start && meeting.getEndTime() < end) {
-				newMeetings.add(meeting);
-			}
-		}
-		return newMeetings;
-	}
+//	TODO
+//	public ArrayList<Meeting> getMeetings(Person person, long start, long end) {
+//		ArrayList<Meeting> meetings = meetings.get(person);
+//		ArrayList<Meeting> newMeetings = new ArrayList<Meeting>();
+//		for (Meeting meeting : meetings) {
+//			if (meeting.getStartTime() >= start && meeting.getEndTime() < end) {
+//				newMeetings.add(meeting);
+//			}
+//		}
+//		return newMeetings;
+//	}
 	
 	public List<Person> getPersons() {
 		return persons;
@@ -165,10 +167,8 @@ public class CalendarModel implements Serializable{
 	}
 	
 	public void setAllMeetings(List<Meeting> meetings) {
-		meetings.put(persons.get(responseCount++), (ArrayList<Meeting>) meetings);
-		if(meetings.size() == persons.size()) {
-			pcs.firePropertyChange(CALENDAR_LOADED_Property, null, meetings);
-		}
+		this.meetings = (ArrayList<Meeting>) meetings;
+		pcs.firePropertyChange(CALENDAR_LOADED_Property, null, meetings);
 	}
 	public void setAllRooms(List<MeetingRoom> rooms) {
 		meetingRooms = (ArrayList<MeetingRoom>) rooms;
@@ -199,8 +199,11 @@ public class CalendarModel implements Serializable{
 		return colors[persons.indexOf(person)];
 	}
 	public void pushMeeting(Meeting meeting) {
-		//TODO
-		Program.reqHandler.sendCreateMeetingRequest(p, a, n, m)
+		try {
+			Program.reqHandler.sendCreateMeetingRequest(meeting);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	public void changeMeeting(Meeting meeting) {
 		//TODO
@@ -211,20 +214,21 @@ public class CalendarModel implements Serializable{
 	public ArrayList<MeetingRoom> getRooms(){
 		return meetingRooms;
 	}
-	public ArrayList<MeetingRoom> getAvailableRooms(long startTime, long endTime){
-		ArrayList<MeetingRoom> rooms = new ArrayList<MeetingRoom>();
-		rooms.addAll(meetingRooms);
-		for(ArrayList<Meeting> meetings: meetings.values()){
-			for (int i = 0; i < meetings.size(); i++) {
-				long meetStart = meetings.get(i).getStartTime();
-				long meetEnd = meetings.get(i).getEndTime();
-				if ((meetStart >= startTime && meetStart < endTime) || (meetEnd > startTime && meetEnd < endTime)) {
-					rooms.remove(meetings.get(i).getRoom());
-				}
-			}
-		}
-		return rooms;
-	}
+//	TODO
+//	public ArrayList<MeetingRoom> getAvailableRooms(long startTime, long endTime){
+//		ArrayList<MeetingRoom> rooms = new ArrayList<MeetingRoom>();
+//		rooms.addAll(meetingRooms);
+//		for(ArrayList<Meeting> meetings: meetings.values()){
+//			for (int i = 0; i < meetings.size(); i++) {
+//				long meetStart = meetings.get(i).getStartTime();
+//				long meetEnd = meetings.get(i).getEndTime();
+//				if ((meetStart >= startTime && meetStart < endTime) || (meetEnd > startTime && meetEnd < endTime)) {
+//					rooms.remove(meetings.get(i).getRoom());
+//				}
+//			}
+//		}
+//		return rooms;
+//	}
 	public ArrayList<Notification> getNotifications(Person user) {
 		return notificationsOfUser;
 	}
