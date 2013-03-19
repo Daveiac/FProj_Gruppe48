@@ -3,6 +3,7 @@ package framePackage;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.*;
 
@@ -29,7 +30,11 @@ public class Login extends JPanel{
 		button = new JButton("Logg inn");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Program.reqHandler.se
+				try {
+					Program.reqHandler.sendAuthenticationRequest(userLabel.getText(), passwordLabel.getText());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		

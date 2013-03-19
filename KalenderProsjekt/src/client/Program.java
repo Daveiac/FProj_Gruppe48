@@ -57,6 +57,7 @@ public class Program {
 	}
 	
 	public static void loginOK() {
+		System.out.println("loginok");
 		DefaultView dw = new DefaultView();
 		JFrame frame = dw.getFrame();
 		frame.setBounds(0, 0, 1260, 768);
@@ -64,9 +65,10 @@ public class Program {
 		loginFrame.setVisible(false);
 	}
 	public static void loginWrong() {
-		
+		System.out.println("loginWRONG");
 	}
 	public static void loginNoExist() {
+		System.out.println("loginNOExist");
 		
 	}
 }
