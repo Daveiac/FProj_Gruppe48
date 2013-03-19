@@ -68,14 +68,6 @@ public class WeekView extends JPanel implements CalendarView,
 			timeCalendar.add(GregorianCalendar.MINUTE, 15);
 		}
 
-		weekCalendar = new GregorianCalendar();
-
-		// Sets this week's title
-		setWeekTitle();
-
-		// Sets this week's headers
-		setHeaders();
-
 		weekTable.setModel(tableModel);
 		weekTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		weekTable.setRowSelectionAllowed(false);
@@ -84,6 +76,15 @@ public class WeekView extends JPanel implements CalendarView,
 		scrollPane.setPreferredSize(new Dimension(800, 407));
 
 		add(scrollPane);
+
+		// Create data
+		weekCalendar = new GregorianCalendar();
+
+		// Sets this week's title
+		setWeekTitle();
+
+		// Sets this week's headers
+		setHeaders();
 	}
 
 	/**
