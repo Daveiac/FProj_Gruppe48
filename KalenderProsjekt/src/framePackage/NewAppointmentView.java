@@ -338,7 +338,7 @@ public class NewAppointmentView extends JPanel {
 		opprettKnapp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(validTime()==false){
-					System.out.println("u failed");
+					//skrive inn resten her for å sende
 				}
 			}
 		});
@@ -350,8 +350,8 @@ public class NewAppointmentView extends JPanel {
 		this.add(endreKnapp, d);
 		endreKnapp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(validTime()==false){
-					System.out.println("u failed");
+				if(validTime()==true){
+					//skrive inn resten her for å sende
 				}
 			}
 		});
@@ -361,8 +361,13 @@ public class NewAppointmentView extends JPanel {
 		d.gridy = 18;
 		d.gridwidth = 9;
 		this.add(slettKnapp, d);
+		slettKnapp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//skrive inn resten her for å sende
+			}
+		});
 		
-		if(meeting != null){
+		if(meeting.getTitle() != null){
 			tittelComponent.setText(meeting.getTitle());
 			greCalendar.setTimeInMillis(meeting.getStartTime());
 			startHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
@@ -401,6 +406,10 @@ public class NewAppointmentView extends JPanel {
 				alarmMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
 			}
 		}
+		
+		if(meeting.getTitle() == null){
+		}
+		
 	}
 
 	private void addDay(int nDays) {
@@ -438,7 +447,7 @@ public class NewAppointmentView extends JPanel {
 	
 	
 
-	public void refreshAlarm() {
+	private void refreshAlarm() {
 		if (alarmComponent.isSelected() == false) {
 			alarmHourComponent.setEnabled(false);
 			alarmMinComponent.setEnabled(false);
@@ -470,23 +479,23 @@ public class NewAppointmentView extends JPanel {
 	}
 
 	public static void main(String[] args) {
-		long alarmTime =  new GregorianCalendar(2013,2,14,15,30).getTimeInMillis();
-		Person kari = new Person("karitr@ggk.no", 81549300, "Kari", "Traa", "karitr", "123456");
-		ArrayList<Person> members = new ArrayList<Person>();
-		Team team = new Team(0, null, members);
-		MeetingRoom room = new MeetingRoom("Roomsa");
-		members.add(kari);
-		long startTime = new GregorianCalendar(2013, 2,11, 16, 30).getTimeInMillis();
-		long endTime = new GregorianCalendar(2013, 2, 11, 17, 30).getTimeInMillis();
-		Meeting meeting = new Meeting(0, "suppe1", null, startTime, endTime, "This is a desc", team, room, kari);
+//		long alarmTime =  new GregorianCalendar(2013,2,14,15,30).getTimeInMillis();
+//		Person kari = new Person("karitr@ggk.no", 81549300, "Kari", "Traa", "karitr", "123456");
+//		ArrayList<Person> members = new ArrayList<Person>();
+//		Team team = new Team(0, null, members);
+//		MeetingRoom room = new MeetingRoom("Roomsa");
+//		members.add(kari);
+//		long startTime = new GregorianCalendar(2013, 2,11, 16, 30).getTimeInMillis();
+//		long endTime = new GregorianCalendar(2013, 2, 11, 17, 30).getTimeInMillis();
+//		Meeting meeting = new Meeting(0, "suppe1", null, startTime, endTime, "This is a desc", team, room, kari);
 		JFrame frame = new JFrame("Avtale");
 		frame.setPreferredSize(new Dimension(850, 700));
 		frame.setResizable(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		CalendarModel calendarModel2 = new CalendarModel();
-		Alarm alarm = new Alarm(0,'a',alarmTime,meeting);
+//		Alarm alarm = new Alarm(0,'a',alarmTime,meeting);
 		calendarModel2.init();
-		frame.getContentPane().add(new NewAppointmentView(meeting,calendarModel2,alarm));
+		frame.getContentPane().add(new NewAppointmentView(null,calendarModel2,null));
 		frame.pack();
 		frame.setVisible(true);
 	}
