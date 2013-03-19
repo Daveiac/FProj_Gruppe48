@@ -42,7 +42,7 @@ public class ServerRequestHandler implements Runnable {
 
 	private void handleAuthenticationRequest(AuthenticationRequest aRequest,
 			Socket client) {
-		AuthenticationResponse aResponse;
+		AuthenticationResponse aResponse = null;
 		try {
 			if (dbController.personExists(aRequest.getUsername())) {
 				if (dbController.authenticateUser(aRequest.getUsername(),
@@ -50,14 +50,18 @@ public class ServerRequestHandler implements Runnable {
 					aResponse = new AuthenticationResponse(
 							AuthenticationResponseType.APPROVED);
 				}
-				aResponse = new AuthenticationResponse(
-						AuthenticationResponseType.WRONG_PASS);
+				else{
+					aResponse = new AuthenticationResponse(
+							AuthenticationResponseType.WRONG_PASS);					
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		aResponse = new AuthenticationResponse(
-				AuthenticationResponseType.USER_NOEXIST);
+		if(aResponse == null){
+			aResponse = new AuthenticationResponse(
+					AuthenticationResponseType.USER_NOEXIST);			
+		}
 
 		try {
 			while (!responses.offer(new PendingResponse(aResponse, client,

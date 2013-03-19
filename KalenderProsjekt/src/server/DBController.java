@@ -85,8 +85,10 @@ public class DBController {
 	}
 
 	public boolean personExists(String username) throws SQLException {
-		ResultSet rs = dBConn.makeQuery(String.format("SELECT * FROM Person "
-				+ "WHERE username = '%s'", username));
+		String sql = String.format("SELECT * FROM Person "
+				+ "WHERE username = '%s'", username);
+		System.out.println(sql);
+		ResultSet rs = dBConn.makeQuery(sql);
 		return rs.next();
 	}
 
