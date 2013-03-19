@@ -9,7 +9,8 @@ public class DataResponse extends Response {
 	public final boolean requested;
 
 	public enum DataResponseType {
-		NOTIFICATION_RESPONSE, PERSON_RESPONSE, MEETING_RESPONSE, ALARM_RESPONSE, TEAM_RESPONSE
+		NOTIFICATION_RESPONSE, PERSON_RESPONSE, MEETING_RESPONSE, ALARM_RESPONSE, TEAM_RESPONSE,
+		CREATE_MEETING_RESPONSE, CREATE_ALARM_RESPONSE, UPDATE_NOTIFICATION_RESPONSE, UPDATE_MEETING_RESPONSE
 	}
 
 	public DataResponse(List data, DataResponseType dataResponseType, boolean requested) {

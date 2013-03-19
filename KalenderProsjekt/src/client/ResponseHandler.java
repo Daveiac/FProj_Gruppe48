@@ -95,29 +95,21 @@ public class ResponseHandler implements Runnable{
 			case TEAM_RESPONSE:
 				receivedTeam(dataResponse.getData());
 				break;
-			}
-			break;
-		}
-			/*
-		case UPDATE_RESPONSE:
-			UpdateResponse updateResponse = (UpdateResponse) response;
-			switch (updateResponse.getUpdateType()){
-			case CREATE_ALARM:
+			case CREATE_ALARM_RESPONSE:
 				
 				break;
-			case CREATE_MEETING:
+			case CREATE_MEETING_RESPONSE:
 				
 				break;
-			case UPDATE_METING:
+			case UPDATE_MEETING_RESPONSE:
 				
 				break;
-			case UPDATE_NOTIFICATION:
+			case UPDATE_NOTIFICATION_RESPONSE:
 				
 				break;
 			}
 			break;
 		}
-		*/
 	}
 
 	
