@@ -19,6 +19,7 @@ public class NewAppointmentView extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private CalendarModel calendarModel;
+	private JFrame frame;
 
 	// Alle labels
 	private JLabel headline = new JLabel("Avtale for:                  ");
@@ -160,7 +161,7 @@ public class NewAppointmentView extends JPanel {
 		c.gridy = 17;
 		this.add(alarmTime, c);
 		
-		//her i fra er det bare jeg(Shimin) som greier å lese....
+		//her i fra er det bare rot
 		c.gridx = 1;
 		c.gridy = 0;
 		addDay(nDays);
@@ -229,14 +230,14 @@ public class NewAppointmentView extends JPanel {
 			}
 			
 			public void keyReleased(KeyEvent arg0) {
+				if(locComponent.getText().length() == 0){
+					romComponent.setEnabled(true);
+				}
 			}
 			
 			public void keyPressed(KeyEvent arg0) {
-				if(locComponent.getText().length() > 0){
+				if(locComponent.getText().length() >= 0){
 					romComponent.setEnabled(false);
-				}
-				else{
-					romComponent.setEnabled(true);
 				}
 			}
 		});
@@ -247,7 +248,6 @@ public class NewAppointmentView extends JPanel {
 		c.gridy = 5;
 		c.gridwidth = 5;
 		romComponent.addItem(" ");
-		romComponent.addItem("test");
 		romComponent.setSelectedIndex(-1);
 		this.add(romComponent, c);
 		romComponent.addActionListener(new ActionListener() {
@@ -337,8 +337,11 @@ public class NewAppointmentView extends JPanel {
 		this.add(opprettKnapp, d);
 		opprettKnapp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(validTime()==false){
+				if(validTime()==true){
 					//skrive inn resten her for å sende
+					frame.setVisible(false);
+				}if(validTime()==false){
+					return;
 				}
 			}
 		});
@@ -352,6 +355,10 @@ public class NewAppointmentView extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if(validTime()==true){
 					//skrive inn resten her for å sende
+					frame.setVisible(false);
+				}
+				if(validTime()==false){
+					return;
 				}
 			}
 		});
@@ -364,10 +371,11 @@ public class NewAppointmentView extends JPanel {
 		slettKnapp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//skrive inn resten her for å sende
+				frame.setVisible(false);
 			}
 		});
 		
-		if(meeting.getTitle() != null){
+		if(meeting!= null){
 			tittelComponent.setText(meeting.getTitle());
 			greCalendar.setTimeInMillis(meeting.getStartTime());
 			startHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
@@ -407,8 +415,17 @@ public class NewAppointmentView extends JPanel {
 			}
 		}
 		
-		if(meeting.getTitle() == null){
+		if(meeting == null){
+			//skrive inn rom her
 		}
+		
+		frame = new JFrame("Avtale");
+		frame.setPreferredSize(new Dimension(850, 700));
+		frame.pack();
+		frame.setVisible(true);
+		frame.setResizable(true);
+		frame.add(this);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 	}
 
@@ -418,7 +435,6 @@ public class NewAppointmentView extends JPanel {
 		for(int i=0; i<nDays;i++){
 			dayComponent.addItem(i+1);
 		}
-		System.out.println("first");
 		dayComponent.setSelectedIndex(cal.get(GregorianCalendar.DAY_OF_MONTH)-1);
 	}
 	
@@ -471,7 +487,7 @@ public class NewAppointmentView extends JPanel {
 			return true;
 		}
 		if(startHourComponent.getSelectedIndex() == endHourComponent.getSelectedIndex()){
-			if(startMinComponent.getSelectedIndex() >= endHourComponent.getSelectedIndex()){
+			if(startMinComponent.getSelectedIndex() >= endMinComponent.getSelectedIndex()){
 				return true;
 			}
 		}
@@ -488,15 +504,18 @@ public class NewAppointmentView extends JPanel {
 //		long startTime = new GregorianCalendar(2013, 2,11, 16, 30).getTimeInMillis();
 //		long endTime = new GregorianCalendar(2013, 2, 11, 17, 30).getTimeInMillis();
 //		Meeting meeting = new Meeting(0, "suppe1", null, startTime, endTime, "This is a desc", team, room, kari);
-		JFrame frame = new JFrame("Avtale");
-		frame.setPreferredSize(new Dimension(850, 700));
-		frame.setResizable(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		JFrame frame = new JFrame("Avtale");
+//		frame.setPreferredSize(new Dimension(850, 700));
+//		frame.setResizable(true);
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		CalendarModel calendarModel2 = new CalendarModel();
 //		Alarm alarm = new Alarm(0,'a',alarmTime,meeting);
 		calendarModel2.init();
-		frame.getContentPane().add(new NewAppointmentView(null,calendarModel2,null));
-		frame.pack();
+		new NewAppointmentView(null,calendarModel2,null);
+//		frame.pack();
+//		frame.setVisible(true);
+	}
+	public void showFrame(){
 		frame.setVisible(true);
 	}
 }

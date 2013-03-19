@@ -8,6 +8,7 @@ import networking.*;
 import java.net.*;
 
 import data.Person;
+import data.Meeting;
 
 import framePackage.DefaultView;
 
@@ -23,36 +24,30 @@ public class RequestHandler {
 		Program.client.sendRequest(qReqGetAllPersons);
 	}
 	
-	public void sendGetEvryMeetingByPersonRequest(Person p) throws IOException{
-		QueryRequest qReqGetEveryMeetingByPerson = new QueryRequest(p, null, QueryType.GET_EVERY_MEETING_BY_PERSON);
+	public void sendGetEvryMeetingByPersonRequest(Person person) throws IOException{
+		QueryRequest qReqGetEveryMeetingByPerson = new QueryRequest(person, null, QueryType.GET_EVERY_MEETING_BY_PERSON);
 		Program.client.sendRequest(qReqGetEveryMeetingByPerson);
 	}
 	
-	/*
-	public void sendGetAlarmsByPersonRequest() throws IOExeption{
-		Client client = new Client( InetAddress.getByName(Constants.serverIP) );
-		QueryRequest qReqGetAlarmsByPerson = new QueryRequest(PersonObject, null, QueryType.GET_ALARMS_BY_PERSON);
-		client.sendRequest(qReqGetAlarmsByPerson);
+	public void sendGetAlarmsByPersonRequest(Person person) throws IOException{
+		QueryRequest qReqGetAlarmsByPerson = new QueryRequest(person, null, QueryType.GET_ALARMS_BY_PERSON);
+		Program.client.sendRequest(qReqGetAlarmsByPerson);
 	}
 	
-	public void sendGetNotificationsByMeetingRequest(){
-		Client client = new Client( InetAddress.getByName(Constants.serverIP) );
-		QueryRequest qReqGetNotificationsByMeeting = new QueryRequest(null, MeetingObject, QueryType.GET_NOTIFICATIONS_BY_MEETING);
-		client.sendRequest(qReqGetNotificationsByMeeting);
+	public void sendGetNotificationsByMeetingRequest(Meeting meeting) throws IOException{
+		QueryRequest qReqGetNotificationsByMeeting = new QueryRequest(null, meeting, QueryType.GET_NOTIFICATIONS_BY_MEETING);
+		Program.client.sendRequest(qReqGetNotificationsByMeeting);
 	}
 	
-	public void sendGetNotificationsByPersonRequest(){
-		Client client = new Client( InetAddress.getByName(Constants.serverIP) );
-		QueryRequest qReqGetNotificationsByPerson = new QueryRequest(PersonObject, null, QueryType.GET_NOTIFICATIONS_BY_PERSON);
-		client.sendRequest(qReqGetNotificationsByPerson);
+	public void sendGetNotificationsByPersonRequest(Person person) throws IOException{
+		QueryRequest qReqGetNotificationsByPerson = new QueryRequest(person, null, QueryType.GET_NOTIFICATIONS_BY_PERSON);
+		Program.client.sendRequest(qReqGetNotificationsByPerson);
 	}
 	
-	public void sendGetTeamsByMeetingRequest(){
-		Client client = new Client( InetAddress.getByName(Constants.serverIP) );
-		QueryRequest qReqGetTeamsByMeeting = new QueryRequest(null, MeetingObject, QueryType.GET_TEAMS_BY_MEETING);
-		client.sendRequest(qReqGetTeamsByMeeting);
+	public void sendGetTeamsByMeetingRequest(Meeting meeting) throws IOException{
+		QueryRequest qReqGetTeamsByMeeting = new QueryRequest(null, meeting, QueryType.GET_TEAMS_BY_MEETING);
+		Program.client.sendRequest(qReqGetTeamsByMeeting);
 	}
-	*/
 	
 }
 

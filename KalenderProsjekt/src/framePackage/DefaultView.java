@@ -63,7 +63,7 @@ public class DefaultView extends JPanel {
 		sharedCView = new SharedCalendarView(Program.calendarModel);
 		appointmentView = new AppointmentView(Program.calendarModel);
 		initialize();
-		Program.calendarModel.init();
+		Program.calendarModel.init("batman");
 	}
 
 	private void initialize() {
@@ -176,7 +176,6 @@ public class DefaultView extends JPanel {
 		timePanelContraints.gridy = 1;
 		calendarPanel = mainView.getPanel();
 		timePanel.add(calendarPanel, timePanelContraints);
-		System.out.println(timePanel.getPreferredSize());
 		//		
 	}
 

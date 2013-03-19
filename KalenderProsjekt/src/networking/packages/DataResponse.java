@@ -27,4 +27,12 @@ public class DataResponse extends Response {
 		return dataResponseType;
 	}
 
+	@Override
+	public String toString() {
+		return "DataResponse [data=" + data + ", dataResponseType="
+				+ dataResponseType + ", requested=" + requested + "]";
+	}
+	
+	
+
 }

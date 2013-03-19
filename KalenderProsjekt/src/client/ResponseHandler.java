@@ -1,13 +1,12 @@
 package client;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 
 import networking.packages.AuthenticationResponse;
 import networking.packages.AuthenticationResponse.AuthenticationResponseType;
-import networking.packages.DataResponse;
-import networking.packages.Response;
 import networking.packages.*;
 import data.*;
 
@@ -34,10 +33,10 @@ public class ResponseHandler implements Runnable{
 		for (Object object : data) {
 			notifications.add((Notification) object);
 		}
-		//TODO send to program
+		Program.calendarModel.addAllNotificationsOfUser(notifications);
 	}
 	
-	private void receivedMeeting(List<Meeting> data){
+	private void receivedMeeting(List<Meeting> data) {
 		List<Meeting> meetings = new ArrayList<Meeting>();
 		for (Object object : data) {
 			meetings.add((Meeting) object);
@@ -77,6 +76,7 @@ public class ResponseHandler implements Runnable{
 				break;
 			case MEETING_RESPONSE:
 				receivedMeeting(dataResponse.getData());
+				
 				break;
 			case PERSON_RESPONSE:
 				receivedPeople(dataResponse.getData());
