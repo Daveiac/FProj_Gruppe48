@@ -37,6 +37,11 @@ public class RequestHandler {
 		Program.client.sendRequest(qReqGetAllMeetingrooms);
 	}
 	
+	public void sendGetAllNotificationsRequest() throws IOException {
+		QueryRequest qReqGetAllNotifications = new QueryRequest(null, null, QueryType.GET_ALL_NOTIFICATIONS);
+		Program.client.sendRequest(qReqGetAllNotifications);
+	}
+	
 	public void sendGetEvryMeetingByPersonRequest(Person person) throws IOException{
 		QueryRequest qReqGetEveryMeetingByPerson =
 				new QueryRequest(person, null, QueryType.GET_EVERY_MEETING_BY_PERSON);

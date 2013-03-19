@@ -25,7 +25,7 @@ public class ResponseHandler implements Runnable{
 		for (Object object : data) {
 			alarms.add((Alarm) object);
 		}
-		//TODO send to program
+		Program.calendarModel.setAlarmsOfUser(alarms);
 	}
 	
 	private void receivedNotification(List<Notification> data){
@@ -62,11 +62,11 @@ public class ResponseHandler implements Runnable{
 	
 	
 	private void receivedMeetingroom(List<MeetingRoom> data) {
-		List<MeetingRoom> meetingroom = new ArrayList<MeetingRoom>();
+		List<MeetingRoom> meetingrooms = new ArrayList<MeetingRoom>();
 		for (Object object : data) {
-			meetingroom.add((MeetingRoom) object);
+			meetingrooms.add((MeetingRoom) object);
 		}
-		//TODO send to program
+		Program.calendarModel.setAllRooms(meetingrooms);
 		
 	}
 	
