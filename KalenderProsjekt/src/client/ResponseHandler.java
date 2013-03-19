@@ -69,10 +69,10 @@ public class ResponseHandler implements Runnable{
 				Program.loginOK();
 				break;
 			case USER_NOEXIST:
-				Program.logInWrong();
+				Program.loginWrong();
 				break;
 			case WRONG_PASS:
-				Program.logInNoExist();
+				Program.loginNoExist();
 				break;
 			}
 		break;

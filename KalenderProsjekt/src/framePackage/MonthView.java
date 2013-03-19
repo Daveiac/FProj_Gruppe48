@@ -91,14 +91,6 @@ public class MonthView extends JPanel implements CalendarView,
 			weekCalendar.add(GregorianCalendar.WEEK_OF_MONTH, 1);
 		}
 
-		monthCalendar = new GregorianCalendar();
-
-		// Sets this month's title
-		setMonthTitle();
-
-		// Sets table headers with corresponding days
-		setHeaders();
-
 		// Sets the new month into the table
 		monthTable.setModel(tableModel);
 		monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -108,6 +100,15 @@ public class MonthView extends JPanel implements CalendarView,
 		scrollPane.setPreferredSize(new Dimension(800, 407));
 
 		add(scrollPane);
+
+		// Create data
+		monthCalendar = new GregorianCalendar();
+
+		// Sets this month's title
+		setMonthTitle();
+
+		// Sets table headers with corresponding days
+		setHeaders();
 
 		//
 		// realDay = cal.get(GregorianCalendar.DAY_OF_MONTH);
