@@ -44,9 +44,9 @@ class MonthTableCellRenderer extends DefaultTableCellRenderer {
 		if (shit == null)
 			return null;
 
-		System.out.println("dashitCELLRENDUS");
-		System.out.println(shit[0].toString());
-		System.out.println(shit[1].toString());
+//		System.out.println("dashitCELLRENDUS");
+//		System.out.println(shit[0].toString());
+//		System.out.println(shit[1].toString());
 
 		int dayOfMonth = (int) shit[0];
 		ArrayList<Meeting> meetings = (ArrayList<Meeting>) shit[1];

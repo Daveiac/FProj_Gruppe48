@@ -124,8 +124,7 @@ public class WeekView extends JPanel implements CalendarView,
 		SimpleDateFormat weekDayFormat = new SimpleDateFormat("EEEE dd. MMM.");
 		int daysInWeek = 7;
 		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {
-			columnHeaders[dayOfWeek] = weekDayFormat.format(weekCalendar
-					.getTime());
+			columnHeaders[dayOfWeek] = weekDayFormat.format(weekCalendar.getTime());
 			weekCalendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
 		}
 		tableModel.setColumnIdentifiers(columnHeaders);
