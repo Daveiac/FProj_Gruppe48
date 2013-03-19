@@ -9,6 +9,8 @@ import java.util.GregorianCalendar;
 
 import javax.swing.*;
 
+import client.Program;
+
 import data.Alarm;
 import data.CalendarModel;
 import data.Meeting;
@@ -21,6 +23,7 @@ public class NewAppointmentView extends JPanel {
 	
 	private CalendarModel calendarModel;
 	private JFrame frame;
+	private Meeting meeting;
 
 	// Alle labels
 	private JLabel headline = new JLabel("Avtale for:                  ");
@@ -69,7 +72,7 @@ public class NewAppointmentView extends JPanel {
 	private JButton endreKnapp = new JButton("Endre avtale");
 	private JButton slettKnapp = new JButton("Slett avtale");
 
-	public NewAppointmentView(Meeting meeting, CalendarModel calendarModel,Alarm alarm) {
+	public NewAppointmentView(Meeting meet, CalendarModel calendarModel,Alarm alarm) {
 		
 		
 		this.calendarModel = calendarModel;
@@ -354,7 +357,16 @@ public class NewAppointmentView extends JPanel {
 		opprettKnapp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(validTime()==true){
-					//skrive inn resten her for å sende
+					long startT = getTimeInMillis(yearComponent.getSelectedIndex()+2013, monthComponent.getSelectedIndex(), dayComponent.getSelectedIndex()+1, startHourComponent.getSelectedIndex(), startMinComponent.getSelectedIndex()*15);
+					long endT = getTimeInMillis(yearComponent.getSelectedIndex()+2013, monthComponent.getSelectedIndex(), dayComponent.getSelectedIndex()+1, endHourComponent.getSelectedIndex(), endMinComponent.getSelectedIndex()*15);
+					ArrayList<Person> list = new ArrayList<Person>();
+					for (int i = 0; i < participantList.getModel().getSize(); i++) {
+						list.add(participantList.getModel().getElementAt(i));
+					}
+					Team team = new Team(0, NewAppointmentView.this.calendarModel.getUser().getEmail(), list);
+					Meeting meeting =  new Meeting(0, tittelComponent.getText(), locComponent.getText(), startT, endT,
+							infoComponent.getText(), team, null, Program.calendarModel.getUser());
+					Program.calendarModel.pushMeeting(meeting);
 					frame.setVisible(false);
 				}if(validTime()==false){
 					return;
@@ -509,6 +521,10 @@ public class NewAppointmentView extends JPanel {
 			}
 		}
 		return false;
+	}
+	private long getTimeInMillis(int year,int month, int day, int hour, int min) {
+		GregorianCalendar cal = new GregorianCalendar(year, month, day, hour, min);
+		return cal.getTimeInMillis();
 	}
 
 	public static void main(String[] args) {

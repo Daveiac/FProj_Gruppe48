@@ -103,11 +103,7 @@ public class DefaultView extends JPanel {
 		backGroundConstraints.gridy = 0;
 		logOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JFrame meeting = new JFrame();
-				meeting.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				meeting.setLocationRelativeTo(null);
-				meeting.setContentPane(new NewAppointmentView(null, Program.calendarModel, null));
-				meeting.setVisible(true);
+				new NewAppointmentView(null, Program.calendarModel, null);
 			}
 		});
 		frame.add(logOut, backGroundConstraints);
