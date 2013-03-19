@@ -149,6 +149,7 @@ public class AppointmentOverView {
 			public void actionPerformed(ActionEvent arg0) {
 				if (yourStatus.getSelectedItem() == check) {
 					lblStatus.setText("Deltar");
+					//skrive inn hvor du skal sende det til
 				}
 				if (yourStatus.getSelectedItem() == cross) {
 					lblStatus.setText("Deltar Ikke");
@@ -228,6 +229,10 @@ public class AppointmentOverView {
 
 	public JPanel getPanel() {
 		return overViewPanel;
+	}
+	
+	public void showFrame(){
+		frame.setVisible(true);
 	}
 
 }
