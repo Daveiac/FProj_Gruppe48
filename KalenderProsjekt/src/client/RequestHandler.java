@@ -2,6 +2,7 @@ package client;
 
 import java.io.IOException;
 
+import networking.packages.AuthenticationRequest;
 import networking.packages.QueryRequest;
 import networking.packages.QueryRequest.QueryType;
 import networking.*;
@@ -18,6 +19,10 @@ public class RequestHandler {
 //		Client client = new Client( InetAddress.getByName(Constants.serverIP) );
 //		sendGetAllPersonsRequest(client);
 //	}
+	public void sendAuthenticationRequest(String username, String password) throws IOException {
+		AuthenticationRequest aReq = new AuthenticationRequest(username, password);
+		Program.client.sendRequest(aReq);
+	}
 
 	public void sendGetAllPersonsRequest() throws IOException {
 		QueryRequest qReqGetAllPersons = new QueryRequest(null, null, QueryType.GET_ALL_PERSONS);
