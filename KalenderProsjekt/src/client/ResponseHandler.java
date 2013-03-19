@@ -65,9 +65,6 @@ public class ResponseHandler implements Runnable{
 		switch(response.getResponseType()){
 		case AUTHENTICATION_RESPONSE:
 			//TODO
-			switch(authenticationResponse.getResponseType()){
-			
-			}
 			break;
 		case DATA_RESPONSE:
 			DataResponse dataResponse = (DataResponse) response;
