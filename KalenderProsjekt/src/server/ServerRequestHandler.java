@@ -19,6 +19,8 @@ import networking.packages.Response;
 import networking.packages.UpdateRequest;
 import data.Alarm;
 import data.Meeting;
+import data.MeetingRoom;
+import data.Notification;
 import data.Notification;
 import data.Person;
 import data.Team;
@@ -109,10 +111,10 @@ public class ServerRequestHandler implements Runnable {
 		return response;
 	}
 
-	private DataResponse getMeetingsByPerson(Person person) {
+	private DataResponse getMeetings() {
 		List<Meeting> data = null;
 		try {
-			data = dbController.getEveryMeetingOwnedByPerson(person);
+			data = dbController.getEveryMeeting();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -131,6 +133,18 @@ public class ServerRequestHandler implements Runnable {
 		}
 		return new DataResponse(teams, DataResponseType.MEETING_RESPONSE, true);
 	}
+	
+	private DataResponse getAllNotifications(){
+		List<Notification> meetings = null;
+		try {
+			meetings = dbController.getAllNotifications();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		DataResponse response = new DataResponse(meetings,
+				DataResponseType.NOTIFICATION_RESPONSE, false);
+		return response;
+	}
 
 	private void handleQueryRequest(QueryRequest request, Socket client) {
 		DataResponse response = null;
@@ -147,11 +161,17 @@ public class ServerRequestHandler implements Runnable {
 			break;
 		case GET_ALARMS_BY_PERSON:
 			response = getAlarms(request.getUsername());
-		case GET_EVERY_MEETING_BY_PERSON:
-			response = getMeetingsByPerson(request.getPerson());
+		case GET_EVERY_MEETING:
+			response = getMeetings();
 			break;
 		case GET_TEAMS_BY_MEETING:
 			response = getTeamsByMeeting(request.getMeeting());
+			break;
+		case GET_ALL_NOTIFICATIONS:
+			response = getAllNotifications();
+			break;
+		case GET_ALL_MEETINGROOMS:
+			response = getAllMeetingRooms();
 			break;
 		default:
 			break;
@@ -168,6 +188,18 @@ public class ServerRequestHandler implements Runnable {
 
 	}
 
+	private DataResponse getAllMeetingRooms(){
+		List<MeetingRoom> meetingRooms = null;
+		try {
+			meetingRooms = dbController.getAllMeetingRooms();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		DataResponse response = new DataResponse(meetingRooms,
+				DataResponseType.MEETINGROOM_RESPONSE, false);
+		return response;
+	}
+	
 	private DataResponse getNotificationsByPerson(String username) {
 		List<Notification> notifications = null;
 		try {
@@ -206,31 +238,34 @@ public class ServerRequestHandler implements Runnable {
 		}
 
 	}
-
-	private DataResponse addAlarm(UpdateRequest request) {
+	
+	private void sendAlarmsToPerson(Socket client , String username){
 		List<Alarm> alarms = null;
 		try {
-			int alarmID = dbController.addAlarm(request.getAlarm());
-			alarms = dbController.getAlarmsOfPerson(request.getSender()
-					.getUsername());
+			alarms = dbController.getAlarmsOfPerson(username);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return new DataResponse(alarms, DataResponseType.ALARM_RESPONSE, false);
+		
+		addResponseToQueue(new PendingResponse(new DataResponse(alarms, DataResponseType.ALARM_RESPONSE, false), client , false));
+	}
+
+	private void addAlarm(UpdateRequest request) {
+		try {
+			dbController.addAlarm(request.getAlarm());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		 
 
 	}
 
-	private DataResponse addMeeting(Meeting meeting) {
-		List<Notification> notifications = new ArrayList<Notification>();
+	private void addMeeting(Meeting meeting) {
 		try {
-			Meeting newMeeting = dbController.addMeeting(meeting);
-			notifications = dbController.getNotifications(newMeeting);
+			dbController.addMeeting(meeting);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		return new DataResponse(notifications,
-				DataResponseType.NOTIFICATION_RESPONSE, false);
 	}
 
 	private void sendAllMeetings() {
@@ -256,54 +291,73 @@ public class ServerRequestHandler implements Runnable {
 		try {
 			dbController.updateNotification(notification);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
 			return new DataResponse(dbController.getAllNotifications(),
 					DataResponseType.NOTIFICATION_RESPONSE, false);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
-
 	
+	private void addResponseToQueue(PendingResponse pResponse){
+		if(pResponse.getResponse() != null){
+			while (!responses.offer(pResponse))
+				;				
+		}
+	}
+	
+	private void deleteMeeting(Meeting meeting){
+		
+	}
 	
 	private void handleUpdateRequest(UpdateRequest request, Socket client) {
-		DataResponse response = null;
-		boolean respondToAllClients = false;
 		switch (request.getUpdateType()) {
 		case CREATE_ALARM:
-			response = addAlarm(request);
+			addAlarm(request);
+			sendAlarmsToPerson(client, request.getSender().getUsername());
 			break;
 		case CREATE_MEETING:
-			response = addMeeting(request.getMeeting());
+			addMeeting(request.getMeeting());
 			sendAllMeetings();
-			respondToAllClients = true;
+			sendAllNotifications();
 			break;
 		case UPDATE_METING:
-			// TODO implement
+			updateMeeting(request.getMeeting());
+			sendAllMeetings();
+			sendAllNotifications();
 			break;
 		case UPDATE_NOTIFICATION:
-			response = editNotification(request.getNotification());
-			respondToAllClients = true;
+			editNotification(request.getNotification());
+			sendAllNotifications();
+			break;
+		case DELETE_MEETING:
+			deleteMeeting(request.getMeeting());
+			sendAllMeetings();
+			sendAllNotifications();
 			break;
 		default:
 			break;
 		}
 
+		
+
+	}
+
+	private void updateMeeting(Meeting meeting) {
 		try {
-			if(response != null){
-				while (!responses.offer(new PendingResponse(response, client,
-						respondToAllClients), 200, TimeUnit.MILLISECONDS))
-					;				
-			}
-		} catch (InterruptedException e) {
+			dbController.updateMeeting(meeting);
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+	}
 
+	private void sendAllNotifications() {
+		addResponseToQueue(new PendingResponse(getAllNotifications(), null, true));
+		
 	}
 
 	public void run() {
