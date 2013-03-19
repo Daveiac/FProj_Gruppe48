@@ -64,8 +64,19 @@ public class ResponseHandler implements Runnable{
 	private void handleResponse(Response response){
 		switch(response.getResponseType()){
 		case AUTHENTICATION_RESPONSE:
-			//TODO
-			break;
+			AuthenticationResponse authenticationResponse = (AuthenticationResponse) response;
+			switch (authenticationResponse.getType()){
+			case APPROVED:
+				Program.loginOK();
+				break;
+			case USER_NOEXIST:
+				Program.logInWrong();
+				break;
+			case WRONG_PASS:
+				Program.logInNoExist();
+				break;
+			}
+		break;
 		case DATA_RESPONSE:
 			DataResponse dataResponse = (DataResponse) response;
 			switch (dataResponse.getQueryResponseType()){
