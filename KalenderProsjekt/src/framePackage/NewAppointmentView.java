@@ -230,14 +230,14 @@ public class NewAppointmentView extends JPanel {
 			}
 			
 			public void keyReleased(KeyEvent arg0) {
+				if(locComponent.getText().length() == 0){
+					romComponent.setEnabled(true);
+				}
 			}
 			
 			public void keyPressed(KeyEvent arg0) {
-				if(locComponent.getText().length() > 0){
+				if(locComponent.getText().length() >= 0){
 					romComponent.setEnabled(false);
-				}
-				else{
-					romComponent.setEnabled(true);
 				}
 			}
 		});
@@ -248,7 +248,6 @@ public class NewAppointmentView extends JPanel {
 		c.gridy = 5;
 		c.gridwidth = 5;
 		romComponent.addItem(" ");
-		romComponent.addItem("test");
 		romComponent.setSelectedIndex(-1);
 		this.add(romComponent, c);
 		romComponent.addActionListener(new ActionListener() {
@@ -341,6 +340,8 @@ public class NewAppointmentView extends JPanel {
 				if(validTime()==true){
 					//skrive inn resten her for å sende
 					frame.setVisible(false);
+				}if(validTime()==false){
+					return;
 				}
 			}
 		});
@@ -357,13 +358,7 @@ public class NewAppointmentView extends JPanel {
 					frame.setVisible(false);
 				}
 				if(validTime()==false){
-					JLabel lblwrong = new JLabel("feil tid!!");
-					JPanel panel = new JPanel();
-					lblwrong.setPreferredSize(new Dimension(200, 200));
-					panel.add(lblwrong);
-					panel.setPreferredSize(new Dimension(300, 300));
-					panel.setVisible(true);
-					frame.add(panel);
+					return;
 				}
 			}
 		});
@@ -492,7 +487,7 @@ public class NewAppointmentView extends JPanel {
 			return true;
 		}
 		if(startHourComponent.getSelectedIndex() == endHourComponent.getSelectedIndex()){
-			if(startMinComponent.getSelectedIndex() >= endHourComponent.getSelectedIndex()){
+			if(startMinComponent.getSelectedIndex() >= endMinComponent.getSelectedIndex()){
 				return true;
 			}
 		}
