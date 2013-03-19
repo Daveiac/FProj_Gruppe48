@@ -230,5 +230,9 @@ public class AppointmentOverView {
 	public JPanel getPanel() {
 		return overViewPanel;
 	}
+	
+	public void showFrame(){
+		frame.setVisible(true);
+	}
 
 }

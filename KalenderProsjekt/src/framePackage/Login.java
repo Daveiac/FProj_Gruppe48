@@ -1,6 +1,9 @@
 package framePackage;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 
 public class Login extends JPanel{
@@ -22,6 +25,11 @@ public class Login extends JPanel{
 		userField = new JTextField(20);
 		passwordField = new JPasswordField(20);
 		button = new JButton("Logg inn");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// send til server
+			}
+		});
 		
 		c.insets = new Insets(0,0,5,0);
 		
