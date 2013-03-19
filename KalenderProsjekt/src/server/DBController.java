@@ -156,9 +156,8 @@ public class DBController {
 		String sql = "SELECT * FROM Meeting "
 				+ "WHERE Meeting.username = '" + person.getUsername()+"' ";
 		ResultSet rs = dBConn.makeQuery(sql);
-		System.out.println(sql);
 		while (rs.next()) {
-			getMeetingFromResultSet(rs);
+			meetings.add(getMeetingFromResultSet(rs));
 		}
 		return meetings;
 	}
