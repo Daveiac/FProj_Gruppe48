@@ -27,7 +27,7 @@ public class CalendarModel implements Serializable{
 	private ArrayList<Notification> notificationsOfUser;
 	private String username;
 	private Person user;
-	private static final Color[] colors = {Color.red,Color.blue,Color.green,Color.orange,Color.magenta,Color.gray,Color.pink};
+	private static final Color[] colors = {Color.red,Color.blue,Color.darkGray,Color.orange,Color.magenta,Color.gray,Color.pink};
 	public static final String SELECTED_Property = "SELECTED", MEETING_ADDED_Property = "NEW_M", 
 			MEETING_CHANGED_Property = "CHANGE", MEETING_REMOVED_Property = "REMOVE",
 			NOTIFICATION_ADDED_Property = "NEW_N", CALENDAR_LOADED_Property = "LOADED", PERSONS_ADDED_Property ="PERSONS";
@@ -46,9 +46,10 @@ public class CalendarModel implements Serializable{
 //		data = new FakeWhale(this);
 		
 		try {
-			Program.reqHandler.sendGetAllPersonsRequest();
+			if(Program.reqHandler != null){
+				Program.reqHandler.sendGetAllPersonsRequest();
+			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 //		for (Person p : persons) {

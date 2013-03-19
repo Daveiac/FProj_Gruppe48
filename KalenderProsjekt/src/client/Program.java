@@ -29,21 +29,16 @@ public class Program {
 		serverAddress = InetAddress.getByName(Constants.serverIP);
 		try {
 			server = new Socket(serverAddress, Constants.port);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		try {
 			client = new Client(InetAddress.getByName(Constants.serverIP));
+			reqHandler = new RequestHandler();
+			startThreads();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("The server is down");
 		}
-		reqHandler = new RequestHandler();
 		DefaultView dw = new DefaultView();
 		JFrame frame = dw.getFrame();
 		frame.setBounds(0, 0, 1260, 768);
 		frame.setVisible(true);
-		startThreads();
 		
 	}
 	
