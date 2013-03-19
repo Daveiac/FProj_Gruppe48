@@ -56,7 +56,7 @@ public class CalendarModel implements Serializable{
 	public ArrayList<Meeting> getAllMeetingsOfPerson(Person person, boolean attending) {
 		ArrayList<Meeting> allMeetings = new ArrayList<Meeting>();
 		for (Notification n : notifications) {
-			if(n.getPerson().getUsername().equals(person.getUsername()) ) {
+			if(n.getPerson().getUsername().equals(person.getUsername()) && (n.getApproved() == 'y' || !attending)) {
 				allMeetings.add(n.getMeeting());
 			}
 		}
