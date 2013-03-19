@@ -41,7 +41,7 @@ public class ResponseHandler implements Runnable{
 		for (Object object : data) {
 			meetings.add((Meeting) object);
 		}
-		Program.calendarModel.setAllMeetingsOfPerson(meetings);
+		Program.calendarModel.setAllMeetings(meetings);
 	}
 	
 	private void receivedPeople(List<Person> data){
