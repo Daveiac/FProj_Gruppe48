@@ -26,6 +26,8 @@ public class CalendarModel implements Serializable{
 	private PropertyChangeSupport pcs;
 	private ArrayList<Notification> notificationsOfUser;
 	private String username;
+	private int responseCount;
+	private Person requestPerson;
 	private Person user;
 	private static final Color[] colors = {Color.red,Color.blue,Color.darkGray,Color.orange,Color.magenta,Color.gray,Color.pink};
 	public static final String SELECTED_Property = "SELECTED", MEETING_ADDED_Property = "NEW_M", 
@@ -48,13 +50,14 @@ public class CalendarModel implements Serializable{
 		try {
 			if(Program.reqHandler != null){
 				Program.reqHandler.sendGetAllPersonsRequest();
+				responseCount = 0;
+				for (Person p : persons) {
+					Program.reqHandler.sendGetEvryMeetingByPersonRequest(p);
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-//		for (Person p : persons) {
-//			data.requestEveryMeetingForPerson(p);
-//		}
 	}
 	/**
 	 * Gets ALL of the meetings of a person
@@ -148,8 +151,8 @@ public class CalendarModel implements Serializable{
 		}
 	}
 	
-	public void addAllMeetingsOfPerson(ArrayList<Meeting> meetings, Person person) {
-		personMeetingRelation.put(person, meetings);
+	public void addAllMeetingsOfPerson(List<Meeting> meetings) {
+		personMeetingRelation.put(persons.get(responseCount++), (ArrayList<Meeting>) meetings);
 		if(personMeetingRelation.size() == persons.size()) {
 			pcs.firePropertyChange(CALENDAR_LOADED_Property, null, personMeetingRelation);
 		}

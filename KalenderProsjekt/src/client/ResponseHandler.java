@@ -42,7 +42,7 @@ public class ResponseHandler implements Runnable{
 		for (Object object : data) {
 			meetings.add((Meeting) object);
 		}
-		//TODO send to program
+		Program.calendarModel.addAllMeetingsOfPerson(meetings);
 	}
 	
 	private void receivedPeople(List<Person> data){
