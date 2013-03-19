@@ -50,7 +50,7 @@ public class SharedCalendarView implements PropertyChangeListener{
 		for(int i = 0; i < list.size(); i++){
 			personList.add(list.get(i));
 			checkBox = new JCheckBox(list.get(i).getFirstName() + list.get(i).getLastName());
-			checkBox.setBackground(calendarModel.getColorOfPerson(list.get(i)));
+			checkBox.setForeground(calendarModel.getColorOfPerson(list.get(i)));
 			c.gridx = 0;
 			c.gridy = i;
 			sharedCPanel.add(checkBox,c);
@@ -61,6 +61,7 @@ public class SharedCalendarView implements PropertyChangeListener{
 				}
 			});
 		}
+		sharedCPanel.validate();
 	}
 	
 	public JPanel getPanel(){
