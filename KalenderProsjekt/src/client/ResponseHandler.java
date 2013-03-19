@@ -38,7 +38,6 @@ public class ResponseHandler implements Runnable{
 	
 	private void receivedMeeting(List<Meeting> data) {
 		List<Meeting> meetings = new ArrayList<Meeting>();
-		System.out.println("Meetings: "+Arrays.toString(meetings.toArray()));
 		for (Object object : data) {
 			meetings.add((Meeting) object);
 		}
@@ -77,6 +76,7 @@ public class ResponseHandler implements Runnable{
 				break;
 			case MEETING_RESPONSE:
 				receivedMeeting(dataResponse.getData());
+				
 				break;
 			case PERSON_RESPONSE:
 				receivedPeople(dataResponse.getData());
