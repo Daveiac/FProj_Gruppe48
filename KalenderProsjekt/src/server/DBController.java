@@ -83,7 +83,15 @@ public class DBController {
 		}
 		return teams;
 	}
+	
 
+	public void deleteMeeting(Meeting meeting) throws SQLException{
+		String sql = String.format(
+				"DELETE FROM Meeting " +
+				"WHERE Meeting.meetingID = %d", meeting.getMeetingID());
+		dBConn.makeUpdate(sql);
+	}
+	
 	public boolean personExists(String username) throws SQLException {
 		String sql = String.format("SELECT * FROM Person "
 				+ "WHERE username = '%s'", username);

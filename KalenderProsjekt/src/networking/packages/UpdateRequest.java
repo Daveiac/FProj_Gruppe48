@@ -13,7 +13,7 @@ public class UpdateRequest extends NetworkRequest{
 	private Person sender;
 	
 	public enum UpdateType{
-		CREATE_MEETING, UPDATE_METING, CREATE_ALARM, UPDATE_NOTIFICATION
+		CREATE_MEETING, UPDATE_METING, CREATE_ALARM, UPDATE_NOTIFICATION, DELETE_MEETING
 	}
 	
 	public UpdateRequest(Meeting meeting, Alarm alarm,

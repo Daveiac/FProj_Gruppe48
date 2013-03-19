@@ -20,6 +20,7 @@ import networking.packages.UpdateRequest;
 import data.Alarm;
 import data.Meeting;
 import data.Notification;
+import data.Notification;
 import data.Person;
 import data.Team;
 
@@ -206,31 +207,34 @@ public class ServerRequestHandler implements Runnable {
 		}
 
 	}
-
-	private DataResponse addAlarm(UpdateRequest request) {
+	
+	private void sendAlarmsToPerson(Socket client , String username){
 		List<Alarm> alarms = null;
 		try {
-			int alarmID = dbController.addAlarm(request.getAlarm());
-			alarms = dbController.getAlarmsOfPerson(request.getSender()
-					.getUsername());
+			alarms = dbController.getAlarmsOfPerson(username);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return new DataResponse(alarms, DataResponseType.ALARM_RESPONSE, false);
+		
+		addResponseToQueue(new PendingResponse(new DataResponse(alarms, DataResponseType.ALARM_RESPONSE, false), client , false));
+	}
+
+	private void addAlarm(UpdateRequest request) {
+		try {
+			dbController.addAlarm(request.getAlarm());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		 
 
 	}
 
-	private DataResponse addMeeting(Meeting meeting) {
-		List<Notification> notifications = new ArrayList<Notification>();
+	private void addMeeting(Meeting meeting) {
 		try {
-			Meeting newMeeting = dbController.addMeeting(meeting);
-			notifications = dbController.getNotifications(newMeeting);
+			dbController.addMeeting(meeting);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		return new DataResponse(notifications,
-				DataResponseType.NOTIFICATION_RESPONSE, false);
 	}
 
 	private void sendAllMeetings() {
@@ -268,42 +272,60 @@ public class ServerRequestHandler implements Runnable {
 		}
 		return null;
 	}
-
 	
+	private void addResponseToQueue(PendingResponse pResponse){
+		if(pResponse.getResponse() != null){
+			while (!responses.offer(pResponse))
+				;				
+		}
+	}
+	
+	private void deleteMeeting(Meeting meeting){
+		
+	}
 	
 	private void handleUpdateRequest(UpdateRequest request, Socket client) {
-		DataResponse response = null;
-		boolean respondToAllClients = false;
 		switch (request.getUpdateType()) {
 		case CREATE_ALARM:
-			response = addAlarm(request);
+			addAlarm(request);
+			sendAlarmsToPerson(client, request.getSender().getUsername());
 			break;
 		case CREATE_MEETING:
-			response = addMeeting(request.getMeeting());
+			addMeeting(request.getMeeting());
 			sendAllMeetings();
-			respondToAllClients = true;
+			sendAllNotifications();
 			break;
 		case UPDATE_METING:
 			// TODO implement
 			break;
 		case UPDATE_NOTIFICATION:
-			response = editNotification(request.getNotification());
-			respondToAllClients = true;
+			editNotification(request.getNotification());
+			sendAllNotifications();
+			break;
+		case DELETE_MEETING:
+			deleteMeeting(request.getMeeting());
+			sendAllMeetings();
+			sendAllNotifications();
 			break;
 		default:
 			break;
 		}
 
+		
+
+	}
+
+	private void sendAllNotifications() {
+		List<Notification> meetings = null;
 		try {
-			if(response != null){
-				while (!responses.offer(new PendingResponse(response, client,
-						respondToAllClients), 200, TimeUnit.MILLISECONDS))
-					;				
-			}
-		} catch (InterruptedException e) {
+			meetings = dbController.getAllNotifications();
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		DataResponse response = new DataResponse(meetings,
+				DataResponseType.NOTIFICATION_RESPONSE, false);
+		addResponseToQueue(new PendingResponse(response, null, true));
+		
 	}
 
 	public void run() {
