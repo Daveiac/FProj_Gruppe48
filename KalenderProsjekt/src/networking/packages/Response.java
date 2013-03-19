@@ -8,7 +8,7 @@ public class Response implements Serializable{
 	private static final long serialVersionUID = 6025666019258737870L;
 
 	public enum ResponseType{
-		DATA_RESPONSE, AUTHENTICATION_RESPONSE, UPDATE_REQUEST
+		DATA_RESPONSE, AUTHENTICATION_RESPONSE, UPDATE_RESPONSE
 	}
 	private ResponseType responseType;
 

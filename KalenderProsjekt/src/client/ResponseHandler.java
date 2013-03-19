@@ -97,9 +97,11 @@ public class ResponseHandler implements Runnable{
 				break;
 			}
 			break;
-		case UPDATE_REQUEST:
-			UpdateRequest updateRequest = (UpdateRequest) response;
-			switch (updateRequest.getUpdateType()){
+		}
+			/*
+		case UPDATE_RESPONSE:
+			UpdateResponse updateResponse = (UpdateResponse) response;
+			switch (updateResponse.getUpdateType()){
 			case CREATE_ALARM:
 				
 				break;
@@ -115,6 +117,7 @@ public class ResponseHandler implements Runnable{
 			}
 			break;
 		}
+		*/
 	}
 
 	
