@@ -84,7 +84,7 @@ public class DayView extends JPanel implements CalendarView,
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
 		dayTable.getColumnModel().getColumn(1)
-				.setCellRenderer(new DayTableCellRenderer(calendarModel));
+				.setCellRenderer(new DayTableCellRenderer(this.calendarModel));
 
 		JScrollPane scrollPane = new JScrollPane(dayTable);
 		scrollPane.setPreferredSize(new Dimension(800, 407));
@@ -142,6 +142,10 @@ public class DayView extends JPanel implements CalendarView,
 			ArrayList<Meeting> meetings = calendarModel.getMeetings(person);
 			setMeetings(calendar, tableModel, dayOfWeek, meetings);
 		}
+		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
+		dayTable.getColumnModel().getColumn(1)
+		.setCellRenderer(new DayTableCellRenderer(this.calendarModel));
 	}
 
 	/**
