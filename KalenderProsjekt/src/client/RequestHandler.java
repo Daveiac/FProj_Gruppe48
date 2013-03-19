@@ -23,6 +23,10 @@ public class RequestHandler {
 		AuthenticationRequest aReq = new AuthenticationRequest(username, password);
 		Program.client.sendRequest(aReq);
 	}
+	
+	/*
+	 * 
+	 */
 
 	public void sendGetAllPersonsRequest() throws IOException {
 		QueryRequest qReqGetAllPersons = new QueryRequest(null, null, QueryType.GET_ALL_PERSONS);

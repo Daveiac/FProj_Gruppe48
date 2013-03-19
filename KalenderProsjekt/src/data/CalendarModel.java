@@ -183,9 +183,9 @@ public class CalendarModel implements Serializable{
 		return colors[persons.indexOf(person)];
 	}
 	//TODO
-//	public void pushMeeting(Meeting meeting) {
-//		data.pushMeeting(meeting);
-//	}
+	public void pushMeeting(Meeting meeting) {
+		//TOFO
+	}
 	public ArrayList<Notification> getNotifications(Person user) {
 		return notificationsOfUser;
 	}
