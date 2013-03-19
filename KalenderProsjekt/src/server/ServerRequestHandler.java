@@ -40,14 +40,14 @@ public class ServerRequestHandler implements Runnable {
 		this.dbController = dbController;
 	}
 
-	private void handleAuthenticationRequest(
-			AuthenticationRequest aRequest, Socket client) {
+	private void handleAuthenticationRequest(AuthenticationRequest aRequest,
+			Socket client) {
 		AuthenticationResponse aResponse;
 		try {
 			if (dbController.personExists(aRequest.getUsername())) {
 				if (dbController.authenticateUser(aRequest.getUsername(),
 						aRequest.getPassword())) {
-					aResponse =  new AuthenticationResponse(
+					aResponse = new AuthenticationResponse(
 							AuthenticationResponseType.APPROVED);
 				}
 				aResponse = new AuthenticationResponse(
@@ -58,16 +58,16 @@ public class ServerRequestHandler implements Runnable {
 		}
 		aResponse = new AuthenticationResponse(
 				AuthenticationResponseType.USER_NOEXIST);
-		
+
 		try {
-			while(!responses.offer(new PendingResponse(aResponse, client, false), 200, TimeUnit.MILLISECONDS));
+			while (!responses.offer(new PendingResponse(aResponse, client,
+					false), 200, TimeUnit.MILLISECONDS))
+				;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
 	}
-
-
 
 	private DataResponse getEveryPerson() {
 		List<Person> data = null;
@@ -116,10 +116,10 @@ public class ServerRequestHandler implements Runnable {
 				DataResponseType.MEETING_RESPONSE, true);
 		return response;
 	}
-	
-	private DataResponse getTeamsByMeeting(Meeting meeting){
+
+	private DataResponse getTeamsByMeeting(Meeting meeting) {
 		List<Team> teams = null;
-		
+
 		try {
 			teams = dbController.getTeamsByMeeting(meeting.getMeetingID());
 		} catch (SQLException e) {
@@ -127,7 +127,7 @@ public class ServerRequestHandler implements Runnable {
 		}
 		return new DataResponse(teams, DataResponseType.MEETING_RESPONSE, true);
 	}
-	
+
 	private void handleQueryRequest(QueryRequest request, Socket client) {
 		DataResponse response = null;
 
@@ -154,14 +154,15 @@ public class ServerRequestHandler implements Runnable {
 		}
 
 		try {
-			while(!responses.offer(new PendingResponse(response, client, false), 200, TimeUnit.MILLISECONDS));
+			while (!responses.offer(
+					new PendingResponse(response, client, false), 200,
+					TimeUnit.MILLISECONDS))
+				;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
 	}
-	
-	
 
 	private DataResponse getNotificationsByPerson(String username) {
 		List<Notification> notifications = null;
@@ -176,18 +177,22 @@ public class ServerRequestHandler implements Runnable {
 	}
 
 	private void processRequest(ReceivedRequest request) {
-		
+
 		switch (request.networkRequest.getEventType()) {
 		case AUTHENTICATION:
-			handleAuthenticationRequest((AuthenticationRequest) request.networkRequest, request.clientSocket);
+			handleAuthenticationRequest(
+					(AuthenticationRequest) request.networkRequest,
+					request.clientSocket);
 			break;
 		case LOGOUT:
 			break;
 		case QUERY:
-			handleQueryRequest((QueryRequest) request.networkRequest, request.clientSocket);
+			handleQueryRequest((QueryRequest) request.networkRequest,
+					request.clientSocket);
 			break;
 		case UPDATE:
-			handleUpdateRequest((UpdateRequest) request.networkRequest, request.clientSocket);
+			handleUpdateRequest((UpdateRequest) request.networkRequest,
+					request.clientSocket);
 			break;
 		default:
 			OutputController
@@ -195,23 +200,23 @@ public class ServerRequestHandler implements Runnable {
 							+ request);
 			break;
 		}
-		
 
 	}
-	
-	private DataResponse addAlarm(UpdateRequest request){
+
+	private DataResponse addAlarm(UpdateRequest request) {
 		List<Alarm> alarms = null;
 		try {
 			int alarmID = dbController.addAlarm(request.getAlarm());
-			alarms = dbController.getAlarmsOfPerson(request.getSender().getUsername());
+			alarms = dbController.getAlarmsOfPerson(request.getSender()
+					.getUsername());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return new DataResponse(alarms, DataResponseType.ALARM_RESPONSE, false);
-		
+
 	}
 
-	private DataResponse addMeeting(Meeting meeting){
+	private DataResponse addMeeting(Meeting meeting) {
 		List<Notification> notifications = new ArrayList<Notification>();
 		try {
 			Meeting newMeeting = dbController.addMeeting(meeting);
@@ -219,35 +224,53 @@ public class ServerRequestHandler implements Runnable {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		return new DataResponse(notifications, DataResponseType.NOTIFICATION_RESPONSE, false);
+
+		return new DataResponse(notifications,
+				DataResponseType.NOTIFICATION_RESPONSE, false);
 	}
-	
-	private void sendAllMeetings(){
+
+	private void sendAllMeetings() {
 		List<Meeting> meetings = null;
 		try {
 			meetings = dbController.getEveryMeeting();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		DataResponse response = new DataResponse(meetings,DataResponseType.MEETING_RESPONSE, false);
+		DataResponse response = new DataResponse(meetings,
+				DataResponseType.MEETING_RESPONSE, false);
 		try {
-			while(!responses.offer(new PendingResponse(response, null, true), 200, TimeUnit.MILLISECONDS));
+			while (!responses.offer(new PendingResponse(response, null, true),
+					200, TimeUnit.MILLISECONDS))
+				;
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
-	public DataResponse editNotification(Notification notification){
-		//TODO fix this
+
+	public DataResponse editNotification(Notification notification) {
+		try {
+			dbController.updateNotification(notification);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			return new DataResponse(dbController.getAllNotifications(),
+					DataResponseType.NOTIFICATION_RESPONSE, false);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
+
+	
 	
 	private void handleUpdateRequest(UpdateRequest request, Socket client) {
-		DataResponse response =  null;
+		DataResponse response = null;
 		boolean respondToAllClients = false;
-		switch(request.getUpdateType()){
+		switch (request.getUpdateType()) {
 		case CREATE_ALARM:
 			response = addAlarm(request);
 			break;
@@ -257,24 +280,27 @@ public class ServerRequestHandler implements Runnable {
 			respondToAllClients = true;
 			break;
 		case UPDATE_METING:
-			//TODO implement
+			// TODO implement
 			break;
 		case UPDATE_NOTIFICATION:
-			editNotification(request.getNotification());
+			response = editNotification(request.getNotification());
+			respondToAllClients = true;
 			break;
 		default:
 			break;
 		}
-		
+
 		try {
-			while(!responses.offer(new PendingResponse(response, client, respondToAllClients), 200, TimeUnit.MILLISECONDS));
+			if(response != null){
+				while (!responses.offer(new PendingResponse(response, client,
+						respondToAllClients), 200, TimeUnit.MILLISECONDS))
+					;				
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-
-
 
 	public void run() {
 		OutputController.output("RequestHandler initialized");
