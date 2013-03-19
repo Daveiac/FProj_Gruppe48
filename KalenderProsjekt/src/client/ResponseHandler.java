@@ -59,6 +59,17 @@ public class ResponseHandler implements Runnable{
 		}
 		//TODO send to program
 	}
+	
+	
+	private void receivedMeetingroom(List<MeetingRoom> data) {
+		List<MeetingRoom> meetingroom = new ArrayList<MeetingRoom>();
+		for (Object object : data) {
+			meetingroom.add((MeetingRoom) object);
+		}
+		//TODO send to program
+		
+	}
+	
 
 	private void handleResponse(Response response){
 		switch(response.getResponseType()){
@@ -87,7 +98,6 @@ public class ResponseHandler implements Runnable{
 				break;
 			case MEETING_RESPONSE:
 				receivedMeeting(dataResponse.getData());
-				
 				break;
 			case PERSON_RESPONSE:
 				receivedPeople(dataResponse.getData());
@@ -95,32 +105,28 @@ public class ResponseHandler implements Runnable{
 			case TEAM_RESPONSE:
 				receivedTeam(dataResponse.getData());
 				break;
+			case MEETINGROOM_RESPONSE:
+				receivedMeetingroom(dataResponse.getData());
+				break;
+				
+				
+			case CREATE_ALARM_RESPONSE:
+				
+				break;
+			case CREATE_MEETING_RESPONSE:
+				
+				break;
+			case UPDATE_MEETING_RESPONSE:
+				
+				break;
+			case UPDATE_NOTIFICATION_RESPONSE:
+				
+				break;
 			}
 			break;
 		}
-			/*
-		case UPDATE_RESPONSE:
-			UpdateResponse updateResponse = (UpdateResponse) response;
-			switch (updateResponse.getUpdateType()){
-			case CREATE_ALARM:
-				
-				break;
-			case CREATE_MEETING:
-				
-				break;
-			case UPDATE_METING:
-				
-				break;
-			case UPDATE_NOTIFICATION:
-				
-				break;
-			}
-			break;
-		}
-		*/
 	}
 
-	
 	@Override
 	public void run() {
 		while(true){
