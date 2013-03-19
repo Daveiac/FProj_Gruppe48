@@ -177,16 +177,30 @@ public class MonthView extends JPanel implements CalendarView,
 	 */
 	private void setHeaders() {
 
-		GregorianCalendar weekCalendar = createWeekCalendar();
+		GregorianCalendar weekDayCalendar = createWeekDayCalendar();
 
 		SimpleDateFormat weekDayFormat = new SimpleDateFormat("EEEE");
 		int daysInWeek = 7;
 		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {
-			columnHeaders[dayOfWeek] = weekDayFormat.format(weekCalendar
+			columnHeaders[dayOfWeek] = weekDayFormat.format(weekDayCalendar
 					.getTime());
-			weekCalendar.add(GregorianCalendar.DAY_OF_WEEK, 1);
+			weekDayCalendar.add(GregorianCalendar.DAY_OF_WEEK, 1);
 		}
 		tableModel.setColumnIdentifiers(columnHeaders);
+
+		// Sets every week in month in the 1st column
+		int weeks = 6;
+		GregorianCalendar weekCalendar = new GregorianCalendar();
+		weekCalendar.setTimeInMillis(calendar.getTimeInMillis());
+		int thisWeekOfMonth = weekCalendar.get(GregorianCalendar.WEEK_OF_MONTH);
+		weekCalendar.add(GregorianCalendar.WEEK_OF_MONTH, -thisWeekOfMonth);
+
+		SimpleDateFormat weekFormat = new SimpleDateFormat("ww");
+		for (int i = 0; i < weeks; i++) {
+			String weekText = weekFormat.format(weekCalendar.getTime());
+			tableModel.setValueAt(weekText, i, 0);
+			weekCalendar.add(GregorianCalendar.WEEK_OF_MONTH, 1);
+		}
 	}
 
 	/**
@@ -202,14 +216,17 @@ public class MonthView extends JPanel implements CalendarView,
 		}
 
 		GregorianCalendar monthCalendar = createMonthCalendar();
-		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy.MM.dd");
-		System.out.println(sdf2.format(monthCalendar.getTime()));
 
 		// Sets this month's meetings
-		int daysInMonth = monthCalendar.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+		int daysInMonth = monthCalendar
+				.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
 		for (int dayOfMonth = 1; dayOfMonth <= daysInMonth; dayOfMonth++) {
 			int week = monthCalendar.get(GregorianCalendar.WEEK_OF_MONTH);
-			int dayOfWeek = monthCalendar.get(GregorianCalendar.DAY_OF_WEEK);
+			int dayOfWeek = monthCalendar.get(GregorianCalendar.DAY_OF_WEEK) - 1;
+
+			// Sunday -.-
+			if (dayOfWeek == 0)
+				dayOfWeek += 7;
 
 			// Sets the day of the month
 
@@ -218,7 +235,8 @@ public class MonthView extends JPanel implements CalendarView,
 			List<Person> persons = calendarModel.getSelectedPersons();
 			for (Person person : persons) {
 
-				ArrayList<Meeting> meetings = calendarModel.getAllMeetingsOfPerson(person, true);
+				ArrayList<Meeting> meetings = calendarModel
+						.getAllMeetingsOfPerson(person, true);
 				for (Meeting meeting : meetings) {
 
 					// Sets the meetings at the given times
@@ -234,10 +252,10 @@ public class MonthView extends JPanel implements CalendarView,
 			}
 			monthCalendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
 
-			Object[] shit = {dayOfMonth, todaysMeetings};
-//			System.out.println("dashitMONTH");
-//			System.out.println(shit[0].toString());
-//			System.out.println(shit[1].toString());
+			Object[] shit = { dayOfMonth, todaysMeetings };
+			// System.out.println("dashitMONTH");
+			// System.out.println(shit[0].toString());
+			// System.out.println(shit[1].toString());
 			tableModel.setValueAt(shit, week, dayOfWeek);
 		}
 
@@ -251,7 +269,7 @@ public class MonthView extends JPanel implements CalendarView,
 	/**
 	 * Returns a calendar that starts on the first day of the month.
 	 * 
-	 * @return monthcalendar
+	 * @return monthCalendar
 	 */
 	private GregorianCalendar createMonthCalendar() {
 		GregorianCalendar monthCalendar = new GregorianCalendar();
@@ -266,12 +284,13 @@ public class MonthView extends JPanel implements CalendarView,
 	 * 
 	 * @return weekCalendar
 	 */
-	private GregorianCalendar createWeekCalendar() {
-		GregorianCalendar weekCalendar = new GregorianCalendar();
-		weekCalendar.setTimeInMillis(calendar.getTimeInMillis());
-		int firstDayOfWeek = -weekCalendar.get(GregorianCalendar.DAY_OF_WEEK) + 2;
-		weekCalendar.add(GregorianCalendar.DAY_OF_WEEK, firstDayOfWeek);
-		return weekCalendar;
+	private GregorianCalendar createWeekDayCalendar() {
+		GregorianCalendar weekDayCalendar = new GregorianCalendar();
+		weekDayCalendar.setTimeInMillis(calendar.getTimeInMillis());
+		int firstDayOfWeek = -weekDayCalendar
+				.get(GregorianCalendar.DAY_OF_WEEK) + 2;
+		weekDayCalendar.add(GregorianCalendar.DAY_OF_WEEK, firstDayOfWeek);
+		return weekDayCalendar;
 	}
 
 	// private void refreshCalendar() {
