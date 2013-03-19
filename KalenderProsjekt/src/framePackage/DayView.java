@@ -69,13 +69,20 @@ public class DayView extends JPanel implements CalendarView,
 			timeCalendar.add(GregorianCalendar.MINUTE, 15);
 		}
 
+		dayOfWeek = 1;
+
 		// Sets this day's title
 		setDayTitle();
+
+		// Sets table headers
+		setHeaders();
 
 		// Sets the new day into the table
 		dayTable.setModel(tableModel);
 		dayTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		dayTable.setRowSelectionAllowed(false);
+		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
 		dayTable.getColumnModel().getColumn(1)
 				.setCellRenderer(new DayTableCellRenderer(calendarModel));
 
@@ -83,11 +90,6 @@ public class DayView extends JPanel implements CalendarView,
 		scrollPane.setPreferredSize(new Dimension(800, 407));
 
 		add(scrollPane);
-		
-		dayOfWeek = 1;
-		
-		// Sets table headers
-		setHeaders();
 	}
 
 	/**
@@ -121,8 +123,6 @@ public class DayView extends JPanel implements CalendarView,
 		SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE");
 		columnHeaders[dayOfWeek] = dayFormat.format(calendar.getTime());
 		tableModel.setColumnIdentifiers(columnHeaders);
-		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
-		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
 	}
 
 	/**
