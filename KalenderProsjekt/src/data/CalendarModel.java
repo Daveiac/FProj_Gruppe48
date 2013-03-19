@@ -114,14 +114,12 @@ public class CalendarModel implements Serializable{
 	 */
 	public void setAllPersons(List<Person> persons) {
 		this.persons = persons;
-		System.out.println(Arrays.toString(persons.toArray()));
 		for (Person person : persons) {
 			selected.add(true);
 			if(person.getUsername() == username) {
 				user = person;
 			}
 		}
-		System.out.println(persons);
 		pcs.firePropertyChange(PERSONS_ADDED_Property, null, persons);
 		requestAllMeetings(persons);
 	}
