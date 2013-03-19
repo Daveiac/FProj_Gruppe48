@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import data.CalendarModel;
 import data.Meeting;
 import data.MeetingRoom;
 import data.Notification;
@@ -41,15 +42,17 @@ public class AppointmentOverView {
 	private JTextArea moreInfo;
 	private JComboBox<ImageIcon> yourStatus;
 	private JPanel overViewPanel;
-	private Meeting meetings;
+	private Meeting meeting;
 	private Person creator;
 	private JButton change, delete;
 	private ImageIcon check, cross, question;
 	private List<Notification> notifications;
+	private NewAppointmentView newAppointment;
+	private CalendarModel calendarModel;
 
-	public AppointmentOverView(Meeting meetings, Person creator,
+	public AppointmentOverView(Meeting meeting, Person creator,
 			Notification notification) {
-		this.meetings = meetings;
+		this.meeting = meeting;
 		notifications = new ArrayList<Notification>();
 		notifications.add(notification);
 		this.creator = creator;
@@ -66,7 +69,7 @@ public class AppointmentOverView {
 		overViewPanel.setVisible(true);
 		GridBagConstraints c = new GridBagConstraints();
 
-		headLine = new JLabel(meetings.getTitle());
+		headLine = new JLabel(meeting.getTitle());
 		c.gridx = 0;
 		c.gridy = 0;
 		headLine.setPreferredSize(new Dimension(300, 25));
@@ -100,6 +103,12 @@ public class AppointmentOverView {
 		c.gridx = 0;
 		c.gridy = 5;
 		overViewPanel.add(change, c);
+		change.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				newAppointment = new NewAppointmentView(meeting, calendarModel, alarm);
+				frame.setVisible(false);
+			}
+		});
 
 		delete = new JButton("Slett avtale");
 		c.gridx = 1;
@@ -144,7 +153,7 @@ public class AppointmentOverView {
 			}
 		});
 
-		moreInfo = new JTextArea(meetings.getDescription());
+		moreInfo = new JTextArea(meeting.getDescription());
 		moreInfo.setEditable(false);
 		moreInfo.setFocusable(false);
 		moreInfo.setPreferredSize(new Dimension(320, 100));
@@ -182,6 +191,8 @@ public class AppointmentOverView {
 				creator);
 		Notification notification = new Notification(0, 'y', 'c', meetings,
 				creator);
+//		CalendarModel calendarModel = new CalendarModel();
+//		sett inn kalendermodel isteden for
 		JFrame frame = new JFrame("APPointmenOverViewTest");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setContentPane(new AppointmentOverView(meetings, creator,
@@ -193,8 +204,8 @@ public class AppointmentOverView {
 	private String getTime() {
 		GregorianCalendar cal = new GregorianCalendar();
 		GregorianCalendar cal2 = new GregorianCalendar();
-		cal.setTimeInMillis(meetings.getStartTime());
-		cal2.setTimeInMillis(meetings.getEndTime());
+		cal.setTimeInMillis(meeting.getStartTime());
+		cal2.setTimeInMillis(meeting.getEndTime());
 		SimpleDateFormat spl1 = new SimpleDateFormat("dd.MMMM");
 		SimpleDateFormat spl2 = new SimpleDateFormat("HH:mm");
 		String time = spl1.format(cal.getTime()) + ". Fra kl "
@@ -204,7 +215,7 @@ public class AppointmentOverView {
 	}
 
 	private String getLoc() {
-		return meetings.getLocation();
+		return meeting.getLocation();
 	}
 
 	private JPanel getPanel() {
