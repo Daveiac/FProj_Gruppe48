@@ -111,10 +111,9 @@ public class CalendarModel implements Serializable{
 	public void setAllPersons(List<Person> persons) {
 		this.persons = persons;
 		for (Person person : persons) {
-			if(person.getUsername() == username) {
+			if(person.getUsername().equals(username)) {
 				user = person;
 				selected.add(true);
-				System.out.println();
 			} else {
 				selected.add(false);
 				
