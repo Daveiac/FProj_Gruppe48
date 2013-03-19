@@ -63,7 +63,7 @@ public class DefaultView extends JPanel {
 		sharedCView = new SharedCalendarView(Program.calendarModel);
 		appointmentView = new AppointmentView(Program.calendarModel);
 		initialize();
-		Program.calendarModel.init();
+		Program.calendarModel.init("karitr");
 	}
 
 	private void initialize() {

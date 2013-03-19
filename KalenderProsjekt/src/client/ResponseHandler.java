@@ -34,7 +34,7 @@ public class ResponseHandler implements Runnable{
 		for (Object object : data) {
 			notifications.add((Notification) object);
 		}
-		//TODO send to program
+		Program.calendarModel.addAllNotificationsOfUser(notifications);
 	}
 	
 	private void receivedMeeting(List<Meeting> data) {

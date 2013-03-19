@@ -40,8 +40,8 @@ public class CalendarModel implements Serializable{
 	public CalendarModel() {
 		pcs = new PropertyChangeSupport(this);
 	}
-	public void init() {
-		username = "davhov";
+	public void init(String username) {
+		this.username = username;
 		persons = new ArrayList<Person>();
 		personMeetingRelation = new HashMap<Person,ArrayList<Meeting>>();
 		selected = new ArrayList<Boolean>();
@@ -103,10 +103,6 @@ public class CalendarModel implements Serializable{
 		selected.set(persons.indexOf(person), sel);
 		pcs.firePropertyChange(SELECTED_Property, person, person);
 	}
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		pcs.addPropertyChangeListener(listener);
-	}
-	
 	/**
 	 * Sets all the persons of the model.
 	 * This method will only be called once by the server at startup
@@ -115,9 +111,13 @@ public class CalendarModel implements Serializable{
 	public void setAllPersons(List<Person> persons) {
 		this.persons = persons;
 		for (Person person : persons) {
-			selected.add(true);
 			if(person.getUsername() == username) {
 				user = person;
+				selected.add(true);
+				System.out.println();
+			} else {
+				selected.add(false);
+				
 			}
 		}
 		pcs.firePropertyChange(PERSONS_ADDED_Property, null, persons);
@@ -166,6 +166,10 @@ public class CalendarModel implements Serializable{
 		}
 	}
 	
+	public void addAllNotificationsOfUser(List<Notification> notis) {
+		notificationsOfUser = (ArrayList<Notification>) notis;
+	}
+	
 	public List<Person> getSelectedPersons() {
 		List<Person> selectedPersons = new ArrayList<Person>();
 		for (int i = 0; i < selected.size(); i++) {
@@ -188,5 +192,8 @@ public class CalendarModel implements Serializable{
 	}
 	public Person getUser() {
 		return user;
+	}
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		pcs.addPropertyChangeListener(listener);
 	}
 }
