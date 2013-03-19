@@ -6,8 +6,7 @@ import java.util.concurrent.BlockingQueue;
 
 import networking.packages.DataResponse;
 import networking.packages.Response;
-import data.Person;
-import framePackage.DefaultView;
+import data.*;
 
 public class ResponseHandler implements Runnable{
 	private BlockingQueue<Response> responseQueue;
@@ -19,12 +18,44 @@ public class ResponseHandler implements Runnable{
 		this.responseQueue = responseQueue;
 	}
 	
-	private void receivedPeople(List data){
+	private void receivedAlarm(List<Alarm> data){
+		List<Alarm> alarms = new ArrayList<Alarm>();
+		for (Object object : data) {
+			alarms.add((Alarm) object);
+		}
+		//TODO send to program
+	}
+	
+	private void receivedNotification(List<Notification> data){
+		List<Notification> notifications = new ArrayList<Notification>();
+		for (Object object : data) {
+			notifications.add((Notification) object);
+		}
+		//TODO send to program
+	}
+	
+	private void receivedMeeting(List<Meeting> data){
+		List<Meeting> meetings = new ArrayList<Meeting>();
+		for (Object object : data) {
+			meetings.add((Meeting) object);
+		}
+		//TODO send to program
+	}
+	
+	private void receivedPeople(List<Person> data){
 		List<Person> people = new ArrayList<Person>();
 		for (Object object : data) {
 			people.add((Person) object);
 		}
 		Program.calendarModel.setAllPersons(data);
+	}
+	
+	private void receivedTeam(List<Team> data){
+		List<Team> team = new ArrayList<Team>();
+		for (Object object : data) {
+			team.add((Team) object);
+		}
+		//TODO send to program
 	}
 
 	private void handleResponse(Response response){
@@ -35,22 +66,25 @@ public class ResponseHandler implements Runnable{
 			DataResponse dataResponse = (DataResponse) response;
 			switch (dataResponse.getQueryResponseType()){
 			case ALARM_RESPONSE:
-				dataResponse.getData();
+				receivedAlarm(dataResponse.getData());
 				break;
 			case NOTIFICATION_RESPONSE:
+				receivedNotification(dataResponse.getData());
 				break;
 			case MEETING_RESPONSE:
+				receivedMeeting(dataResponse.getData());
 				break;
 			case PERSON_RESPONSE:
 				receivedPeople(dataResponse.getData());
-				
 				break;
 			case TEAM_RESPONSE:
+				receivedTeam(dataResponse.getData());
 				break;
 			}
 			break;
 		}
 	}
+
 	
 	@Override
 	public void run() {
@@ -58,7 +92,6 @@ public class ResponseHandler implements Runnable{
 			try {
 				handleResponse(responseQueue.take());
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -66,3 +99,4 @@ public class ResponseHandler implements Runnable{
 	}
 
 }
+
