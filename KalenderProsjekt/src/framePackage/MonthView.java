@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -156,6 +154,14 @@ public class MonthView extends JPanel implements CalendarView,
 
 		// Creates the month data
 		createMonth();
+
+		monthTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+
+		int daysInWeek = 7;
+		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {
+			monthTable.getColumnModel().getColumn(dayOfWeek)
+					.setCellRenderer(new MonthTableCellRenderer(calendarModel));
+		}
 	}
 
 	/**
@@ -196,38 +202,43 @@ public class MonthView extends JPanel implements CalendarView,
 		}
 
 		GregorianCalendar monthCalendar = createMonthCalendar();
-		
+
 		// Sets this month's meetings
-		int daysInMonth = monthCalendar.getActualMaximum(GregorianCalendar.MONTH);
+		int daysInMonth = monthCalendar
+				.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+		System.out.println(daysInMonth + " is da daysInMonth");
 		for (int dayOfMonth = 1; dayOfMonth <= daysInMonth; dayOfMonth++) {
+			System.out.println(dayOfMonth + " lizzm");
 			int week = monthCalendar.get(GregorianCalendar.WEEK_OF_MONTH);
 			int dayOfWeek = monthCalendar.get(GregorianCalendar.DAY_OF_WEEK);
 
-			DefaultListModel<String> listModel = new DefaultListModel<String>();
-
 			// Sets the day of the month
-			listModel.addElement(String.valueOf(dayOfMonth));
+
+			ArrayList<Meeting> todaysMeetings = new ArrayList<Meeting>();
 
 			List<Person> persons = calendarModel.getSelectedPersons();
 			for (Person person : persons) {
-				ArrayList<Meeting> meetings = calendarModel.getMeetings(person);
-				ArrayList<Meeting> todaysMeetings = new ArrayList<Meeting>();
 
+				ArrayList<Meeting> meetings = calendarModel.getAllMeetingsOfPerson(person, true);
 				for (Meeting meeting : meetings) {
+
 					// Sets the meetings at the given times
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
 					if (sdf.format(calendar.getTime()).equals(
 							sdf.format(monthCalendar.getTime()))) {
+
 						if (!todaysMeetings.contains(meeting)) {
-							listModel.addElement(meeting.getTitle());
+							todaysMeetings.add(meeting);
 						}
-						todaysMeetings.add(meeting);
 					}
 				}
 			}
-			JList<String> meetingList = new JList<String>();
-			meetingList.setModel(listModel);
-			tableModel.setValueAt(meetingList, week, dayOfWeek);
+
+			Object[] shit = {dayOfMonth, todaysMeetings};
+			System.out.println("dashitMONTH");
+			System.out.println(shit[0].toString());
+			System.out.println(shit[1].toString());
+			tableModel.setValueAt(shit, week - 1, dayOfWeek);
 		}
 
 		// List<Person> persons = calendarModel.getSelectedPersons();
@@ -323,13 +334,7 @@ public class MonthView extends JPanel implements CalendarView,
 		case CalendarModel.CALENDAR_LOADED_Property:
 			createMonthTable();
 			break;
-		case CalendarModel.MEETING_ADDED_Property:
-			createMonthTable();
-			break;
-		case CalendarModel.MEETING_CHANGED_Property:
-			createMonthTable();
-			break;
-		case CalendarModel.MEETING_REMOVED_Property:
+		case CalendarModel.MEETINGS_CHANGED_Property:
 			createMonthTable();
 			break;
 		default:

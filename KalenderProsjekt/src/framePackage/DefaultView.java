@@ -101,6 +101,11 @@ public class DefaultView extends JPanel {
 		logOut = new JButton("logout");
 		backGroundConstraints.gridx = 3;
 		backGroundConstraints.gridy = 0;
+		logOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new NewAppointmentView(null, Program.calendarModel, null);
+			}
+		});
 		frame.add(logOut, backGroundConstraints);
 		
 		backGroundConstraints.gridx = 0;
