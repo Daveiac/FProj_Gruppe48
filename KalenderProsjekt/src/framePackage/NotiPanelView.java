@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -17,6 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import data.Meeting;
 import data.MeetingRoom;
@@ -32,6 +36,7 @@ public class NotiPanelView extends JPanel{
 	private JList warningList;
 	private DefaultListModel listModel;
 	private List<Notification> notifications;
+	private AppointmentOverView appointOverView;
 	
 	public NotiPanelView(){
 		notifications = new ArrayList<Notification>();
@@ -62,6 +67,13 @@ public class NotiPanelView extends JPanel{
 		c.gridx = 0;
 		c.gridy = 1;
 		varselPanel.add(scrollPane, c);
+		warningList.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent arg0) {
+//				appointOverView = new AppointmentOverView(meeting, creator, notification);
+//				bruke calendarmodel her
+				appointOverView.getPanel();
+			}
+		}); 
 		
 	}
 	

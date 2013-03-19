@@ -121,7 +121,7 @@ public class DefaultView extends JPanel {
 		backGroundConstraints.gridy = 1;
 		backGroundConstraints.gridheight = 2;
 		backGroundConstraints.gridwidth = 2;
-		backGroundConstraints.fill = GridBagConstraints.HORIZONTAL;
+		backGroundConstraints.fill = GridBagConstraints.BOTH;
 		backGroundConstraints.weightx = 1;
 		backGroundConstraints.weighty = 1;
 		frame.add(timePanel, backGroundConstraints);
