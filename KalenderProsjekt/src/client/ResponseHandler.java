@@ -1,13 +1,12 @@
 package client;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 
 import networking.packages.AuthenticationResponse;
 import networking.packages.AuthenticationResponse.AuthenticationResponseType;
-import networking.packages.DataResponse;
-import networking.packages.Response;
 import networking.packages.*;
 import data.*;
 
@@ -39,6 +38,7 @@ public class ResponseHandler implements Runnable{
 	
 	private void receivedMeeting(List<Meeting> data) {
 		List<Meeting> meetings = new ArrayList<Meeting>();
+		System.out.println("Meetings: "+Arrays.toString(meetings.toArray()));
 		for (Object object : data) {
 			meetings.add((Meeting) object);
 		}
