@@ -363,7 +363,7 @@ public class NewAppointmentView extends JPanel {
 					for (int i = 0; i < participantList.getModel().getSize(); i++) {
 						list.add(participantList.getModel().getElementAt(i));
 					}
-					Team team = new Team(0, NewAppointmentView.this.calendarModel.getUser().getEmail(), list);
+					Team team = null;
 					Meeting meeting =  new Meeting(0, tittelComponent.getText(), locComponent.getText(), startT, endT,
 							infoComponent.getText(), team, null, Program.calendarModel.getUser());
 					Program.calendarModel.pushMeeting(meeting);
@@ -512,11 +512,11 @@ public class NewAppointmentView extends JPanel {
 	}
 	
 	private boolean validTime(){		
-		if(startHourComponent.getSelectedIndex() > endHourComponent.getSelectedIndex()){
+		if(startHourComponent.getSelectedIndex() < endHourComponent.getSelectedIndex()){
 			return true;
 		}
 		if(startHourComponent.getSelectedIndex() == endHourComponent.getSelectedIndex()){
-			if(startMinComponent.getSelectedIndex() >= endMinComponent.getSelectedIndex()){
+			if(startMinComponent.getSelectedIndex() < endMinComponent.getSelectedIndex()){
 				return true;
 			}
 		}

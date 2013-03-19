@@ -54,7 +54,7 @@ public class DefaultView extends JPanel {
 
 
 
-	public DefaultView() {
+	public DefaultView(String username) {
 		dato = new Dato();
 		dayView = new DayView(Program.calendarModel);
 		weekView = new WeekView(Program.calendarModel);
@@ -63,7 +63,7 @@ public class DefaultView extends JPanel {
 		sharedCView = new SharedCalendarView(Program.calendarModel);
 		appointmentView = new AppointmentView(Program.calendarModel);
 		initialize();
-		Program.calendarModel.init("batman");
+		Program.calendarModel.init(username);
 	}
 
 	private void initialize() {

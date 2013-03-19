@@ -137,12 +137,10 @@ public class CalendarModel implements Serializable{
 	}
 	
 	private void requestAllMeetings() {
-		for (Person p : persons) {
-			try {
-				Program.reqHandler.sendGetEvryMeetingByPersonRequest(p);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		try {
+			Program.reqHandler.sendGetEvryMeetingRequest();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
