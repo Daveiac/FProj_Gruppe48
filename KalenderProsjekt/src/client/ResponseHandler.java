@@ -38,7 +38,6 @@ public class ResponseHandler implements Runnable{
 	
 	private void receivedMeeting(List<Meeting> data) {
 		List<Meeting> meetings = new ArrayList<Meeting>();
-		System.out.println("Meetings: "+Arrays.toString(meetings.toArray()));
 		for (Object object : data) {
 			meetings.add((Meeting) object);
 		}
@@ -64,8 +63,19 @@ public class ResponseHandler implements Runnable{
 	private void handleResponse(Response response){
 		switch(response.getResponseType()){
 		case AUTHENTICATION_RESPONSE:
-			//TODO
-			break;
+			AuthenticationResponse authenticationResponse = (AuthenticationResponse) response;
+			switch (authenticationResponse.getType()){
+			case APPROVED:
+				Program.loginOK();
+				break;
+			case USER_NOEXIST:
+				Program.loginWrong();
+				break;
+			case WRONG_PASS:
+				Program.loginNoExist();
+				break;
+			}
+		break;
 		case DATA_RESPONSE:
 			DataResponse dataResponse = (DataResponse) response;
 			switch (dataResponse.getQueryResponseType()){
@@ -77,6 +87,7 @@ public class ResponseHandler implements Runnable{
 				break;
 			case MEETING_RESPONSE:
 				receivedMeeting(dataResponse.getData());
+				
 				break;
 			case PERSON_RESPONSE:
 				receivedPeople(dataResponse.getData());

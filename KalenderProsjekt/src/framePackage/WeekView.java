@@ -29,7 +29,6 @@ public class WeekView extends JPanel implements CalendarView,
 	private String[] columnHeaders;
 	private DayView dayView;
 	private GregorianCalendar weekCalendar;
-	private static final SimpleDateFormat weekDayFormat = new SimpleDateFormat("EEEE dd. MMM.");
 
 	/**
 	 * Constructs the WeekView Panel.
@@ -68,21 +67,23 @@ public class WeekView extends JPanel implements CalendarView,
 			tableModel.setValueAt(timeText, i, 0);
 			timeCalendar.add(GregorianCalendar.MINUTE, 15);
 		}
-		
-		JScrollPane scrollPane = new JScrollPane(weekTable);
-		scrollPane.setPreferredSize(new Dimension(800, 407));
-		
-		add(scrollPane);
-
-		// Sets this week's title
-		setWeekTitle();
 
 		weekTable.setModel(tableModel);
 		weekTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		weekTable.setRowSelectionAllowed(false);
 
+		JScrollPane scrollPane = new JScrollPane(weekTable);
+		scrollPane.setPreferredSize(new Dimension(800, 407));
+
+		add(scrollPane);
+
+		// Create data
 		weekCalendar = new GregorianCalendar();
+
+		// Sets this week's title
 		setWeekTitle();
+
+		// Sets this week's headers
 		setHeaders();
 	}
 
@@ -91,37 +92,16 @@ public class WeekView extends JPanel implements CalendarView,
 	 */
 	public void createWeekTable() {
 
+		weekCalendar = new GregorianCalendar();
+
 		// Sets this week's title
 		setWeekTitle();
 
-		// Sets table headers with corresponding days and creates the week data
+		// Sets table headers with corresponding days
 		setHeaders();
 
-		int daysInWeek = 7;
-		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {
-			dayView.createDay(weekCalendar, tableModel, dayOfWeek);
-			weekCalendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
-		}
-
-	}
-
-	private void setHeaders() {
-		weekCalendar.setTimeInMillis(calendar.getTimeInMillis());
-		int firstDayOfWeek = -weekCalendar.get(GregorianCalendar.DAY_OF_WEEK) + 2;
-		weekCalendar.add(GregorianCalendar.DAY_OF_WEEK, firstDayOfWeek);
-		// Sets the new week into the table
-		for (int i = 1; i < 8; i++) {
-			weekTable.getColumnModel().getColumn(i)
-			.setCellRenderer(new DayTableCellRenderer(calendarModel));
-		}
-		
-		int daysInWeek = 7;
-		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {
-			columnHeaders[dayOfWeek] = weekDayFormat.format(weekCalendar.getTime());
-			weekCalendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
-		}
-		tableModel.setColumnIdentifiers(columnHeaders);
-		weekTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+		// Creates the week data
+		createWeek();
 	}
 
 	/**
@@ -130,6 +110,44 @@ public class WeekView extends JPanel implements CalendarView,
 	private void setWeekTitle() {
 		SimpleDateFormat titleFormat = new SimpleDateFormat("ww, MMMMM yyyy");
 		title = "Uke " + titleFormat.format(calendar.getTime());
+	}
+
+	/**
+	 * Sets the table headers with corresponding days.
+	 */
+	private void setHeaders() {
+		weekCalendar.setTimeInMillis(calendar.getTimeInMillis());
+		int firstDayOfWeek = -weekCalendar.get(GregorianCalendar.DAY_OF_WEEK) + 2;
+		weekCalendar.add(GregorianCalendar.DAY_OF_WEEK, firstDayOfWeek);
+
+		// Sets the new week into the table
+		// for (int i = 1; i < 8; i++) {
+		// weekTable.getColumnModel().getColumn(i)
+		// .setCellRenderer(new DayTableCellRenderer(calendarModel));
+		// }
+
+		SimpleDateFormat weekDayFormat = new SimpleDateFormat("EEEE dd. MMM.");
+		int daysInWeek = 7;
+		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {
+			columnHeaders[dayOfWeek] = weekDayFormat.format(weekCalendar
+					.getTime());
+			weekTable.getColumnModel().getColumn(dayOfWeek)
+					.setCellRenderer(new DayTableCellRenderer(calendarModel));
+			weekCalendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
+		}
+		tableModel.setColumnIdentifiers(columnHeaders);
+		weekTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+	}
+
+	/**
+	 * Creates the week data.
+	 */
+	private void createWeek() {
+		int daysInWeek = 7;
+		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {
+			dayView.createDay(weekCalendar, tableModel, dayOfWeek);
+			weekCalendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
+		}
 	}
 
 	/**
