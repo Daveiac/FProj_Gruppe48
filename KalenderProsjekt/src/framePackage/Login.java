@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import client.Program;
+
 public class Login extends JPanel{
 	
 	private JPanel panel;
@@ -27,7 +29,7 @@ public class Login extends JPanel{
 		button = new JButton("Logg inn");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// send til server
+				Program.reqHandler.se
 			}
 		});
 		

@@ -24,6 +24,7 @@ public class Program {
 	public final static CalendarModel calendarModel = new CalendarModel();
 	public static Client client;
 	public static RequestHandler reqHandler;
+	private static JFrame loginFrame;
 
 	public static void main(String[] args) throws UnknownHostException {
 		queueForHandlingResponses = new LinkedBlockingQueue<Response>();
@@ -37,16 +38,12 @@ public class Program {
 			System.out.println("The server is down");
 		}
 		Login login = new Login();
-		JFrame loginFrame = new JFrame("SUPA CALENDA!");
+		loginFrame = new JFrame("SUPA CALENDA!");
 		loginFrame.setContentPane(login);
 		loginFrame.pack();
 		loginFrame.setLocationRelativeTo(null);
 		loginFrame.setVisible(true);
 //		
-//		DefaultView dw = new DefaultView();
-//		JFrame frame = dw.getFrame();
-//		frame.setBounds(0, 0, 1260, 768);
-//		frame.setVisible(true);
 		
 	}
 	
@@ -60,7 +57,11 @@ public class Program {
 	}
 	
 	public static void loginOK() {
-		
+		DefaultView dw = new DefaultView();
+		JFrame frame = dw.getFrame();
+		frame.setBounds(0, 0, 1260, 768);
+		frame.setVisible(true);
+		loginFrame.setVisible(false);
 	}
 	public static void loginWrong() {
 		
