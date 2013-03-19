@@ -97,6 +97,23 @@ public class ResponseHandler implements Runnable{
 				break;
 			}
 			break;
+		case UPDATE_REQUEST:
+			UpdateRequest updateRequest = (UpdateRequest) response;
+			switch (updateRequest.getUpdateType()){
+			case CREATE_ALARM:
+				
+				break;
+			case CREATE_MEETING:
+				
+				break;
+			case UPDATE_METING:
+				
+				break;
+			case UPDATE_NOTIFICATION:
+				
+				break;
+			}
+			break;
 		}
 	}
 
