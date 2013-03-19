@@ -6,6 +6,7 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -51,9 +52,6 @@ public class CalendarModel implements Serializable{
 			if(Program.reqHandler != null){
 				Program.reqHandler.sendGetAllPersonsRequest();
 				responseCount = 0;
-				for (Person p : persons) {
-					Program.reqHandler.sendGetEvryMeetingByPersonRequest(p);
-				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -115,14 +113,26 @@ public class CalendarModel implements Serializable{
 	 * @param persons
 	 */
 	public void setAllPersons(List<Person> persons) {
+		this.persons = persons;
+		System.out.println(Arrays.toString(persons.toArray()));
 		for (Person person : persons) {
+			selected.add(true);
 			if(person.getUsername() == username) {
 				user = person;
 			}
 		}
-		this.persons = persons;
 		System.out.println(persons);
 		pcs.firePropertyChange(PERSONS_ADDED_Property, null, persons);
+		requestAllMeetings(persons);
+	}
+	private void requestAllMeetings(List<Person> persons) {
+		for (Person p : persons) {
+			try {
+				Program.reqHandler.sendGetEvryMeetingByPersonRequest(p);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**

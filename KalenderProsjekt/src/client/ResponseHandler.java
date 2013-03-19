@@ -37,7 +37,7 @@ public class ResponseHandler implements Runnable{
 		//TODO send to program
 	}
 	
-	private void receivedMeeting(List<Meeting> data){
+	private void receivedMeeting(List<Meeting> data) {
 		List<Meeting> meetings = new ArrayList<Meeting>();
 		for (Object object : data) {
 			meetings.add((Meeting) object);

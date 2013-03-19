@@ -154,7 +154,7 @@ public class DBController {
 		List<Meeting> meetings = new ArrayList<Meeting>();
 
 		String sql = "SELECT * FROM Meeting, Person "
-				+ "WHERE Meeting.username = " + person.getUsername();
+				+ "WHERE Meeting.username = '" + person.getUsername()+"';";
 		ResultSet rs = dBConn.makeQuery(sql);
 
 		while (rs.next()) {
