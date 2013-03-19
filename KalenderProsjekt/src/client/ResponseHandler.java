@@ -69,10 +69,10 @@ public class ResponseHandler implements Runnable{
 				Program.loginOK();
 				break;
 			case USER_NOEXIST:
-				Program.logInWrong();
+				Program.loginNoExist();
 				break;
 			case WRONG_PASS:
-				Program.logInNoExist();
+				Program.loginWrong();
 				break;
 			}
 		break;
@@ -94,6 +94,23 @@ public class ResponseHandler implements Runnable{
 				break;
 			case TEAM_RESPONSE:
 				receivedTeam(dataResponse.getData());
+				break;
+			}
+			break;
+		case UPDATE_REQUEST:
+			UpdateRequest updateRequest = (UpdateRequest) response;
+			switch (updateRequest.getUpdateType()){
+			case CREATE_ALARM:
+				
+				break;
+			case CREATE_MEETING:
+				
+				break;
+			case UPDATE_METING:
+				
+				break;
+			case UPDATE_NOTIFICATION:
+				
 				break;
 			}
 			break;

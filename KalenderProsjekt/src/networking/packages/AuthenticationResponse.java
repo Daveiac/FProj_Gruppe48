@@ -17,6 +17,11 @@ public class AuthenticationResponse extends Response{
 	public AuthenticationResponseType getType() {
 		return type;
 	}
+
+	@Override
+	public String toString() {
+		return "AuthenticationResponse [type=" + type + "]";
+	}
 	
 	
 }
