@@ -161,7 +161,7 @@ public class NewAppointmentView extends JPanel {
 		c.gridy = 17;
 		this.add(alarmTime, c);
 		
-		//her i fra er det bare jeg(Shimin) som greier å lese....
+		//her i fra er det bare rot
 		c.gridx = 1;
 		c.gridy = 0;
 		addDay(nDays);
