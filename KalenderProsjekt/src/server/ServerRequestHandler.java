@@ -19,6 +19,7 @@ import networking.packages.Response;
 import networking.packages.UpdateRequest;
 import data.Alarm;
 import data.Meeting;
+import data.MeetingRoom;
 import data.Notification;
 import data.Notification;
 import data.Person;
@@ -132,6 +133,18 @@ public class ServerRequestHandler implements Runnable {
 		}
 		return new DataResponse(teams, DataResponseType.MEETING_RESPONSE, true);
 	}
+	
+	private DataResponse getAllNotifications(){
+		List<Notification> meetings = null;
+		try {
+			meetings = dbController.getAllNotifications();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		DataResponse response = new DataResponse(meetings,
+				DataResponseType.NOTIFICATION_RESPONSE, false);
+		return response;
+	}
 
 	private void handleQueryRequest(QueryRequest request, Socket client) {
 		DataResponse response = null;
@@ -154,6 +167,12 @@ public class ServerRequestHandler implements Runnable {
 		case GET_TEAMS_BY_MEETING:
 			response = getTeamsByMeeting(request.getMeeting());
 			break;
+		case GET_ALL_NOTIFICATIONS:
+			response = getAllNotifications();
+			break;
+		case GET_ALL_MEETINGROOMS:
+			response = getAllMeetingRooms();
+			break;
 		default:
 			break;
 		}
@@ -169,6 +188,18 @@ public class ServerRequestHandler implements Runnable {
 
 	}
 
+	private DataResponse getAllMeetingRooms(){
+		List<MeetingRoom> meetingRooms = null;
+		try {
+			meetingRooms = dbController.getAllMeetingRooms();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		DataResponse response = new DataResponse(meetingRooms,
+				DataResponseType.MEETINGROOM_RESPONSE, false);
+		return response;
+	}
+	
 	private DataResponse getNotificationsByPerson(String username) {
 		List<Notification> notifications = null;
 		try {
@@ -260,14 +291,12 @@ public class ServerRequestHandler implements Runnable {
 		try {
 			dbController.updateNotification(notification);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
 			return new DataResponse(dbController.getAllNotifications(),
 					DataResponseType.NOTIFICATION_RESPONSE, false);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -316,15 +345,7 @@ public class ServerRequestHandler implements Runnable {
 	}
 
 	private void sendAllNotifications() {
-		List<Notification> meetings = null;
-		try {
-			meetings = dbController.getAllNotifications();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		DataResponse response = new DataResponse(meetings,
-				DataResponseType.NOTIFICATION_RESPONSE, false);
-		addResponseToQueue(new PendingResponse(response, null, true));
+		addResponseToQueue(new PendingResponse(getAllNotifications(), null, true));
 		
 	}
 
