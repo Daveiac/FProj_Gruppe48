@@ -176,7 +176,6 @@ public class DefaultView extends JPanel {
 		timePanelContraints.gridy = 1;
 		calendarPanel = mainView.getPanel();
 		timePanel.add(calendarPanel, timePanelContraints);
-		System.out.println(timePanel.getPreferredSize());
 		//		
 	}
 

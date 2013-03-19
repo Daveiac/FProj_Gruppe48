@@ -29,7 +29,7 @@ public class ResponseListener implements Runnable{
 			while (true){	
 				ois = new ObjectInputStream(server.getInputStream());
 				Response response = (Response) ois.readObject();
-				System.out.println(response);
+				System.out.println("response get: " + response);
 				while(!responses.offer(response, 200, TimeUnit.MILLISECONDS));
 			}
 			
