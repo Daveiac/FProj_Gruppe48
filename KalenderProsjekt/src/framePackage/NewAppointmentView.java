@@ -2,6 +2,7 @@ package framePackage;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.TileObserver;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -191,8 +192,23 @@ public class NewAppointmentView extends JPanel {
 		c.gridy = 2;
 		c.gridwidth = 5;
 		this.add(tittelComponent, c);
-
-
+		if(meeting == null){
+			opprettKnapp.setEnabled(true);
+			slettKnapp.setEnabled(false);
+			endreKnapp.setEnabled(false);
+		}
+		if(meeting != null){
+			opprettKnapp.setEnabled(false);
+		}
+		tittelComponent.addKeyListener(new KeyListener() {
+			public void keyTyped(KeyEvent arg0) {
+			}
+			public void keyReleased(KeyEvent arg0) {
+			}
+			public void keyPressed(KeyEvent arg0) {
+			}
+		});
+		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 2;
 		c.gridy = 3;
@@ -419,6 +435,7 @@ public class NewAppointmentView extends JPanel {
 			//skrive inn rom her
 		}
 		
+		
 		frame = new JFrame("Avtale");
 		frame.setPreferredSize(new Dimension(850, 700));
 		frame.pack();
@@ -504,13 +521,13 @@ public class NewAppointmentView extends JPanel {
 //		long startTime = new GregorianCalendar(2013, 2,11, 16, 30).getTimeInMillis();
 //		long endTime = new GregorianCalendar(2013, 2, 11, 17, 30).getTimeInMillis();
 //		Meeting meeting = new Meeting(0, "suppe1", null, startTime, endTime, "This is a desc", team, room, kari);
+//		Alarm alarm = new Alarm(0,'a',alarmTime,meeting);
 //		JFrame frame = new JFrame("Avtale");
 //		frame.setPreferredSize(new Dimension(850, 700));
 //		frame.setResizable(true);
 //		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		CalendarModel calendarModel2 = new CalendarModel();
-//		Alarm alarm = new Alarm(0,'a',alarmTime,meeting);
-		calendarModel2.init();
+		calendarModel2.init("batman");
 		new NewAppointmentView(null,calendarModel2,null);
 //		frame.pack();
 //		frame.setVisible(true);
