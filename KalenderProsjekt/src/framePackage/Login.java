@@ -31,7 +31,7 @@ public class Login extends JPanel{
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Program.reqHandler.sendAuthenticationRequest(userLabel.getText(), passwordLabel.getText());
+					Program.reqHandler.sendAuthenticationRequest(userField.getText(), new String(passwordField.getPassword()));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
