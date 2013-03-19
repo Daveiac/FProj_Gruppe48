@@ -195,7 +195,7 @@ public class DBController {
 		ResultSet rs = dBConn.makeQuery(sql);
 
 		while (rs.next()) {
-			getMeetingFromResultSet(rs);
+			meetings.add(getMeetingFromResultSet(rs));
 		}
 		return meetings;
 	}

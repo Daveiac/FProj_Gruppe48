@@ -111,7 +111,7 @@ public class ServerRequestHandler implements Runnable {
 		return response;
 	}
 
-	private DataResponse getMeetingsByPerson() {
+	private DataResponse getMeetings() {
 		List<Meeting> data = null;
 		try {
 			data = dbController.getEveryMeeting();
@@ -162,7 +162,7 @@ public class ServerRequestHandler implements Runnable {
 		case GET_ALARMS_BY_PERSON:
 			response = getAlarms(request.getUsername());
 		case GET_EVERY_MEETING:
-			response = getMeetingsByPerson();
+			response = getMeetings();
 			break;
 		case GET_TEAMS_BY_MEETING:
 			response = getTeamsByMeeting(request.getMeeting());
@@ -325,7 +325,9 @@ public class ServerRequestHandler implements Runnable {
 			sendAllNotifications();
 			break;
 		case UPDATE_METING:
-			// TODO implement
+			updateMeeting(request.getMeeting());
+			sendAllMeetings();
+			sendAllNotifications();
 			break;
 		case UPDATE_NOTIFICATION:
 			editNotification(request.getNotification());
@@ -342,6 +344,15 @@ public class ServerRequestHandler implements Runnable {
 
 		
 
+	}
+
+	private void updateMeeting(Meeting meeting) {
+		try {
+			dbController.updateMeeting(meeting);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	private void sendAllNotifications() {
