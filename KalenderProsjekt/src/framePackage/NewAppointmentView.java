@@ -454,7 +454,6 @@ public class NewAppointmentView extends JPanel {
 		frame.setVisible(true);
 		frame.setResizable(true);
 		frame.add(this);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 	}
 

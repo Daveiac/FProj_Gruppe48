@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -46,7 +47,7 @@ public class DefaultView extends JPanel {
 	private AppointmentView appointmentView;
 	private NotiPanelView notiPanel;
 	private Dato dato;
-	private JPanel calendarPanel;
+	private JComponent calendarPanel;
 	private GridBagConstraints timePanelContraints;
 
 
@@ -175,8 +176,9 @@ public class DefaultView extends JPanel {
 		timePanel.add(monthBtn, timePanelContraints);
 		//		
 		timePanelContraints.gridwidth = 5;
-		timePanelContraints.fill = GridBagConstraints.HORIZONTAL;
+		timePanelContraints.fill = GridBagConstraints.BOTH;
 		timePanelContraints.weightx = 1;
+		timePanelContraints.weighty = 1;
 		timePanelContraints.gridx = 0;
 		timePanelContraints.gridy = 1;
 		calendarPanel = mainView.getPanel();

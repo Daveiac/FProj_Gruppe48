@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -32,6 +33,7 @@ public class DayView extends JPanel implements CalendarView,
 	private String title;
 	private String[] columnHeaders;
 	private int dayOfWeek;
+	private JScrollPane scrollPane;
 
 	/**
 	 * Constructs the DayView Panel.
@@ -86,8 +88,8 @@ public class DayView extends JPanel implements CalendarView,
 		dayTable.getColumnModel().getColumn(1)
 				.setCellRenderer(new DayTableCellRenderer(this.calendarModel));
 
-		JScrollPane scrollPane = new JScrollPane(dayTable);
-		scrollPane.setPreferredSize(new Dimension(800, 407));
+		scrollPane = new JScrollPane(dayTable);
+//		scrollPane.setPreferredSize(new Dimension(800, 407));
 
 		add(scrollPane);
 	}
@@ -231,8 +233,8 @@ public class DayView extends JPanel implements CalendarView,
 	 * @return day panel.
 	 */
 	@Override
-	public JPanel getPanel() {
-		return this;
+	public JComponent getPanel() {
+		return scrollPane;
 	}
 
 	@Override
