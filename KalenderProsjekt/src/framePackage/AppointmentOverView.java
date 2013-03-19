@@ -67,8 +67,8 @@ public class AppointmentOverView {
 		overViewPanel = new JPanel(new GridBagLayout());
 		overViewPanel.setPreferredSize(new Dimension(700, 450));
 		overViewPanel.setVisible(true);
-		GridBagConstraints c = new GridBagConstraints();
-
+		GridBagConstraints c = new GridBagConstraints();		
+		
 		headLine = new JLabel(meeting.getTitle());
 		c.gridx = 0;
 		c.gridy = 0;
@@ -105,8 +105,9 @@ public class AppointmentOverView {
 		overViewPanel.add(change, c);
 		change.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				newAppointment = new NewAppointmentView(meeting, calendarModel, alarm);
+//				newAppointment = new NewAppointmentView(meeting, calendarModel, alarm);
 				frame.setVisible(false);
+//				overViewPanel.setVisible(false);
 			}
 		});
 
@@ -114,6 +115,11 @@ public class AppointmentOverView {
 		c.gridx = 1;
 		c.gridy = 5;
 		overViewPanel.add(delete, c);
+		delete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//sett inn hva du skal sende her
+			}
+		});
 
 		yourStatus = new JComboBox<ImageIcon>();
 		yourStatus.addItem(check);
@@ -173,6 +179,12 @@ public class AppointmentOverView {
 		c.gridy = 3;
 		overViewPanel.add(myJScrollPane, c);
 		
+		frame =  new JFrame();
+		frame.setContentPane(overViewPanel);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
+		
 	}
 
 	public static void main(String args[]) {
@@ -191,14 +203,10 @@ public class AppointmentOverView {
 				creator);
 		Notification notification = new Notification(0, 'y', 'c', meetings,
 				creator);
+		new AppointmentOverView(meetings, creator,
+				notification);
 //		CalendarModel calendarModel = new CalendarModel();
 //		sett inn kalendermodel isteden for
-		JFrame frame = new JFrame("APPointmenOverViewTest");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setContentPane(new AppointmentOverView(meetings, creator,
-				notification).getPanel());
-		frame.pack();
-		frame.setVisible(true);
 	}
 
 	private String getTime() {
@@ -218,7 +226,7 @@ public class AppointmentOverView {
 		return meeting.getLocation();
 	}
 
-	private JPanel getPanel() {
+	public JPanel getPanel() {
 		return overViewPanel;
 	}
 
