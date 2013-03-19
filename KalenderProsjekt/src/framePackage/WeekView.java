@@ -78,8 +78,8 @@ public class WeekView extends JPanel implements CalendarView,
 		weekTable.setRowSelectionAllowed(false);
 		weekTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 
-		int daysInWeek = 8;
-		for (int dayOfWeek = 1; dayOfWeek < daysInWeek; dayOfWeek++) {
+		int daysInWeek = 7;
+		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {
 			weekTable.getColumnModel().getColumn(dayOfWeek)
 					.setCellRenderer(new DayTableCellRenderer(calendarModel));
 		}
@@ -103,6 +103,8 @@ public class WeekView extends JPanel implements CalendarView,
 
 		// Creates the week data
 		createWeek();
+
+		weekTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 	}
 
 	/**
@@ -138,12 +140,14 @@ public class WeekView extends JPanel implements CalendarView,
 		int daysInWeek = 7;
 		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {
 			dayView.createDay(weekCalendar, tableModel, dayOfWeek);
+			weekTable.getColumnModel().getColumn(dayOfWeek)
+			.setCellRenderer(new DayTableCellRenderer(calendarModel));
 			weekCalendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
 		}
 	}
 
 	/**
-	 * Returns a calendar that start on monday.
+	 * Returns a calendar that starts on Monday.
 	 * 
 	 * @return weekCalendar
 	 */
