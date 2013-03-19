@@ -153,11 +153,10 @@ public class DBController {
 			throws SQLException {
 		List<Meeting> meetings = new ArrayList<Meeting>();
 
-		String sql = "SELECT * FROM Meeting, Person "
-				+ "WHERE Meeting.username = '" + person.getUsername()+"' "
-				+ "AND Person.username = '" + person.getUsername()+"';";
+		String sql = "SELECT * FROM Meeting "
+				+ "WHERE Meeting.username = '" + person.getUsername()+"' ";
 		ResultSet rs = dBConn.makeQuery(sql);
-
+		System.out.println(sql);
 		while (rs.next()) {
 			getMeetingFromResultSet(rs);
 		}
