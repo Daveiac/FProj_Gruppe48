@@ -219,7 +219,7 @@ public class MonthView extends JPanel implements CalendarView,
 			List<Person> persons = calendarModel.getSelectedPersons();
 			for (Person person : persons) {
 
-				ArrayList<Meeting> meetings = calendarModel.getMeetings(person);
+				ArrayList<Meeting> meetings = calendarModel.getAllMeetingsOfPerson(person, true);
 				for (Meeting meeting : meetings) {
 
 					// Sets the meetings at the given times
@@ -334,13 +334,7 @@ public class MonthView extends JPanel implements CalendarView,
 		case CalendarModel.CALENDAR_LOADED_Property:
 			createMonthTable();
 			break;
-		case CalendarModel.MEETING_ADDED_Property:
-			createMonthTable();
-			break;
-		case CalendarModel.MEETING_CHANGED_Property:
-			createMonthTable();
-			break;
-		case CalendarModel.MEETING_REMOVED_Property:
+		case CalendarModel.MEETINGS_CHANGED_Property:
 			createMonthTable();
 			break;
 		default:

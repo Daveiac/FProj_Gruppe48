@@ -203,13 +203,7 @@ public class WeekView extends JPanel implements CalendarView,
 		case CalendarModel.CALENDAR_LOADED_Property:
 			createWeekTable();
 			break;
-		case CalendarModel.MEETING_ADDED_Property:
-			createWeekTable();
-			break;
-		case CalendarModel.MEETING_CHANGED_Property:
-			createWeekTable();
-			break;
-		case CalendarModel.MEETING_REMOVED_Property:
+		case CalendarModel.MEETINGS_CHANGED_Property:
 			createWeekTable();
 			break;
 		case CalendarModel.SELECTED_Property:

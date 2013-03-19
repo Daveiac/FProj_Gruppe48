@@ -139,7 +139,7 @@ public class DayView extends JPanel implements CalendarView,
 		// Sets today's meetings
 		List<Person> persons = calendarModel.getSelectedPersons();
 		for (Person person : persons) {
-			ArrayList<Meeting> meetings = calendarModel.getMeetings(person);
+			ArrayList<Meeting> meetings = calendarModel.getAllMeetingsOfPerson(person, true);
 			setMeetings(calendar, tableModel, dayOfWeek, meetings);
 		}
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
@@ -241,13 +241,7 @@ public class DayView extends JPanel implements CalendarView,
 		case CalendarModel.CALENDAR_LOADED_Property:
 			createDayTable();
 			break;
-		case CalendarModel.MEETING_ADDED_Property:
-			createDayTable();
-			break;
-		case CalendarModel.MEETING_CHANGED_Property:
-			createDayTable();
-			break;
-		case CalendarModel.MEETING_REMOVED_Property:
+		case CalendarModel.MEETINGS_CHANGED_Property:
 			createDayTable();
 			break;
 		case CalendarModel.SELECTED_Property:
