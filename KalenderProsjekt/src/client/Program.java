@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import data.CalendarModel;
 
 import framePackage.DefaultView;
+import framePackage.Login;
 
 import networking.Constants;
 import networking.packages.Response;
@@ -23,6 +24,7 @@ public class Program {
 	public final static CalendarModel calendarModel = new CalendarModel();
 	public static Client client;
 	public static RequestHandler reqHandler;
+	private static JFrame loginFrame;
 
 	public static void main(String[] args) throws UnknownHostException {
 		queueForHandlingResponses = new LinkedBlockingQueue<Response>();
@@ -35,10 +37,13 @@ public class Program {
 		} catch (IOException e) {
 			System.out.println("The server is down");
 		}
-		DefaultView dw = new DefaultView();
-		JFrame frame = dw.getFrame();
-		frame.setBounds(0, 0, 1260, 768);
-		frame.setVisible(true);
+		Login login = new Login();
+		loginFrame = new JFrame("SUPA CALENDA!");
+		loginFrame.setContentPane(login);
+		loginFrame.pack();
+		loginFrame.setLocationRelativeTo(null);
+		loginFrame.setVisible(true);
+//		
 		
 	}
 	
@@ -49,5 +54,21 @@ public class Program {
 		t.start();
 		Thread t2 = new Thread(new ResponseHandler(queueForHandlingResponses));
 		t2.start();
+	}
+	
+	public static void loginOK() {
+		System.out.println("loginok");
+		DefaultView dw = new DefaultView();
+		JFrame frame = dw.getFrame();
+		frame.setBounds(0, 0, 1260, 768);
+		frame.setVisible(true);
+		loginFrame.setVisible(false);
+	}
+	public static void loginWrong() {
+		System.out.println("loginWRONG");
+	}
+	public static void loginNoExist() {
+		System.out.println("loginNOExist");
+		
 	}
 }

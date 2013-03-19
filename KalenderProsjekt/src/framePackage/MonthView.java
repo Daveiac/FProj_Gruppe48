@@ -25,7 +25,7 @@ import data.Person;
  */
 @SuppressWarnings("serial")
 public class MonthView extends JPanel implements CalendarView,
-PropertyChangeListener {
+		PropertyChangeListener {
 
 	private JTable monthTable;
 	private DefaultTableModel tableModel;
@@ -33,6 +33,7 @@ PropertyChangeListener {
 	private GregorianCalendar calendar;
 	private String title;
 	private String[] columnHeaders;
+	private GregorianCalendar monthCalendar;
 
 	// private JPanel monthPanel;
 	// private int realDay, realMonth, realYear, currentMonth, currentYear;
@@ -56,10 +57,9 @@ PropertyChangeListener {
 	 */
 	public MonthView(CalendarModel calendarModel) {
 		initialize(calendarModel);
-//		refreshCalendar();
+		// refreshCalendar();
 	}
 
-	@SuppressWarnings("serial")
 	private void initialize(CalendarModel calendarModel) {
 		calendar = new GregorianCalendar();
 		this.calendarModel = calendarModel;
@@ -91,9 +91,6 @@ PropertyChangeListener {
 			weekCalendar.add(GregorianCalendar.WEEK_OF_MONTH, 1);
 		}
 
-		// Sets this month's title
-		setMonthTitle();
-
 		// Sets the new month into the table
 		monthTable.setModel(tableModel);
 		monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -104,12 +101,15 @@ PropertyChangeListener {
 
 		add(scrollPane);
 
-		//
-		// tableModel = new DefaultTableModel();
-		// String[] headers = { "Uke", "Mandag", "Tirsdag", "Onsdag", "Torsdag",
-		// "Fredag", "Lørdag", "Søndag" };
-		// tableModel.setColumnIdentifiers(headers);
-		// tableModel.setRowCount(6);
+		// Create data
+		monthCalendar = new GregorianCalendar();
+
+		// Sets this month's title
+		setMonthTitle();
+
+		// Sets table headers with corresponding days
+		setHeaders();
+
 		//
 		// realDay = cal.get(GregorianCalendar.DAY_OF_MONTH);
 		// realMonth = cal.get(GregorianCalendar.MONTH);
@@ -145,38 +145,16 @@ PropertyChangeListener {
 	 */
 	public void createMonthTable() {
 
+		monthCalendar = new GregorianCalendar();
+
 		// Sets this month's title
 		setMonthTitle();
 
 		// Sets table headers with corresponding days
-		GregorianCalendar monthCalendar = new GregorianCalendar();
-		monthCalendar.setTimeInMillis(calendar.getTimeInMillis());
-		int thisDayOfMonth = monthCalendar.get(GregorianCalendar.DAY_OF_MONTH);
-		monthCalendar.add(GregorianCalendar.DAY_OF_MONTH, -thisDayOfMonth);
+		setHeaders();
 
-		SimpleDateFormat weekDay = new SimpleDateFormat("EEEE");
-		int daysInWeek = 7;
-		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {
-			columnHeaders[dayOfWeek] = weekDay.format(monthCalendar.getTime());
-			// dayView.createDay(monthCalendar, tableModel, dayOfWeek);
-			createMonth(monthCalendar);
-			monthCalendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
-		}
-		tableModel.setColumnIdentifiers(columnHeaders);
-
-		// Sets the new week into the table
-		monthTable.setModel(tableModel);
-		monthTable.getColumnModel().getColumn(0).setPreferredWidth(0);
-		monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		monthTable.setRowSelectionAllowed(false);
-		monthTable.getSelectionModel();
-		for (int i = 1; i < 8; i++) {
-			monthTable
-			.getColumnModel()
-			.getColumn(i)
-			.setCellRenderer(
-					new MonthTableCellRenderer(calendarModel));
-		}
+		// Creates the month data
+		createMonth();
 	}
 
 	/**
@@ -187,7 +165,31 @@ PropertyChangeListener {
 		title = titleFormat.format(calendar.getTime());
 	}
 
-	private void createMonth(GregorianCalendar monthCalendar) {
+	/**
+	 * Sets the table headers with corresponding days.
+	 */
+	private void setHeaders() {
+		monthCalendar.setTimeInMillis(calendar.getTimeInMillis());
+		int thisDayOfMonth = monthCalendar.get(GregorianCalendar.DAY_OF_MONTH);
+		monthCalendar.add(GregorianCalendar.DAY_OF_MONTH, -thisDayOfMonth);
+
+		SimpleDateFormat weekDayFormat = new SimpleDateFormat("EEEE");
+		int daysInWeek = 7;
+		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {
+			columnHeaders[dayOfWeek] = weekDayFormat.format(monthCalendar
+					.getTime());
+			monthTable.getColumnModel().getColumn(dayOfWeek)
+					.setCellRenderer(new MonthTableCellRenderer(calendarModel));
+			monthCalendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
+		}
+		tableModel.setColumnIdentifiers(columnHeaders);
+		monthTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+	}
+
+	/**
+	 * Creates the month data.
+	 */
+	private void createMonth() {
 
 		// Clear table
 		for (int row = 0; row < tableModel.getRowCount(); row++) {
@@ -196,38 +198,42 @@ PropertyChangeListener {
 			}
 		}
 
+		monthCalendar.setTimeInMillis(calendar.getTimeInMillis());
+		int thisDayOfMonth = monthCalendar.get(GregorianCalendar.DAY_OF_MONTH);
+		monthCalendar.add(GregorianCalendar.DAY_OF_MONTH, -thisDayOfMonth);
 		// Sets this month's meetings
-		for (int dayOfMonth = 0; dayOfMonth < calendar.get(GregorianCalendar.MONTH); dayOfMonth++) {
-			int week = calendar.get(GregorianCalendar.WEEK_OF_MONTH);
-			int dayOfWeek = calendar.get(GregorianCalendar.DAY_OF_WEEK);
-			
-			JList<Meeting> meetingList = new JList<Meeting>();
-			DefaultListModel<Meeting> listModel = new DefaultListModel<Meeting>();
-			meetingList.setModel(listModel);
+		int daysInMonth = monthCalendar
+				.getActualMaximum(GregorianCalendar.MONTH);
+		for (int dayOfMonth = 1; dayOfMonth <= daysInMonth; dayOfMonth++) {
+			int week = monthCalendar.get(GregorianCalendar.WEEK_OF_MONTH);
+			int dayOfWeek = monthCalendar.get(GregorianCalendar.DAY_OF_WEEK);
+
+			DefaultListModel<String> listModel = new DefaultListModel<String>();
+
+			// Sets the day of the month
+			listModel.setElementAt(String.valueOf(dayOfMonth), 0);
 
 			List<Person> persons = calendarModel.getSelectedPersons();
 			for (Person person : persons) {
 				ArrayList<Meeting> meetings = calendarModel.getMeetings(person);
+				ArrayList<Meeting> todaysMeetings = new ArrayList<Meeting>();
 
 				for (Meeting meeting : meetings) {
 					// Sets the meetings at the given times
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
 					if (sdf.format(calendar.getTime()).equals(
 							sdf.format(monthCalendar.getTime()))) {
-
-						listModel.addElement(meeting);
+						if (!todaysMeetings.contains(meeting)) {
+							listModel.addElement(meeting.getTitle());
+						}
+						todaysMeetings.add(meeting);
 					}
 				}
 			}
+			JList<String> meetingList = new JList<String>();
+			meetingList.setModel(listModel);
 			tableModel.setValueAt(meetingList, week, dayOfWeek);
 		}
-
-		// for (int row = 0; row < tableModel.getRowCount(); row++) {
-		// for (int column = 0; column < tableModel.getColumnCount(); column++)
-		// {
-		//
-		// }
-		// }
 
 		// List<Person> persons = calendarModel.getSelectedPersons();
 		// for (Person person : persons) {
@@ -236,34 +242,34 @@ PropertyChangeListener {
 		// }
 	}
 
-//	private void refreshCalendar() {
-//		int nDays, monthStart, weekStart;
-//		title = months[currentMonth] + ", " + currentYear;
-//		GregorianCalendar cal = new GregorianCalendar(currentYear,
-//				currentMonth, 1);
-//		nDays = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
-//		monthStart = cal.get(GregorianCalendar.DAY_OF_WEEK);
-//		monthStart = (monthStart == 1) ? 6 : monthStart - 2;
-//		weekStart = cal.get(GregorianCalendar.WEEK_OF_YEAR);
-//		// Clear table
-//		for (int i = 0; i < 6; i++) {
-//			for (int j = 0; j < 8; j++) {
-//				tableModel.setValueAt(null, i, j);
-//			}
-//		}
-//		// Draw calendar
-//		for (int i = 0; i < 6; i++) {
-//			tableModel.setValueAt(weekStart + i, i, 0);
-//		}
-//		for (int i = 0; i < nDays; i++) {
-//			int row = new Integer((i + monthStart) / 7);
-//			int column = (i + monthStart) % 7 + 1;
-//			tableModel
-//			.setValueAt(new JList<String>(new String[] {
-//					i + 1 + ". " + "Møte 1", "AvtaleYO", "zomg" }),
-//					row, column);
-//		}
-//	}
+	// private void refreshCalendar() {
+	// int nDays, monthStart, weekStart;
+	// title = months[currentMonth] + ", " + currentYear;
+	// GregorianCalendar cal = new GregorianCalendar(currentYear,
+	// currentMonth, 1);
+	// nDays = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+	// monthStart = cal.get(GregorianCalendar.DAY_OF_WEEK);
+	// monthStart = (monthStart == 1) ? 6 : monthStart - 2;
+	// weekStart = cal.get(GregorianCalendar.WEEK_OF_YEAR);
+	// // Clear table
+	// for (int i = 0; i < 6; i++) {
+	// for (int j = 0; j < 8; j++) {
+	// tableModel.setValueAt(null, i, j);
+	// }
+	// }
+	// // Draw calendar
+	// for (int i = 0; i < 6; i++) {
+	// tableModel.setValueAt(weekStart + i, i, 0);
+	// }
+	// for (int i = 0; i < nDays; i++) {
+	// int row = new Integer((i + monthStart) / 7);
+	// int column = (i + monthStart) % 7 + 1;
+	// tableModel
+	// .setValueAt(new JList<String>(new String[] {
+	// i + 1 + ". " + "Møte 1", "AvtaleYO", "zomg" }),
+	// row, column);
+	// }
+	// }
 
 	/**
 	 * Generates the title of month panel.

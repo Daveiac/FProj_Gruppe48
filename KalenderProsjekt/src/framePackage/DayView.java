@@ -32,7 +32,6 @@ public class DayView extends JPanel implements CalendarView,
 	private String title;
 	private String[] columnHeaders;
 	private int dayOfWeek;
-	private static final SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE");
 
 	/**
 	 * Constructs the DayView Panel.
@@ -91,14 +90,6 @@ public class DayView extends JPanel implements CalendarView,
 		setHeaders();
 	}
 
-	private void setHeaders() {
-		setDayTitle();
-		columnHeaders[dayOfWeek] = dayFormat.format(calendar.getTime());
-		tableModel.setColumnIdentifiers(columnHeaders);
-		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
-		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
-	}
-
 	/**
 	 * Creates a new day view.
 	 */
@@ -106,13 +97,12 @@ public class DayView extends JPanel implements CalendarView,
 
 		// Sets this day's title
 		setDayTitle();
-		
-		setHeaders();
 
+		// Sets table headers with corresponding days
+		setHeaders();
 
 		// Creates the day data
 		createDay(calendar, tableModel, dayOfWeek);
-
 	}
 
 	/**
@@ -124,11 +114,24 @@ public class DayView extends JPanel implements CalendarView,
 	}
 
 	/**
-	 * Creates the new day's data.
+	 * Sets the table headers with corresponding days.
+	 */
+	private void setHeaders() {
+		setDayTitle();
+		SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE");
+		columnHeaders[dayOfWeek] = dayFormat.format(calendar.getTime());
+		tableModel.setColumnIdentifiers(columnHeaders);
+		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
+	}
+
+	/**
+	 * Creates the day data.
 	 */
 	public void createDay(GregorianCalendar calendar,
 			DefaultTableModel tableModel, int dayOfWeek) {
 
+		// Clear table
 		for (int i = 0; i < tableModel.getRowCount(); i++) {
 			tableModel.setValueAt(null, i, dayOfWeek);
 		}
