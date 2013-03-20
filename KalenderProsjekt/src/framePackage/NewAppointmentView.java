@@ -423,16 +423,16 @@ public class NewAppointmentView extends JPanel {
 				romComponent.setSelectedItem(meet.getRoom().getRoomName());
 			}
 			for(int i = 0; i<model.getPersons().size();i++ ){
-				if(meet.getTeam().getMembers().contains(model.getPersons().get(i)) == false){
-					participantComponent.addItem(model.getPersons().get(i).getFirstName() + model.getPersons().get(i).getLastName());
+				if(meet.getTeam() != null && meet.getTeam().getMembers().contains(model.getPersons().get(i)) == false){
+					listModel.addElement(model.getPersons().get(i));
 				}
 				else{
-					listModel.addElement(model.getPersons().get(i));
+					participantComponent.addItem(model.getPersons().get(i).getFirstName() + model.getPersons().get(i).getLastName());
 				}
 			}
 			infoComponent.setText(meet.getDescription());
+			if(alarm != null){
 			greCalendar.setTimeInMillis(alarm.getTime());
-			if(greCalendar.getTime() != null){
 				alarmComponent.setSelected(true);
 				alarmHourComponent.setEnabled(true);
 				alarmMinComponent.setEnabled(true);
@@ -532,7 +532,7 @@ public class NewAppointmentView extends JPanel {
 		for(int i = 0; i< listModel.size();i++){
 				list.add(listModel.get(i));
 			}
-		Team team = new Team(0,calendarModel.getUser().getEmail(),list);
+		Team team = new Team(-1,calendarModel.getUser().getEmail(),list);
 		if(listModel.size() == 0){
 			team = null;
 		}
@@ -545,7 +545,7 @@ public class NewAppointmentView extends JPanel {
 	}
 	
 	private long getTime(int year,int day, int month, int hour, int min){
-		GregorianCalendar greCalendar = new GregorianCalendar(year, month, month, hour, min);
+		GregorianCalendar greCalendar = new GregorianCalendar(year, month, day, hour, min);
 		return greCalendar.getTimeInMillis();
 		}
 	
