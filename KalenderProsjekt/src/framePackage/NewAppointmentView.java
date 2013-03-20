@@ -368,7 +368,7 @@ public class NewAppointmentView extends JPanel {
 		this.add(opprettKnapp, d);
 		opprettKnapp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(validTime()==true && tittelComponent.getText().length() > 0){
+				if(validTime()==true && tittelComponent.getText().length() > 0 && infoComponent.getText().length() <= 255){
 					calendarModel.pushMeeting(getMeeting());
 					frame.setVisible(false);
 				}if(validTime()==false){
@@ -384,7 +384,7 @@ public class NewAppointmentView extends JPanel {
 		this.add(endreKnapp, d);
 		endreKnapp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(validTime()==true && tittelComponent.getText().length() > 0){
+				if(validTime()==true && tittelComponent.getText().length() > 0 && infoComponent.getText().length() <= 255){
 					calendarModel.changeMeeting(getMeeting());
 					frame.setVisible(false);
 				}
