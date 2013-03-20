@@ -109,23 +109,26 @@ public class AppointmentView implements PropertyChangeListener {
 		mc.anchor = GridBagConstraints.NORTHWEST;
 		 for (int i = 0; i < notifications.size(); i++) {
 		 Notification n = notifications.get(i);
+		 Meeting meeting = n.getMeeting();
 		 JComponent[] items = new JComponent[7];
-		 	switch (n.getApproved()) {
-			case 'w':
-				items[0] = new JLabel(new ImageIcon("res/icons/icon_check.png"));
-				break;
-			case 'y':
-				items[0] = new JLabel(new ImageIcon("res/icons/icon_check.png"));
-				break;
-			case 'n':
-				items[0] = new JLabel(new ImageIcon("res/icons/icon_check.png"));
-				break;
+		 	if (!meeting.getCreator().getUsername().equals(user.getUsername())) {
+				switch (n.getApproved()) {
+				case 'w':
+					items[0] = new JLabel(new ImageIcon("res/icons/icon_question.png"));
+					break;
+				case 'y':
+					items[0] = new JLabel(new ImageIcon("res/icons/icon_check.png"));
+					break;
+				case 'n':
+					items[0] = new JLabel(new ImageIcon("res/icons/icon_cross.png"));
+					break;
+				}
+			} else {
+				items[0] = new JLabel(new ImageIcon("res/icons/icon_star.png"));
 			}
-
-		 	if (meetings.size() == 0 && i == notifications.size()-1) {
+			if (meetings.size() == 0 && i == notifications.size()-1) {
 				mc.weighty = 1;
 			}
-		 	
 			items[1] = new JLabel();
 			items[2] = new JLabel();
 			items[3] = new JLabel(meeting.getTitle());
@@ -146,6 +149,7 @@ public class AppointmentView implements PropertyChangeListener {
 				meetingPanel.add(item, mc);
 			}
 		 }
+		int n = notifications.size();
 		
 		for (int i = 0; i < meetings.size(); i++) {
 			if (i == meetings.size()-1) {
@@ -153,7 +157,7 @@ public class AppointmentView implements PropertyChangeListener {
 			}
 			Meeting meeting = meetings.get(i);
 			JComponent[] items = new JComponent[7];
-			items[0] = new JLabel(new ImageIcon("res/icons/icon_check.png"));
+			items[0] = new JLabel(new ImageIcon("res/icons/icon_star.png"));
 			items[1] = new JLabel();
 			items[2] = new JLabel();
 			items[3] = new JLabel(meeting.getTitle());
@@ -166,7 +170,7 @@ public class AppointmentView implements PropertyChangeListener {
 			((JLabel) items[1]).setText(dateFormat.format(startDate.getTime()));
 			((JLabel) items[2]).setText(timeFormat.format(startDate.getTime()));
 
-			mc.gridy = i + 1;
+			mc.gridy = i+n + 1;
 			for (int j = 0; j < items.length; j++) {
 				JComponent item = items[j];
 				item.setPreferredSize(new Dimension(sizes[j], 20));
@@ -197,7 +201,7 @@ public class AppointmentView implements PropertyChangeListener {
 			user = calendarModel.getUser();
 			notifications = calendarModel.getAllNotificationsOfPerson(user);
 			meetings = calendarModel.getAppointments();
-//			refreshMeetings();
+			refreshMeetings();
 			break;
 		}
 
