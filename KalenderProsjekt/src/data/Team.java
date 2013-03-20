@@ -26,8 +26,7 @@ public class Team implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "Team [teamID=" + teamID + ", email=" + email + ", members="
-				+ members + "]";
+		return "Team [teamID=" + teamID + "]";
 	}
 	
 

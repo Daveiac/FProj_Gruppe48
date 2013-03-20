@@ -41,8 +41,8 @@ public class Notification implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Notification [time=" + time + ", approved=" + approved
-				+ ", kind=" + kind + ", meeting=" + meeting + ", person="
+		return "Notification ["+ ", approved=" + approved
+				 + ", meeting=" + meeting + ", person="
 				+ person + "]";
 	}
 	

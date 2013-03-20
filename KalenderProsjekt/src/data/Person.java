@@ -55,9 +55,7 @@ public class Person implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Person [email=" + email + ", phone=" + phone + ", firstName="
-				+ firstName + ", lastName=" + lastName + ", username="
-				+ username + ", password=" + password + "]";
+		return "Person [username=" + username + ", password=" + password + "]";
 	}
 
 
