@@ -356,6 +356,7 @@ public class NewAppointmentView extends JPanel {
 		this.add(opprettKnapp, d);
 		opprettKnapp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				System.out.println(validTime());
 				if(validTime()==true){
 					long startT = getTimeInMillis(yearComponent.getSelectedIndex()+2013, monthComponent.getSelectedIndex(), dayComponent.getSelectedIndex()+1, startHourComponent.getSelectedIndex(), startMinComponent.getSelectedIndex()*15);
 					long endT = getTimeInMillis(yearComponent.getSelectedIndex()+2013, monthComponent.getSelectedIndex(), dayComponent.getSelectedIndex()+1, endHourComponent.getSelectedIndex(), endMinComponent.getSelectedIndex()*15);
@@ -363,7 +364,7 @@ public class NewAppointmentView extends JPanel {
 					for (int i = 0; i < participantList.getModel().getSize(); i++) {
 						list.add(participantList.getModel().getElementAt(i));
 					}
-					Team team = new Team(0, NewAppointmentView.this.calendarModel.getUser().getEmail(), list);
+					Team team = null;
 					Meeting meeting =  new Meeting(0, tittelComponent.getText(), locComponent.getText(), startT, endT,
 							infoComponent.getText(), team, null, Program.calendarModel.getUser());
 					Program.calendarModel.pushMeeting(meeting);
@@ -512,11 +513,11 @@ public class NewAppointmentView extends JPanel {
 	}
 	
 	private boolean validTime(){		
-		if(startHourComponent.getSelectedIndex() > endHourComponent.getSelectedIndex()){
+		if(startHourComponent.getSelectedIndex() < endHourComponent.getSelectedIndex()){
 			return true;
 		}
 		if(startHourComponent.getSelectedIndex() == endHourComponent.getSelectedIndex()){
-			if(startMinComponent.getSelectedIndex() >= endMinComponent.getSelectedIndex()){
+			if(startMinComponent.getSelectedIndex() <= endMinComponent.getSelectedIndex()){
 				return true;
 			}
 		}

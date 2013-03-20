@@ -199,6 +199,7 @@ public class CalendarModel implements Serializable{
 		return colors[persons.indexOf(person)];
 	}
 	public void pushMeeting(Meeting meeting) {
+		System.out.println("Trying to push meeting");
 		try {
 			Program.reqHandler.sendCreateMeetingRequest(meeting);
 		} catch (IOException e) {
