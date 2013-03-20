@@ -109,20 +109,23 @@ public class AppointmentView implements PropertyChangeListener {
 		mc.anchor = GridBagConstraints.NORTHWEST;
 		 for (int i = 0; i < notifications.size(); i++) {
 		 Notification n = notifications.get(i);
+		 JComponent[] items = new JComponent[7];
 		 	switch (n.getApproved()) {
 			case 'w':
-				
+				items[0] = new JLabel(new ImageIcon("res/icons/icon_check.png"));
 				break;
-
-			default:
+			case 'y':
+				items[0] = new JLabel(new ImageIcon("res/icons/icon_check.png"));
+				break;
+			case 'n':
+				items[0] = new JLabel(new ImageIcon("res/icons/icon_check.png"));
 				break;
 			}
+
 		 	if (meetings.size() == 0 && i == notifications.size()-1) {
 				mc.weighty = 1;
 			}
-			Meeting meeting = meetings.get(i);
-			JComponent[] items = new JComponent[7];
-			items[0] = new JLabel(new ImageIcon("res/icons/icon_check.png"));
+		 	
 			items[1] = new JLabel();
 			items[2] = new JLabel();
 			items[3] = new JLabel(meeting.getTitle());
