@@ -445,6 +445,9 @@ public class NewAppointmentView extends JPanel {
 			for(int i = 0; i < calendarModel.getPersons().size(); i++){
 				participantComponent.addItem(getAllPerson().get(i).getFirstName() + " " +  getAllPerson().get(i).getLastName());
 			}
+			for(int j = 0; j < calendarModel.getRooms().size(); j ++){
+				romComponent.addItem(calendarModel.getRooms().get(j).getRoomName());
+			}
 		}
 		
 		
