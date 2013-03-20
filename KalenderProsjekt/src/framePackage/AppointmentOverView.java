@@ -182,16 +182,18 @@ public class AppointmentOverView {
 				if (yourStatus.getSelectedItem() == check) {
 					lblStatus.setText("Deltar");
 					calendarModel.setStatus('y',userNotification);
+					closeFrame();
 				}
 				if (yourStatus.getSelectedItem() == cross) {
 					lblStatus.setText("Deltar Ikke");
 					calendarModel.setStatus('n',userNotification);
+					closeFrame();
 				}
 				if (yourStatus.getSelectedItem() == question) {
 					lblStatus.setText("Ikke svart");
 					calendarModel.setStatus('w',userNotification);
+					closeFrame();
 				}
-				frame.setVisible(false);
 			}
 		});
 
@@ -241,6 +243,10 @@ public class AppointmentOverView {
 	
 	public void showFrame(){
 		frame.setVisible(true);
+	}
+	
+	public void closeFrame(){
+		frame.setVisible(false);
 	}
 
 }
