@@ -15,7 +15,7 @@ public class Login extends JPanel{
 	private JLabel userLabel, passwordLabel;
 	private JTextField userField;
 	private JPasswordField passwordField;
-	private JButton button;
+	public JButton button;
 	private String username;
 	private GridBagConstraints c;
 	
