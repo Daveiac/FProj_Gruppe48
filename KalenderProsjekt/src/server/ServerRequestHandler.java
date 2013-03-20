@@ -324,7 +324,7 @@ public class ServerRequestHandler implements Runnable {
 			sendAllMeetings();
 			sendAllNotifications();
 			break;
-		case UPDATE_METING:
+		case UPDATE_MEETING:
 			updateMeeting(request.getMeeting());
 			sendAllMeetings();
 			sendAllNotifications();
