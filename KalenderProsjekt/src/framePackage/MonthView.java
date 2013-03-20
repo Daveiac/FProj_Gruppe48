@@ -1,6 +1,5 @@
 package framePackage;
 
-import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
@@ -9,12 +8,12 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
+import client.Program;
 import data.CalendarModel;
 import data.Meeting;
 import data.Person;
@@ -59,7 +58,7 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 	}
 
 	private void initialize(CalendarModel calendarModel) {
-		calendar = new GregorianCalendar();
+		calendar = calendarModel.getCalendar();
 		this.calendarModel = calendarModel;
 		this.calendarModel.addPropertyChangeListener(this);
 
@@ -94,13 +93,29 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 
 		// Sets table headers with corresponding days
 		setHeaders();
-
+		
 		// Sets the new month into the table
 		monthTable.setModel(tableModel);
 		monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		monthTable.setRowSelectionAllowed(false);
-		monthTable.setRowHeight(300);
+		monthTable.setRowHeight(80);
 		monthTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+
+		monthTable.addMouseListener(new java.awt.event.MouseAdapter() {
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				int row = monthTable.rowAtPoint(evt.getPoint());
+				int weekDay = monthTable.columnAtPoint(evt.getPoint()) - 1;
+				if (row >= 0 && weekDay >= 0) {
+					int firstDayOfWeek = -calendar.get(GregorianCalendar.DAY_OF_WEEK) + 2;
+					calendar.add(GregorianCalendar.DAY_OF_WEEK, weekDay + firstDayOfWeek);
+					int calWeekOfMonth = calendar.get(GregorianCalendar.WEEK_OF_MONTH);
+					calendar.add(GregorianCalendar.WEEK_OF_MONTH, row - calWeekOfMonth);
+					MonthView.this.calendarModel.changeDate();
+					Program.dw.setView(Program.dw.dayView);
+				}
+			}
+		});
 
 		int daysInWeek = 7;
 		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {
@@ -342,6 +357,7 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 	@Override
 	public void next() {
 		calendar.add(GregorianCalendar.MONTH, 1);
+		calendarModel.changeDate();
 		createMonthTable();
 	}
 
@@ -351,6 +367,7 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 	@Override
 	public void prev() {
 		calendar.add(GregorianCalendar.MONTH, -1);
+		calendarModel.changeDate();
 		createMonthTable();
 	}
 
@@ -371,6 +388,9 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 			createMonthTable();
 			break;
 		case CalendarModel.MEETINGS_CHANGED_Property:
+			createMonthTable();
+			break;
+		case CalendarModel.DATE_CHANGED_Property:
 			createMonthTable();
 			break;
 		default:

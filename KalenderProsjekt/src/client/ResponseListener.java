@@ -40,7 +40,6 @@ public class ResponseListener implements Runnable{
 			// TODO Go home and cry yourself to sleep :(
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

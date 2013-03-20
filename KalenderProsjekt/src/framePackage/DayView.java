@@ -1,6 +1,5 @@
 package framePackage;
 
-import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
@@ -9,7 +8,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -38,7 +36,7 @@ public class DayView implements CalendarView, PropertyChangeListener {
 	 * Constructs the DayView Panel.
 	 */
 	public DayView(CalendarModel calendarModel) {
-		calendar = new GregorianCalendar();
+		calendar = calendarModel.getCalendar();
 		this.calendarModel = calendarModel;
 		this.calendarModel.addPropertyChangeListener(this);
 
@@ -84,6 +82,7 @@ public class DayView implements CalendarView, PropertyChangeListener {
 		dayTable.setRowSelectionAllowed(false);
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
+		
 		dayTable.getColumnModel().getColumn(1)
 				.setCellRenderer(new DayTableCellRenderer(this.calendarModel));
 
@@ -143,6 +142,19 @@ public class DayView implements CalendarView, PropertyChangeListener {
 		}
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
+
+		dayTable.addMouseListener(new java.awt.event.MouseAdapter() {
+		    @Override
+		    public void mouseClicked(java.awt.event.MouseEvent evt) {
+		        int row = dayTable.rowAtPoint(evt.getPoint());
+		        int col = dayTable.columnAtPoint(evt.getPoint()) - 1;
+		        if (row >= 0 && col >= 0) {
+		        	Meeting meeting = (Meeting) DayView.this.tableModel.getValueAt(row, col);
+		        	new NewAppointmentView(meeting);
+		        }
+		    }
+		});
+		
 		dayTable.getColumnModel().getColumn(1)
 				.setCellRenderer(new DayTableCellRenderer(this.calendarModel));
 	}
@@ -212,6 +224,7 @@ public class DayView implements CalendarView, PropertyChangeListener {
 	@Override
 	public void next() {
 		calendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
+		calendarModel.changeDate();
 		createDayTable();
 	}
 
@@ -221,6 +234,7 @@ public class DayView implements CalendarView, PropertyChangeListener {
 	@Override
 	public void prev() {
 		calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
+		calendarModel.changeDate();
 		createDayTable();
 	}
 
@@ -245,6 +259,9 @@ public class DayView implements CalendarView, PropertyChangeListener {
 			break;
 		case CalendarModel.SELECTED_Property:
 			System.out.println("motherfucker!");
+			createDayTable();
+			break;
+		case CalendarModel.DATE_CHANGED_Property:
 			createDayTable();
 			break;
 		default:

@@ -214,6 +214,12 @@ public class DBController {
 
 		dBConn.makeUpdate(sql);
 	}
+	
+	public void addMeetingRoom(MeetingRoom room) throws SQLException{
+		String sql = String.format("INSERT INTO MeetingRoom (roomName) " +
+				"VALUES ('%s');", room.getRoomName());
+		dBConn.makeUpdate(sql);
+	}
 
 	public Meeting addMeeting(Meeting meeting) throws SQLException {
 		String teamID = "null";

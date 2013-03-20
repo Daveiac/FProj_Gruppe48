@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
@@ -62,8 +64,6 @@ public class AppointmentView implements PropertyChangeListener {
 		mainPanel.add(legendPanel, BorderLayout.SOUTH);
 		mainPanel.setBorder(new LineBorder(Color.black));
 		mainPanel.setPreferredSize(new Dimension(814, 457));
-		// refreshMeetings();
-
 	}
 
 	private void createLegend() {
@@ -106,32 +106,46 @@ public class AppointmentView implements PropertyChangeListener {
 	}
 
 	private void refreshMeetings() {
-//		 for (int i = 0; i < notifications.size(); i++) {
-//		 Notification n = notifications.get(i);
-//		 	if(n.getApproved() == 'w') {
-//		 		
-//		 	}
-//		 }
-		
 		mc.anchor = GridBagConstraints.NORTHWEST;
-		for (int i = 0; i < meetings.size(); i++) {
-			if (i == meetings.size()-1) {
+		for (int i = 0; i < notifications.size(); i++) {
+		 Notification n = notifications.get(i);
+		 Meeting meeting = n.getMeeting();
+		 JComponent[] items = new JComponent[7];
+		 	if (!meeting.getCreator().getUsername().equals(user.getUsername())) {
+				switch (n.getApproved()) {
+				case 'w':
+					items[0] = new JLabel(new ImageIcon("res/icons/icon_question.png"));
+					break;
+				case 'y':
+					items[0] = new JLabel(new ImageIcon("res/icons/icon_check.png"));
+					break;
+				case 'n':
+					items[0] = new JLabel(new ImageIcon("res/icons/icon_cross.png"));
+					break;
+				}
+			} else {
+				items[0] = new JLabel(new ImageIcon("res/icons/icon_star.png"));
+			}
+			if (meetings.size() == 0 && i == notifications.size()-1) {
 				mc.weighty = 1;
 			}
-			Meeting meeting = meetings.get(i);
-			JComponent[] items = new JComponent[7];
-			items[0] = new JLabel(new ImageIcon("res/icons/icon_check.png"));
+			JButton changeBtn = new JButton("endre");
+			JButton infoBtn = new JButton("mer info...");
+			
 			items[1] = new JLabel();
 			items[2] = new JLabel();
 			items[3] = new JLabel(meeting.getTitle());
 			items[4] = new JLabel(meeting.getLocation());
-			items[5] = new JButton("endre");
-			items[6] = new JButton("mer info...");
+			items[5] = changeBtn;
+			items[6] = infoBtn;
 
 			GregorianCalendar startDate = new GregorianCalendar();
 			startDate.setTimeInMillis(meeting.getStartTime());
 			((JLabel) items[1]).setText(dateFormat.format(startDate.getTime()));
 			((JLabel) items[2]).setText(timeFormat.format(startDate.getTime()));
+			
+			changeBtn.addActionListener(new ChangeButtonListener(meeting));
+			infoBtn.addActionListener(new InfoButtonListener(meeting));
 
 			mc.gridy = i + 1;
 			for (int j = 0; j < items.length; j++) {
@@ -140,7 +154,68 @@ public class AppointmentView implements PropertyChangeListener {
 				mc.gridx = j;
 				meetingPanel.add(item, mc);
 			}
+		 }
+		int n = notifications.size();
+		
+		for (int i = 0; i < meetings.size(); i++) {
+			Meeting meeting = meetings.get(i);
+			JComponent[] items = new JComponent[7];
+			if (i == meetings.size()-1) {
+				mc.weighty = 1;
+			}
+			
+			JButton changeBtn = new JButton("endre");
+			JButton infoBtn = new JButton("mer info...");
+			
+			items[0] = new JLabel(new ImageIcon("res/icons/icon_star.png"));
+			items[1] = new JLabel();
+			items[2] = new JLabel();
+			items[3] = new JLabel(meeting.getTitle());
+			items[4] = new JLabel(meeting.getLocation());
+			items[5] = changeBtn;
+			items[6] = infoBtn;
+
+			GregorianCalendar startDate = new GregorianCalendar();
+			startDate.setTimeInMillis(meeting.getStartTime());
+			((JLabel) items[1]).setText(dateFormat.format(startDate.getTime()));
+			((JLabel) items[2]).setText(timeFormat.format(startDate.getTime()));
+
+			changeBtn.addActionListener(new ChangeButtonListener(meeting));
+			infoBtn.addActionListener(new InfoButtonListener(meeting));
+
+			mc.gridy = i+n + 1;
+			for (int j = 0; j < items.length; j++) {
+				JComponent item = items[j];
+				item.setPreferredSize(new Dimension(sizes[j], 20));
+				mc.gridx = j;
+				meetingPanel.add(item, mc);
+			}
 		}
+		
+	}
+	private class ChangeButtonListener implements ActionListener{
+		private Meeting meeting;
+		
+		public ChangeButtonListener(Meeting meeting) {
+			this.meeting = meeting;
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			new NewAppointmentView(meeting);
+		}
+		
+	}
+	private class InfoButtonListener implements ActionListener{
+		private Meeting meeting;
+		
+		public InfoButtonListener(Meeting meeting) {
+			this.meeting = meeting;
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			new AppointmentOverView(meeting);
+		}
+		
 	}
 
 	public static void main(String[] args) {
@@ -162,9 +237,9 @@ public class AppointmentView implements PropertyChangeListener {
 		switch (evt.getPropertyName()) {
 		case CalendarModel.CALENDAR_LOADED_Property:
 			user = calendarModel.getUser();
-			meetings = calendarModel.getAllMeetingsOfPerson(user, false);
-//			notifications = calendarModel.getNotifications(user);
-//			refreshMeetings();
+			notifications = calendarModel.getAllNotificationsOfPerson(user);
+			meetings = calendarModel.getAppointments();
+			refreshMeetings();
 			break;
 		}
 

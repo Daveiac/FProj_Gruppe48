@@ -1,13 +1,11 @@
 package framePackage;
 
-import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -34,7 +32,7 @@ public class WeekView implements CalendarView, PropertyChangeListener {
 	 * Constructs the WeekView Panel.
 	 */
 	public WeekView(CalendarModel calendarModel) {
-		calendar = new GregorianCalendar();
+		calendar = calendarModel.getCalendar();
 		this.calendarModel = calendarModel;
 		this.calendarModel.addPropertyChangeListener(this);
 		dayView = new DayView(calendarModel);
@@ -173,6 +171,7 @@ public class WeekView implements CalendarView, PropertyChangeListener {
 	@Override
 	public void next() {
 		calendar.add(GregorianCalendar.WEEK_OF_YEAR, 1);
+		calendarModel.changeDate();
 		createWeekTable();
 	}
 
@@ -182,6 +181,7 @@ public class WeekView implements CalendarView, PropertyChangeListener {
 	@Override
 	public void prev() {
 		calendar.add(GregorianCalendar.WEEK_OF_YEAR, -1);
+		calendarModel.changeDate();
 		createWeekTable();
 	}
 
@@ -205,6 +205,9 @@ public class WeekView implements CalendarView, PropertyChangeListener {
 			createWeekTable();
 			break;
 		case CalendarModel.SELECTED_Property:
+			createWeekTable();
+			break;
+		case CalendarModel.DATE_CHANGED_Property:
 			createWeekTable();
 			break;
 		default:
