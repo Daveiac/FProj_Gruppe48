@@ -75,27 +75,33 @@ public class RequestHandler {
 	//Update requests:
 	public void sendCreateMeetingRequest(Meeting m) throws IOException{
 		UpdateRequest uReqCreateMeeting =
-				new UpdateRequest(m, UpdateType.CREATE_MEETING);
+				new UpdateRequest(m, null, null, UpdateType.CREATE_MEETING);
 		Program.client.sendRequest(uReqCreateMeeting);
 	}
-//	TODO
-//	public void sendCreateAlarmRequest(Person p, Alarm a,Notification n, Meeting m) throws IOException{
-//		UpdateRequest uReqCreateAlarm =
-//				new UpdateRequest(m, a, n, UpdateType.CREATE_ALARM, p);
-//		Program.client.sendRequest(uReqCreateAlarm);
-//	}
 	
-	public void sendUpdateMeetingRequest(Person p, Alarm a, Notification n, Meeting m) throws IOException{
+	public void sendUpdateMeetingRequest(Meeting m) throws IOException{
 		UpdateRequest uReqUpdateMeeting =
-				new UpdateRequest(m, UpdateType.UPDATE_METING);
+				new UpdateRequest(m, null, null, UpdateType.UPDATE_MEETING);
 		Program.client.sendRequest(uReqUpdateMeeting);
 	}
-//	TODO
-//	public void sendUpdateNotificationRequest(Person p,Alarm a,Notification n,Meeting m)throws IOException{
-//		UpdateRequest uReqUpdateNotification =
-//				new UpdateRequest(m, a, n, UpdateType.UPDATE_NOTIFICATION, p);
-//		Program.client.sendRequest(uReqUpdateNotification);
-//	}
+	
+	public void sendDeleteMeetingRequest(Meeting m) throws IOException{
+		UpdateRequest uReqDeleteMeeting =
+				new UpdateRequest(m, null, null, UpdateType.DELETE_MEETING);
+		Program.client.sendRequest(uReqDeleteMeeting);
+	}
+	
+	public void sendCreateAlarmRequest(Alarm a) throws IOException{
+		UpdateRequest uReqCreateAlarm =
+				new UpdateRequest(null, a, null, UpdateType.CREATE_ALARM);
+		Program.client.sendRequest(uReqCreateAlarm);
+	}
+
+	public void sendUpdateNotificationRequest(Notification n)throws IOException{
+		UpdateRequest uReqUpdateNotification =
+				new UpdateRequest(null, null, n, UpdateType.UPDATE_NOTIFICATION);
+		Program.client.sendRequest(uReqUpdateNotification);
+	}
 	
 }
 

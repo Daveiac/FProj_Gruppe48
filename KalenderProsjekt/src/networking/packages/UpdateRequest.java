@@ -13,10 +13,10 @@ public class UpdateRequest extends NetworkRequest{
 	private Person sender;
 	
 	public enum UpdateType{
-		CREATE_MEETING, UPDATE_METING, CREATE_ALARM, UPDATE_NOTIFICATION, DELETE_MEETING
+		CREATE_MEETING, UPDATE_MEETING, CREATE_ALARM, UPDATE_NOTIFICATION, DELETE_MEETING
 	}
 	
-	public UpdateRequest(Meeting meeting, UpdateType updateType) {
+	public UpdateRequest(Meeting meeting, Alarm a, Notification n, UpdateType updateType) {
 		super(EventType.UPDATE);
 		this.meeting = meeting;
 		this.updateType = updateType;

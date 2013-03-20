@@ -106,7 +106,7 @@ public class ResponseHandler implements Runnable{
 				receivedMeetingroom(dataResponse.getData());
 				break;
 				
-				
+			
 			case CREATE_ALARM_RESPONSE:
 				//TODO
 				break;
