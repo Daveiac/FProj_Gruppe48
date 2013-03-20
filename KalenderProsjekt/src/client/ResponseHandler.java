@@ -1,12 +1,10 @@
+
 package client;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 
-import networking.packages.AuthenticationResponse;
-import networking.packages.AuthenticationResponse.AuthenticationResponseType;
 import networking.packages.*;
 import data.*;
 
@@ -67,7 +65,6 @@ public class ResponseHandler implements Runnable{
 			meetingrooms.add((MeetingRoom) object);
 		}
 		Program.calendarModel.setAllRooms(meetingrooms);
-		
 	}
 	
 
@@ -111,16 +108,16 @@ public class ResponseHandler implements Runnable{
 				
 				
 			case CREATE_ALARM_RESPONSE:
-				
+				//TODO
 				break;
 			case CREATE_MEETING_RESPONSE:
-				
+				//TODO
 				break;
 			case UPDATE_MEETING_RESPONSE:
-				
+				//TODO
 				break;
 			case UPDATE_NOTIFICATION_RESPONSE:
-				
+				//TODO
 				break;
 			}
 			break;
@@ -140,4 +137,3 @@ public class ResponseHandler implements Runnable{
 	}
 
 }
-

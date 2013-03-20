@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -22,8 +23,7 @@ import data.Person;
  * This is the DayView Panel that shows the day planner.
  */
 @SuppressWarnings("serial")
-public class DayView extends JPanel implements CalendarView,
-		PropertyChangeListener {
+public class DayView implements CalendarView, PropertyChangeListener {
 
 	private JTable dayTable;
 	private DefaultTableModel tableModel;
@@ -32,12 +32,13 @@ public class DayView extends JPanel implements CalendarView,
 	private String title;
 	private String[] columnHeaders;
 	private int dayOfWeek;
+	private JScrollPane scrollPane;
 
 	/**
 	 * Constructs the DayView Panel.
 	 */
 	public DayView(CalendarModel calendarModel) {
-		calendar = new GregorianCalendar();
+		calendar = calendarModel.getCalendar();
 		this.calendarModel = calendarModel;
 		this.calendarModel.addPropertyChangeListener(this);
 
@@ -83,13 +84,11 @@ public class DayView extends JPanel implements CalendarView,
 		dayTable.setRowSelectionAllowed(false);
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
+		
 		dayTable.getColumnModel().getColumn(1)
 				.setCellRenderer(new DayTableCellRenderer(this.calendarModel));
 
-		JScrollPane scrollPane = new JScrollPane(dayTable);
-		scrollPane.setPreferredSize(new Dimension(800, 407));
-
-		add(scrollPane);
+		scrollPane = new JScrollPane(dayTable);
 	}
 
 	/**
@@ -139,11 +138,24 @@ public class DayView extends JPanel implements CalendarView,
 		// Sets today's meetings
 		List<Person> persons = calendarModel.getSelectedPersons();
 		for (Person person : persons) {
-			ArrayList<Meeting> meetings = calendarModel.getAllMeetingsOfPerson(person, true);
+			ArrayList<Meeting> meetings = calendarModel.getAllMeetingsOfPerson(
+					person, true);
 			setMeetings(calendar, tableModel, dayOfWeek, meetings);
 		}
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
+
+//		dayTable.addMouseListener(new java.awt.event.MouseAdapter() {
+//		    @Override
+//		    public void mouseClicked(java.awt.event.MouseEvent evt) {
+//		        int row = dayTable.rowAtPoint(evt.getPoint());
+//		        int col = dayTable.columnAtPoint(evt.getPoint());
+//		        if (row >= 0 && col >= 0) {
+//		        	Møtvisning møtevisning = new Møtevisning();
+//		        }
+//		    }
+//		});
+		
 		dayTable.getColumnModel().getColumn(1)
 				.setCellRenderer(new DayTableCellRenderer(this.calendarModel));
 	}
@@ -213,6 +225,7 @@ public class DayView extends JPanel implements CalendarView,
 	@Override
 	public void next() {
 		calendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
+		calendarModel.changeDate();
 		createDayTable();
 	}
 
@@ -222,6 +235,7 @@ public class DayView extends JPanel implements CalendarView,
 	@Override
 	public void prev() {
 		calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
+		calendarModel.changeDate();
 		createDayTable();
 	}
 
@@ -231,8 +245,8 @@ public class DayView extends JPanel implements CalendarView,
 	 * @return day panel.
 	 */
 	@Override
-	public JPanel getPanel() {
-		return this;
+	public JComponent getPanel() {
+		return scrollPane;
 	}
 
 	@Override
@@ -246,6 +260,9 @@ public class DayView extends JPanel implements CalendarView,
 			break;
 		case CalendarModel.SELECTED_Property:
 			System.out.println("motherfucker!");
+			createDayTable();
+			break;
+		case CalendarModel.DATE_CHANGED_Property:
 			createDayTable();
 			break;
 		default:

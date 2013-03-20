@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,31 +24,35 @@ public class CalendarModel implements Serializable{
 	private List<Person> persons;
 	private ArrayList<Meeting> meetings;
 	private ArrayList<Boolean> selected;
-//	private FakeWhale data;
 	private PropertyChangeSupport pcs;
-	private ArrayList<Notification> notificationsOfUser;
 	private ArrayList<Notification> notifications;
 	private ArrayList<Alarm> alarms;
 	private String username;
-	private int responseCount;
 	private Person user;
 	private ArrayList<MeetingRoom> meetingRooms;
-	private static final Color[] colors = {Color.red,Color.blue,Color.darkGray,Color.orange,Color.magenta,Color.gray,Color.pink};
-	public static final String SELECTED_Property = "SELECTED", MEETINGS_CHANGED_Property = "MEETINGS",
-			NOTIFICATIONS_CHANGED_Property = "NNOTI", CALENDAR_LOADED_Property = "LOADED", PERSONS_ADDED_Property ="PERSONS";
-
+	private GregorianCalendar calendar;
+	private static final Color[] colors = { Color.red, Color.blue,
+			Color.yellow, Color.orange, Color.magenta, Color.gray, Color.pink };
+	public static final String SELECTED_Property = "SELECTED",
+			MEETINGS_CHANGED_Property = "MEETINGS",
+			NOTIFICATIONS_CHANGED_Property = "NNOTI",
+			CALENDAR_LOADED_Property = "LOADED",
+			PERSONS_ADDED_Property = "PERSONS",
+			ALARMS_CHANGED_Property = "ALARMA!",
+			DATE_CHANGED_Property = "DATE";
 
 
 	public CalendarModel() {
 		pcs = new PropertyChangeSupport(this);
+		calendar = new GregorianCalendar();
 	}
 	public void init(String username) {
+		System.out.println();
 		this.username = username;
 		persons = new ArrayList<Person>();
 		meetings = new ArrayList<Meeting>();
 		selected = new ArrayList<Boolean>();
 		notifications = new ArrayList<Notification>();
-		notificationsOfUser = new ArrayList<Notification>();
 		alarms = new ArrayList<Alarm>();
 		meetingRooms = new ArrayList<MeetingRoom>();
 		requestAllPersons();
@@ -55,18 +60,48 @@ public class CalendarModel implements Serializable{
 	
 	public ArrayList<Meeting> getAllMeetingsOfPerson(Person person, boolean attending) {
 		ArrayList<Meeting> allMeetings = new ArrayList<Meeting>();
+		allMeetings.addAll(getAppointments());
+		allMeetings.addAll(getMeetings(person, attending));
+		return allMeetings;
+	}
+	public ArrayList<Meeting> getMeetings(Person person, boolean attending) {
+		ArrayList<Meeting> allMeetings = new ArrayList<Meeting>();
 		for (Notification n : notifications) {
 			if(n.getPerson().getUsername().equals(person.getUsername()) && (n.getApproved() == 'y' || !attending)) {
 				allMeetings.add(n.getMeeting());
 			}
 		}
-		for (Meeting meeting : meetings) {
-			if(meeting.getTeam() == null && meeting.getCreator().getUsername().equals(user.getUsername())) {
-				allMeetings.add(meeting);
-			}
-		}
 		return allMeetings;
 	}
+	public ArrayList<Meeting> getAppointments() {
+		ArrayList<Meeting> appointments = new ArrayList<Meeting>();
+		for (Meeting meeting : meetings) {
+			if(meeting.getTeam() == null && meeting.getCreator().getUsername().equals(user.getUsername())) {
+				appointments.add(meeting);
+			}
+		}
+		return appointments;
+	}
+	public ArrayList<Notification> getAllNotificationsOfPerson(Person person) {
+		ArrayList<Notification> notis = new ArrayList<Notification>();
+		for (Notification n : notifications) {
+			if(n.getPerson().getUsername().equals(person.getUsername())) {
+				notis.add(n);
+			}
+		}
+		return notis;
+	}
+	
+	public ArrayList<Notification> getAllNotificationsOfMeeting(Meeting meeting) {
+		ArrayList<Notification> notis = new ArrayList<Notification>();
+		for (Notification n : notifications) {
+			if(n.getMeeting().getMeetingID() == meeting.getMeetingID()) {
+				notis.add(n);
+			}
+		}
+		return notis;
+	}
+	
 	/**
 	 * Gets ALL of the meetings of a person in the given time interval
 	 * @param person the person whose meetings to get
@@ -104,6 +139,7 @@ public class CalendarModel implements Serializable{
 	
 	public void setSelected(Person person, boolean sel) {
 		selected.set(persons.indexOf(person), sel);
+		System.out.println("EEE WADDAFUK");
 		pcs.firePropertyChange(SELECTED_Property, person, person);
 	}
 	private void requestEverything() {
@@ -129,7 +165,6 @@ public class CalendarModel implements Serializable{
 		try {
 			if(Program.reqHandler != null){
 				Program.reqHandler.sendGetAllPersonsRequest();
-				responseCount = 0;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -137,12 +172,10 @@ public class CalendarModel implements Serializable{
 	}
 	
 	private void requestAllMeetings() {
-		for (Person p : persons) {
-			try {
-				Program.reqHandler.sendGetEvryMeetingByPersonRequest(p);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		try {
+			Program.reqHandler.sendGetEvryMeetingRequest();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -178,11 +211,6 @@ public class CalendarModel implements Serializable{
 	}
 	public void setAllNotifications(List<Notification> notifications) {
 		this.notifications = (ArrayList<Notification>) notifications;
-		for (Notification notification : notifications) {
-			if (notification.getPerson().getUsername().equals(user.getEmail())) {
-				notificationsOfUser.add(notification);
-			}
-		}
 	}
 	
 	public List<Person> getSelectedPersons() {
@@ -209,7 +237,7 @@ public class CalendarModel implements Serializable{
 	public void changeMeeting(Meeting meeting) {
 		//TODO
 	}
-	public void removeMeeting(String meetingID) {
+	public void removeMeeting(int meetingID) {
 		//TODO
 	}
 	public ArrayList<MeetingRoom> getRooms(){
@@ -230,11 +258,15 @@ public class CalendarModel implements Serializable{
 //		}
 //		return rooms;
 //	}
-	public ArrayList<Notification> getNotifications(Person user) {
-		return notificationsOfUser;
-	}
 	public Person getUser() {
 		return user;
+	}
+	
+	public GregorianCalendar getCalendar() {
+		return calendar;
+	}
+	public void changeDate() {
+		pcs.firePropertyChange(DATE_CHANGED_Property, null, null);
 	}
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		pcs.addPropertyChangeListener(listener);
