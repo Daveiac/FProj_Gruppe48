@@ -131,7 +131,7 @@ public class AppointmentOverView {
 			}
 		});
 		
-		if(!meeting.getCreator().getUsername().equals(calendarModel.getUser().getUsername())){
+		if(meeting.getCreator().getUsername().equals(calendarModel.getUser().getUsername()) == false ){
 			delete.setEnabled(false);
 			change.setEnabled(false);
 		}
