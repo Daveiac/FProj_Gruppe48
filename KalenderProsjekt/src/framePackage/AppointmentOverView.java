@@ -126,7 +126,7 @@ public class AppointmentOverView {
 		overViewPanel.add(delete, c);
 		delete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				calendarModel.removeMeeting(meeting.getMeetingID());
+				calendarModel.removeMeeting(meeting);
 			}
 		});
 		
