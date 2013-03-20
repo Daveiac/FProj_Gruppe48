@@ -302,14 +302,17 @@ public class DBController {
 
 	private Team getTeamFromResultSet(ResultSet rs) throws SQLException {
 		List<Person> members = new ArrayList<Person>();
+		int teamID = rs.getInt("teamID");
+		String sql = String.format("SELECT Person.* FROM Person, memberOF "
+						+ "WHERE memberOF.teamID = %d " +
+						"AND Person.username = memberOf.username", teamID);
+		
 		ResultSet membersOf = dBConn
-				.makeQuery("SELECT * FROM Person, memberOF, Team "
-						+ "WHERE memberOF.username = Person.username "
-						+ "AND memberOF.teamID = Team.teamID;");
+				.makeQuery(sql);
 		while (membersOf.next()) {
 			members.add(getPersonFromResultSet(membersOf));
 		}
-		return new Team(rs.getInt("teamID"), rs.getString("email"), members);
+		return new Team(teamID, rs.getString("email"), members);
 	}
 
 	public Team getTeam(int teamID) throws SQLException {
