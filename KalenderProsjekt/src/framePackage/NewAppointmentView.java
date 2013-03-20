@@ -401,7 +401,7 @@ public class NewAppointmentView extends JPanel {
 		this.add(slettKnapp, d);
 		slettKnapp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				calendarModel.removeMeeting(meeting.getMeetingID());
+				calendarModel.removeMeeting(meeting);
 				frame.setVisible(false);
 			}
 		});
