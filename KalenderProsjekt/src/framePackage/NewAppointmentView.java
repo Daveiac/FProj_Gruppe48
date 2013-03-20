@@ -433,6 +433,8 @@ public class NewAppointmentView extends JPanel {
 				romComponent.setSelectedItem(meet.getRoom().getRoomName());
 			}
 			
+			System.out.println(meet.getTeam().getMembers().size());
+			
 			infoComponent.setText(meet.getDescription());
 			if(alarm != null){
 			greCalendar.setTimeInMillis(alarm.getTime());
