@@ -103,16 +103,16 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 		monthTable.setRowHeight(300);
 		monthTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 
-//		monthTable.addMouseListener(new java.awt.event.MouseAdapter() {
-//		    @Override
-//		    public void mouseClicked(java.awt.event.MouseEvent evt) {
-//		        int row = monthTable.rowAtPoint(evt.getPoint());
-//		        int col = monthTable.columnAtPoint(evt.getPoint());
-//		        if (row >= 0 && col >= 0) {
-//		        	Program.;
-//		        }
-//		    }
-//		});
+		monthTable.addMouseListener(new java.awt.event.MouseAdapter() {
+		    @Override
+		    public void mouseClicked(java.awt.event.MouseEvent evt) {
+		        int row = monthTable.rowAtPoint(evt.getPoint());
+		        int col = monthTable.columnAtPoint(evt.getPoint());
+		        if (row >= 0 && col >= 0) {
+		        	Program.dw.setView(Program.dw.dayView);
+		        }
+		    }
+		});
 
 		int daysInWeek = 7;
 		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {

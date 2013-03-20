@@ -202,7 +202,7 @@ public class DefaultView extends JPanel {
 			calendarTitle.setText(mainView.getTitle());
 		}
 	}
-	private void setView(CalendarView view) {
+	public void setView(CalendarView view) {
 		mainView =  view;
 		calendarTitle.setText(mainView.getTitle());
 		timePanel.remove(calendarPanel);
