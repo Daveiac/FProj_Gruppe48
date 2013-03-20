@@ -41,11 +41,18 @@ public class CalendarModel implements Serializable {
 			ALARMS_CHANGED_Property = "ALARMA!",
 			DATE_CHANGED_Property = "DATE", ROOMS_CHANGED_Property = "ROOMS";
 
+	/**
+	 * Constructs the calendar model.
+	 */
 	public CalendarModel() {
 		pcs = new PropertyChangeSupport(this);
 		calendar = new GregorianCalendar();
 	}
 
+	/**
+	 * Initiate CalendarModel
+	 * @param username
+	 */
 	public void init(String username) {
 		System.out.println();
 		this.username = username;
@@ -58,6 +65,12 @@ public class CalendarModel implements Serializable {
 		requestAllPersons();
 	}
 
+	/**
+	 * Returns all meetings of the person.
+	 * @param person
+	 * @param attending
+	 * @return allMeetings
+	 */
 	public ArrayList<Meeting> getAllMeetingsOfPerson(Person person,
 			boolean attending) {
 		ArrayList<Meeting> allMeetings = new ArrayList<Meeting>();
@@ -66,6 +79,12 @@ public class CalendarModel implements Serializable {
 		return allMeetings;
 	}
 
+	/**
+	 * Returns something... DAVID!??
+	 * @param person
+	 * @param attending
+	 * @return
+	 */
 	public ArrayList<Meeting> getMeetings(Person person, boolean attending) {
 		ArrayList<Meeting> allMeetings = new ArrayList<Meeting>();
 		for (Notification n : notifications) {
@@ -77,6 +96,10 @@ public class CalendarModel implements Serializable {
 		return allMeetings;
 	}
 
+	/**
+	 * Returns a list of meetings.
+	 * @return appointments
+	 */
 	public ArrayList<Meeting> getAppointments() {
 		ArrayList<Meeting> appointments = new ArrayList<Meeting>();
 		for (Meeting meeting : meetings) {
@@ -89,9 +112,14 @@ public class CalendarModel implements Serializable {
 		return appointments;
 	}
 
+	/**
+	 * Returns all notifications of a person.
+	 * @param person
+	 * @return notifications
+	 */
 	public ArrayList<Notification> getAllNotificationsOfPerson(Person person) {
 		ArrayList<Notification> notis = new ArrayList<Notification>();
-		for (Notification n : notifications) {
+		for (Notification n : notis) {
 			if (n.getPerson().getUsername().equals(person.getUsername())) {
 				notis.add(n);
 			}
@@ -99,6 +127,10 @@ public class CalendarModel implements Serializable {
 		return notis;
 	}
 
+	/**
+	 * Returns unanswered notifications of user.
+	 * @return unanswered
+	 */
 	public ArrayList<Notification> getUnansweredNotificationsOfUser() {
 		ArrayList<Notification> unanswered = new ArrayList<Notification>();
 		for (Notification n : notifications) {
@@ -109,6 +141,11 @@ public class CalendarModel implements Serializable {
 		return unanswered;
 	}
 
+	/**
+	 * Returns all notifications of a meeting
+	 * @param meeting
+	 * @return notifications
+	 */
 	public ArrayList<Notification> getAllNotificationsOfMeeting(Meeting meeting) {
 		ArrayList<Notification> notis = new ArrayList<Notification>();
 		for (Notification n : notifications) {
@@ -119,6 +156,11 @@ public class CalendarModel implements Serializable {
 		return notis;
 	}
 
+	/**
+	 * Returns alarma by a meeting.
+	 * @param meeting
+	 * @return alarm
+	 */
 	public Alarm getAlarmByMeeting(Meeting meeting) {
 		for (Alarm alarm : alarms) {
 			if (alarm.getMeeting().getMeetingID() == meeting.getMeetingID()) {
@@ -293,7 +335,7 @@ public class CalendarModel implements Serializable {
 
 	public void changeMeeting(Meeting meeting) {
 		try {
-			Program.reqHandler.sendUpdateMeetingRequest(null);
+			Program.reqHandler.sendUpdateMeetingRequest(meeting);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
