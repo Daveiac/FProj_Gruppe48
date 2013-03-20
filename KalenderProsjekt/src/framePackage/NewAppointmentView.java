@@ -321,7 +321,7 @@ public class NewAppointmentView extends JPanel {
 		this.add(slettDeltakerKnapp, c);
 		slettDeltakerKnapp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(participantList.getSelectedValue()!=null){
+				if(participantList.getSelectedValue()!=null && participantList.getSelectedValue() != calendarModel.getUser()){
 					int i = participantList.getSelectedIndex();
 					getAllPerson().add(participantList.getSelectedValue());
 					listModel.remove(i);
