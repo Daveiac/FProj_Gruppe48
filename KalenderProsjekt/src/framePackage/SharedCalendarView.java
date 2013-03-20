@@ -27,12 +27,18 @@ public class SharedCalendarView implements PropertyChangeListener{
 	private List<Person> personList;
 	private List<JCheckBox> checkBoxList;
 
-	
+	/**
+	 * Constructs the Shared Calendar View.
+	 * @param calendarModel
+	 */
 	public SharedCalendarView(CalendarModel calendarModel){
 		initialize(calendarModel);
 	}
 	
-	
+	/**
+	 * Initiates data.
+	 * @param calendarModel
+	 */
 	private void initialize(CalendarModel calendarModel){
 		this.calendarModel = calendarModel;
 		calendarModel.addPropertyChangeListener(this);

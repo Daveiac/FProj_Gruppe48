@@ -111,19 +111,19 @@ public class DefaultView extends JPanel {
 		logOut = new JButton("logout");
 		backGroundConstraints.gridx = 3;
 		backGroundConstraints.gridy = 0;
-		logOut.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				frame.dispose();
-
-				JPanel loginPanel = new Login();
-				JFrame loginFrame = new JFrame("SUPA CALENDA!");
-				loginFrame.setContentPane(loginPanel);
-				loginFrame.pack();
-				loginFrame.setLocationRelativeTo(null);
-				loginFrame.setVisible(true);
-//				loginFrame.getRootPane().setDefaultButton(loginPanel.button);
-			}
-		});
+//		logOut.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent arg0) {
+//				frame.dispose();
+//
+//				JPanel loginPanel = new Login();
+//				JFrame loginFrame = new JFrame("SUPA CALENDA!");
+//				loginFrame.setContentPane(loginPanel);
+//				loginFrame.pack();
+//				loginFrame.setLocationRelativeTo(null);
+//				loginFrame.setVisible(true);
+////				loginFrame.getRootPane().setDefaultButton(loginPanel.button);
+//			}
+//		});
 		frame.add(logOut, backGroundConstraints);
 		
 		backGroundConstraints.gridx = 0;
