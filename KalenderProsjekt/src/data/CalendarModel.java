@@ -92,6 +92,16 @@ public class CalendarModel implements Serializable{
 		return notis;
 	}
 	
+	public ArrayList<Notification> getUnansweredNotificationsOfUser() {
+		ArrayList<Notification> unanswered = new ArrayList<Notification>();
+		for (Notification n : notifications) {
+			if(n.getApproved() == 'w') {
+				unanswered.add(n);
+			}
+		}
+		return unanswered;
+	}
+	
 	public ArrayList<Notification> getAllNotificationsOfMeeting(Meeting meeting) {
 		ArrayList<Notification> notis = new ArrayList<Notification>();
 		for (Notification n : notifications) {
