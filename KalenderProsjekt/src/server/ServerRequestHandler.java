@@ -310,7 +310,12 @@ public class ServerRequestHandler implements Runnable {
 	}
 	
 	private void deleteMeeting(Meeting meeting){
-		
+		try {
+			dbController.deleteMeeting(meeting);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void handleUpdateRequest(UpdateRequest request, Socket client) {
