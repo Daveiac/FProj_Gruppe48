@@ -433,7 +433,9 @@ public class NewAppointmentView extends JPanel {
 				romComponent.setSelectedItem(meet.getRoom().getRoomName());
 			}
 			
-			System.out.println(meet.getTeam().getMembers().size());
+			for(int i = 0; i < meet.getTeam().getMembers().size(); i++){
+				listModel.addElement(meet.getTeam().getMembers().get(i));
+			}
 			
 			infoComponent.setText(meet.getDescription());
 			if(alarm != null){
