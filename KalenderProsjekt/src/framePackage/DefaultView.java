@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -46,7 +47,7 @@ public class DefaultView extends JPanel {
 	private AppointmentView appointmentView;
 	private NotiPanelView notiPanel;
 	private Dato dato;
-	private JPanel calendarPanel;
+	private JComponent calendarPanel;
 	private GridBagConstraints timePanelContraints;
 
 
@@ -54,7 +55,7 @@ public class DefaultView extends JPanel {
 
 
 
-	public DefaultView() {
+	public DefaultView(String username) {
 		dato = new Dato();
 		dayView = new DayView(Program.calendarModel);
 		weekView = new WeekView(Program.calendarModel);
@@ -63,7 +64,7 @@ public class DefaultView extends JPanel {
 		sharedCView = new SharedCalendarView(Program.calendarModel);
 		appointmentView = new AppointmentView(Program.calendarModel);
 		initialize();
-		Program.calendarModel.init("batman");
+		Program.calendarModel.init(username);
 	}
 
 	private void initialize() {
@@ -101,6 +102,11 @@ public class DefaultView extends JPanel {
 		logOut = new JButton("logout");
 		backGroundConstraints.gridx = 3;
 		backGroundConstraints.gridy = 0;
+		logOut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new NewAppointmentView(null, Program.calendarModel, null);
+			}
+		});
 		frame.add(logOut, backGroundConstraints);
 		
 		backGroundConstraints.gridx = 0;
@@ -170,8 +176,9 @@ public class DefaultView extends JPanel {
 		timePanel.add(monthBtn, timePanelContraints);
 		//		
 		timePanelContraints.gridwidth = 5;
-		timePanelContraints.fill = GridBagConstraints.HORIZONTAL;
+		timePanelContraints.fill = GridBagConstraints.BOTH;
 		timePanelContraints.weightx = 1;
+		timePanelContraints.weighty = 1;
 		timePanelContraints.gridx = 0;
 		timePanelContraints.gridy = 1;
 		calendarPanel = mainView.getPanel();

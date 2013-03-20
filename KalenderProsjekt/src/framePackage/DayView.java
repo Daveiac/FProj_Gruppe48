@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -22,7 +23,7 @@ import data.Person;
  * This is the DayView Panel that shows the day planner.
  */
 @SuppressWarnings("serial")
-public class DayView extends JPanel implements CalendarView,
+public class DayView implements CalendarView,
 		PropertyChangeListener {
 
 	private JTable dayTable;
@@ -32,6 +33,7 @@ public class DayView extends JPanel implements CalendarView,
 	private String title;
 	private String[] columnHeaders;
 	private int dayOfWeek;
+	private JScrollPane scrollPane;
 
 	/**
 	 * Constructs the DayView Panel.
@@ -86,10 +88,7 @@ public class DayView extends JPanel implements CalendarView,
 		dayTable.getColumnModel().getColumn(1)
 				.setCellRenderer(new DayTableCellRenderer(this.calendarModel));
 
-		JScrollPane scrollPane = new JScrollPane(dayTable);
-		scrollPane.setPreferredSize(new Dimension(800, 407));
-
-		add(scrollPane);
+		scrollPane = new JScrollPane(dayTable);
 	}
 
 	/**
@@ -139,13 +138,13 @@ public class DayView extends JPanel implements CalendarView,
 		// Sets today's meetings
 		List<Person> persons = calendarModel.getSelectedPersons();
 		for (Person person : persons) {
-			ArrayList<Meeting> meetings = calendarModel.getMeetings(person);
+			ArrayList<Meeting> meetings = calendarModel.getAllMeetingsOfPerson(person, true);
 			setMeetings(calendar, tableModel, dayOfWeek, meetings);
 		}
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
 		dayTable.getColumnModel().getColumn(1)
-		.setCellRenderer(new DayTableCellRenderer(this.calendarModel));
+				.setCellRenderer(new DayTableCellRenderer(this.calendarModel));
 	}
 
 	/**
@@ -231,8 +230,8 @@ public class DayView extends JPanel implements CalendarView,
 	 * @return day panel.
 	 */
 	@Override
-	public JPanel getPanel() {
-		return this;
+	public JComponent getPanel() {
+		return scrollPane;
 	}
 
 	@Override
@@ -241,13 +240,11 @@ public class DayView extends JPanel implements CalendarView,
 		case CalendarModel.CALENDAR_LOADED_Property:
 			createDayTable();
 			break;
-		case CalendarModel.MEETING_ADDED_Property:
+		case CalendarModel.MEETINGS_CHANGED_Property:
 			createDayTable();
 			break;
-		case CalendarModel.MEETING_CHANGED_Property:
-			createDayTable();
-			break;
-		case CalendarModel.MEETING_REMOVED_Property:
+		case CalendarModel.SELECTED_Property:
+			System.out.println("motherfucker!");
 			createDayTable();
 			break;
 		default:

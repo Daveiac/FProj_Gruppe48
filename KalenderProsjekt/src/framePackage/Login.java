@@ -16,6 +16,7 @@ public class Login extends JPanel{
 	private JTextField userField;
 	private JPasswordField passwordField;
 	private JButton button;
+	private String username;
 	private GridBagConstraints c;
 	
 	public Login(){
@@ -31,7 +32,8 @@ public class Login extends JPanel{
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Program.reqHandler.sendAuthenticationRequest(userField.getText(), new String(passwordField.getPassword()));
+					username = userField.getText();
+					Program.reqHandler.sendAuthenticationRequest(username, new String(passwordField.getPassword()));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -75,5 +77,9 @@ public class Login extends JPanel{
 		frame.getContentPane().add(new Login());
 		frame.pack();
 		frame.setVisible(true);
+	}
+
+	public String getUsername() {
+		return username;
 	}
 }

@@ -6,6 +6,7 @@ import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -18,7 +19,7 @@ import data.CalendarModel;
  * This is the WeekView Panel that shows the week planner.
  */
 @SuppressWarnings("serial")
-public class WeekView extends JPanel implements CalendarView,
+public class WeekView implements CalendarView,
 		PropertyChangeListener {
 
 	private JTable weekTable;
@@ -28,6 +29,7 @@ public class WeekView extends JPanel implements CalendarView,
 	private String title;
 	private String[] columnHeaders;
 	private DayView dayView;
+	private JScrollPane scrollPane;
 
 	/**
 	 * Constructs the WeekView Panel.
@@ -84,10 +86,7 @@ public class WeekView extends JPanel implements CalendarView,
 					.setCellRenderer(new DayTableCellRenderer(calendarModel));
 		}
 
-		JScrollPane scrollPane = new JScrollPane(weekTable);
-		scrollPane.setPreferredSize(new Dimension(800, 407));
-
-		add(scrollPane);
+		scrollPane = new JScrollPane(weekTable);
 	}
 
 	/**
@@ -124,8 +123,7 @@ public class WeekView extends JPanel implements CalendarView,
 		SimpleDateFormat weekDayFormat = new SimpleDateFormat("EEEE dd. MMM.");
 		int daysInWeek = 7;
 		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {
-			columnHeaders[dayOfWeek] = weekDayFormat.format(weekCalendar
-					.getTime());
+			columnHeaders[dayOfWeek] = weekDayFormat.format(weekCalendar.getTime());
 			weekCalendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
 		}
 		tableModel.setColumnIdentifiers(columnHeaders);
@@ -141,7 +139,7 @@ public class WeekView extends JPanel implements CalendarView,
 		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {
 			dayView.createDay(weekCalendar, tableModel, dayOfWeek);
 			weekTable.getColumnModel().getColumn(dayOfWeek)
-			.setCellRenderer(new DayTableCellRenderer(calendarModel));
+					.setCellRenderer(new DayTableCellRenderer(calendarModel));
 			weekCalendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
 		}
 	}
@@ -193,8 +191,8 @@ public class WeekView extends JPanel implements CalendarView,
 	 * @return week panel.
 	 */
 	@Override
-	public JPanel getPanel() {
-		return this;
+	public JComponent getPanel() {
+		return scrollPane;
 	}
 
 	@Override
@@ -203,13 +201,10 @@ public class WeekView extends JPanel implements CalendarView,
 		case CalendarModel.CALENDAR_LOADED_Property:
 			createWeekTable();
 			break;
-		case CalendarModel.MEETING_ADDED_Property:
+		case CalendarModel.MEETINGS_CHANGED_Property:
 			createWeekTable();
 			break;
-		case CalendarModel.MEETING_CHANGED_Property:
-			createWeekTable();
-			break;
-		case CalendarModel.MEETING_REMOVED_Property:
+		case CalendarModel.SELECTED_Property:
 			createWeekTable();
 			break;
 		default:

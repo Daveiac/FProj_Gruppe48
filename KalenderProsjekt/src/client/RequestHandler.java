@@ -42,10 +42,10 @@ public class RequestHandler {
 		Program.client.sendRequest(qReqGetAllNotifications);
 	}
 	
-	public void sendGetEvryMeetingByPersonRequest(Person person) throws IOException{
-		QueryRequest qReqGetEveryMeetingByPerson =
-				new QueryRequest(person, null, QueryType.GET_EVERY_MEETING_BY_PERSON);
-		Program.client.sendRequest(qReqGetEveryMeetingByPerson);
+	public void sendGetEvryMeetingRequest() throws IOException{
+		QueryRequest qReqGetEveryMeeting =
+				new QueryRequest(null, null, QueryType.GET_EVERY_MEETING);
+		Program.client.sendRequest(qReqGetEveryMeeting);
 	}
 	
 	public void sendGetAlarmsByPersonRequest(Person person) throws IOException{
@@ -73,29 +73,29 @@ public class RequestHandler {
 	}
 	
 	//Update requests:
-	public void sendCreateMeetingRequest(Person p, Alarm a, Notification n, Meeting m) throws IOException{
+	public void sendCreateMeetingRequest(Meeting m) throws IOException{
 		UpdateRequest uReqCreateMeeting =
-				new UpdateRequest(m, a, n, UpdateType.CREATE_MEETING, p);
+				new UpdateRequest(m, UpdateType.CREATE_MEETING);
 		Program.client.sendRequest(uReqCreateMeeting);
 	}
-	
-	public void sendCreateAlarmRequest(Person p, Alarm a,Notification n, Meeting m) throws IOException{
-		UpdateRequest uReqCreateAlarm =
-				new UpdateRequest(m, a, n, UpdateType.CREATE_ALARM, p);
-		Program.client.sendRequest(uReqCreateAlarm);
-	}
+//	TODO
+//	public void sendCreateAlarmRequest(Person p, Alarm a,Notification n, Meeting m) throws IOException{
+//		UpdateRequest uReqCreateAlarm =
+//				new UpdateRequest(m, a, n, UpdateType.CREATE_ALARM, p);
+//		Program.client.sendRequest(uReqCreateAlarm);
+//	}
 	
 	public void sendUpdateMeetingRequest(Person p, Alarm a, Notification n, Meeting m) throws IOException{
 		UpdateRequest uReqUpdateMeeting =
-				new UpdateRequest(m, a, n, UpdateType.UPDATE_METING, p);
+				new UpdateRequest(m, UpdateType.UPDATE_METING);
 		Program.client.sendRequest(uReqUpdateMeeting);
 	}
-	
-	public void sendUpdateNotificationRequest(Person p,Alarm a,Notification n,Meeting m)throws IOException{
-		UpdateRequest uReqUpdateNotification =
-				new UpdateRequest(m, a, n, UpdateType.UPDATE_NOTIFICATION, p);
-		Program.client.sendRequest(uReqUpdateNotification);
-	}
+//	TODO
+//	public void sendUpdateNotificationRequest(Person p,Alarm a,Notification n,Meeting m)throws IOException{
+//		UpdateRequest uReqUpdateNotification =
+//				new UpdateRequest(m, a, n, UpdateType.UPDATE_NOTIFICATION, p);
+//		Program.client.sendRequest(uReqUpdateNotification);
+//	}
 	
 }
 
