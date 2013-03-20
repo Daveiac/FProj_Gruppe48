@@ -24,7 +24,6 @@ public class CalendarModel implements Serializable{
 	private ArrayList<Meeting> meetings;
 	private ArrayList<Boolean> selected;
 	private PropertyChangeSupport pcs;
-	private ArrayList<Notification> notificationsOfUser;
 	private ArrayList<Notification> notifications;
 	private ArrayList<Alarm> alarms;
 	private String username;
@@ -50,7 +49,6 @@ public class CalendarModel implements Serializable{
 		meetings = new ArrayList<Meeting>();
 		selected = new ArrayList<Boolean>();
 		notifications = new ArrayList<Notification>();
-		notificationsOfUser = new ArrayList<Notification>();
 		alarms = new ArrayList<Alarm>();
 		meetingRooms = new ArrayList<MeetingRoom>();
 		requestAllPersons();
@@ -208,11 +206,6 @@ public class CalendarModel implements Serializable{
 	}
 	public void setAllNotifications(List<Notification> notifications) {
 		this.notifications = (ArrayList<Notification>) notifications;
-		for (Notification notification : notifications) {
-			if (notification.getPerson().getUsername().equals(user.getEmail())) {
-				notificationsOfUser.add(notification);
-			}
-		}
 	}
 	
 	public List<Person> getSelectedPersons() {
@@ -259,9 +252,6 @@ public class CalendarModel implements Serializable{
 //		}
 //		return rooms;
 //	}
-	public ArrayList<Notification> getNotifications(Person user) {
-		return notificationsOfUser;
-	}
 	public Person getUser() {
 		return user;
 	}
