@@ -152,7 +152,7 @@ public class AppointmentView implements PropertyChangeListener {
 			}
 			infoBtn.addActionListener(new InfoButtonListener(meeting));
 
-			System.out.println(mc.gridy = i + 1);
+//			System.out.println(mc.gridy = i + 1);
 			
 			for (int j = 0; j < items.length; j++) {
 				JComponent item = items[j];
