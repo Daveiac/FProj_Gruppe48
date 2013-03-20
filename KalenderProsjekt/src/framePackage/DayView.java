@@ -150,7 +150,7 @@ public class DayView implements CalendarView, PropertyChangeListener {
 		        int col = dayTable.columnAtPoint(evt.getPoint()) - 1;
 		        if (row >= 0 && col >= 0) {
 		        	Meeting meeting = (Meeting) DayView.this.tableModel.getValueAt(row, col);
-		        	NewAppointmentView nav = new NewAppointmentView(meeting);
+		        	new NewAppointmentView(meeting);
 		        }
 		    }
 		});
