@@ -1,6 +1,5 @@
 package framePackage;
 
-import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
@@ -9,14 +8,12 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 import client.Program;
-
 import data.CalendarModel;
 import data.Meeting;
 import data.Person;
@@ -96,22 +93,28 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 
 		// Sets table headers with corresponding days
 		setHeaders();
+		
 		// Sets the new month into the table
 		monthTable.setModel(tableModel);
 		monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		monthTable.setRowSelectionAllowed(false);
-		monthTable.setRowHeight(300);
+		monthTable.setRowHeight(80);
 		monthTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 
 		monthTable.addMouseListener(new java.awt.event.MouseAdapter() {
-		    @Override
-		    public void mouseClicked(java.awt.event.MouseEvent evt) {
-		        int row = monthTable.rowAtPoint(evt.getPoint());
-		        int col = monthTable.columnAtPoint(evt.getPoint());
-		        if (row >= 0 && col >= 0) {
-		        	Program.dw.setView(Program.dw.dayView);
-		        }
-		    }
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				int row = monthTable.rowAtPoint(evt.getPoint());
+				int weekDay = monthTable.columnAtPoint(evt.getPoint()) - 1;
+				if (row >= 0 && weekDay >= 0) {
+					int firstDayOfWeek = -calendar.get(GregorianCalendar.DAY_OF_WEEK) + 2;
+					calendar.add(GregorianCalendar.DAY_OF_WEEK, weekDay + firstDayOfWeek);
+					int calWeekOfMonth = calendar.get(GregorianCalendar.WEEK_OF_MONTH);
+					calendar.add(GregorianCalendar.WEEK_OF_MONTH, row - calWeekOfMonth);
+					MonthView.this.calendarModel.changeDate();
+					Program.dw.setView(Program.dw.dayView);
+				}
+			}
 		});
 
 		int daysInWeek = 7;
