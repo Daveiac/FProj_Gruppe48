@@ -15,6 +15,8 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
+import client.Program;
+
 import data.CalendarModel;
 import data.Meeting;
 import data.Person;
@@ -59,7 +61,7 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 	}
 
 	private void initialize(CalendarModel calendarModel) {
-		calendar = new GregorianCalendar();
+		calendar = calendarModel.getCalendar();
 		this.calendarModel = calendarModel;
 		this.calendarModel.addPropertyChangeListener(this);
 
@@ -94,13 +96,23 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 
 		// Sets table headers with corresponding days
 		setHeaders();
-
 		// Sets the new month into the table
 		monthTable.setModel(tableModel);
 		monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		monthTable.setRowSelectionAllowed(false);
 		monthTable.setRowHeight(300);
 		monthTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+
+		monthTable.addMouseListener(new java.awt.event.MouseAdapter() {
+		    @Override
+		    public void mouseClicked(java.awt.event.MouseEvent evt) {
+		        int row = monthTable.rowAtPoint(evt.getPoint());
+		        int col = monthTable.columnAtPoint(evt.getPoint());
+		        if (row >= 0 && col >= 0) {
+		        	Program.dw.setView(Program.dw.dayView);
+		        }
+		    }
+		});
 
 		int daysInWeek = 7;
 		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {

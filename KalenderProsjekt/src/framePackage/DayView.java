@@ -38,7 +38,7 @@ public class DayView implements CalendarView, PropertyChangeListener {
 	 * Constructs the DayView Panel.
 	 */
 	public DayView(CalendarModel calendarModel) {
-		calendar = new GregorianCalendar();
+		calendar = calendarModel.getCalendar();
 		this.calendarModel = calendarModel;
 		this.calendarModel.addPropertyChangeListener(this);
 
@@ -84,6 +84,7 @@ public class DayView implements CalendarView, PropertyChangeListener {
 		dayTable.setRowSelectionAllowed(false);
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
+		
 		dayTable.getColumnModel().getColumn(1)
 				.setCellRenderer(new DayTableCellRenderer(this.calendarModel));
 
@@ -143,6 +144,18 @@ public class DayView implements CalendarView, PropertyChangeListener {
 		}
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
+
+//		dayTable.addMouseListener(new java.awt.event.MouseAdapter() {
+//		    @Override
+//		    public void mouseClicked(java.awt.event.MouseEvent evt) {
+//		        int row = dayTable.rowAtPoint(evt.getPoint());
+//		        int col = dayTable.columnAtPoint(evt.getPoint());
+//		        if (row >= 0 && col >= 0) {
+//		        	Møtvisning møtevisning = new Møtevisning();
+//		        }
+//		    }
+//		});
+		
 		dayTable.getColumnModel().getColumn(1)
 				.setCellRenderer(new DayTableCellRenderer(this.calendarModel));
 	}

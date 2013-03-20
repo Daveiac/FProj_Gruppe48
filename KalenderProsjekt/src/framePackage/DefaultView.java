@@ -40,9 +40,9 @@ public class DefaultView extends JPanel {
 	private JToggleButton weekBtn;
 	private JToggleButton monthBtn;
 	private CalendarView mainView;
-	private DayView dayView;
-	private WeekView weekView;
-	private MonthView monthView;
+	public DayView dayView;
+	public WeekView weekView;
+	public MonthView monthView;
 	private SharedCalendarView sharedCView;
 	private AppointmentView appointmentView;
 	private NotiPanelView notiPanel;
@@ -202,20 +202,31 @@ public class DefaultView extends JPanel {
 			calendarTitle.setText(mainView.getTitle());
 		}
 	}
+	public void setView(CalendarView view) {
+		if(view == dayView) {
+			dayBtn.setSelected(true);
+		} else if(view == weekView) {
+			weekBtn.setSelected(true);
+		} else if(view == monthView) {
+			monthBtn.setSelected(true);
+		}
+		mainView =  view;
+		calendarTitle.setText(mainView.getTitle());
+		timePanel.remove(calendarPanel);
+		calendarPanel = mainView.getPanel();
+		timePanel.add(calendarPanel, timePanelContraints);
+		timePanel.validate();
+	}
+	
 	private class DayWeekMonthListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource() == dayBtn) {
-				mainView = dayView;
+				setView(dayView);
 			} else if(e.getSource() == weekBtn) {
-				mainView = weekView;
+				setView(weekView);
 			} else {
-				mainView = monthView;
+				setView(monthView);
 			}
-			calendarTitle.setText(mainView.getTitle());
-			timePanel.remove(calendarPanel);
-			calendarPanel = mainView.getPanel();
-			timePanel.add(calendarPanel, timePanelContraints);
-			timePanel.validate();
 		}
 	}
 	private class CalendarMeetingListener implements ActionListener {

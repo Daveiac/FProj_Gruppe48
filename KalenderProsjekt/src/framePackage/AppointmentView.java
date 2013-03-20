@@ -106,14 +106,47 @@ public class AppointmentView implements PropertyChangeListener {
 	}
 
 	private void refreshMeetings() {
-//		 for (int i = 0; i < notifications.size(); i++) {
-//		 Notification n = notifications.get(i);
-//		 	if(n.getApproved() == 'w') {
-//		 		
-//		 	}
-//		 }
-		
 		mc.anchor = GridBagConstraints.NORTHWEST;
+		 for (int i = 0; i < notifications.size(); i++) {
+		 Notification n = notifications.get(i);
+		 JComponent[] items = new JComponent[7];
+		 	switch (n.getApproved()) {
+			case 'w':
+				items[0] = new JLabel(new ImageIcon("res/icons/icon_check.png"));
+				break;
+			case 'y':
+				items[0] = new JLabel(new ImageIcon("res/icons/icon_check.png"));
+				break;
+			case 'n':
+				items[0] = new JLabel(new ImageIcon("res/icons/icon_check.png"));
+				break;
+			}
+
+		 	if (meetings.size() == 0 && i == notifications.size()-1) {
+				mc.weighty = 1;
+			}
+		 	
+			items[1] = new JLabel();
+			items[2] = new JLabel();
+			items[3] = new JLabel(meeting.getTitle());
+			items[4] = new JLabel(meeting.getLocation());
+			items[5] = new JButton("endre");
+			items[6] = new JButton("mer info...");
+
+			GregorianCalendar startDate = new GregorianCalendar();
+			startDate.setTimeInMillis(meeting.getStartTime());
+			((JLabel) items[1]).setText(dateFormat.format(startDate.getTime()));
+			((JLabel) items[2]).setText(timeFormat.format(startDate.getTime()));
+
+			mc.gridy = i + 1;
+			for (int j = 0; j < items.length; j++) {
+				JComponent item = items[j];
+				item.setPreferredSize(new Dimension(sizes[j], 20));
+				mc.gridx = j;
+				meetingPanel.add(item, mc);
+			}
+		 }
+		
 		for (int i = 0; i < meetings.size(); i++) {
 			if (i == meetings.size()-1) {
 				mc.weighty = 1;
@@ -162,8 +195,8 @@ public class AppointmentView implements PropertyChangeListener {
 		switch (evt.getPropertyName()) {
 		case CalendarModel.CALENDAR_LOADED_Property:
 			user = calendarModel.getUser();
-			meetings = calendarModel.getAllMeetingsOfPerson(user, false);
-//			notifications = calendarModel.getNotifications(user);
+			notifications = calendarModel.getAllNotificationsOfPerson(user);
+			meetings = calendarModel.getAppointments();
 //			refreshMeetings();
 			break;
 		}

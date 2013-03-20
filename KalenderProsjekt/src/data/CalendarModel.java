@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,12 +25,12 @@ public class CalendarModel implements Serializable{
 	private ArrayList<Meeting> meetings;
 	private ArrayList<Boolean> selected;
 	private PropertyChangeSupport pcs;
-	private ArrayList<Notification> notificationsOfUser;
 	private ArrayList<Notification> notifications;
 	private ArrayList<Alarm> alarms;
 	private String username;
 	private Person user;
 	private ArrayList<MeetingRoom> meetingRooms;
+	private GregorianCalendar calendar;
 	private static final Color[] colors = { Color.red, Color.blue,
 			Color.yellow, Color.orange, Color.magenta, Color.gray, Color.pink };
 	public static final String SELECTED_Property = "SELECTED",
@@ -50,9 +51,9 @@ public class CalendarModel implements Serializable{
 		meetings = new ArrayList<Meeting>();
 		selected = new ArrayList<Boolean>();
 		notifications = new ArrayList<Notification>();
-		notificationsOfUser = new ArrayList<Notification>();
 		alarms = new ArrayList<Alarm>();
 		meetingRooms = new ArrayList<MeetingRoom>();
+		calendar = new GregorianCalendar();
 		requestAllPersons();
 	}
 	
@@ -208,11 +209,6 @@ public class CalendarModel implements Serializable{
 	}
 	public void setAllNotifications(List<Notification> notifications) {
 		this.notifications = (ArrayList<Notification>) notifications;
-		for (Notification notification : notifications) {
-			if (notification.getPerson().getUsername().equals(user.getEmail())) {
-				notificationsOfUser.add(notification);
-			}
-		}
 	}
 	
 	public List<Person> getSelectedPersons() {
@@ -259,11 +255,12 @@ public class CalendarModel implements Serializable{
 //		}
 //		return rooms;
 //	}
-	public ArrayList<Notification> getNotifications(Person user) {
-		return notificationsOfUser;
-	}
 	public Person getUser() {
 		return user;
+	}
+	
+	public GregorianCalendar getCalendar() {
+		return calendar;
 	}
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		pcs.addPropertyChangeListener(listener);
