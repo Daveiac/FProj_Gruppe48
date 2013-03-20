@@ -26,7 +26,6 @@ public class Program {
 	public static RequestHandler reqHandler;
 	private static JFrame loginFrame;
 	private static Login loginPanel;
-	public static DefaultView dw;
 
 	public static void main(String[] args) throws UnknownHostException {
 		queueForHandlingResponses = new LinkedBlockingQueue<Response>();
@@ -45,7 +44,6 @@ public class Program {
 		loginFrame.pack();
 		loginFrame.setLocationRelativeTo(null);
 		loginFrame.setVisible(true);
-		loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //		
 		
 	}
@@ -61,7 +59,7 @@ public class Program {
 	
 	public static void loginOK() {
 		System.out.println("loginok");
-		dw = new DefaultView(loginPanel.getUsername());
+		DefaultView dw = new DefaultView(loginPanel.getUsername());
 		JFrame frame = dw.getFrame();
 		frame.setBounds(0, 0, 1260, 768);
 		frame.setVisible(true);
