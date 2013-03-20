@@ -31,15 +31,15 @@ public class CalendarModel implements Serializable{
 	private Person user;
 	private ArrayList<MeetingRoom> meetingRooms;
 	private GregorianCalendar calendar;
-	private static final Color[] colors = { Color.red, Color.blue,
-			Color.yellow, Color.orange, Color.magenta, Color.gray, Color.pink };
+	private static final Color[] colors = { Color.red, Color.blue,Color.yellow, Color.orange, Color.magenta, Color.gray, Color.pink };
 	public static final String SELECTED_Property = "SELECTED",
 			MEETINGS_CHANGED_Property = "MEETINGS",
 			NOTIFICATIONS_CHANGED_Property = "NNOTI",
 			CALENDAR_LOADED_Property = "LOADED",
 			PERSONS_ADDED_Property = "PERSONS",
 			ALARMS_CHANGED_Property = "ALARMA!",
-			DATE_CHANGED_Property = "DATE";
+			DATE_CHANGED_Property = "DATE",
+			ROOMS_CHANGED_Property = "ROOMS";
 
 
 	public CalendarModel() {
@@ -213,12 +213,15 @@ public class CalendarModel implements Serializable{
 	}
 	public void setAllRooms(List<MeetingRoom> rooms) {
 		meetingRooms = (ArrayList<MeetingRoom>) rooms;
+		pcs.firePropertyChange(ROOMS_CHANGED_Property, null, null);
 	}
 	public void setAlarmsOfUser(List<Alarm> alarms) {
 		this.alarms = (ArrayList<Alarm>) alarms;
+		pcs.firePropertyChange(ALARMS_CHANGED_Property, null, null);
 	}
 	public void setAllNotifications(List<Notification> notifications) {
 		this.notifications = (ArrayList<Notification>) notifications;
+		pcs.firePropertyChange(NOTIFICATIONS_CHANGED_Property, null, null);
 	}
 	
 	public List<Person> getSelectedPersons() {
