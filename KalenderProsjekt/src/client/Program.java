@@ -46,8 +46,6 @@ public class Program {
 		loginFrame.setLocationRelativeTo(null);
 		loginFrame.setVisible(true);
 		loginFrame.getRootPane().setDefaultButton(loginPanel.button);
-//		
-		
 	}
 	
 
