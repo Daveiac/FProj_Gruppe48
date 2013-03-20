@@ -426,14 +426,16 @@ public class NewAppointmentView extends JPanel {
 				locComponent.setText(meet.getLocation());
 				romComponent.setEnabled(false);
 			}
-			if(meet.getLocation().length() == 0){
+			if(meet.getRoom() != null){
 				romComponent.setEnabled(true);
 				locComponent.setEnabled(false);
 				romComponent.addItem(meet.getRoom().getRoomName());
 				romComponent.setSelectedItem(meet.getRoom().getRoomName());
 			}
 			
-			System.out.println(meet.getTeam().getMembers().size());
+			for(int i = 0; i < meet.getTeam().getMembers().size(); i++){
+				listModel.addElement(meet.getTeam().getMembers().get(i));
+			}
 			
 			infoComponent.setText(meet.getDescription());
 			if(alarm != null){

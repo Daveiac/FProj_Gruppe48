@@ -37,7 +37,7 @@ public class NotiPanelView extends JPanel implements PropertyChangeListener {
 	private JPanel varselPanel;
 	private JLabel lblWarning;
 	private JList warningList;
-	private DefaultListModel listModel;
+	private DefaultListModel<Notification> listModel;
 	private List<Notification> notifications;
 	private AppointmentOverView appointOverView;
 	private CalendarModel calendarModel;
@@ -78,9 +78,11 @@ public class NotiPanelView extends JPanel implements PropertyChangeListener {
 		warningList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
 				if(warningList.getSelectedValue() != null){
+					int i = warningList.getSelectedIndex();
 					Meeting meeting =  ((Notification) warningList.getSelectedValue()).getMeeting();
 					appointOverView = new AppointmentOverView(meeting);
 					appointOverView.showFrame();
+					listModel.remove(i);
 				}
 				if(warningList.getSelectedValue() == null){
 					return;
@@ -91,15 +93,13 @@ public class NotiPanelView extends JPanel implements PropertyChangeListener {
 	}
 	
 	private void filList(){
-//		listModel.removeAllElements();
-		for(int i = 0; i < calendarModel.getUnansweredNotificationsOfUser().size();i++){
-			listModel.addElement(calendarModel.getUnansweredNotificationsOfUser().get(i));
+		listModel.removeAllElements();
+		for(int i = 0; i < notifications.size(); i++){
+			if(notifications.get(i).getPerson().getUsername().equals(calendarModel.getUser().getUsername()) == true
+					&& notifications.get(i).getMeeting().getCreator().getUsername().equals(calendarModel.getUser().getUsername()) == false){
+				listModel.addElement(notifications.get(i));
+			}
 		}
-//		for(int i = 0; i <calendarModel.getPersons().size(); i++){
-//			if(calendarModel.getUser() == notifications.get(i).getPerson()){
-//				listModel.addElement(notifications.get(i));
-//			}
-//		}
 	}
 
 	public JPanel getPanel() {
