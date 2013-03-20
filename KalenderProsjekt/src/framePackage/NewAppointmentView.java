@@ -514,11 +514,11 @@ public class NewAppointmentView extends JPanel {
 	}
 	
 	private boolean validTime(){		
-		if(startHourComponent.getSelectedIndex() > endHourComponent.getSelectedIndex()){
+		if(startHourComponent.getSelectedIndex() < endHourComponent.getSelectedIndex()){
 			return true;
 		}
 		if(startHourComponent.getSelectedIndex() == endHourComponent.getSelectedIndex()){
-			if(startMinComponent.getSelectedIndex() >= endMinComponent.getSelectedIndex()){
+			if(startMinComponent.getSelectedIndex() < endMinComponent.getSelectedIndex()){
 				return true;
 			}
 		}
