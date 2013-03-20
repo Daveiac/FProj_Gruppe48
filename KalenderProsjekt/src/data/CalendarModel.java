@@ -23,25 +23,28 @@ public class CalendarModel implements Serializable{
 	private List<Person> persons;
 	private ArrayList<Meeting> meetings;
 	private ArrayList<Boolean> selected;
-//	private FakeWhale data;
 	private PropertyChangeSupport pcs;
 	private ArrayList<Notification> notificationsOfUser;
 	private ArrayList<Notification> notifications;
 	private ArrayList<Alarm> alarms;
 	private String username;
-	private int responseCount;
 	private Person user;
 	private ArrayList<MeetingRoom> meetingRooms;
-	private static final Color[] colors = {Color.red,Color.blue,Color.darkGray,Color.orange,Color.magenta,Color.gray,Color.pink};
-	public static final String SELECTED_Property = "SELECTED", MEETINGS_CHANGED_Property = "MEETINGS",
-			NOTIFICATIONS_CHANGED_Property = "NNOTI", CALENDAR_LOADED_Property = "LOADED", PERSONS_ADDED_Property ="PERSONS";
-
+	private static final Color[] colors = { Color.red, Color.blue,
+			Color.yellow, Color.orange, Color.magenta, Color.gray, Color.pink };
+	public static final String SELECTED_Property = "SELECTED",
+			MEETINGS_CHANGED_Property = "MEETINGS",
+			NOTIFICATIONS_CHANGED_Property = "NNOTI",
+			CALENDAR_LOADED_Property = "LOADED",
+			PERSONS_ADDED_Property = "PERSONS",
+			ALARMS_CHANGED_Property = "ALARMA!";
 
 
 	public CalendarModel() {
 		pcs = new PropertyChangeSupport(this);
 	}
 	public void init(String username) {
+		System.out.println();
 		this.username = username;
 		persons = new ArrayList<Person>();
 		meetings = new ArrayList<Meeting>();
@@ -55,18 +58,48 @@ public class CalendarModel implements Serializable{
 	
 	public ArrayList<Meeting> getAllMeetingsOfPerson(Person person, boolean attending) {
 		ArrayList<Meeting> allMeetings = new ArrayList<Meeting>();
+		allMeetings.addAll(getAppointments());
+		allMeetings.addAll(getMeetings(person, attending));
+		return allMeetings;
+	}
+	public ArrayList<Meeting> getMeetings(Person person, boolean attending) {
+		ArrayList<Meeting> allMeetings = new ArrayList<Meeting>();
 		for (Notification n : notifications) {
 			if(n.getPerson().getUsername().equals(person.getUsername()) && (n.getApproved() == 'y' || !attending)) {
 				allMeetings.add(n.getMeeting());
 			}
 		}
-		for (Meeting meeting : meetings) {
-			if(meeting.getTeam() == null && meeting.getCreator().getUsername().equals(user.getUsername())) {
-				allMeetings.add(meeting);
-			}
-		}
 		return allMeetings;
 	}
+	public ArrayList<Meeting> getAppointments() {
+		ArrayList<Meeting> appointments = new ArrayList<Meeting>();
+		for (Meeting meeting : meetings) {
+			if(meeting.getTeam() == null && meeting.getCreator().getUsername().equals(user.getUsername())) {
+				appointments.add(meeting);
+			}
+		}
+		return appointments;
+	}
+	public ArrayList<Notification> getAllNotificationsOfPerson(Person person) {
+		ArrayList<Notification> notis = new ArrayList<Notification>();
+		for (Notification n : notifications) {
+			if(n.getPerson().getUsername().equals(person.getUsername())) {
+				notis.add(n);
+			}
+		}
+		return notis;
+	}
+	
+	public ArrayList<Notification> getAllNotificationsOfMeeting(Meeting meeting) {
+		ArrayList<Notification> notis = new ArrayList<Notification>();
+		for (Notification n : notifications) {
+			if(n.getMeeting().getMeetingID() == meeting.getMeetingID()) {
+				notis.add(n);
+			}
+		}
+		return notis;
+	}
+	
 	/**
 	 * Gets ALL of the meetings of a person in the given time interval
 	 * @param person the person whose meetings to get
@@ -129,7 +162,6 @@ public class CalendarModel implements Serializable{
 		try {
 			if(Program.reqHandler != null){
 				Program.reqHandler.sendGetAllPersonsRequest();
-				responseCount = 0;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

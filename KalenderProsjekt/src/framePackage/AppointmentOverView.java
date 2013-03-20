@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import data.Alarm;
 import data.CalendarModel;
 import data.Meeting;
 import data.MeetingRoom;
@@ -49,12 +50,13 @@ public class AppointmentOverView {
 	private List<Notification> notifications;
 	private NewAppointmentView newAppointment;
 	private CalendarModel calendarModel;
+	private Alarm alarm;
 
 	public AppointmentOverView(Meeting meeting, Person creator,
 			Notification notification) {
 		this.meeting = meeting;
 		notifications = new ArrayList<Notification>();
-		notifications.add(notification);
+		notifications.add(notification); 
 		this.creator = creator;
 		initialize();
 	}
@@ -105,9 +107,9 @@ public class AppointmentOverView {
 		overViewPanel.add(change, c);
 		change.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				newAppointment = new NewAppointmentView(meeting, calendarModel, alarm);
+				newAppointment = new NewAppointmentView(meeting, calendarModel, alarm);
 				frame.setVisible(false);
-//				overViewPanel.setVisible(false);
+				overViewPanel.setVisible(true);
 			}
 		});
 
@@ -204,10 +206,9 @@ public class AppointmentOverView {
 				creator);
 		Notification notification = new Notification(0, 'y', 'c', meetings,
 				creator);
+		CalendarModel calendarModel2 = new CalendarModel();
 		new AppointmentOverView(meetings, creator,
 				notification);
-//		CalendarModel calendarModel = new CalendarModel();
-//		sett inn kalendermodel isteden for
 	}
 
 	private String getTime() {
