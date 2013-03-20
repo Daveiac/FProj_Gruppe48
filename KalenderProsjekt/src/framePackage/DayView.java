@@ -92,7 +92,10 @@ public class DayView implements CalendarView, PropertyChangeListener {
 				if (row >= 0 && col >= 1) {
 					Meeting meeting = (Meeting) DayView.this.tableModel
 							.getValueAt(row, col);
-					new NewAppointmentView(meeting);
+					if (meeting != null)
+						new AppointmentOverView(meeting);
+					else
+						new NewAppointmentView(meeting);
 				}
 			}
 		});
@@ -200,9 +203,10 @@ public class DayView implements CalendarView, PropertyChangeListener {
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns the table model.
+	 * 
 	 * @return tableModel
 	 */
 	public DefaultTableModel getTableModel() {
