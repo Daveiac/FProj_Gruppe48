@@ -44,11 +44,12 @@ public class NotiPanelView extends JPanel implements PropertyChangeListener {
 
 	public NotiPanelView(CalendarModel calendarModel) {
 		this.calendarModel = calendarModel;
+		calendarModel.addPropertyChangeListener(this);
 		initialize();
 	}
 
 	private void initialize() {
-
+		
 		varselPanel = new JPanel(new GridBagLayout());
 		varselPanel.setPreferredSize(new Dimension(250, 300));
 		varselPanel.setVisible(true);
@@ -77,10 +78,15 @@ public class NotiPanelView extends JPanel implements PropertyChangeListener {
 		varselPanel.add(scrollPane, c);
 		warningList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
-				Meeting meeting = ((Notification) warningList
-						.getSelectedValue()).getMeeting();
-				appointOverView = new AppointmentOverView(meeting);
-				appointOverView.getPanel();
+				if(warningList.getSelectedValue() != null){
+					Meeting meeting = ((Notification) warningList
+							.getSelectedValue()).getMeeting();
+					appointOverView = new AppointmentOverView(meeting);
+					appointOverView.getPanel();
+				}
+				if(warningList.getSelectedValue() == null){
+					return;
+				}
 			}
 		});
 		

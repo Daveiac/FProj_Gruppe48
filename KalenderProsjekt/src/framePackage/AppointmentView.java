@@ -107,7 +107,6 @@ public class AppointmentView implements PropertyChangeListener {
 		mainPanel.remove(meetingPanel);
 		meetingPanel = new JPanel();
 		mainPanel.add(meetingPanel, BorderLayout.CENTER);
-		mainPanel.validate();
 		mc.anchor = GridBagConstraints.NORTH;
 		for (int i = 0; i < notifications.size(); i++) {
 		 Notification n = notifications.get(i);
@@ -203,6 +202,7 @@ public class AppointmentView implements PropertyChangeListener {
 			}
 		}
 		mc.weighty = 0;
+		mainPanel.validate();
 		
 	}
 	private class ChangeButtonListener implements ActionListener{
@@ -244,6 +244,12 @@ public class AppointmentView implements PropertyChangeListener {
 			refreshMeetings();
 			break;
 		case CalendarModel.MEETINGS_CHANGED_Property:
+			user = calendarModel.getUser();
+			notifications = calendarModel.getAllNotificationsOfPerson(user);
+			meetings = calendarModel.getAppointments();
+			refreshMeetings();
+			break;
+		case CalendarModel.NOTIFICATIONS_CHANGED_Property:
 			user = calendarModel.getUser();
 			notifications = calendarModel.getAllNotificationsOfPerson(user);
 			meetings = calendarModel.getAppointments();

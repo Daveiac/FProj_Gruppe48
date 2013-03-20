@@ -48,7 +48,7 @@ public class AppointmentOverView {
 	private Meeting meeting;
 	private Person user;
 	private JButton change, delete;
-	private ImageIcon check, cross, question;
+	private ImageIcon check, cross, question,star;
 	private List<Notification> notifications;
 	private Notification userNotification;
 	private NewAppointmentView newAppointment;
@@ -72,6 +72,7 @@ public class AppointmentOverView {
 		check = new ImageIcon("res/icons/icon_check.png");
 		cross = new ImageIcon("res/icons/icon_cross.png");
 		question = new ImageIcon("res/icons/icon_question.png");
+		star = new ImageIcon("res/icons/icon_star.png");
 
 		overViewPanel = new JPanel(new GridBagLayout());
 		overViewPanel.setPreferredSize(new Dimension(700, 450));
@@ -130,7 +131,7 @@ public class AppointmentOverView {
 			}
 		});
 		
-		if(meeting.getCreator().getUsername() != calendarModel.getUser().getUsername()){
+		if(meeting.getCreator().getUsername().equals(calendarModel.getUser().getUsername()) == false ){
 			delete.setEnabled(false);
 			change.setEnabled(false);
 		}
@@ -139,6 +140,7 @@ public class AppointmentOverView {
 		yourStatus.addItem(check);
 		yourStatus.addItem(cross);
 		yourStatus.addItem(question);
+		yourStatus.addItem(star);
 		c.gridx = 1;
 		c.gridy = 4;
 		overViewPanel.add(yourStatus, c);
@@ -165,6 +167,9 @@ public class AppointmentOverView {
 		if(calendarModel.getUser().getUsername().equals(meeting.getCreator().getUsername()) ){
 			System.out.println(calendarModel.getUser().getUsername());
 			System.out.println(meeting.getCreator().getUsername());
+			change.setEnabled(true);
+			delete.setEnabled(true);
+			yourStatus.setSelectedItem(star);
 			yourStatus.setEnabled(false);
 		}
 		
@@ -182,6 +187,7 @@ public class AppointmentOverView {
 					lblStatus.setText("Ikke svart");
 					calendarModel.setStatus('w',userNotification);
 				}
+				frame.setVisible(false);
 			}
 		});
 
@@ -206,7 +212,6 @@ public class AppointmentOverView {
 		c.gridx = 1;
 		c.gridy = 3;
 		overViewPanel.add(myJScrollPane, c);
-		
 		frame =  new JFrame();
 		frame.setContentPane(overViewPanel);
 		frame.pack();
