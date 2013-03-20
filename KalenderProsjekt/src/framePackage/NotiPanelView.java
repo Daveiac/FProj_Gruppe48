@@ -44,11 +44,12 @@ public class NotiPanelView extends JPanel implements PropertyChangeListener {
 
 	public NotiPanelView(CalendarModel calendarModel) {
 		this.calendarModel = calendarModel;
+		calendarModel.addPropertyChangeListener(this);
 		initialize();
 	}
 
 	private void initialize() {
-
+		
 		varselPanel = new JPanel(new GridBagLayout());
 		varselPanel.setPreferredSize(new Dimension(250, 300));
 		varselPanel.setVisible(true);
