@@ -413,7 +413,7 @@ public class NewAppointmentView extends JPanel {
 			startMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
 			monthComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MONTH)-1);
 			yearComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.YEAR)%2013);
-			dayComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.DAY_OF_MONTH));
+			dayComponent.setSelectedItem(greCalendar.get(GregorianCalendar.DAY_OF_MONTH));
 			greCalendar.setTimeInMillis(meet.getEndTime());
 			endHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
 			endMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);

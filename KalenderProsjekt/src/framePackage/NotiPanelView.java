@@ -94,9 +94,8 @@ public class NotiPanelView extends JPanel implements PropertyChangeListener {
 	
 	private void filList(){
 		listModel.removeAllElements();
-		for(int i = 0; i < notifications.size(); i++){
-			listModel.addElement(notifications.get(i));
-		}
+		int i = notifications.size()-1;
+		listModel.addElement(notifications.get(i));
 	}
 
 	public JPanel getPanel() {

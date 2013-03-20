@@ -79,6 +79,11 @@ public class AppointmentOverView {
 		overViewPanel.setVisible(true);
 		GridBagConstraints c = new GridBagConstraints();		
 		
+		frame =  new JFrame();
+		frame.setContentPane(overViewPanel);
+		frame.pack();
+		frame.setVisible(true);
+		
 		headLine = new JLabel(meeting.getTitle());
 		c.gridx = 0;
 		c.gridy = 0;
@@ -116,8 +121,8 @@ public class AppointmentOverView {
 		change.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				newAppointment = new NewAppointmentView(meeting);
-				frame.setVisible(false);
 				overViewPanel.setVisible(true);
+				frame.setVisible(false);
 			}
 		});
 
@@ -128,7 +133,7 @@ public class AppointmentOverView {
 		delete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				calendarModel.removeMeeting(meeting);
-				overViewPanel.setVisible(false);
+				frame.setVisible(false);
 			}
 		});
 		
@@ -141,7 +146,6 @@ public class AppointmentOverView {
 		yourStatus.addItem(check);
 		yourStatus.addItem(cross);
 		yourStatus.addItem(question);
-		yourStatus.addItem(star);
 		c.gridx = 1;
 		c.gridy = 4;
 		overViewPanel.add(yourStatus, c);
@@ -150,7 +154,7 @@ public class AppointmentOverView {
 		lblStatus = new JLabel();
 		lblStatus.setPreferredSize(new Dimension(70, 25));
 		overViewPanel.add(lblStatus, c);
-		if (userNotification != null) {
+		if (userNotification != null ) {
 			if (userNotification.getApproved() == 'y') {
 				yourStatus.setSelectedItem(check);
 				lblStatus.setText("Deltar");
@@ -166,11 +170,10 @@ public class AppointmentOverView {
 		}
 		
 		if(calendarModel.getUser().getUsername().equals(meeting.getCreator().getUsername()) ){
-			System.out.println(calendarModel.getUser().getUsername());
-			System.out.println(meeting.getCreator().getUsername());
+			yourStatus.addItem(star);
+			yourStatus.setSelectedItem(star);
 			change.setEnabled(true);
 			delete.setEnabled(true);
-			yourStatus.setSelectedItem(star);
 			yourStatus.setEnabled(false);
 		}
 		
@@ -213,10 +216,6 @@ public class AppointmentOverView {
 		c.gridx = 1;
 		c.gridy = 3;
 		overViewPanel.add(myJScrollPane, c);
-		frame =  new JFrame();
-		frame.setContentPane(overViewPanel);
-		frame.pack();
-		frame.setVisible(true);
 	}
 
 	private String getTime() {
