@@ -286,15 +286,21 @@ public class DBController {
 
 	private Meeting getMeetingFromResultSet(ResultSet rs) throws SQLException {
 		Team team = null;
+		String title = rs.getString("title");
+		if (title.equals("ttestttt")){
+			System.out.println(title);
+		}
 		try {
 			int teamID = rs.getInt("teamID");
 			team = getTeam(teamID);
 
 		} catch (Exception e) {
-			// Do nothing. The meeting does not exist, therefore this is
+			// Do nothing. The team does not exist, therefore this is
 			// technically an 'appointment'
 		}
-		return new Meeting(rs.getInt("meetingID"), rs.getString("title"),
+		
+		//TODO must return a real meetingRoom
+		return new Meeting(rs.getInt("meetingID"), title,
 				rs.getString("location"), rs.getLong("startTime"),
 				rs.getLong("endTime"), rs.getString("description"), team,
 				new MeetingRoom("100"), getPerson(rs.getString("username")));
@@ -305,7 +311,7 @@ public class DBController {
 		int teamID = rs.getInt("teamID");
 		String sql = String.format("SELECT Person.* FROM Person, memberOF "
 						+ "WHERE memberOF.teamID = %d " +
-						"AND Person.username = memberOf.username", teamID);
+						"AND Person.username = memberOF.username", teamID);
 		
 		ResultSet membersOf = dBConn
 				.makeQuery(sql);

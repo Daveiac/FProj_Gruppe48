@@ -73,7 +73,8 @@ public class Meeting implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Meeting [meetingID=" + meetingID + ", title=" + title + "]";
+		return "Meeting [meetingID=" + meetingID + ", title=" + title
+				+ ", team=" + team + ", creator=" + creator + "]";
 	}
 
 
