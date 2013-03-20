@@ -203,6 +203,13 @@ public class DefaultView extends JPanel {
 		}
 	}
 	public void setView(CalendarView view) {
+		if(view == dayView) {
+			dayBtn.setSelected(true);
+		} else if(view == weekView) {
+			weekBtn.setSelected(true);
+		} else if(view == monthView) {
+			monthBtn.setSelected(true);
+		}
 		mainView =  view;
 		calendarTitle.setText(mainView.getTitle());
 		timePanel.remove(calendarPanel);
