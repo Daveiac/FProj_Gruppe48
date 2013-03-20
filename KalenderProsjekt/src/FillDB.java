@@ -65,6 +65,26 @@ public class FillDB {
 		}
 	}
 
+	public static void addMeetingrooms(){
+		List<MeetingRoom> rooms = new ArrayList<MeetingRoom>();
+		rooms.add(new MeetingRoom("s1"));
+		rooms.add(new MeetingRoom("s2"));
+		rooms.add(new MeetingRoom("s3"));
+		rooms.add(new MeetingRoom("s4"));
+		rooms.add(new MeetingRoom("r1"));
+		rooms.add(new MeetingRoom("r2"));
+		rooms.add(new MeetingRoom("r3"));
+		
+		for (MeetingRoom meetingRoom : rooms) {
+			try {
+				control.addMeetingRoom(meetingRoom);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
 	
 		
 	/**
@@ -74,6 +94,7 @@ public class FillDB {
 	public static void main(String[] args) throws SQLException {
 		addPeople();
 		addMeetings();
+		addMeetingrooms();
 	}
 
 }
