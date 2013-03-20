@@ -32,32 +32,10 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 	private String[] columnHeaders;
 	private JScrollPane scrollPane;
 
-	// private JPanel monthPanel;
-	// private int realDay, realMonth, realYear, currentMonth, currentYear;
-	// public static final String[] months = { "Januar", "Februar", "Mars",
-	// "April", "Mai", "Juni", "Juli", "August", "September", "Oktober",
-	// "November", "Desember" };
-
-	// public static void main(String args[]) {
-	// CalendarModel cm = new CalendarModel();
-	// MonthView mw = new MonthView(cm);
-	// cm.init();
-	// JFrame frame = new JFrame("monthView test: ");
-	// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	// frame.setContentPane(mw.getPanel());
-	// frame.setSize(700, 600);
-	// frame.setVisible(true);
-	// }
-
 	/**
 	 * Constructs the MonthView Panel.
 	 */
 	public MonthView(CalendarModel calendarModel) {
-		initialize(calendarModel);
-		// refreshCalendar();
-	}
-
-	private void initialize(CalendarModel calendarModel) {
 		calendar = calendarModel.getCalendar();
 		this.calendarModel = calendarModel;
 		this.calendarModel.addPropertyChangeListener(this);
@@ -124,34 +102,6 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 		}
 
 		scrollPane = new JScrollPane(monthTable);
-		//
-		// realDay = cal.get(GregorianCalendar.DAY_OF_MONTH);
-		// realMonth = cal.get(GregorianCalendar.MONTH);
-		// realYear = cal.get(GregorianCalendar.YEAR);
-		// currentMonth = realMonth;
-		// currentYear = realYear;
-		//
-		// monthTable = new JTable(tableModel) {
-		// public boolean isCellEditable(int rowIndex, int colIndex) {
-		// return false; // Disable the editing of any cell
-		// }
-		// };
-		// monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		// monthTable.setRowSelectionAllowed(false);
-		// monthTable.setRowHeight(64);
-		// monthTable.getColumnModel().getColumn(0).setPreferredWidth(10);
-		// for (int i = 1; i < 8; i++) {
-		// monthTable.getColumnModel().getColumn(i)
-		// .setCellRenderer(new MonthTableCellRenderer());
-		// }
-		//
-		// monthPanel = new JPanel();
-		// monthPanel.setSize(600, 500);
-		// JScrollPane jsp = new JScrollPane(monthTable);
-		// jsp.setPreferredSize(new Dimension(800, 407));
-		// monthPanel.add(jsp);
-		//
-		// title = months[currentMonth] + ", " + currentYear;
 	}
 
 	/**
@@ -272,17 +222,8 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 			monthCalendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
 
 			Object[] shit = { dayOfMonth, todaysMeetings };
-			// System.out.println("dashitMONTH");
-			// System.out.println(shit[0].toString());
-			// System.out.println(shit[1].toString());
 			tableModel.setValueAt(shit, week, dayOfWeek);
 		}
-
-		// List<Person> persons = calendarModel.getSelectedPersons();
-		// for (Person person : persons) {
-		// ArrayList<Meeting> meetings = calendarModel.getMeetings(person);
-		// setMeetings(calendar, tableModel, dayOfWeek, meetings);
-		// }
 	}
 
 	/**
@@ -311,35 +252,6 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 		weekDayCalendar.add(GregorianCalendar.DAY_OF_WEEK, firstDayOfWeek);
 		return weekDayCalendar;
 	}
-
-	// private void refreshCalendar() {
-	// int nDays, monthStart, weekStart;
-	// title = months[currentMonth] + ", " + currentYear;
-	// GregorianCalendar cal = new GregorianCalendar(currentYear,
-	// currentMonth, 1);
-	// nDays = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
-	// monthStart = cal.get(GregorianCalendar.DAY_OF_WEEK);
-	// monthStart = (monthStart == 1) ? 6 : monthStart - 2;
-	// weekStart = cal.get(GregorianCalendar.WEEK_OF_YEAR);
-	// // Clear table
-	// for (int i = 0; i < 6; i++) {
-	// for (int j = 0; j < 8; j++) {
-	// tableModel.setValueAt(null, i, j);
-	// }
-	// }
-	// // Draw calendar
-	// for (int i = 0; i < 6; i++) {
-	// tableModel.setValueAt(weekStart + i, i, 0);
-	// }
-	// for (int i = 0; i < nDays; i++) {
-	// int row = new Integer((i + monthStart) / 7);
-	// int column = (i + monthStart) % 7 + 1;
-	// tableModel
-	// .setValueAt(new JList<String>(new String[] {
-	// i + 1 + ". " + "Møte 1", "AvtaleYO", "zomg" }),
-	// row, column);
-	// }
-	// }
 
 	/**
 	 * Generates the title of month panel.
