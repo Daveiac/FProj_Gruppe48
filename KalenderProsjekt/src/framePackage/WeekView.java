@@ -6,6 +6,7 @@ import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -18,7 +19,7 @@ import data.CalendarModel;
  * This is the WeekView Panel that shows the week planner.
  */
 @SuppressWarnings("serial")
-public class WeekView extends JPanel implements CalendarView,
+public class WeekView implements CalendarView,
 		PropertyChangeListener {
 
 	private JTable weekTable;
@@ -28,6 +29,7 @@ public class WeekView extends JPanel implements CalendarView,
 	private String title;
 	private String[] columnHeaders;
 	private DayView dayView;
+	private JScrollPane scrollPane;
 
 	/**
 	 * Constructs the WeekView Panel.
@@ -84,10 +86,7 @@ public class WeekView extends JPanel implements CalendarView,
 					.setCellRenderer(new DayTableCellRenderer(calendarModel));
 		}
 
-		JScrollPane scrollPane = new JScrollPane(weekTable);
-		scrollPane.setPreferredSize(new Dimension(800, 407));
-
-		add(scrollPane);
+		scrollPane = new JScrollPane(weekTable);
 	}
 
 	/**
@@ -192,8 +191,8 @@ public class WeekView extends JPanel implements CalendarView,
 	 * @return week panel.
 	 */
 	@Override
-	public JPanel getPanel() {
-		return this;
+	public JComponent getPanel() {
+		return scrollPane;
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -22,7 +23,7 @@ import data.Person;
  * This is the MonthView Panel that shows the month planner.
  */
 @SuppressWarnings("serial")
-public class MonthView extends JPanel implements CalendarView,
+public class MonthView implements CalendarView,
 		PropertyChangeListener {
 
 	private JTable monthTable;
@@ -31,6 +32,7 @@ public class MonthView extends JPanel implements CalendarView,
 	private GregorianCalendar calendar;
 	private String title;
 	private String[] columnHeaders;
+	private JScrollPane scrollPane;
 
 	// private JPanel monthPanel;
 	// private int realDay, realMonth, realYear, currentMonth, currentYear;
@@ -107,11 +109,7 @@ public class MonthView extends JPanel implements CalendarView,
 					.setCellRenderer(new MonthTableCellRenderer(calendarModel));
 		}
 
-		JScrollPane scrollPane = new JScrollPane(monthTable);
-		scrollPane.setPreferredSize(new Dimension(800, 407));
-
-		add(scrollPane);
-
+		scrollPane = new JScrollPane(monthTable);
 		//
 		// realDay = cal.get(GregorianCalendar.DAY_OF_MONTH);
 		// realMonth = cal.get(GregorianCalendar.MONTH);
@@ -357,8 +355,8 @@ public class MonthView extends JPanel implements CalendarView,
 	 * @return month panel.
 	 */
 	@Override
-	public JPanel getPanel() {
-		return this;
+	public JComponent getPanel() {
+		return scrollPane;
 	}
 
 	@Override

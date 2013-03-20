@@ -1,11 +1,11 @@
 package framePackage;
 
-import javax.swing.JPanel;
+import javax.swing.JComponent;
 
 public interface CalendarView {
 	
 	public String getTitle();
-	public JPanel getPanel();
+	public JComponent getPanel();
 	public void next();
 	public void prev();
 
