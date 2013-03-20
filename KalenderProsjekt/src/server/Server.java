@@ -51,7 +51,6 @@ public class Server extends Thread {
 				(new Thread(new RequestListener(nClient, requestQueue)))
 						.start();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

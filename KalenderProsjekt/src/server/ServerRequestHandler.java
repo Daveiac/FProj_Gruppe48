@@ -226,8 +226,13 @@ public class ServerRequestHandler implements Runnable {
 					request.clientSocket);
 			break;
 		case UPDATE:
-			handleUpdateRequest((UpdateRequest) request.networkRequest,
-					request.clientSocket);
+			try {
+				handleUpdateRequest((UpdateRequest) request.networkRequest,
+						request.clientSocket);
+				
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+			}
 			break;
 		default:
 			OutputController
