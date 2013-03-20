@@ -114,7 +114,7 @@ public class AppointmentOverView {
 		overViewPanel.add(change, c);
 		change.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				newAppointment = new NewAppointmentView(meeting, calendarModel, alarm);
+				newAppointment = new NewAppointmentView(meeting);
 				frame.setVisible(false);
 				overViewPanel.setVisible(true);
 			}
