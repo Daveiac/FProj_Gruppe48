@@ -85,13 +85,13 @@ public class AppointmentView implements PropertyChangeListener {
 	private void createHeaders() {
 		headerPanel = new JPanel(new GridBagLayout());
 		JLabel[] headers = new JLabel[7];
-		headers[0] = new JLabel("status");
-		headers[1] = new JLabel("dato");
-		headers[2] = new JLabel("tid");
-		headers[3] = new JLabel("avtale");
-		headers[4] = new JLabel("sted");
-		headers[5] = new JLabel("endre");
-		headers[6] = new JLabel("mer info");
+		headers[0] = new JLabel("Status");
+		headers[1] = new JLabel("Dato");
+		headers[2] = new JLabel("Tid");
+		headers[3] = new JLabel("Avtale");
+		headers[4] = new JLabel("Sted");
+		headers[5] = new JLabel("Endre");
+		headers[6] = new JLabel("Mer info");
 
 		mc = new GridBagConstraints();
 		mc.gridy = 0;
@@ -108,6 +108,7 @@ public class AppointmentView implements PropertyChangeListener {
 		meetingPanel = new JPanel();
 		mainPanel.add(meetingPanel, BorderLayout.CENTER);
 		mc.anchor = GridBagConstraints.NORTH;
+		
 		for (int i = 0; i < notifications.size(); i++) {
 		 Notification n = notifications.get(i);
 		 Meeting meeting = n.getMeeting();
@@ -151,15 +152,36 @@ public class AppointmentView implements PropertyChangeListener {
 				changeBtn.addActionListener(new ChangeButtonListener(meeting));
 			}
 			infoBtn.addActionListener(new InfoButtonListener(meeting));
-
-//			System.out.println(mc.gridy = i + 1);
 			
-			for (int j = 0; j < items.length; j++) {
+			/*for (int j = 0; j < items.length; j++) {
 				JComponent item = items[j];
 				item.setPreferredSize(new Dimension(sizes[j], 20));
 				mc.gridx = j;
 				meetingPanel.add(item, mc);
-			}
+			}*/
+			
+			items[0].setPreferredSize(new Dimension(20, 20));
+			items[1].setPreferredSize(new Dimension(20, 20));
+			items[2].setPreferredSize(new Dimension(20, 20));
+			items[3].setPreferredSize(new Dimension(20, 20));
+			items[4].setPreferredSize(new Dimension(20, 20));
+			items[5].setPreferredSize(new Dimension(20, 20));
+			items[6].setPreferredSize(new Dimension(20, 20));
+			mc.gridx = 0;
+			meetingPanel.add(items[0], mc);
+			mc.gridx = 1;
+			meetingPanel.add(items[1], mc);
+			mc.gridx = 2;
+			meetingPanel.add(items[2], mc);
+			mc.gridx = 3;
+			meetingPanel.add(items[3], mc);
+			mc.gridx = 4;
+			meetingPanel.add(items[4], mc);
+			mc.gridx = 5;
+			meetingPanel.add(items[5], mc);
+			mc.gridx = 6;
+			meetingPanel.add(items[6], mc);
+			
 		 }
 		int n = notifications.size();
 		
@@ -193,13 +215,13 @@ public class AppointmentView implements PropertyChangeListener {
 			}
 			infoBtn.addActionListener(new InfoButtonListener(meeting));
 
-			System.out.println(mc.gridy = i+n + 1);
 			for (int j = 0; j < items.length; j++) {
 				JComponent item = items[j];
 				item.setPreferredSize(new Dimension(sizes[j], 20));
 				mc.gridx = j;
 				meetingPanel.add(item, mc);
 			}
+			mc.gridy++;
 		}
 		mc.weighty = 0;
 		mainPanel.validate();
