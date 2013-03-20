@@ -25,6 +25,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import client.Program;
+
 import data.Alarm;
 import data.CalendarModel;
 import data.Meeting;
@@ -52,12 +54,11 @@ public class AppointmentOverView {
 	private CalendarModel calendarModel;
 	private Alarm alarm;
 
-	public AppointmentOverView(Meeting meeting, Person creator,
-			Notification notification) {
+	public AppointmentOverView(Meeting meeting) {
+		this.calendarModel = Program.calendarModel;
 		this.meeting = meeting;
-		notifications = new ArrayList<Notification>();
-		notifications.add(notification); 
-		this.creator = creator;
+		this.creator = calendarModel.getUser();
+		notifications = calendarModel.getAllNotificationsOfMeeting(meeting);
 		initialize();
 	}
 
@@ -184,10 +185,8 @@ public class AppointmentOverView {
 		
 		frame =  new JFrame();
 		frame.setContentPane(overViewPanel);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
-		
 	}
 
 	public static void main(String args[]) {
@@ -207,8 +206,7 @@ public class AppointmentOverView {
 		Notification notification = new Notification(0, 'y', 'c', meetings,
 				creator);
 		CalendarModel calendarModel2 = new CalendarModel();
-		new AppointmentOverView(meetings, creator,
-				notification);
+		new AppointmentOverView(meetings);
 	}
 
 	private String getTime() {

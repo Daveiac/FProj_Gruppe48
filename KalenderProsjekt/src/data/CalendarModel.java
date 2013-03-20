@@ -236,7 +236,7 @@ public class CalendarModel implements Serializable{
 	public void changeMeeting(Meeting meeting) {
 		//TODO
 	}
-	public void removeMeeting(String meetingID) {
+	public void removeMeeting(int meetingID) {
 		//TODO
 	}
 	public ArrayList<MeetingRoom> getRooms(){
