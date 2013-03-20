@@ -71,7 +71,7 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 
 		// Sets table headers with corresponding days
 		setHeaders();
-		
+
 		// Sets the new month into the table
 		monthTable.setModel(tableModel);
 		monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -85,10 +85,14 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 				int row = monthTable.rowAtPoint(evt.getPoint());
 				int weekDay = monthTable.columnAtPoint(evt.getPoint()) - 1;
 				if (row >= 0 && weekDay >= 0) {
-					int firstDayOfWeek = -calendar.get(GregorianCalendar.DAY_OF_WEEK) + 2;
-					calendar.add(GregorianCalendar.DAY_OF_WEEK, weekDay + firstDayOfWeek);
-					int calWeekOfMonth = calendar.get(GregorianCalendar.WEEK_OF_MONTH);
-					calendar.add(GregorianCalendar.WEEK_OF_MONTH, row - calWeekOfMonth);
+					int firstDayOfWeek = -calendar
+							.get(GregorianCalendar.DAY_OF_WEEK) + 2;
+					calendar.add(GregorianCalendar.DAY_OF_WEEK, weekDay
+							+ firstDayOfWeek);
+					int calWeekOfMonth = calendar
+							.get(GregorianCalendar.WEEK_OF_MONTH);
+					calendar.add(GregorianCalendar.WEEK_OF_MONTH, row
+							- calWeekOfMonth);
 					MonthView.this.calendarModel.changeDate();
 					Program.dw.setView(Program.dw.dayView);
 				}
@@ -300,6 +304,13 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 			createMonthTable();
 			break;
 		case CalendarModel.MEETINGS_CHANGED_Property:
+			createMonthTable();
+			break;
+		case CalendarModel.NOTIFICATIONS_CHANGED_Property:
+			createMonthTable();
+			break;
+		case CalendarModel.SELECTED_Property:
+			System.out.println("someone just got lucky! (SELECTED)");
 			createMonthTable();
 			break;
 		case CalendarModel.DATE_CHANGED_Property:
