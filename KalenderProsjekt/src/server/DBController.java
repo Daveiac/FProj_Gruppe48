@@ -304,7 +304,8 @@ public class DBController {
 		List<Person> members = new ArrayList<Person>();
 		int teamID = rs.getInt("teamID");
 		String sql = String.format("SELECT Person.* FROM Person, memberOF "
-						+ "AND memberOF.teamID = %d", teamID);
+						+ "WHERE memberOF.teamID = %d " +
+						"AND Person.username = memberOf.username", teamID);
 		
 		ResultSet membersOf = dBConn
 				.makeQuery(sql);
