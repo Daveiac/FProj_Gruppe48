@@ -253,6 +253,7 @@ public class CalendarModel implements Serializable {
 
 	public void setAllNotifications(List<Notification> notifications) {
 		this.notifications = (ArrayList<Notification>) notifications;
+		System.out.println("setting all notifications");
 		pcs.firePropertyChange(NOTIFICATIONS_CHANGED_Property, null, null);
 	}
 
