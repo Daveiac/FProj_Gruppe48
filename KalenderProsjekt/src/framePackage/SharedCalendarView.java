@@ -35,7 +35,7 @@ public class SharedCalendarView implements PropertyChangeListener{
 	}
 	
 	/**
-	 * 
+	 * Initiates data.
 	 * @param calendarModel
 	 */
 	private void initialize(CalendarModel calendarModel){
