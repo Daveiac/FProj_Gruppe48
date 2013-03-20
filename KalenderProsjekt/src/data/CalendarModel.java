@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class CalendarModel implements Serializable{
 	private String username;
 	private Person user;
 	private ArrayList<MeetingRoom> meetingRooms;
+	private GregorianCalendar calendar;
 	private static final Color[] colors = { Color.red, Color.blue,
 			Color.yellow, Color.orange, Color.magenta, Color.gray, Color.pink };
 	public static final String SELECTED_Property = "SELECTED",
@@ -51,6 +53,7 @@ public class CalendarModel implements Serializable{
 		notifications = new ArrayList<Notification>();
 		alarms = new ArrayList<Alarm>();
 		meetingRooms = new ArrayList<MeetingRoom>();
+		calendar = new GregorianCalendar();
 		requestAllPersons();
 	}
 	
@@ -254,6 +257,10 @@ public class CalendarModel implements Serializable{
 //	}
 	public Person getUser() {
 		return user;
+	}
+	
+	public GregorianCalendar getCalendar() {
+		return calendar;
 	}
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		pcs.addPropertyChangeListener(listener);

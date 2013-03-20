@@ -45,6 +45,7 @@ public class Program {
 		loginFrame.pack();
 		loginFrame.setLocationRelativeTo(null);
 		loginFrame.setVisible(true);
+		loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //		
 		
 	}
