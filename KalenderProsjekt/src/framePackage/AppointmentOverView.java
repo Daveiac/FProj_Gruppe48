@@ -46,10 +46,11 @@ public class AppointmentOverView {
 	private JComboBox<ImageIcon> yourStatus;
 	private JPanel overViewPanel;
 	private Meeting meeting;
-	private Person creator;
+	private Person user;
 	private JButton change, delete;
 	private ImageIcon check, cross, question;
 	private List<Notification> notifications;
+	private Notification userNotification;
 	private NewAppointmentView newAppointment;
 	private CalendarModel calendarModel;
 	private Alarm alarm;
@@ -57,8 +58,13 @@ public class AppointmentOverView {
 	public AppointmentOverView(Meeting meeting) {
 		this.calendarModel = Program.calendarModel;
 		this.meeting = meeting;
-		this.creator = calendarModel.getUser();
+		this.user = calendarModel.getUser();
 		notifications = calendarModel.getAllNotificationsOfMeeting(meeting);
+		for (Notification n : notifications) {
+			if(n.getPerson().getUsername().equals(user.getUsername())) {
+				userNotification = n;
+			}
+		}
 		initialize();
 	}
 
@@ -136,17 +142,19 @@ public class AppointmentOverView {
 		lblStatus = new JLabel();
 		lblStatus.setPreferredSize(new Dimension(70, 25));
 		overViewPanel.add(lblStatus, c);
-		if (notifications.get(0).getApproved() == 'y') {
-			yourStatus.setSelectedItem(check);
-			lblStatus.setText("Deltar");
-		}
-		if (notifications.get(0).getApproved() == 'n') {
-			yourStatus.setSelectedItem(cross);
-			lblStatus.setText("Deltar Ikke");
-		}
-		if (notifications.get(0).getApproved() == 'w') {
-			yourStatus.setSelectedItem(question);
-			lblStatus.setText("Vet Ikke");
+		if (userNotification != null) {
+			if (userNotification.getApproved() == 'y') {
+				yourStatus.setSelectedItem(check);
+				lblStatus.setText("Deltar");
+			}
+			if (userNotification.getApproved() == 'n') {
+				yourStatus.setSelectedItem(cross);
+				lblStatus.setText("Deltar Ikke");
+			}
+			if (userNotification.getApproved() == 'w') {
+				yourStatus.setSelectedItem(question);
+				lblStatus.setText("Vet Ikke");
+			}
 		}
 		yourStatus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -172,7 +180,9 @@ public class AppointmentOverView {
 		overViewPanel.add(moreInfo, c);
 
 		listModel = new DefaultListModel();
-		listModel.addElement(notifications.get(0));
+		for (int i = 0; i < notifications.size(); i++) {
+			listModel.addElement(notifications.get(i));
+		}
 		participantList = new JList<Notification>();
 		participantList.setModel(listModel);
 		participantList.setFixedCellWidth(300);
