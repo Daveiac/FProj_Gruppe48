@@ -6,6 +6,8 @@ public class OutputController {
 	 * adding an entry to the log.
 	 */
 	public static void output(String output){
+		System.out.println();
 		System.out.println(output);
+		System.out.println();
 	}
 }
