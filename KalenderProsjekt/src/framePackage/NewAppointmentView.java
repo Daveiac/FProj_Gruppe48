@@ -391,11 +391,9 @@ public class NewAppointmentView extends JPanel {
 		});
 		
 		if(meet!= null){
-			if(calendarModel.getUser().equals(meet.getCreator())){
-				opprettKnapp.setEnabled(false);
-				endreKnapp.setEnabled(true);
-				slettKnapp.setEnabled(true);
-			}
+			opprettKnapp.setEnabled(false);
+			endreKnapp.setEnabled(true);
+			slettKnapp.setEnabled(true);
 			for(int i = 0; i < calendarModel.getPersons().size(); i++){
 				participantComponent.addItem(getAllPerson().get(i).getFirstName() + " " +  getAllPerson().get(i).getLastName());
 			}
