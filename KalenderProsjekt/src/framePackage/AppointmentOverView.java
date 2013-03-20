@@ -151,17 +151,14 @@ public class AppointmentOverView {
 			if (userNotification.getApproved() == 'y') {
 				yourStatus.setSelectedItem(check);
 				lblStatus.setText("Deltar");
-				frame.setVisible(false);
 			}
 			if (userNotification.getApproved() == 'n') {
 				yourStatus.setSelectedItem(cross);
 				lblStatus.setText("Deltar Ikke");
-				frame.setVisible(false);
 			}
 			if (userNotification.getApproved() == 'w') {
 				yourStatus.setSelectedItem(question);
 				lblStatus.setText("Vet Ikke");
-				frame.setVisible(false);
 			}
 		}
 		
@@ -185,6 +182,7 @@ public class AppointmentOverView {
 					lblStatus.setText("Ikke svart");
 					calendarModel.setStatus('w',userNotification);
 				}
+				frame.setVisible(false);
 			}
 		});
 
