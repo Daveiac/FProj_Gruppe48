@@ -272,6 +272,7 @@ public class CalendarModel implements Serializable {
 
 	public void setStatus(char c, Notification notification) {
 		try {
+			System.out.println("setting status: "+c);
 			Program.reqHandler.sendUpdateNotificationRequest(
 					new Notification(Calendar.getInstance().getTimeInMillis(), c, notification
 							.getKind(), notification.getMeeting(), notification.getPerson()));
