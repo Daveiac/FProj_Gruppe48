@@ -201,7 +201,7 @@ public class AppointmentView implements PropertyChangeListener {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			new NewAppointmentView(meeting, calendarModel, null);
+			new NewAppointmentView(meeting);
 		}
 		
 	}

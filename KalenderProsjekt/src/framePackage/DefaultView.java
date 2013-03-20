@@ -104,7 +104,7 @@ public class DefaultView extends JPanel {
 		backGroundConstraints.gridy = 0;
 		logOut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new NewAppointmentView(null, Program.calendarModel, null);
+				new NewAppointmentView(null);
 			}
 		});
 		frame.add(logOut, backGroundConstraints);
