@@ -64,8 +64,6 @@ public class AppointmentView implements PropertyChangeListener {
 		mainPanel.add(legendPanel, BorderLayout.SOUTH);
 		mainPanel.setBorder(new LineBorder(Color.black));
 		mainPanel.setPreferredSize(new Dimension(814, 457));
-		// refreshMeetings();
-
 	}
 
 	private void createLegend() {
@@ -203,7 +201,7 @@ public class AppointmentView implements PropertyChangeListener {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			new NewAppointmentView(meeting, calendarModel, null);
+			new NewAppointmentView(meeting);
 		}
 		
 	}

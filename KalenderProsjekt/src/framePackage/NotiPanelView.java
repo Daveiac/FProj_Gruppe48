@@ -83,7 +83,14 @@ public class NotiPanelView extends JPanel implements PropertyChangeListener {
 				appointOverView.getPanel();
 			}
 		});
-
+		
+	}
+	
+	private void filList(){
+		listModel.clear();
+		for(int i = 0; i < notifications.size(); i++){
+			listModel.addElement(notifications.get(i));
+		}
 	}
 
 	public JPanel getPanel() {
@@ -94,6 +101,7 @@ public class NotiPanelView extends JPanel implements PropertyChangeListener {
 		switch (evt.getPropertyName()) {
 		case CalendarModel.NOTIFICATIONS_CHANGED_Property:
 			notifications = calendarModel.getUnansweredNotificationsOfUser();
+			filList();
 			break;
 		}
 	}

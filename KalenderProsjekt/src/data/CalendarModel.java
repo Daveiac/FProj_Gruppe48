@@ -31,15 +31,15 @@ public class CalendarModel implements Serializable{
 	private Person user;
 	private ArrayList<MeetingRoom> meetingRooms;
 	private GregorianCalendar calendar;
-	private static final Color[] colors = { Color.red, Color.blue,
-			Color.yellow, Color.orange, Color.magenta, Color.gray, Color.pink };
+	private static final Color[] colors = { Color.red, Color.blue,Color.yellow, Color.orange, Color.magenta, Color.gray, Color.pink };
 	public static final String SELECTED_Property = "SELECTED",
 			MEETINGS_CHANGED_Property = "MEETINGS",
 			NOTIFICATIONS_CHANGED_Property = "NNOTI",
 			CALENDAR_LOADED_Property = "LOADED",
 			PERSONS_ADDED_Property = "PERSONS",
 			ALARMS_CHANGED_Property = "ALARMA!",
-			DATE_CHANGED_Property = "DATE";
+			DATE_CHANGED_Property = "DATE",
+			ROOMS_CHANGED_Property = "ROOMS";
 
 
 	public CalendarModel() {
@@ -110,6 +110,14 @@ public class CalendarModel implements Serializable{
 			}
 		}
 		return notis;
+	}
+	public Alarm getAlarmByMeeting(Meeting meeting) {
+		for (Alarm alarm : alarms) {
+			if(alarm.getMeeting().getMeetingID() == meeting.getMeetingID()) {
+				return alarm;
+			}
+		}
+		return null;
 	}
 	
 	/**
@@ -213,12 +221,15 @@ public class CalendarModel implements Serializable{
 	}
 	public void setAllRooms(List<MeetingRoom> rooms) {
 		meetingRooms = (ArrayList<MeetingRoom>) rooms;
+		pcs.firePropertyChange(ROOMS_CHANGED_Property, null, null);
 	}
 	public void setAlarmsOfUser(List<Alarm> alarms) {
 		this.alarms = (ArrayList<Alarm>) alarms;
+		pcs.firePropertyChange(ALARMS_CHANGED_Property, null, null);
 	}
 	public void setAllNotifications(List<Notification> notifications) {
 		this.notifications = (ArrayList<Notification>) notifications;
+		pcs.firePropertyChange(NOTIFICATIONS_CHANGED_Property, null, null);
 	}
 	
 	public List<Person> getSelectedPersons() {
@@ -243,7 +254,12 @@ public class CalendarModel implements Serializable{
 		}
 	}
 	public void changeMeeting(Meeting meeting) {
-		//TODO
+		try {
+			Program.reqHandler.sendUpdateMeetingRequest(null, null, null, meeting);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public void removeMeeting(int meetingID) {
 		//TODO
@@ -251,21 +267,18 @@ public class CalendarModel implements Serializable{
 	public ArrayList<MeetingRoom> getRooms(){
 		return meetingRooms;
 	}
-//	TODO
-//	public ArrayList<MeetingRoom> getAvailableRooms(long startTime, long endTime){
-//		ArrayList<MeetingRoom> rooms = new ArrayList<MeetingRoom>();
-//		rooms.addAll(meetingRooms);
-//		for(ArrayList<Meeting> meetings: meetings.values()){
-//			for (int i = 0; i < meetings.size(); i++) {
-//				long meetStart = meetings.get(i).getStartTime();
-//				long meetEnd = meetings.get(i).getEndTime();
-//				if ((meetStart >= startTime && meetStart < endTime) || (meetEnd > startTime && meetEnd < endTime)) {
-//					rooms.remove(meetings.get(i).getRoom());
-//				}
-//			}
-//		}
-//		return rooms;
-//	}
+	public ArrayList<MeetingRoom> getAvailableRooms(long startTime, long endTime){
+		ArrayList<MeetingRoom> rooms = new ArrayList<MeetingRoom>();
+		rooms.addAll(meetingRooms);
+		for(Meeting meeting: meetings){
+				long meetStart = meeting.getStartTime();
+				long meetEnd = meeting.getEndTime();
+				if (meeting.getRoom() != null && (meetStart >= startTime && meetStart < endTime) || (meetEnd > startTime && meetEnd < endTime)) {
+					rooms.remove(meeting.getRoom());
+				}
+		}
+		return rooms;
+	}
 	public Person getUser() {
 		return user;
 	}

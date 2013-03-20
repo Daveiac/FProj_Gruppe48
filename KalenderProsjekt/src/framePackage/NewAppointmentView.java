@@ -9,6 +9,8 @@ import java.util.GregorianCalendar;
 
 import javax.swing.*;
 
+import client.Program;
+
 import data.Alarm;
 import data.CalendarModel;
 import data.Meeting;
@@ -71,10 +73,13 @@ public class NewAppointmentView extends JPanel {
 	private JButton slettKnapp = new JButton("Slett avtale");
 	private ArrayList list;
 
-	public NewAppointmentView(Meeting meet, CalendarModel model,Alarm alarm) {
+	private Alarm alarm;
+
+	public NewAppointmentView(Meeting meet) {
 		
 		this.meeting = meet;
-		this.calendarModel = model;
+		this.calendarModel = Program.calendarModel;
+		this.alarm = calendarModel.getAlarmByMeeting(meet);
 		GregorianCalendar greCalendar = new GregorianCalendar();
 		this.setPreferredSize(new Dimension(1000, 1000));
 		JScrollPane scrollPane = new JScrollPane();
@@ -422,12 +427,12 @@ public class NewAppointmentView extends JPanel {
 				romComponent.addItem(meet.getRoom().getRoomName());
 				romComponent.setSelectedItem(meet.getRoom().getRoomName());
 			}
-			for(int i = 0; i<model.getPersons().size();i++ ){
-				if(meet.getTeam() != null && meet.getTeam().getMembers().contains(model.getPersons().get(i)) == false){
-					listModel.addElement(model.getPersons().get(i));
+			for(int i = 0; i<calendarModel.getPersons().size();i++ ){
+				if(meet.getTeam() != null && meet.getTeam().getMembers().contains(calendarModel.getPersons().get(i)) == false){
+					listModel.addElement(calendarModel.getPersons().get(i));
 				}
 				else{
-					participantComponent.addItem(model.getPersons().get(i).getFirstName() + model.getPersons().get(i).getLastName());
+					participantComponent.addItem(calendarModel.getPersons().get(i).getFirstName() + calendarModel.getPersons().get(i).getLastName());
 				}
 			}
 			infoComponent.setText(meet.getDescription());
@@ -549,14 +554,7 @@ public class NewAppointmentView extends JPanel {
 		return greCalendar.getTimeInMillis();
 		}
 	
-//	private ArrayList getAllPersonString(){
-//		ArrayList<String> list = new ArrayList<String>();
-//		for(int i = 0; i< calendarModel.getPersons().size(); i++){
-//			list.add(calendarModel.getPersons().get(i).getFirstName() + calendarModel.getPersons().get(i).getLastName());
-//		}
-//		return list;
-//	}
-//	
+
 	private ArrayList<Person> getAllPerson(){
 		ArrayList<Person> list = new ArrayList<Person>();
 		for(int i = 0; i< calendarModel.getPersons().size(); i++){
@@ -565,11 +563,6 @@ public class NewAppointmentView extends JPanel {
 		return list;
 	}
 
-	public static void main(String[] args) {
-		CalendarModel calendarModel2 = new CalendarModel();
-		calendarModel2.init("batman");
-		new NewAppointmentView(null,calendarModel2,null);
-	}
 	public void showFrame(){
 		frame.setVisible(true);
 	}
