@@ -80,6 +80,7 @@ public class NotiPanelView extends JPanel implements PropertyChangeListener {
 			public void valueChanged(ListSelectionEvent arg0) {
 				Meeting meeting = ((Notification) warningList
 						.getSelectedValue()).getMeeting();
+				System.out.println(meeting.getTitle());
 				appointOverView = new AppointmentOverView(meeting);
 				appointOverView.getPanel();
 			}
