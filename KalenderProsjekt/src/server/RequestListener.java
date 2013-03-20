@@ -39,7 +39,6 @@ public class RequestListener implements Runnable {
 				in = new ObjectInputStream(clientSocket.getInputStream());
 			}
 		} catch (IOException | InterruptedException | ClassNotFoundException e) {
-			e.printStackTrace();
 			OutputController.output("Client disconnected " + clientSocket.getInetAddress().toString());
 			Server.clients.remove(clientSocket);
 			
