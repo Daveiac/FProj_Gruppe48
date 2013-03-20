@@ -69,6 +69,7 @@ public class NewAppointmentView extends JPanel {
 	private JButton opprettKnapp = new JButton("Opprett avtale");
 	private JButton endreKnapp = new JButton("Endre avtale");
 	private JButton slettKnapp = new JButton("Slett avtale");
+	private ArrayList list;
 
 	public NewAppointmentView(Meeting meet, CalendarModel model,Alarm alarm) {
 		
@@ -96,12 +97,6 @@ public class NewAppointmentView extends JPanel {
 		opprettKnapp.setPreferredSize(new Dimension(150, 30));
 		endreKnapp.setPreferredSize(new Dimension(150, 30));
 		slettKnapp.setPreferredSize(new Dimension(150, 30));
-		leggTilDeltakerKnapp.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				listModel.addElement(new data.Person("Per", 5, "sd", "sd",
-						"sd", "sd"));
-			}
-		});
 		participantList = new JList<data.Person>(listModel);
 		monthComponent = new JComboBox();
 		yearComponent = new JComboBox();
@@ -184,6 +179,8 @@ public class NewAppointmentView extends JPanel {
 		c.gridx = 3;
 		c.gridy = 0;
 		this.add(addYear(), c);
+		
+		participantList.setCellRenderer(new PersonRender());
 
 		c.insets = new Insets(10, 0, 0, 0);
 
@@ -290,6 +287,17 @@ public class NewAppointmentView extends JPanel {
 		c.gridy = 6;
 		c.gridwidth = 5;
 		this.add(leggTilDeltakerKnapp, c);
+		leggTilDeltakerKnapp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int i = participantComponent.getSelectedIndex();
+				if(participantComponent.getSelectedItem() != null){
+					Person pr = getAllPerson().get(i);
+					if(listModel.contains(pr) == false){
+						listModel.addElement(pr);
+					}
+				}
+			}
+		});
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
@@ -307,10 +315,11 @@ public class NewAppointmentView extends JPanel {
 		c.gridy = 7;
 		this.add(slettDeltakerKnapp, c);
 		slettDeltakerKnapp.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent arg0) {
 				if(participantList.getSelectedValue()!=null){
-					listModel.remove(participantList.getSelectedIndex());
+					int i = participantList.getSelectedIndex();
+					getAllPerson().add(participantList.getSelectedValue());
+					listModel.remove(i);
 			}
 		}});
 
@@ -433,7 +442,9 @@ public class NewAppointmentView extends JPanel {
 		}
 		
 		if(meet == null){
-			//skrive inn rom her
+			for(int i = 0; i < calendarModel.getPersons().size(); i++){
+				participantComponent.addItem(getAllPerson().get(i).getFirstName() + " " +  getAllPerson().get(i).getLastName());
+			}
 		}
 		
 		
@@ -443,7 +454,6 @@ public class NewAppointmentView extends JPanel {
 		frame.setVisible(true);
 		frame.setResizable(true);
 		frame.add(this);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 	}
 
@@ -513,7 +523,6 @@ public class NewAppointmentView extends JPanel {
 	}
 	
 	private Meeting getMeeting(){
-		//fix noe mer her
 		long startT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(), startHourComponent.getSelectedIndex(), startMinComponent.getSelectedIndex()*15);
 		long endT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(),endHourComponent.getSelectedIndex(), endMinComponent.getSelectedIndex()*15);
 		ArrayList<Person> list = new ArrayList<Person>();
@@ -521,6 +530,9 @@ public class NewAppointmentView extends JPanel {
 				list.add(listModel.get(i));
 			}
 		Team team = new Team(0,calendarModel.getUser().getEmail(),list);
+		if(listModel.size() == 0){
+			team = null;
+		}
 		meeting = new Meeting(0, tittelComponent.getText(), locComponent.getText(),startT, endT, infoComponent.getText(), team, (MeetingRoom)romComponent.getSelectedItem(), calendarModel.getUser());
 		return meeting;
 	}
@@ -533,27 +545,27 @@ public class NewAppointmentView extends JPanel {
 		GregorianCalendar greCalendar = new GregorianCalendar(year, month, month, hour, min);
 		return greCalendar.getTimeInMillis();
 		}
+	
+//	private ArrayList getAllPersonString(){
+//		ArrayList<String> list = new ArrayList<String>();
+//		for(int i = 0; i< calendarModel.getPersons().size(); i++){
+//			list.add(calendarModel.getPersons().get(i).getFirstName() + calendarModel.getPersons().get(i).getLastName());
+//		}
+//		return list;
+//	}
+//	
+	private ArrayList<Person> getAllPerson(){
+		ArrayList<Person> list = new ArrayList<Person>();
+		for(int i = 0; i< calendarModel.getPersons().size(); i++){
+			list.add(calendarModel.getPersons().get(i));
+		}
+		return list;
+	}
 
 	public static void main(String[] args) {
-//		long alarmTime =  new GregorianCalendar(2013,2,14,15,30).getTimeInMillis();
-//		Person kari = new Person("karitr@ggk.no", 81549300, "Kari", "Traa", "karitr", "123456");
-//		ArrayList<Person> members = new ArrayList<Person>();
-//		Team team = new Team(0, null, members);
-//		MeetingRoom room = new MeetingRoom("Roomsa");
-//		members.add(kari);
-//		long startTime = new GregorianCalendar(2013, 2,11, 16, 30).getTimeInMillis();
-//		long endTime = new GregorianCalendar(2013, 2, 11, 17, 30).getTimeInMillis();
-//		Meeting meeting = new Meeting(0, "suppe1", null, startTime, endTime, "This is a desc", team, room, kari);
-//		Alarm alarm = new Alarm(0,'a',alarmTime,meeting);
-//		JFrame frame = new JFrame("Avtale");
-//		frame.setPreferredSize(new Dimension(850, 700));
-//		frame.setResizable(true);
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		CalendarModel calendarModel2 = new CalendarModel();
 		calendarModel2.init("batman");
 		new NewAppointmentView(null,calendarModel2,null);
-//		frame.pack();
-//		frame.setVisible(true);
 	}
 	public void showFrame(){
 		frame.setVisible(true);
