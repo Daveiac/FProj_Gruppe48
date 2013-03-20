@@ -60,7 +60,7 @@ public class DefaultView extends JPanel {
 		dayView = new DayView(Program.calendarModel);
 		weekView = new WeekView(Program.calendarModel);
 		monthView = new MonthView(Program.calendarModel);
-		notiPanel = new NotiPanelView();
+		notiPanel = new NotiPanelView(Program.calendarModel);
 		sharedCView = new SharedCalendarView(Program.calendarModel);
 		appointmentView = new AppointmentView(Program.calendarModel);
 		initialize();

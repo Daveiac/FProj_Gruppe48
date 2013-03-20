@@ -532,7 +532,7 @@ public class NewAppointmentView extends JPanel {
 		for(int i = 0; i< listModel.size();i++){
 				list.add(listModel.get(i));
 			}
-		Team team = new Team(0,calendarModel.getUser().getEmail(),list);
+		Team team = new Team(-1,calendarModel.getUser().getEmail(),list);
 		if(listModel.size() == 0){
 			team = null;
 		}
