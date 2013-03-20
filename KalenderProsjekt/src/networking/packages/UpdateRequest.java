@@ -20,6 +20,7 @@ public class UpdateRequest extends NetworkRequest{
 		super(EventType.UPDATE);
 		this.meeting = meeting;
 		this.updateType = updateType;
+		this.notification = n;
 	}
 
 	public Meeting getMeeting() {
