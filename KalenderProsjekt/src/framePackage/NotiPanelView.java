@@ -82,7 +82,6 @@ public class NotiPanelView extends JPanel implements PropertyChangeListener {
 					Meeting meeting = ((Notification) warningList
 							.getSelectedValue()).getMeeting();
 					appointOverView = new AppointmentOverView(meeting);
-					appointOverView.getPanel();
 				}
 				if(warningList.getSelectedValue() == null){
 					return;
@@ -94,8 +93,11 @@ public class NotiPanelView extends JPanel implements PropertyChangeListener {
 	
 	private void filList(){
 		listModel.removeAllElements();
-		int i = notifications.size()-1;
-		listModel.addElement(notifications.get(i));
+		for(int i = 0; i < notifications.size(); i++){
+			if(notifications.get(i).getApproved() == 'w'){
+				listModel.addElement(notifications.get(i));
+			}
+		}
 	}
 
 	public JPanel getPanel() {
