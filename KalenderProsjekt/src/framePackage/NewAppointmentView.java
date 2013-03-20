@@ -370,8 +370,8 @@ public class NewAppointmentView extends JPanel {
 		this.add(endreKnapp, d);
 		endreKnapp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(validTime()==true){
-					//skrive inn resten her for å sende
+				if(validTime()==true && tittelComponent.getText().length() > 0){
+					calendarModel.changeMeeting(getMeeting());
 					frame.setVisible(false);
 				}
 				if(validTime()==false){
@@ -387,7 +387,7 @@ public class NewAppointmentView extends JPanel {
 		this.add(slettKnapp, d);
 		slettKnapp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//skrive inn resten her for å sende
+//				calendarModel.removeMeeting(getMeetingID());
 				frame.setVisible(false);
 			}
 		});
@@ -513,6 +513,7 @@ public class NewAppointmentView extends JPanel {
 	}
 	
 	private Meeting getMeeting(){
+		//fix noe mer her
 		long startT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(), startHourComponent.getSelectedIndex(), startMinComponent.getSelectedIndex()*15);
 		long endT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(),endHourComponent.getSelectedIndex(), endMinComponent.getSelectedIndex()*15);
 		ArrayList<Person> list = new ArrayList<Person>();
@@ -522,6 +523,10 @@ public class NewAppointmentView extends JPanel {
 		Team team = new Team(0,calendarModel.getUser().getEmail(),list);
 		meeting = new Meeting(0, tittelComponent.getText(), locComponent.getText(),startT, endT, infoComponent.getText(), team, (MeetingRoom)romComponent.getSelectedItem(), calendarModel.getUser());
 		return meeting;
+	}
+	
+	private int getMeetingID(){
+		return meeting.getMeetingID();
 	}
 	
 	private long getTime(int year,int day, int month, int hour, int min){
