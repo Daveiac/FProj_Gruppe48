@@ -139,27 +139,32 @@ public class CalendarModel implements Serializable{
 	
 	public void setSelected(Person person, boolean sel) {
 		selected.set(persons.indexOf(person), sel);
-		System.out.println("EEE WADDAFUK");
-		pcs.firePropertyChange(SELECTED_Property, person, person);
+		System.out.println("Set selected (Model)");
+		pcs.firePropertyChange(SELECTED_Property, null, null);
 	}
 	private void requestEverything() {
-		requestAllMeetings();
-		requestAllNotifications();
-		requestAlarmsOfUser();
-		requestAllRooms();
+		try {
+			requestAllMeetings();
+			requestAllNotifications();
+			requestAlarmsOfUser();
+			requestAllRooms();
+		} catch (IOException e) {
+			System.out.println("Requests failed");
+			e.printStackTrace();
+		}
 		
 	}
-	private void requestAllRooms() {
-		// TODO Auto-generated method stub
-		
+	private void requestAllMeetings() throws IOException {
+		Program.reqHandler.sendGetEvryMeetingRequest();
 	}
-	private void requestAlarmsOfUser() {
-		// TODO Auto-generated method stub
-		
+	private void requestAllNotifications() throws IOException {
+		Program.reqHandler.sendGetAllNotificationsRequest();
 	}
-	private void requestAllNotifications() {
-		// TODO Auto-generated method stub
-		
+	private void requestAlarmsOfUser() throws IOException {
+		Program.reqHandler.sendGetAlarmsByPersonRequest(user);
+	}
+	private void requestAllRooms() throws IOException {
+		Program.reqHandler.sendGetAllMeetingroomsRequest();
 	}
 	private void requestAllPersons() {
 		try {
@@ -171,13 +176,6 @@ public class CalendarModel implements Serializable{
 		}
 	}
 	
-	private void requestAllMeetings() {
-		try {
-			Program.reqHandler.sendGetEvryMeetingRequest();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	/**
 	 * Sets all the persons of the model.
