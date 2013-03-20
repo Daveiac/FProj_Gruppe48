@@ -109,7 +109,7 @@ public class AppointmentView implements PropertyChangeListener {
 		mainPanel.add(meetingPanel, BorderLayout.CENTER);
 		mc.anchor = GridBagConstraints.NORTH;
 		
-		for (int i = 0; i < notifications.size(); i++) {
+		/*for (int i = 0; i < notifications.size(); i++) {
 		 Notification n = notifications.get(i);
 		 Meeting meeting = n.getMeeting();
 		 JComponent[] items = new JComponent[7];
@@ -153,20 +153,20 @@ public class AppointmentView implements PropertyChangeListener {
 			}
 			infoBtn.addActionListener(new InfoButtonListener(meeting));
 			
-			/*for (int j = 0; j < items.length; j++) {
+			for (int j = 0; j < items.length; j++) {
 				JComponent item = items[j];
 				item.setPreferredSize(new Dimension(sizes[j], 20));
 				mc.gridx = j;
 				meetingPanel.add(item, mc);
-			}*/
+			}
 			
-			items[0].setPreferredSize(new Dimension(20, 20));
-			items[1].setPreferredSize(new Dimension(20, 20));
-			items[2].setPreferredSize(new Dimension(20, 20));
-			items[3].setPreferredSize(new Dimension(20, 20));
-			items[4].setPreferredSize(new Dimension(20, 20));
-			items[5].setPreferredSize(new Dimension(20, 20));
-			items[6].setPreferredSize(new Dimension(20, 20));
+			items[0].setPreferredSize(new Dimension(100, 20));
+			items[1].setPreferredSize(new Dimension(100, 20));
+			items[2].setPreferredSize(new Dimension(100, 20));
+			items[3].setPreferredSize(new Dimension(100, 20));
+			items[4].setPreferredSize(new Dimension(100, 20));
+			items[5].setPreferredSize(new Dimension(100, 20));
+			items[6].setPreferredSize(new Dimension(100, 20));
 			mc.gridx = 0;
 			meetingPanel.add(items[0], mc);
 			mc.gridx = 1;
@@ -182,8 +182,10 @@ public class AppointmentView implements PropertyChangeListener {
 			mc.gridx = 6;
 			meetingPanel.add(items[6], mc);
 			
+			mc.gridy = mc.gridy +1;
+			
 		 }
-		int n = notifications.size();
+		int n = notifications.size();*/
 		
 		for (int i = 0; i < meetings.size(); i++) {
 			Meeting meeting = meetings.get(i);
@@ -215,13 +217,35 @@ public class AppointmentView implements PropertyChangeListener {
 			}
 			infoBtn.addActionListener(new InfoButtonListener(meeting));
 
-			for (int j = 0; j < items.length; j++) {
+			/*for (int j = 0; j < items.length; j++) {
 				JComponent item = items[j];
 				item.setPreferredSize(new Dimension(sizes[j], 20));
 				mc.gridx = j;
 				meetingPanel.add(item, mc);
-			}
-			mc.gridy++;
+			}*/
+			items[0].setPreferredSize(new Dimension(100, 20));
+			items[1].setPreferredSize(new Dimension(100, 20));
+			items[2].setPreferredSize(new Dimension(100, 20));
+			items[3].setPreferredSize(new Dimension(100, 20));
+			items[4].setPreferredSize(new Dimension(100, 20));
+			items[5].setPreferredSize(new Dimension(100, 20));
+			items[6].setPreferredSize(new Dimension(100, 20));
+			mc.gridx = 0;
+			meetingPanel.add(items[0], mc);
+			mc.gridx = 1;
+			meetingPanel.add(items[1], mc);
+			mc.gridx = 2;
+			meetingPanel.add(items[2], mc);
+			mc.gridx = 3;
+			meetingPanel.add(items[3], mc);
+			mc.gridx = 4;
+			meetingPanel.add(items[4], mc);
+			mc.gridx = 5;
+			meetingPanel.add(items[5], mc);
+			mc.gridx = 6;
+			meetingPanel.add(items[6], mc);
+			
+			mc.gridy = mc.gridy +1;
 		}
 		mc.weighty = 0;
 		mainPanel.validate();
