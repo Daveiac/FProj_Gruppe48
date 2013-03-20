@@ -34,7 +34,7 @@ public class WeekView implements CalendarView, PropertyChangeListener {
 	 * Constructs the WeekView Panel.
 	 */
 	public WeekView(CalendarModel calendarModel) {
-		calendar = new GregorianCalendar();
+		calendar = calendarModel.getCalendar();
 		this.calendarModel = calendarModel;
 		this.calendarModel.addPropertyChangeListener(this);
 		dayView = new DayView(calendarModel);

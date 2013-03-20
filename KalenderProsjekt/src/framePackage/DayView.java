@@ -38,7 +38,7 @@ public class DayView implements CalendarView, PropertyChangeListener {
 	 * Constructs the DayView Panel.
 	 */
 	public DayView(CalendarModel calendarModel) {
-		calendar = new GregorianCalendar();
+		calendar = calendarModel.getCalendar();
 		this.calendarModel = calendarModel;
 		this.calendarModel.addPropertyChangeListener(this);
 

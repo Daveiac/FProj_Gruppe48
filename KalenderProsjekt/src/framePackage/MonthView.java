@@ -61,7 +61,7 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 	}
 
 	private void initialize(CalendarModel calendarModel) {
-		calendar = new GregorianCalendar();
+		calendar = calendarModel.getCalendar();
 		this.calendarModel = calendarModel;
 		this.calendarModel.addPropertyChangeListener(this);
 
