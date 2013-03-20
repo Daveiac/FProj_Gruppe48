@@ -126,10 +126,14 @@ public class AppointmentOverView {
 		overViewPanel.add(delete, c);
 		delete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//sett inn hva du skal sende her
+				calendarModel.removeMeeting(meeting.getMeetingID());
 			}
 		});
 		
+		if(meeting.getCreator().getUsername() != calendarModel.getUser().getUsername()){
+			delete.setEnabled(false);
+			change.setEnabled(false);
+		}
 
 		yourStatus = new JComboBox<ImageIcon>();
 		yourStatus.addItem(check);
@@ -168,13 +172,15 @@ public class AppointmentOverView {
 			public void actionPerformed(ActionEvent arg0) {
 				if (yourStatus.getSelectedItem() == check) {
 					lblStatus.setText("Deltar");
-					//skrive inn hvor du skal sende det til
+					calendarModel.setStatus('y',userNotification);
 				}
 				if (yourStatus.getSelectedItem() == cross) {
 					lblStatus.setText("Deltar Ikke");
+					calendarModel.setStatus('n',userNotification);
 				}
 				if (yourStatus.getSelectedItem() == question) {
 					lblStatus.setText("Ikke svart");
+					calendarModel.setStatus('w',userNotification);
 				}
 			}
 		});
