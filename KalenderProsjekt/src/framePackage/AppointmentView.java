@@ -48,8 +48,6 @@ public class AppointmentView implements PropertyChangeListener {
 	public AppointmentView(CalendarModel calendarModel) {
 		this.calendarModel = calendarModel;
 		calendarModel.addPropertyChangeListener(this);
-		this.notifications = notifications;
-		this.user = user;
 		mainPanel = new JPanel();
 		meetingPanel = new JPanel();
 		meetingPanel.setLayout(new GridBagLayout());
@@ -106,7 +104,11 @@ public class AppointmentView implements PropertyChangeListener {
 	}
 
 	private void refreshMeetings() {
-		mc.anchor = GridBagConstraints.NORTHWEST;
+		mainPanel.remove(meetingPanel);
+		meetingPanel = new JPanel();
+		mainPanel.add(meetingPanel, BorderLayout.CENTER);
+		mainPanel.validate();
+		mc.anchor = GridBagConstraints.NORTH;
 		for (int i = 0; i < notifications.size(); i++) {
 		 Notification n = notifications.get(i);
 		 Meeting meeting = n.getMeeting();
@@ -144,10 +146,15 @@ public class AppointmentView implements PropertyChangeListener {
 			((JLabel) items[1]).setText(dateFormat.format(startDate.getTime()));
 			((JLabel) items[2]).setText(timeFormat.format(startDate.getTime()));
 			
-			changeBtn.addActionListener(new ChangeButtonListener(meeting));
+			if(meeting.getCreator().getUsername() != user.getUsername()) {
+				changeBtn.setEnabled(false);
+			} else {
+				changeBtn.addActionListener(new ChangeButtonListener(meeting));
+			}
 			infoBtn.addActionListener(new InfoButtonListener(meeting));
 
-			mc.gridy = i + 1;
+			System.out.println(mc.gridy = i + 1);
+			
 			for (int j = 0; j < items.length; j++) {
 				JComponent item = items[j];
 				item.setPreferredSize(new Dimension(sizes[j], 20));
@@ -180,10 +187,14 @@ public class AppointmentView implements PropertyChangeListener {
 			((JLabel) items[1]).setText(dateFormat.format(startDate.getTime()));
 			((JLabel) items[2]).setText(timeFormat.format(startDate.getTime()));
 
-			changeBtn.addActionListener(new ChangeButtonListener(meeting));
+			if(meeting.getCreator().getUsername() != user.getUsername()) {
+				changeBtn.setEnabled(false);
+			} else {
+				changeBtn.addActionListener(new ChangeButtonListener(meeting));
+			}
 			infoBtn.addActionListener(new InfoButtonListener(meeting));
 
-			mc.gridy = i+n + 1;
+			System.out.println(mc.gridy = i+n + 1);
 			for (int j = 0; j < items.length; j++) {
 				JComponent item = items[j];
 				item.setPreferredSize(new Dimension(sizes[j], 20));
@@ -191,6 +202,7 @@ public class AppointmentView implements PropertyChangeListener {
 				meetingPanel.add(item, mc);
 			}
 		}
+		mc.weighty = 0;
 		
 	}
 	private class ChangeButtonListener implements ActionListener{
@@ -218,16 +230,6 @@ public class AppointmentView implements PropertyChangeListener {
 		
 	}
 
-	public static void main(String[] args) {
-		JFrame frame = new JFrame("APPointmensTest");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		CalendarModel cm = new CalendarModel();
-		frame.setContentPane(new AppointmentView(cm).getPanel());
-//		cm.init();
-		frame.pack();
-		frame.setVisible(true);
-	}
-
 	public JPanel getPanel() {
 		return mainPanel;
 	}
@@ -236,6 +238,12 @@ public class AppointmentView implements PropertyChangeListener {
 	public void propertyChange(PropertyChangeEvent evt) {
 		switch (evt.getPropertyName()) {
 		case CalendarModel.CALENDAR_LOADED_Property:
+			user = calendarModel.getUser();
+			notifications = calendarModel.getAllNotificationsOfPerson(user);
+			meetings = calendarModel.getAppointments();
+			refreshMeetings();
+			break;
+		case CalendarModel.MEETINGS_CHANGED_Property:
 			user = calendarModel.getUser();
 			notifications = calendarModel.getAllNotificationsOfPerson(user);
 			meetings = calendarModel.getAppointments();

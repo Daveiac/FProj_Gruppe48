@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +16,7 @@ import client.Program;
 
 import framePackage.DefaultView;
 
-
-public class CalendarModel implements Serializable{
+public class CalendarModel implements Serializable {
 	/**
 	 * 
 	 */
@@ -31,21 +31,21 @@ public class CalendarModel implements Serializable{
 	private Person user;
 	private ArrayList<MeetingRoom> meetingRooms;
 	private GregorianCalendar calendar;
-	private static final Color[] colors = { Color.red, Color.blue,Color.yellow, Color.orange, Color.magenta, Color.gray, Color.pink };
+	private static final Color[] colors = { Color.red, Color.blue,
+			Color.yellow, Color.orange, Color.magenta, Color.gray, Color.pink };
 	public static final String SELECTED_Property = "SELECTED",
 			MEETINGS_CHANGED_Property = "MEETINGS",
 			NOTIFICATIONS_CHANGED_Property = "NNOTI",
 			CALENDAR_LOADED_Property = "LOADED",
 			PERSONS_ADDED_Property = "PERSONS",
 			ALARMS_CHANGED_Property = "ALARMA!",
-			DATE_CHANGED_Property = "DATE",
-			ROOMS_CHANGED_Property = "ROOMS";
-
+			DATE_CHANGED_Property = "DATE", ROOMS_CHANGED_Property = "ROOMS";
 
 	public CalendarModel() {
 		pcs = new PropertyChangeSupport(this);
 		calendar = new GregorianCalendar();
 	}
+
 	public void init(String username) {
 		System.out.println();
 		this.username = username;
@@ -57,95 +57,110 @@ public class CalendarModel implements Serializable{
 		meetingRooms = new ArrayList<MeetingRoom>();
 		requestAllPersons();
 	}
-	
-	public ArrayList<Meeting> getAllMeetingsOfPerson(Person person, boolean attending) {
+
+	public ArrayList<Meeting> getAllMeetingsOfPerson(Person person,
+			boolean attending) {
 		ArrayList<Meeting> allMeetings = new ArrayList<Meeting>();
 		allMeetings.addAll(getAppointments());
 		allMeetings.addAll(getMeetings(person, attending));
 		return allMeetings;
 	}
+
 	public ArrayList<Meeting> getMeetings(Person person, boolean attending) {
 		ArrayList<Meeting> allMeetings = new ArrayList<Meeting>();
 		for (Notification n : notifications) {
-			if(n.getPerson().getUsername().equals(person.getUsername()) && (n.getApproved() == 'y' || !attending)) {
+			if (n.getPerson().getUsername().equals(person.getUsername())
+					&& (n.getApproved() == 'y' || !attending)) {
 				allMeetings.add(n.getMeeting());
 			}
 		}
 		return allMeetings;
 	}
+
 	public ArrayList<Meeting> getAppointments() {
 		ArrayList<Meeting> appointments = new ArrayList<Meeting>();
 		for (Meeting meeting : meetings) {
-			if(meeting.getTeam() == null && meeting.getCreator().getUsername().equals(user.getUsername())) {
+			if (meeting.getTeam() == null
+					&& meeting.getCreator().getUsername()
+							.equals(user.getUsername())) {
 				appointments.add(meeting);
 			}
 		}
 		return appointments;
 	}
+
 	public ArrayList<Notification> getAllNotificationsOfPerson(Person person) {
 		ArrayList<Notification> notis = new ArrayList<Notification>();
 		for (Notification n : notifications) {
-			if(n.getPerson().getUsername().equals(person.getUsername())) {
+			if (n.getPerson().getUsername().equals(person.getUsername())) {
 				notis.add(n);
 			}
 		}
 		return notis;
 	}
-	
+
 	public ArrayList<Notification> getUnansweredNotificationsOfUser() {
 		ArrayList<Notification> unanswered = new ArrayList<Notification>();
 		for (Notification n : notifications) {
-			if(n.getApproved() == 'w') {
+			if (n.getApproved() == 'w') {
 				unanswered.add(n);
 			}
 		}
 		return unanswered;
 	}
-	
+
 	public ArrayList<Notification> getAllNotificationsOfMeeting(Meeting meeting) {
 		ArrayList<Notification> notis = new ArrayList<Notification>();
 		for (Notification n : notifications) {
-			if(n.getMeeting().getMeetingID() == meeting.getMeetingID()) {
+			if (n.getMeeting().getMeetingID() == meeting.getMeetingID()) {
 				notis.add(n);
 			}
 		}
 		return notis;
 	}
+
 	public Alarm getAlarmByMeeting(Meeting meeting) {
 		for (Alarm alarm : alarms) {
-			if(alarm.getMeeting().getMeetingID() == meeting.getMeetingID()) {
+			if (alarm.getMeeting().getMeetingID() == meeting.getMeetingID()) {
 				return alarm;
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Gets ALL of the meetings of a person in the given time interval
-	 * @param person the person whose meetings to get
-	 * @param start the minimum start time of the meeting
-	 * @param end the maximum end time of the meeting
-	 * @return all the meetings of the given person within the given time interval.
+	 * 
+	 * @param person
+	 *            the person whose meetings to get
+	 * @param start
+	 *            the minimum start time of the meeting
+	 * @param end
+	 *            the maximum end time of the meeting
+	 * @return all the meetings of the given person within the given time
+	 *         interval.
 	 */
-//	TODO
-//	public ArrayList<Meeting> getMeetings(Person person, long start, long end) {
-//		ArrayList<Meeting> meetings = meetings.get(person);
-//		ArrayList<Meeting> newMeetings = new ArrayList<Meeting>();
-//		for (Meeting meeting : meetings) {
-//			if (meeting.getStartTime() >= start && meeting.getEndTime() < end) {
-//				newMeetings.add(meeting);
-//			}
-//		}
-//		return newMeetings;
-//	}
-	
+	// TODO
+	// public ArrayList<Meeting> getMeetings(Person person, long start, long
+	// end) {
+	// ArrayList<Meeting> meetings = meetings.get(person);
+	// ArrayList<Meeting> newMeetings = new ArrayList<Meeting>();
+	// for (Meeting meeting : meetings) {
+	// if (meeting.getStartTime() >= start && meeting.getEndTime() < end) {
+	// newMeetings.add(meeting);
+	// }
+	// }
+	// return newMeetings;
+	// }
+
 	public List<Person> getPersons() {
 		return persons;
 	}
-	//TODO
-//	public HashMap<Person, ArrayList<Meeting>> getHasjmap() {
-//		return meetings;
-//	}
+
+	// TODO
+	// public HashMap<Person, ArrayList<Meeting>> getHasjmap() {
+	// return meetings;
+	// }
 
 	public ArrayList<Boolean> getSelected() {
 		return selected;
@@ -154,12 +169,13 @@ public class CalendarModel implements Serializable{
 	public void setAllSelected(ArrayList<Boolean> selected) {
 		this.selected = selected;
 	}
-	
+
 	public void setSelected(Person person, boolean sel) {
 		selected.set(persons.indexOf(person), sel);
 		System.out.println("Set selected (Model)");
 		pcs.firePropertyChange(SELECTED_Property, null, null);
 	}
+
 	private void requestEverything() {
 		try {
 			requestAllMeetings();
@@ -170,81 +186,100 @@ public class CalendarModel implements Serializable{
 			System.out.println("Requests failed");
 			e.printStackTrace();
 		}
-		
+
 	}
+
 	private void requestAllMeetings() throws IOException {
 		Program.reqHandler.sendGetEvryMeetingRequest();
 	}
+
 	private void requestAllNotifications() throws IOException {
 		Program.reqHandler.sendGetAllNotificationsRequest();
 	}
+
 	private void requestAlarmsOfUser() throws IOException {
 		Program.reqHandler.sendGetAlarmsByPersonRequest(user);
 	}
+
 	private void requestAllRooms() throws IOException {
 		Program.reqHandler.sendGetAllMeetingroomsRequest();
 	}
+
 	private void requestAllPersons() {
 		try {
-			if(Program.reqHandler != null){
+			if (Program.reqHandler != null) {
 				Program.reqHandler.sendGetAllPersonsRequest();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	/**
-	 * Sets all the persons of the model.
-	 * This method will only be called once by the server at startup
+	 * Sets all the persons of the model. This method will only be called once
+	 * by the server at startup
+	 * 
 	 * @param persons
 	 */
 	public void setAllPersons(List<Person> persons) {
 		this.persons = persons;
 		for (Person person : persons) {
-			if(person.getUsername().equals(username)) {
+			if (person.getUsername().equals(username)) {
 				user = person;
 				selected.add(true);
 			} else {
 				selected.add(false);
-				
+
 			}
 		}
 		pcs.firePropertyChange(PERSONS_ADDED_Property, null, persons);
 		requestEverything();
 	}
-	
+
 	public void setAllMeetings(List<Meeting> meetings) {
 		this.meetings = (ArrayList<Meeting>) meetings;
 		pcs.firePropertyChange(CALENDAR_LOADED_Property, null, meetings);
 	}
+
 	public void setAllRooms(List<MeetingRoom> rooms) {
 		meetingRooms = (ArrayList<MeetingRoom>) rooms;
 		pcs.firePropertyChange(ROOMS_CHANGED_Property, null, null);
 	}
+
 	public void setAlarmsOfUser(List<Alarm> alarms) {
 		this.alarms = (ArrayList<Alarm>) alarms;
 		pcs.firePropertyChange(ALARMS_CHANGED_Property, null, null);
 	}
+
 	public void setAllNotifications(List<Notification> notifications) {
 		this.notifications = (ArrayList<Notification>) notifications;
 		pcs.firePropertyChange(NOTIFICATIONS_CHANGED_Property, null, null);
 	}
-	
+
 	public List<Person> getSelectedPersons() {
 		List<Person> selectedPersons = new ArrayList<Person>();
 		for (int i = 0; i < selected.size(); i++) {
-			if(selected.get(i)) {
+			if (selected.get(i)) {
 				selectedPersons.add(persons.get(i));
 			}
 		}
 		return selectedPersons;
 	}
-	
+
 	public Color getColorOfPerson(Person person) {
 		return colors[persons.indexOf(person)];
 	}
+
+	public void setStatus(char c, Notification notification) {
+		try {
+			Program.reqHandler.sendUpdateNotificationRequest(
+					new Notification(Calendar.getInstance().getTimeInMillis(), c, notification
+							.getKind(), notification.getMeeting(), notification.getPerson()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void pushMeeting(Meeting meeting) {
 		System.out.println("Trying to push meeting");
 		try {
@@ -253,42 +288,54 @@ public class CalendarModel implements Serializable{
 			e.printStackTrace();
 		}
 	}
+
 	public void changeMeeting(Meeting meeting) {
 		try {
-			Program.reqHandler.sendUpdateMeetingRequest(null, null, null, meeting);
+			Program.reqHandler.sendUpdateMeetingRequest(null);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	public void removeMeeting(int meetingID) {
-		//TODO
+
+	public void removeMeeting(Meeting meeting) {
+		try {
+			Program.reqHandler.sendDeleteMeetingRequest(meeting);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-	public ArrayList<MeetingRoom> getRooms(){
+
+	public ArrayList<MeetingRoom> getRooms() {
 		return meetingRooms;
 	}
-	public ArrayList<MeetingRoom> getAvailableRooms(long startTime, long endTime){
+
+	public ArrayList<MeetingRoom> getAvailableRooms(long startTime, long endTime) {
 		ArrayList<MeetingRoom> rooms = new ArrayList<MeetingRoom>();
 		rooms.addAll(meetingRooms);
-		for(Meeting meeting: meetings){
-				long meetStart = meeting.getStartTime();
-				long meetEnd = meeting.getEndTime();
-				if (meeting.getRoom() != null && (meetStart >= startTime && meetStart < endTime) || (meetEnd > startTime && meetEnd < endTime)) {
-					rooms.remove(meeting.getRoom());
-				}
+		for (Meeting meeting : meetings) {
+			long meetStart = meeting.getStartTime();
+			long meetEnd = meeting.getEndTime();
+			if (meeting.getRoom() != null
+					&& (meetStart >= startTime && meetStart < endTime)
+					|| (meetEnd > startTime && meetEnd < endTime)) {
+				rooms.remove(meeting.getRoom());
+			}
 		}
 		return rooms;
 	}
+
 	public Person getUser() {
 		return user;
 	}
-	
+
 	public GregorianCalendar getCalendar() {
 		return calendar;
 	}
+
 	public void changeDate() {
 		pcs.firePropertyChange(DATE_CHANGED_Property, null, null);
 	}
+
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		pcs.addPropertyChangeListener(listener);
 	}
