@@ -140,9 +140,6 @@ public class CalendarModel implements Serializable{
 	public void setSelected(Person person, boolean sel) {
 		selected.set(persons.indexOf(person), sel);
 		System.out.println("EEE WADDAFUK");
-		for (int i = 0; i < pcs.getPropertyChangeListeners(SELECTED_Property).length; i++) {
-			System.out.println(pcs.getPropertyChangeListeners(SELECTED_Property)[i].getClass());
-		}
 		pcs.firePropertyChange(SELECTED_Property, person, person);
 	}
 	private void requestEverything() {
