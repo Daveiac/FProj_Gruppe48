@@ -173,6 +173,7 @@ public class WeekView implements CalendarView, PropertyChangeListener {
 	@Override
 	public void next() {
 		calendar.add(GregorianCalendar.WEEK_OF_YEAR, 1);
+		calendarModel.changeDate();
 		createWeekTable();
 	}
 
@@ -182,6 +183,7 @@ public class WeekView implements CalendarView, PropertyChangeListener {
 	@Override
 	public void prev() {
 		calendar.add(GregorianCalendar.WEEK_OF_YEAR, -1);
+		calendarModel.changeDate();
 		createWeekTable();
 	}
 
@@ -205,6 +207,9 @@ public class WeekView implements CalendarView, PropertyChangeListener {
 			createWeekTable();
 			break;
 		case CalendarModel.SELECTED_Property:
+			createWeekTable();
+			break;
+		case CalendarModel.DATE_CHANGED_Property:
 			createWeekTable();
 			break;
 		default:

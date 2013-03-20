@@ -38,11 +38,13 @@ public class CalendarModel implements Serializable{
 			NOTIFICATIONS_CHANGED_Property = "NNOTI",
 			CALENDAR_LOADED_Property = "LOADED",
 			PERSONS_ADDED_Property = "PERSONS",
-			ALARMS_CHANGED_Property = "ALARMA!";
+			ALARMS_CHANGED_Property = "ALARMA!",
+			DATE_CHANGED_Property = "DATE";
 
 
 	public CalendarModel() {
 		pcs = new PropertyChangeSupport(this);
+		calendar = new GregorianCalendar();
 	}
 	public void init(String username) {
 		System.out.println();
@@ -53,7 +55,6 @@ public class CalendarModel implements Serializable{
 		notifications = new ArrayList<Notification>();
 		alarms = new ArrayList<Alarm>();
 		meetingRooms = new ArrayList<MeetingRoom>();
-		calendar = new GregorianCalendar();
 		requestAllPersons();
 	}
 	
@@ -261,6 +262,9 @@ public class CalendarModel implements Serializable{
 	
 	public GregorianCalendar getCalendar() {
 		return calendar;
+	}
+	public void changeDate() {
+		pcs.firePropertyChange(DATE_CHANGED_Property, null, null);
 	}
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		pcs.addPropertyChangeListener(listener);

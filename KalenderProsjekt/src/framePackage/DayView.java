@@ -225,6 +225,7 @@ public class DayView implements CalendarView, PropertyChangeListener {
 	@Override
 	public void next() {
 		calendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
+		calendarModel.changeDate();
 		createDayTable();
 	}
 
@@ -234,6 +235,7 @@ public class DayView implements CalendarView, PropertyChangeListener {
 	@Override
 	public void prev() {
 		calendar.add(GregorianCalendar.DAY_OF_MONTH, -1);
+		calendarModel.changeDate();
 		createDayTable();
 	}
 
@@ -258,6 +260,9 @@ public class DayView implements CalendarView, PropertyChangeListener {
 			break;
 		case CalendarModel.SELECTED_Property:
 			System.out.println("motherfucker!");
+			createDayTable();
+			break;
+		case CalendarModel.DATE_CHANGED_Property:
 			createDayTable();
 			break;
 		default:

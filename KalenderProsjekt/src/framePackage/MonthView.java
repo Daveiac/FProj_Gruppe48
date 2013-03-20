@@ -354,6 +354,7 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 	@Override
 	public void next() {
 		calendar.add(GregorianCalendar.MONTH, 1);
+		calendarModel.changeDate();
 		createMonthTable();
 	}
 
@@ -363,6 +364,7 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 	@Override
 	public void prev() {
 		calendar.add(GregorianCalendar.MONTH, -1);
+		calendarModel.changeDate();
 		createMonthTable();
 	}
 
@@ -383,6 +385,9 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 			createMonthTable();
 			break;
 		case CalendarModel.MEETINGS_CHANGED_Property:
+			createMonthTable();
+			break;
+		case CalendarModel.DATE_CHANGED_Property:
 			createMonthTable();
 			break;
 		default:
