@@ -426,7 +426,7 @@ public class NewAppointmentView extends JPanel {
 				locComponent.setText(meet.getLocation());
 				romComponent.setEnabled(false);
 			}
-			if(meet.getLocation().length() == 0){
+			if(meet.getRoom() != null){
 				romComponent.setEnabled(true);
 				locComponent.setEnabled(false);
 				romComponent.addItem(meet.getRoom().getRoomName());
