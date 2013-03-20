@@ -195,22 +195,7 @@ public class NewAppointmentView extends JPanel {
 		c.gridy = 2;
 		c.gridwidth = 5;
 		this.add(tittelComponent, c);
-		if(meet == null){
-			opprettKnapp.setEnabled(true);
-			slettKnapp.setEnabled(false);
-			endreKnapp.setEnabled(false);
-		}
-		if(meet != null){
-			opprettKnapp.setEnabled(false);
-		}
-		tittelComponent.addKeyListener(new KeyListener() {
-			public void keyTyped(KeyEvent arg0) {
-			}
-			public void keyReleased(KeyEvent arg0) {
-			}
-			public void keyPressed(KeyEvent arg0) {
-			}
-		});
+		
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 2;
@@ -323,7 +308,7 @@ public class NewAppointmentView extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				if(participantList.getSelectedValue()!=null && participantList.getSelectedValue() != calendarModel.getUser()){
 					int i = participantList.getSelectedIndex();
-					listModel.remove(participantList.getSelectedIndex());
+					listModel.remove(i);
 			}
 		}});
 
@@ -406,6 +391,11 @@ public class NewAppointmentView extends JPanel {
 		});
 		
 		if(meet!= null){
+			if(calendarModel.getUser().equals(meet.getCreator())){
+				opprettKnapp.setEnabled(false);
+				endreKnapp.setEnabled(true);
+				slettKnapp.setEnabled(true);
+			}
 			for(int i = 0; i < calendarModel.getPersons().size(); i++){
 				participantComponent.addItem(getAllPerson().get(i).getFirstName() + " " +  getAllPerson().get(i).getLastName());
 			}
@@ -449,6 +439,9 @@ public class NewAppointmentView extends JPanel {
 		}
 		
 		if(meet == null){
+			opprettKnapp.setEnabled(true);
+			endreKnapp.setEnabled(false);
+			slettKnapp.setEnabled(false);
 			for(int i = 0; i < calendarModel.getPersons().size(); i++){
 				participantComponent.addItem(getAllPerson().get(i).getFirstName() + " " +  getAllPerson().get(i).getLastName());
 			}
