@@ -324,7 +324,6 @@ public class NewAppointmentView extends JPanel {
 				if(participantList.getSelectedValue()!=null && participantList.getSelectedValue() != calendarModel.getUser()){
 					int i = participantList.getSelectedIndex();
 					getAllPerson().add(participantList.getSelectedValue());
-					listModel.remove(i);
 			}
 		}});
 
@@ -407,6 +406,12 @@ public class NewAppointmentView extends JPanel {
 		});
 		
 		if(meet!= null){
+			for(int i = 0; i < calendarModel.getPersons().size(); i++){
+				participantComponent.addItem(getAllPerson().get(i).getFirstName() + " " +  getAllPerson().get(i).getLastName());
+			}
+			for(int j = 0; j < calendarModel.getRooms().size(); j ++){
+				romComponent.addItem(calendarModel.getRooms().get(j).getRoomName());
+			}
 			tittelComponent.setText(meet.getTitle());
 			greCalendar.setTimeInMillis(meet.getStartTime());
 			startHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
@@ -417,26 +422,17 @@ public class NewAppointmentView extends JPanel {
 			greCalendar.setTimeInMillis(meet.getEndTime());
 			endHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
 			endMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
-			if(meet.getLocation() != null){
+			if(meet.getLocation().length() != 0){
 				locComponent.setText(meet.getLocation());
 				romComponent.setEnabled(false);
 			}
-			if(meet.getLocation() == null){
+			if(meet.getLocation().length() == 0){
 				romComponent.setEnabled(true);
 				locComponent.setEnabled(false);
 				romComponent.addItem(meet.getRoom().getRoomName());
 				romComponent.setSelectedItem(meet.getRoom().getRoomName());
 			}
-			for(int i = 0; i<meet.getTeam().getMembers().size();i++ ){
-				for(int j = 0; j<calendarModel.getPersons().size();j++){
-					if(meet.getTeam().getMembers().get(i).equals(calendarModel.getPersons().get(i)) == false){
-						listModel.addElement(calendarModel.getPersons().get(i));
-					}
-					else{
-						participantComponent.addItem(calendarModel.getPersons().get(i).getFirstName() + calendarModel.getPersons().get(i).getLastName());
-					}
-				}
-			}
+			
 			infoComponent.setText(meet.getDescription());
 			if(alarm != null){
 			greCalendar.setTimeInMillis(alarm.getTime());
