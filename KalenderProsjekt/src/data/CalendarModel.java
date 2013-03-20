@@ -111,6 +111,14 @@ public class CalendarModel implements Serializable{
 		}
 		return notis;
 	}
+	public Alarm getAlarmByMeeting(Meeting meeting) {
+		for (Alarm alarm : alarms) {
+			if(alarm.getMeeting().getMeetingID() == meeting.getMeetingID()) {
+				return alarm;
+			}
+		}
+		return null;
+	}
 	
 	/**
 	 * Gets ALL of the meetings of a person in the given time interval
