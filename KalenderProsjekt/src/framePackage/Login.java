@@ -18,6 +18,7 @@ public class Login extends JPanel{
 	public JButton button;
 	private String username;
 	private GridBagConstraints c;
+	private JFrame frame;
 	
 	public Login(){
 		
@@ -66,18 +67,26 @@ public class Login extends JPanel{
 		c.gridx = 2;
 		c.gridy = 3;
 		add(button,c);
-	}
-	
-	public static void main(String[] args){
 		
-		JFrame frame = new JFrame("Logg inn");
-		frame.setPreferredSize(new Dimension(350, 130));
-		frame.setResizable(false);
-		frame.setLocationRelativeTo(null);
-		frame.getContentPane().add(new Login());
+		frame = new JFrame("Logg inn");
+		frame.setPreferredSize(new Dimension(850, 700));
+		frame.getContentPane().add(panel);
 		frame.pack();
 		frame.setVisible(true);
+		frame.setResizable(true);
+		frame.add(this);
 	}
+	
+//	public static void main(String[] args){
+//		
+//		JFrame frame = new JFrame("Logg inn");
+//		frame.setPreferredSize(new Dimension(350, 130));
+//		frame.setResizable(false);
+//		frame.setLocationRelativeTo(null);
+//		frame.getContentPane().add(new Login());
+//		frame.pack();
+//		frame.setVisible(true);
+//	}
 
 	public String getUsername() {
 		return username;
