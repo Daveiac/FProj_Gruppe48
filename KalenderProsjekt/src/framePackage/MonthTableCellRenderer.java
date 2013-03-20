@@ -47,9 +47,9 @@ class MonthTableCellRenderer extends DefaultTableCellRenderer {
 		if (shit == null)
 			return null;
 
-//		System.out.println("dashitCELLRENDUS");
-//		System.out.println(shit[0].toString());
-//		System.out.println(shit[1].toString());
+		// System.out.println("dashitCELLRENDUS");
+		// System.out.println(shit[0].toString());
+		// System.out.println(shit[1].toString());
 
 		int dayOfMonth = (int) shit[0];
 		ArrayList<Meeting> meetings = (ArrayList<Meeting>) shit[1];
@@ -66,15 +66,7 @@ class MonthTableCellRenderer extends DefaultTableCellRenderer {
 
 		JList<String> meetingList = new JList<String>();
 		meetingList.setModel(listModel);
-		
-
-		DefaultListSelectionModel listSelectionModel = new DefaultListSelectionModel();
-		listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		meetingList.setSelectionModel(listSelectionModel);
-//		listSelectionModel.addListSelectionListener(new ListSelectionListeners(this));
-
-		JScrollPane scrollPane = new JScrollPane(meetingList);
-		add(scrollPane);
+		add(meetingList);
 
 		// @SuppressWarnings("unchecked")
 		// JList<String> list = (JList<String>) value;
@@ -105,7 +97,7 @@ class MonthTableCellRenderer extends DefaultTableCellRenderer {
 		// component.setBackground(table.getBackground());
 		// }
 		// }
-		return scrollPane;
+		return meetingList;
 	}
 }
 // listModel.addElement(String.valueOf(dayOfMonth));

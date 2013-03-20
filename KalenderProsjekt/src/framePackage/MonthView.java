@@ -23,8 +23,7 @@ import data.Person;
  * This is the MonthView Panel that shows the month planner.
  */
 @SuppressWarnings("serial")
-public class MonthView implements CalendarView,
-		PropertyChangeListener {
+public class MonthView implements CalendarView, PropertyChangeListener {
 
 	private JTable monthTable;
 	private DefaultTableModel tableModel;
@@ -100,7 +99,7 @@ public class MonthView implements CalendarView,
 		monthTable.setModel(tableModel);
 		monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		monthTable.setRowSelectionAllowed(false);
-		 monthTable.setRowHeight(300);
+		monthTable.setRowHeight(300);
 		monthTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 
 		int daysInWeek = 7;
@@ -124,7 +123,7 @@ public class MonthView implements CalendarView,
 		// };
 		// monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		// monthTable.setRowSelectionAllowed(false);
-//		 monthTable.setRowHeight(64);
+		// monthTable.setRowHeight(64);
 		// monthTable.getColumnModel().getColumn(0).setPreferredWidth(10);
 		// for (int i = 1; i < 8; i++) {
 		// monthTable.getColumnModel().getColumn(i)
@@ -238,10 +237,16 @@ public class MonthView implements CalendarView,
 						.getAllMeetingsOfPerson(person, true);
 				for (Meeting meeting : meetings) {
 
+					GregorianCalendar meetingCalendar = new GregorianCalendar();
+
+					// Starting time of meeting
+					long startTime = meeting.getStartTime();
+					meetingCalendar.setTimeInMillis(startTime);
+
 					// Sets the meetings at the given times
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-					if (sdf.format(calendar.getTime()).equals(
-							sdf.format(monthCalendar.getTime()))) {
+					if (sdf.format(monthCalendar.getTime()).equals(
+							sdf.format(meetingCalendar.getTime()))) {
 
 						if (!todaysMeetings.contains(meeting)) {
 							todaysMeetings.add(meeting);

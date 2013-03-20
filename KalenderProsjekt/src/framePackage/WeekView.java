@@ -19,8 +19,7 @@ import data.CalendarModel;
  * This is the WeekView Panel that shows the week planner.
  */
 @SuppressWarnings("serial")
-public class WeekView implements CalendarView,
-		PropertyChangeListener {
+public class WeekView implements CalendarView, PropertyChangeListener {
 
 	private JTable weekTable;
 	private DefaultTableModel tableModel;
@@ -123,7 +122,8 @@ public class WeekView implements CalendarView,
 		SimpleDateFormat weekDayFormat = new SimpleDateFormat("EEEE dd. MMM.");
 		int daysInWeek = 7;
 		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {
-			columnHeaders[dayOfWeek] = weekDayFormat.format(weekCalendar.getTime());
+			columnHeaders[dayOfWeek] = weekDayFormat.format(weekCalendar
+					.getTime());
 			weekCalendar.add(GregorianCalendar.DAY_OF_MONTH, 1);
 		}
 		tableModel.setColumnIdentifiers(columnHeaders);

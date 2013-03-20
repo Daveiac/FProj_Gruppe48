@@ -23,8 +23,7 @@ import data.Person;
  * This is the DayView Panel that shows the day planner.
  */
 @SuppressWarnings("serial")
-public class DayView implements CalendarView,
-		PropertyChangeListener {
+public class DayView implements CalendarView, PropertyChangeListener {
 
 	private JTable dayTable;
 	private DefaultTableModel tableModel;
@@ -138,7 +137,8 @@ public class DayView implements CalendarView,
 		// Sets today's meetings
 		List<Person> persons = calendarModel.getSelectedPersons();
 		for (Person person : persons) {
-			ArrayList<Meeting> meetings = calendarModel.getAllMeetingsOfPerson(person, true);
+			ArrayList<Meeting> meetings = calendarModel.getAllMeetingsOfPerson(
+					person, true);
 			setMeetings(calendar, tableModel, dayOfWeek, meetings);
 		}
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
