@@ -38,7 +38,7 @@ public class DayTableCellRenderer extends DefaultTableCellRenderer {
 				} else {
 
 					component.setBackground(calendarModel
-							.getColorOfPerson(selectedPerson));
+							.getColorOfPerson(meeting.getCreator()));
 				}
 			}
 			setText(meeting.getTitle());
