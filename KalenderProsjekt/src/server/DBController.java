@@ -436,27 +436,7 @@ public class DBController {
 		return notificationList;
 	}
 
-	public static void main(String[] args) throws SQLException {
-		DBController dbc = new DBController();
-		Person hakon = dbc.getPerson("haakondi");
-		Person david = dbc.getPerson("davidhov");
-		Person stian = dbc.getPerson("stiven");
-		Meeting meeting = dbc.getMeeting(3);
 
-		List<Person> personList = new ArrayList<Person>();
-		personList.add(david);
-		personList.add(hakon);
-
-		Team team = new Team(-1, "anyone", personList);
-		dbc.addTeam(team);
-		Notification notification = new Notification(10000, 'n', 'n', meeting,
-				stian);
-		dbc.addNotification(notification);
-
-		for (Notification notificatio : dbc.getNotifications(meeting)) {
-			System.out.println(notificatio);
-		}
-	}
 
 	public List<MeetingRoom> getAllMeetingRooms() throws SQLException {
 		List<MeetingRoom> rooms = new ArrayList<MeetingRoom>();
