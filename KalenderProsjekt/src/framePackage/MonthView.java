@@ -100,6 +100,7 @@ public class MonthView implements CalendarView,
 		monthTable.setModel(tableModel);
 		monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		monthTable.setRowSelectionAllowed(false);
+		 monthTable.setRowHeight(300);
 		monthTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 
 		int daysInWeek = 7;
@@ -123,7 +124,7 @@ public class MonthView implements CalendarView,
 		// };
 		// monthTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		// monthTable.setRowSelectionAllowed(false);
-		// monthTable.setRowHeight(64);
+//		 monthTable.setRowHeight(64);
 		// monthTable.getColumnModel().getColumn(0).setPreferredWidth(10);
 		// for (int i = 1; i < 8; i++) {
 		// monthTable.getColumnModel().getColumn(i)

@@ -5,8 +5,11 @@ import java.awt.Component;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JList;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -63,8 +66,15 @@ class MonthTableCellRenderer extends DefaultTableCellRenderer {
 
 		JList<String> meetingList = new JList<String>();
 		meetingList.setModel(listModel);
+		
 
-		add(meetingList);
+		DefaultListSelectionModel listSelectionModel = new DefaultListSelectionModel();
+		listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		meetingList.setSelectionModel(listSelectionModel);
+//		listSelectionModel.addListSelectionListener(new ListSelectionListeners(this));
+
+		JScrollPane scrollPane = new JScrollPane(meetingList);
+		add(scrollPane);
 
 		// @SuppressWarnings("unchecked")
 		// JList<String> list = (JList<String>) value;
@@ -95,7 +105,7 @@ class MonthTableCellRenderer extends DefaultTableCellRenderer {
 		// component.setBackground(table.getBackground());
 		// }
 		// }
-		return meetingList;
+		return scrollPane;
 	}
 }
 // listModel.addElement(String.valueOf(dayOfMonth));
