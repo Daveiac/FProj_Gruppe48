@@ -246,7 +246,12 @@ public class CalendarModel implements Serializable{
 		}
 	}
 	public void changeMeeting(Meeting meeting) {
-		//TODO
+		try {
+			Program.reqHandler.sendUpdateMeetingRequest(null, null, null, meeting);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public void removeMeeting(int meetingID) {
 		//TODO
@@ -254,21 +259,18 @@ public class CalendarModel implements Serializable{
 	public ArrayList<MeetingRoom> getRooms(){
 		return meetingRooms;
 	}
-//	TODO
-//	public ArrayList<MeetingRoom> getAvailableRooms(long startTime, long endTime){
-//		ArrayList<MeetingRoom> rooms = new ArrayList<MeetingRoom>();
-//		rooms.addAll(meetingRooms);
-//		for(ArrayList<Meeting> meetings: meetings.values()){
-//			for (int i = 0; i < meetings.size(); i++) {
-//				long meetStart = meetings.get(i).getStartTime();
-//				long meetEnd = meetings.get(i).getEndTime();
-//				if ((meetStart >= startTime && meetStart < endTime) || (meetEnd > startTime && meetEnd < endTime)) {
-//					rooms.remove(meetings.get(i).getRoom());
-//				}
-//			}
-//		}
-//		return rooms;
-//	}
+	public ArrayList<MeetingRoom> getAvailableRooms(long startTime, long endTime){
+		ArrayList<MeetingRoom> rooms = new ArrayList<MeetingRoom>();
+		rooms.addAll(meetingRooms);
+		for(Meeting meeting: meetings){
+				long meetStart = meeting.getStartTime();
+				long meetEnd = meeting.getEndTime();
+				if (meeting.getRoom() != null && (meetStart >= startTime && meetStart < endTime) || (meetEnd > startTime && meetEnd < endTime)) {
+					rooms.remove(meeting.getRoom());
+				}
+		}
+		return rooms;
+	}
 	public Person getUser() {
 		return user;
 	}
