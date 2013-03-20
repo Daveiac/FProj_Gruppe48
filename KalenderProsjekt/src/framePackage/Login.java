@@ -35,6 +35,7 @@ public class Login extends JPanel{
 				try {
 					username = userField.getText();
 					Program.reqHandler.sendAuthenticationRequest(username, new String(passwordField.getPassword()));
+					frame.setVisible(false);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
