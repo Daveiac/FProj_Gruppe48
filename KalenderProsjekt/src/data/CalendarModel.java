@@ -29,19 +29,23 @@ public class CalendarModel implements Serializable{
 	private ArrayList<Notification> notifications;
 	private ArrayList<Alarm> alarms;
 	private String username;
-	private int responseCount;
 	private Person user;
 	private ArrayList<MeetingRoom> meetingRooms;
-	private static final Color[] colors = {Color.red,Color.blue,Color.darkGray,Color.orange,Color.magenta,Color.gray,Color.pink};
-	public static final String SELECTED_Property = "SELECTED", MEETINGS_CHANGED_Property = "MEETINGS",
-			NOTIFICATIONS_CHANGED_Property = "NNOTI", CALENDAR_LOADED_Property = "LOADED", PERSONS_ADDED_Property ="PERSONS";
-
+	private static final Color[] colors = { Color.red, Color.blue,
+			Color.yellow, Color.orange, Color.magenta, Color.gray, Color.pink };
+	public static final String SELECTED_Property = "SELECTED",
+			MEETINGS_CHANGED_Property = "MEETINGS",
+			NOTIFICATIONS_CHANGED_Property = "NNOTI",
+			CALENDAR_LOADED_Property = "LOADED",
+			PERSONS_ADDED_Property = "PERSONS",
+			ALARMS_CHANGED_Property = "ALARMA!";
 
 
 	public CalendarModel() {
 		pcs = new PropertyChangeSupport(this);
 	}
 	public void init(String username) {
+		System.out.println();
 		this.username = username;
 		persons = new ArrayList<Person>();
 		meetings = new ArrayList<Meeting>();
@@ -129,7 +133,6 @@ public class CalendarModel implements Serializable{
 		try {
 			if(Program.reqHandler != null){
 				Program.reqHandler.sendGetAllPersonsRequest();
-				responseCount = 0;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
