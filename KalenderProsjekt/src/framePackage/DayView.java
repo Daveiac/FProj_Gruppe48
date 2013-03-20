@@ -149,8 +149,9 @@ public class DayView implements CalendarView, PropertyChangeListener {
 		        int row = dayTable.rowAtPoint(evt.getPoint());
 		        int col = dayTable.columnAtPoint(evt.getPoint()) - 1;
 		        if (row >= 0 && col >= 0) {
-		        	Meeting meeting = (Meeting) DayView.this.tableModel.getValueAt(row, col);
-		        	new NewAppointmentView(meeting);
+//		        	Meeting meeting = (Meeting) DayView.this.
+////		        			tableModel.getValueAt(row, col);
+//		        	new NewAppointmentView(meeting);
 		        }
 		    }
 		});
@@ -258,7 +259,7 @@ public class DayView implements CalendarView, PropertyChangeListener {
 			createDayTable();
 			break;
 		case CalendarModel.SELECTED_Property:
-			System.out.println("motherfucker!");
+			System.out.println("someone just got lucky! (SELECTED)");
 			createDayTable();
 			break;
 		case CalendarModel.DATE_CHANGED_Property:

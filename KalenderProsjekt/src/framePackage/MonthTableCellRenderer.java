@@ -39,18 +39,16 @@ class MonthTableCellRenderer extends DefaultTableCellRenderer {
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
 		listModel.addElement(String.valueOf(dayOfMonth));
 
-		if (meetings != null) {
-
-			for (Meeting meeting : meetings) {
-				listModel.addElement(meeting.getTitle());
-			}
-		}
-
 		JList<String> meetingList = new JList<String>();
 		meetingList.setModel(listModel);
 		add(meetingList);
 
 		if (meetingList != null) {
+
+			for (Meeting meeting : meetings) {
+				listModel.addElement(meeting.getTitle());
+			}
+			
 			if (hasFocus) {
 				meetingList.setBorder(lineBorder);
 			} else {
