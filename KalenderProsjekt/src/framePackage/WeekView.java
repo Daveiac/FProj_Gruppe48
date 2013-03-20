@@ -12,6 +12,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 import data.CalendarModel;
+import data.Meeting;
 
 /**
  * This is the WeekView Panel that shows the week planner.
@@ -76,6 +77,18 @@ public class WeekView implements CalendarView, PropertyChangeListener {
 		weekTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		weekTable.setRowSelectionAllowed(false);
 		weekTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+
+		weekTable.addMouseListener(new java.awt.event.MouseAdapter() {
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				int row = weekTable.rowAtPoint(evt.getPoint());
+				int col = weekTable.columnAtPoint(evt.getPoint());
+				if (row >= 0 && col >= 1) {
+					Meeting meeting = (Meeting) WeekView.this.tableModel.getValueAt(row, col);
+					new NewAppointmentView(meeting);
+				}
+			}
+		});
 
 		int daysInWeek = 7;
 		for (int dayOfWeek = 1; dayOfWeek <= daysInWeek; dayOfWeek++) {

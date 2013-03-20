@@ -25,6 +25,7 @@ public class DayView implements CalendarView, PropertyChangeListener {
 
 	private JTable dayTable;
 	private DefaultTableModel tableModel;
+
 	private CalendarModel calendarModel;
 	private GregorianCalendar calendar;
 	private String title;
@@ -82,7 +83,20 @@ public class DayView implements CalendarView, PropertyChangeListener {
 		dayTable.setRowSelectionAllowed(false);
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
-		
+
+		dayTable.addMouseListener(new java.awt.event.MouseAdapter() {
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				int row = dayTable.rowAtPoint(evt.getPoint());
+				int col = dayTable.columnAtPoint(evt.getPoint());
+				if (row >= 0 && col >= 1) {
+					Meeting meeting = (Meeting) DayView.this.tableModel
+							.getValueAt(row, col);
+					new NewAppointmentView(meeting);
+				}
+			}
+		});
+
 		dayTable.getColumnModel().getColumn(1)
 				.setCellRenderer(new DayTableCellRenderer(this.calendarModel));
 
@@ -143,19 +157,6 @@ public class DayView implements CalendarView, PropertyChangeListener {
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
 
-		dayTable.addMouseListener(new java.awt.event.MouseAdapter() {
-		    @Override
-		    public void mouseClicked(java.awt.event.MouseEvent evt) {
-		        int row = dayTable.rowAtPoint(evt.getPoint());
-		        int col = dayTable.columnAtPoint(evt.getPoint()) - 1;
-		        if (row >= 0 && col >= 0) {
-//		        	Meeting meeting = (Meeting) DayView.this.
-////		        			tableModel.getValueAt(row, col);
-//		        	new NewAppointmentView(meeting);
-		        }
-		    }
-		});
-		
 		dayTable.getColumnModel().getColumn(1)
 				.setCellRenderer(new DayTableCellRenderer(this.calendarModel));
 	}
@@ -198,6 +199,14 @@ public class DayView implements CalendarView, PropertyChangeListener {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Returns the table model.
+	 * @return tableModel
+	 */
+	public DefaultTableModel getTableModel() {
+		return tableModel;
 	}
 
 	/**
