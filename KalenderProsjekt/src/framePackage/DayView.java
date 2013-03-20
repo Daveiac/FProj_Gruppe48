@@ -143,16 +143,17 @@ public class DayView implements CalendarView, PropertyChangeListener {
 		dayTable.getColumnModel().getColumn(0).setPreferredWidth(0);
 		dayTable.getColumnModel().getColumn(1).setPreferredWidth(718);
 
-//		dayTable.addMouseListener(new java.awt.event.MouseAdapter() {
-//		    @Override
-//		    public void mouseClicked(java.awt.event.MouseEvent evt) {
-//		        int row = dayTable.rowAtPoint(evt.getPoint());
-//		        int col = dayTable.columnAtPoint(evt.getPoint());
-//		        if (row >= 0 && col >= 0) {
-//		        	Møtvisning møtevisning = new Møtevisning();
-//		        }
-//		    }
-//		});
+		dayTable.addMouseListener(new java.awt.event.MouseAdapter() {
+		    @Override
+		    public void mouseClicked(java.awt.event.MouseEvent evt) {
+		        int row = dayTable.rowAtPoint(evt.getPoint());
+		        int col = dayTable.columnAtPoint(evt.getPoint()) - 1;
+		        if (row >= 0 && col >= 0) {
+		        	Meeting meeting = (Meeting) DayView.this.tableModel.getValueAt(row, col);
+		        	NewAppointmentView nav = new NewAppointmentView(meeting);
+		        }
+		    }
+		});
 		
 		dayTable.getColumnModel().getColumn(1)
 				.setCellRenderer(new DayTableCellRenderer(this.calendarModel));
