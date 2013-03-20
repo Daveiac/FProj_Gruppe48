@@ -323,7 +323,7 @@ public class NewAppointmentView extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				if(participantList.getSelectedValue()!=null && participantList.getSelectedValue() != calendarModel.getUser()){
 					int i = participantList.getSelectedIndex();
-					getAllPerson().add(participantList.getSelectedValue());
+					listModel.remove(participantList.getSelectedIndex());
 			}
 		}});
 
@@ -426,14 +426,16 @@ public class NewAppointmentView extends JPanel {
 				locComponent.setText(meet.getLocation());
 				romComponent.setEnabled(false);
 			}
-			if(meet.getLocation().length() == 0){
+			if(meet.getRoom() != null){
 				romComponent.setEnabled(true);
 				locComponent.setEnabled(false);
 				romComponent.addItem(meet.getRoom().getRoomName());
 				romComponent.setSelectedItem(meet.getRoom().getRoomName());
 			}
 			
-			System.out.println(meet.getTeam().getMembers().size());
+			for(int i = 0; i < meet.getTeam().getMembers().size(); i++){
+				listModel.addElement(meet.getTeam().getMembers().get(i));
+			}
 			
 			infoComponent.setText(meet.getDescription());
 			if(alarm != null){
@@ -541,7 +543,8 @@ public class NewAppointmentView extends JPanel {
 		if(listModel.size() == 0){
 			team = null;
 		}
-		meeting = new Meeting(0, tittelComponent.getText(), locComponent.getText(),startT, endT, infoComponent.getText(), team, (MeetingRoom)romComponent.getSelectedItem(), calendarModel.getUser());
+		MeetingRoom mr = new MeetingRoom(romComponent.getSelectedItem().toString());
+		meeting = new Meeting(0, tittelComponent.getText(), locComponent.getText(),startT, endT, infoComponent.getText(), team, mr, calendarModel.getUser());
 		return meeting;
 	}
 	
