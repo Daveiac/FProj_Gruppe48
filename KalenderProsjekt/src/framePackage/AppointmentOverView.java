@@ -129,6 +129,7 @@ public class AppointmentOverView {
 				//sett inn hva du skal sende her
 			}
 		});
+		
 
 		yourStatus = new JComboBox<ImageIcon>();
 		yourStatus.addItem(check);
@@ -156,6 +157,13 @@ public class AppointmentOverView {
 				lblStatus.setText("Vet Ikke");
 			}
 		}
+		
+		if(calendarModel.getUser().getUsername().equals(meeting.getCreator().getUsername()) ){
+			System.out.println(calendarModel.getUser().getUsername());
+			System.out.println(meeting.getCreator().getUsername());
+			yourStatus.setEnabled(false);
+		}
+		
 		yourStatus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (yourStatus.getSelectedItem() == check) {
@@ -197,26 +205,6 @@ public class AppointmentOverView {
 		frame.setContentPane(overViewPanel);
 		frame.pack();
 		frame.setVisible(true);
-	}
-
-	public static void main(String args[]) {
-		ArrayList<Person> members = new ArrayList<Person>();
-		Team team = new Team(0, null, members);
-		MeetingRoom room = new MeetingRoom("Soverommet");
-		Person creator = new Person(null, 00000000, "Dav", "Hov", "dave",
-				"1234");
-		members.add(creator);
-		long startTime = new GregorianCalendar(2013, 2, 14, 16, 30)
-				.getTimeInMillis();
-		long endTime = new GregorianCalendar(2013, 2, 14, 17, 30)
-				.getTimeInMillis();
-		Meeting meetings = new Meeting(0, "suppemøtewwwwwwwwwwwwwwwwwwwwwwwww",
-				"kontoret", startTime, endTime, "This is a desc", team, room,
-				creator);
-		Notification notification = new Notification(0, 'y', 'c', meetings,
-				creator);
-		CalendarModel calendarModel2 = new CalendarModel();
-		new AppointmentOverView(meetings);
 	}
 
 	private String getTime() {
