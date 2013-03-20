@@ -545,7 +545,7 @@ public class NewAppointmentView extends JPanel {
 	}
 	
 	private long getTime(int year,int day, int month, int hour, int min){
-		GregorianCalendar greCalendar = new GregorianCalendar(year, month, month, hour, min);
+		GregorianCalendar greCalendar = new GregorianCalendar(year, month, day, hour, min);
 		return greCalendar.getTimeInMillis();
 		}
 	
