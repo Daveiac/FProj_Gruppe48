@@ -56,7 +56,7 @@ public class AppointmentView implements PropertyChangeListener {
 		meetingPanel.setLayout(new GridBagLayout());
 
 		jsp = new JScrollPane(meetingPanel);
-		jsp.setPreferredSize(new Dimension(800,636));
+		jsp.setPreferredSize(new Dimension(800,500));
 		createHeaders();
 		createLegend();
 		mainPanel.add(headerPanel, BorderLayout.NORTH);
@@ -111,7 +111,7 @@ public class AppointmentView implements PropertyChangeListener {
 		jsp.remove(meetingPanel);
 		meetingPanel = new JPanel(new GridBagLayout());
 		jsp = new JScrollPane(meetingPanel);
-		jsp.setPreferredSize(new Dimension(800,636));
+		jsp.setPreferredSize(new Dimension(800,500));
 		mainPanel.add(jsp, BorderLayout.CENTER);
 		mainPanel.add(legendPanel,BorderLayout.SOUTH);
 		mc.anchor = GridBagConstraints.NORTHWEST;
