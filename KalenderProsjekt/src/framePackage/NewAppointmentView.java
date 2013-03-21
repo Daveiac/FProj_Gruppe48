@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
+import javax.naming.LimitExceededException;
 import javax.swing.*;
 
 import client.Program;
@@ -445,6 +446,7 @@ public class NewAppointmentView extends JPanel {
 			opprettKnapp.setEnabled(true);
 			endreKnapp.setEnabled(false);
 			slettKnapp.setEnabled(false);
+			listModel.addElement(calendarModel.getUser());
 			for(int i = 0; i < calendarModel.getPersons().size(); i++){
 				participantComponent.addItem(getAllPerson().get(i).getFirstName() + " " +  getAllPerson().get(i).getLastName());
 			}
