@@ -42,6 +42,7 @@ public class AppointmentView implements PropertyChangeListener {
 	private GridBagConstraints mc;
 	private CalendarModel calendarModel;
 	private JScrollPane jsp;
+	private ArrayList<Integer> addedMeetings;
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"dd.MMM.yyyy");
 	private static final SimpleDateFormat timeFormat = new SimpleDateFormat(
@@ -119,6 +120,7 @@ public class AppointmentView implements PropertyChangeListener {
 		for (int i = 0; i < notifications.size(); i++) {
 		 Notification n = notifications.get(i);
 		 Meeting meeting = n.getMeeting();
+		 addedMeetings.add(meeting.getMeetingID());
 		 JComponent[] items = new JComponent[7];
 		 	if (!meeting.getCreator().getUsername().equals(user.getUsername())) {
 				switch (n.getApproved()) {
@@ -171,6 +173,7 @@ public class AppointmentView implements PropertyChangeListener {
 		
 		for (int i = 0; i < meetings.size(); i++) {
 			Meeting meeting = meetings.get(i);
+			if(addedMeetings.contains(meeting.getMeetingID())) continue;
 			JComponent[] items = new JComponent[7];
 			if (i == meetings.size()-1) {
 				mc.weighty = 1;
@@ -245,18 +248,21 @@ public class AppointmentView implements PropertyChangeListener {
 	public void propertyChange(PropertyChangeEvent evt) {
 		switch (evt.getPropertyName()) {
 		case CalendarModel.CALENDAR_LOADED_Property:
+			addedMeetings = new ArrayList<Integer>();
 			user = calendarModel.getUser();
 			notifications = calendarModel.getAllNotificationsOfPerson(user);
 			meetings = calendarModel.getAppointments(true);
 			refreshMeetings();
 			break;
 		case CalendarModel.MEETINGS_CHANGED_Property:
+			addedMeetings = new ArrayList<Integer>();
 			user = calendarModel.getUser();
 			notifications = calendarModel.getAllNotificationsOfPerson(user);
 			meetings = calendarModel.getAppointments(true);
 			refreshMeetings();
 			break;
 		case CalendarModel.NOTIFICATIONS_CHANGED_Property:
+			addedMeetings = new ArrayList<Integer>();
 			user = calendarModel.getUser();
 			notifications = calendarModel.getAllNotificationsOfPerson(user);
 			meetings = calendarModel.getAppointments(true);
