@@ -123,7 +123,7 @@ public class DBController {
 	private boolean isMemberOfTeam(String username, int teamID)
 			throws SQLException {
 		String sql = String.format("SELECT Person.* FROM Person, memberOF "
-				+ "WHERE memberOF.teamID = %d " + "AND Person.username = '%s'",
+				+ "WHERE memberOF.teamID = %d " + "AND memberOF.username = '%s'",
 				teamID, username);
 		ResultSet rs = dBConn.makeQuery(sql);
 		return rs.next();
@@ -155,10 +155,11 @@ public class DBController {
 
 	}
 
-	private void removeNotification(String username, int meetingID) {
-		String sql = String.format("DELETE FROM Notification "
-				+ "WHERE Notification.meetingID = %d "
-				+ "AND Notification.username = '%s'", meetingID, username);
+	private void removeNotification(String username, int meetingID) throws SQLException {
+		String sql = String.format("DELETE FROM notification "
+				+ "WHERE notification.meetingID = %d "
+				+ "AND notification.username = '%s'", meetingID, username);
+		dBConn.makeUpdate(sql);
 
 	}
 
