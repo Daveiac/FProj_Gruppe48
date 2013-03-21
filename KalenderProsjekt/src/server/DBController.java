@@ -54,14 +54,17 @@ public class DBController {
 	}
 
 	public void updateMeeting(Meeting meeting) throws SQLException {
+		Integer teamID = null;
+		if (meeting.getTeam() != null){
+			teamID = meeting.getTeam().getTeamID();
+		}
 		String sql = String
 				.format("UPDATE Meeting "
 						+ "SET title = %s, location = %s, startTime = %d, endTime = %d, description = %s, teamID = %d, username = '%s' "
 						+ "WHERE meetingID = %d", parseStringForDB(meeting
 						.getTitle()), parseStringForDB(meeting.getLocation()),
 						meeting.getStartTime(), meeting.getEndTime(),
-						parseStringForDB(meeting.getDescription()), meeting
-								.getTeam().getTeamID(), meeting.getCreator()
+						parseStringForDB(meeting.getDescription()), teamID, meeting.getCreator()
 								.getUsername(), meeting.getMeetingID());
 		dBConn.makeUpdate(sql);
 	}
@@ -245,7 +248,6 @@ public class DBController {
 
 		int meetingID = dBConn.makeUpdateReturnID(sql);
 		// add notifications
-		System.out.println(meetingID);
 		Meeting newMeeting = getMeeting(meetingID);
 		if (meeting.getTeam() != null) {
 			for (Person p : meeting.getTeam().getMembers()) {
