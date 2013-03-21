@@ -29,5 +29,13 @@ public class Team implements Serializable{
 		return "Team [teamID=" + teamID + "]";
 	}
 	
+	public boolean isMember(Person person){
+		for (Person p : members) {
+			if (person.getUsername().equals(p.getUsername())) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 }

@@ -20,7 +20,7 @@ public class FillDB {
 		Person david = new Person("davhov@ggk.no", 81549303, "David", "Hovind", "davhov", "123456");
 		Person batman = new Person("batman@ggk.no", 81549304, "Bat", "Man", "batman", "123456");
 		persons.add(new Person("shiming@ggk.no", 81549300, "Shiming", "Sun", "shimings", "123456"));
-		persons.add(new Person("vegard@ggk.no", 81549300, "Vegard", "Lerpoll", "vegeardhl", "123456"));
+		persons.add(new Person("vegar@ggk.no", 81549300, "Vegar", "Lerpoll", "vegarhl", "123456"));
 		persons.add(kari);
 		persons.add(jon);
 		persons.add(chris);
