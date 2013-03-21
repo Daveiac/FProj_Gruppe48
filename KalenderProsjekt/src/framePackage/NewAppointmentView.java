@@ -590,7 +590,7 @@ public class NewAppointmentView extends JPanel {
 		String loc = locComponent.getText();
 		MeetingRoom mr = null;
 		int mID = 0;
-		if(romComponent.isEnabled() && romComponent.getSelectedItem() != null){
+		if(romComponent.isEnabled() && romComponent.getSelectedItem() != null && !romComponent.getSelectedItem().equals(" ")){
 			mr = new MeetingRoom(romComponent.getSelectedItem().toString());
 		}
 		return new Meeting(mID, tittelComponent.getText(), loc,startT, endT, infoComponent.getText(), team, mr, calendarModel.getUser());
