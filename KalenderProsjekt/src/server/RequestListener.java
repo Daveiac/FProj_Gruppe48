@@ -41,7 +41,7 @@ public class RequestListener implements Runnable {
 		} catch (IOException | InterruptedException | ClassNotFoundException e) {
 			OutputController.output("Client disconnected " + clientSocket.getInetAddress().toString());
 			synchronized (Server.clients) {
-				Server.clients.remove(clientSocket);				
+				System.out.println(Server.clients.remove(clientSocket));				
 			}
 			
 		}
