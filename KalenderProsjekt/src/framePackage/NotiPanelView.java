@@ -77,29 +77,27 @@ public class NotiPanelView extends JPanel implements PropertyChangeListener {
 		varselPanel.add(scrollPane, c);
 		warningList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
-				if(warningList.getSelectedValue() != null){
+				if (warningList.getSelectedValue() != null) {
 					int i = warningList.getSelectedIndex();
-					Meeting meeting =  ((Notification) warningList.getSelectedValue()).getMeeting();
+					Meeting meeting = ((Notification) warningList
+							.getSelectedValue()).getMeeting();
 					appointOverView = new AppointmentOverView(meeting);
 					appointOverView.showFrame();
 					listModel.remove(i);
 				}
-				if(warningList.getSelectedValue() == null){
+				if (warningList.getSelectedValue() == null) {
 					return;
 				}
 			}
 		});
-		
+
 	}
-	
-	private void filList(){
+
+	private void filList() {
 		listModel.removeAllElements();
-		if(notifications != null){
-			for(int i = 0; i < notifications.size(); i++){
-				if(notifications.get(i).getPerson().getUsername().equals(calendarModel.getUser().getUsername()) == true
-						&& notifications.get(i).getMeeting().getCreator().getUsername().equals(calendarModel.getUser().getUsername()) == false){
-					listModel.addElement(notifications.get(i));
-				}
+		for (int i = 0; i < notifications.size(); i++) {
+			if(notifications.get(i).getApproved() == 'w'){
+				listModel.addElement(notifications.get(i));
 			}
 		}
 	}
