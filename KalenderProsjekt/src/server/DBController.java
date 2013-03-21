@@ -70,6 +70,21 @@ public class DBController {
 						meeting.getCreator().getUsername(),
 						meeting.getMeetingID());
 		dBConn.makeUpdate(sql);
+		
+		//Update reservation
+		removeReservations(meeting.getMeetingID());
+		if(meeting.getRoom() != null){
+			addReservation(meeting.getMeetingID(), meeting.getRoom().getRoomName());
+		}
+		
+	}
+	
+	private boolean isHeldIn(String roomName, int meetingID) throws SQLException{
+		String sql = String.format("SELECT * FROM reservation "
+				+ "WHERE reservation.teamID = %d "
+				+ "AND reservation.username = '%s'", meetingID, roomName);
+		ResultSet rs = dBConn.makeQuery(sql);
+		return rs.next();
 	}
 	
 	private boolean isMemberOfTeam(String username, int teamID) throws SQLException{
@@ -81,8 +96,8 @@ public class DBController {
 	}
 	
 	private void removeFromTeam(String username, int teamID) throws SQLException{
-		String sql = String.format("DELETE FROM memeberOF "
-				+ "WHERE memeberOF.teamID = %d " +
+		String sql = String.format("DELETE FROM memberOF "
+				+ "WHERE memberOF.teamID = %d " +
 				"AND memberOF.username = '%s'", teamID, username);
 		dBConn.makeUpdate(sql);
 	}
@@ -384,6 +399,12 @@ public class DBController {
 			members.add(getPersonFromResultSet(membersOf));
 		}
 		return new Team(teamID, rs.getString("email"), members);
+	}
+	
+	private void removeReservations(int meetingID) throws SQLException{
+		String sql = String.format("DELETE FROM reservation "
+				+ "WHERE reservation.meetingID = %d ", meetingID);
+		dBConn.makeUpdate(sql);
 	}
 
 	public Team getTeam(int teamID) throws SQLException {
