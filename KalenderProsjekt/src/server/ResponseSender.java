@@ -29,8 +29,10 @@ public class ResponseSender implements Runnable{
 			try {
 				PendingResponse pendingResponse = pendingResponses.take();
 				if(pendingResponse.respondToAll){
-					for (Socket client : clients) {
-						sendResponse(pendingResponse.getResponse(), client);
+					synchronized (clients) {
+						for (Socket client : clients) {
+							sendResponse(pendingResponse.getResponse(), client);
+						}						
 					}
 				}
 				else{

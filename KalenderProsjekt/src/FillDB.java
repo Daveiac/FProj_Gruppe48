@@ -14,11 +14,13 @@ public class FillDB {
 	static DBController control = new DBController();
 	public static void addPeople(){
 		List<Person> persons = new ArrayList<Person>();
-		Person kari = new Person("karitr@ggk.no", 81549300, "Kari", "Traa", "karitr", "123456");
-		Person jon = new Person("jonbl@ggk.no", 81549301, "Jon", "blund", "jonbl", "123456");
-		Person chris = new Person("chrispr@ggk.no", 81549302, "Christoffer", "Pman", "chrispr", "123456");
+		Person kari = new Person("christoffer@ggk.no", 81549300, "Aina", "Thunestveit", "ainaelt", "123456");
+		Person jon = new Person("jonbl@ggk.no", 81549301, "Håkon", "Dissen", "haakondi", "1234567");
+		Person chris = new Person("chrispr@ggk.no", 81549302, "Christoffer", "Pram", "chrispr", "123456");
 		Person david = new Person("davhov@ggk.no", 81549303, "David", "Hovind", "davhov", "123456");
 		Person batman = new Person("batman@ggk.no", 81549304, "Bat", "Man", "batman", "123456");
+		persons.add(new Person("shiming@ggk.no", 81549300, "Shiming", "Sun", "shimings", "123456"));
+		persons.add(new Person("vegard@ggk.no", 81549300, "Vegard", "Lerpoll", "vegeardhl", "123456"));
 		persons.add(kari);
 		persons.add(jon);
 		persons.add(chris);
@@ -93,7 +95,7 @@ public class FillDB {
 	 */
 	public static void main(String[] args) throws SQLException {
 		addPeople();
-		addMeetings();
+//		addMeetings();
 		addMeetingrooms();
 	}
 
