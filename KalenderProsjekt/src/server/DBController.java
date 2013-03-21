@@ -53,9 +53,36 @@ public class DBController {
 		dBConn.makeUpdate(sql);
 	}
 
+	public void updateNotifications(Meeting meeting) throws SQLException {
+		List<Notification> notifications = getNotifications(meeting);
+
+		List<Person> members = meeting.getTeam().getMembers();
+		for (Notification notification : notifications) {
+			if (!meeting.getTeam().isMember(notification.getPerson())) {
+				removeNotification(notification.getPerson().getUsername(),
+						meeting.getMeetingID());
+			}
+		}
+		for (Person person : members) {
+			if(!hasNotification(meeting.getMeetingID(), person.getUsername())){
+				addNotification(new Notification(0, 'w', 'm', meeting, person));
+			}
+		}
+	}
+
+	private boolean hasNotification(int meetingID, String username) throws SQLException {
+		String sql = String.format("SELECT * FROM notification "
+				+ "WHERE notification.meetingID = %d "
+				+ "AND notification.username = '%s'", meetingID, username);
+		ResultSet rs = dBConn.makeQuery(sql);
+		return rs.next();
+	}
+
 	public void updateMeeting(Meeting meeting) throws SQLException {
+		System.out.println("Updating meeting");
 		String teamID = "null";
 		if (meeting.getTeam() != null) {
+			System.out.println("updating team");
 			updateTeam(meeting.getTeam());
 			teamID = Integer.toString(meeting.getTeam().getTeamID());
 		}
@@ -70,51 +97,69 @@ public class DBController {
 						meeting.getCreator().getUsername(),
 						meeting.getMeetingID());
 		dBConn.makeUpdate(sql);
-		
-		//Update reservation
-		removeReservations(meeting.getMeetingID());
-		if(meeting.getRoom() != null){
-			addReservation(meeting.getMeetingID(), meeting.getRoom().getRoomName());
+
+		if (meeting.getTeam() != null) {
+			updateNotifications(meeting);
 		}
-		
+
+		// Update reservation
+		removeReservations(meeting.getMeetingID());
+		if (meeting.getRoom() != null) {
+			addReservation(meeting.getMeetingID(), meeting.getRoom()
+					.getRoomName());
+		}
+
 	}
-	
-	private boolean isHeldIn(String roomName, int meetingID) throws SQLException{
+
+	private boolean isHeldIn(String roomName, int meetingID)
+			throws SQLException {
 		String sql = String.format("SELECT * FROM reservation "
 				+ "WHERE reservation.teamID = %d "
 				+ "AND reservation.username = '%s'", meetingID, roomName);
 		ResultSet rs = dBConn.makeQuery(sql);
 		return rs.next();
 	}
-	
-	private boolean isMemberOfTeam(String username, int teamID) throws SQLException{
+
+	private boolean isMemberOfTeam(String username, int teamID)
+			throws SQLException {
 		String sql = String.format("SELECT Person.* FROM Person, memberOF "
-				+ "WHERE memberOF.teamID = %d "
-				+ "AND Person.username = '%s'", teamID, username);
+				+ "WHERE memberOF.teamID = %d " + "AND Person.username = '%s'",
+				teamID, username);
 		ResultSet rs = dBConn.makeQuery(sql);
 		return rs.next();
 	}
-	
-	private void removeFromTeam(String username, int teamID) throws SQLException{
+
+	private void removeFromTeam(String username, int teamID)
+			throws SQLException {
 		String sql = String.format("DELETE FROM memberOF "
-				+ "WHERE memberOF.teamID = %d " +
-				"AND memberOF.username = '%s'", teamID, username);
+				+ "WHERE memberOF.teamID = %d "
+				+ "AND memberOF.username = '%s'", teamID, username);
 		dBConn.makeUpdate(sql);
 	}
-	
-	public void updateTeam(Team team) throws SQLException{
+
+	public void updateTeam(Team team) throws SQLException {
+		OutputController.output(team.getMembers().toString());
 		Team oldTeam = getTeam(team.getTeamID());
 		for (Person person : oldTeam.getMembers()) {
-			if(!team.isMember(person)){
+			if (!team.isMember(person)) {
 				removeFromTeam(person.getUsername(), team.getTeamID());
+				OutputController.output("removed " + person + " from " + team);
 			}
 		}
 		for (Person p : team.getMembers()) {
-			if(!isMemberOfTeam(p.getUsername(), team.getTeamID())){
+			if (!isMemberOfTeam(p.getUsername(), team.getTeamID())) {
 				addMemberOf(p.getUsername(), team.getTeamID());
+				OutputController.output("added " + p + " to " + team);
 			}
 		}
-		
+
+	}
+
+	private void removeNotification(String username, int meetingID) {
+		String sql = String.format("DELETE FROM Notification "
+				+ "WHERE Notification.meetingID = %d "
+				+ "AND Notification.username = '%s'", meetingID, username);
+
 	}
 
 	public boolean authenticateUser(String username, String password)
@@ -400,8 +445,8 @@ public class DBController {
 		}
 		return new Team(teamID, rs.getString("email"), members);
 	}
-	
-	private void removeReservations(int meetingID) throws SQLException{
+
+	private void removeReservations(int meetingID) throws SQLException {
 		String sql = String.format("DELETE FROM reservation "
 				+ "WHERE reservation.meetingID = %d ", meetingID);
 		dBConn.makeUpdate(sql);
