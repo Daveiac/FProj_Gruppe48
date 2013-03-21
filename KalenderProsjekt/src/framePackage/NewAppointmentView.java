@@ -587,7 +587,7 @@ public class NewAppointmentView extends JPanel {
 		if(locComponent.getText().length() > 0){
 			loc = locComponent.getText();
 		}
-		if(romComponent.getSelectedItem() != null){
+		if(romComponent.getSelectedItem() != " "){
 			mr = new MeetingRoom(romComponent.getSelectedItem().toString());
 		}
 		try {
