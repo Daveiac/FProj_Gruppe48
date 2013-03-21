@@ -203,12 +203,26 @@ public class NewAppointmentView extends JPanel {
 		c.gridy = 3;
 		c.gridwidth = 1;
 		this.add(startHourComponent, c);
+		startHourComponent.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				for (int i = 0; i < getRoomList().size(); i++) {
+					romComponent.addItem(getRoomList().get(i).getRoomName());
+				}
+			}
+		});
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 3;
 		c.gridy = 3;
 		c.gridwidth = 1;
-		this.add(startMinComponent, c);
+		this.add(startMinComponent, c);		
+		startMinComponent.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				for (int i = 0; i < getRoomList().size(); i++) {
+					romComponent.addItem(getRoomList().get(i).getRoomName());
+				}
+			}
+		});
 
 
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -216,12 +230,26 @@ public class NewAppointmentView extends JPanel {
 		c.gridy = 3;
 		c.gridwidth = 1;
 		this.add(endHourComponent, c);
+		endHourComponent.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				for (int i = 0; i < getRoomList().size(); i++) {
+					romComponent.addItem(getRoomList().get(i).getRoomName());
+				}
+			}
+		});
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 6;
 		c.gridy = 3;
 		c.gridwidth = 1;
 		this.add(endMinComponent, c);
+		endMinComponent.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				for (int i = 0; i < getRoomList().size(); i++) {
+					romComponent.addItem(getRoomList().get(i).getRoomName());
+				}
+			}
+		});
 
 
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -411,9 +439,14 @@ public class NewAppointmentView extends JPanel {
 			greCalendar.setTimeInMillis(meet.getEndTime());
 			endHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
 			endMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
-			if(meet.getLocation().length() != 0){
-				locComponent.setText(meet.getLocation());
-				romComponent.setEnabled(false);
+			try {
+				if(meet.getLocation().length() != 0){
+					locComponent.setText(meet.getLocation());
+					romComponent.setEnabled(false);
+				}
+				
+			} catch (NullPointerException e) {
+				locComponent.setEnabled(false);
 			}
 			if(meet.getRoom() != null){
 				romComponent.setEnabled(true);
@@ -446,7 +479,6 @@ public class NewAppointmentView extends JPanel {
 			opprettKnapp.setEnabled(true);
 			endreKnapp.setEnabled(false);
 			slettKnapp.setEnabled(false);
-			listModel.addElement(calendarModel.getUser());
 			for(int i = 0; i < calendarModel.getPersons().size(); i++){
 				participantComponent.addItem(getAllPerson().get(i).getFirstName() + " " +  getAllPerson().get(i).getLastName());
 			}
@@ -469,7 +501,7 @@ public class NewAppointmentView extends JPanel {
 		long startT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(), startHourComponent.getSelectedIndex(), startMinComponent.getSelectedIndex()*15);
 		long endT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(),endHourComponent.getSelectedIndex(), endMinComponent.getSelectedIndex()*15);
 		ArrayList<MeetingRoom> list = new ArrayList<MeetingRoom>();
-		calendarModel.getAvailableRooms(startT, endT);
+		list = calendarModel.getAvailableRooms(startT, endT);
 		return list;
 	}
 

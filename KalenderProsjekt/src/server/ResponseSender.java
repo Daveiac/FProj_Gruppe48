@@ -8,13 +8,10 @@ import java.util.concurrent.BlockingQueue;
 
 import networking.packages.Response;
 
-public class ResponseSender implements Runnable{
+public class ResponseSender implements Runnable {
 	private BlockingQueue<PendingResponse> pendingResponses;
 	private List<Socket> clients;
-	
-	
-	
-	
+
 	public ResponseSender(BlockingQueue<PendingResponse> pendingResponses,
 			List<Socket> clients) {
 		super();
@@ -25,28 +22,28 @@ public class ResponseSender implements Runnable{
 
 	@Override
 	public void run() {
-		while(true){
+		while (true) {
 			try {
 				PendingResponse pendingResponse = pendingResponses.take();
-				if(pendingResponse.respondToAll){
+				if (pendingResponse.respondToAll) {
 					synchronized (clients) {
 						for (Socket client : clients) {
 							sendResponse(pendingResponse.getResponse(), client);
-						}						
+						}
 					}
+				} else {
+					sendResponse(pendingResponse.getResponse(),
+							pendingResponse.getClientSoket());
 				}
-				else{
-					sendResponse(pendingResponse.getResponse(), pendingResponse.getClientSoket());
-				}
-				
+
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
-	
+
 	private void sendResponse(Response response, Socket clientSocket) {
 		ObjectOutputStream oos = null;
 
@@ -60,5 +57,5 @@ public class ResponseSender implements Runnable{
 			e.printStackTrace();
 		}
 	}
-	
+
 }

@@ -9,11 +9,9 @@ import java.util.Properties;
 
 public class DBConnection {
 	/*
-	 *A connection with the database.
-	 *Fully tested
-	 *Final 
+	 * A connection with the database.Fully testedFinal
 	 */
-	
+
 	Connection connection;
 	String url;
 
@@ -52,12 +50,12 @@ public class DBConnection {
 		st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
 		ResultSet keys = st.getGeneratedKeys();
 		OutputController.output(sql);
-		if(keys.next())
+		if (keys.next())
 			return keys.getInt(1);
-		else{
+		else {
 			throw new SQLException();
 		}
-		
+
 	}
 
 }

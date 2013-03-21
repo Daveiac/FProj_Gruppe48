@@ -33,9 +33,9 @@ public class Server extends Thread {
 
 		Thread requestHandler = new Thread(new ServerRequestHandler(
 				responseQueue, requestQueue, new DBController()));
-		
+
 		requestHandler.start();
-		
+
 		Thread sender = new Thread(new ResponseSender(responseQueue, clients));
 		sender.start();
 		OutputController.output("Server initialized");
@@ -47,7 +47,7 @@ public class Server extends Thread {
 				System.out.println(newClientQueue);
 				Socket nClient = newClientQueue.take();
 				synchronized (clients) {
-					clients.add(nClient);					
+					clients.add(nClient);
 				}
 				OutputController.output("spawning new RequestListener thread");
 				(new Thread(new RequestListener(nClient, requestQueue)))
