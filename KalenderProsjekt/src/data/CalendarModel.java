@@ -133,7 +133,8 @@ public class CalendarModel implements Serializable {
 	 */
 	public ArrayList<Notification> getUnansweredNotificationsOfUser() {
 		ArrayList<Notification> unanswered = new ArrayList<Notification>();
-		for (Notification n : notifications) {
+		ArrayList<Notification> notis = getAllNotificationsOfPerson(user);
+		for (Notification n : notis) {
 			if (n.getApproved() == 'w') {
 				unanswered.add(n);
 			}
