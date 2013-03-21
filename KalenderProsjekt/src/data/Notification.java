@@ -3,6 +3,7 @@ package data;
 import java.io.Serializable;
 
 public class Notification implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private long time;
 	private char approved;
 	private char kind;

@@ -6,10 +6,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -20,12 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
-import networking.Constants;
-import networking.packages.Response;
-
-import client.Client;
 import client.Program;
-import client.RequestHandler;
 
 @SuppressWarnings("serial")
 public class DefaultView extends JPanel {
@@ -33,12 +24,12 @@ public class DefaultView extends JPanel {
 	// her er main frame work, som kan brukes p�year og month views ogs�
 	private JFrame frame;
 	private JLabel lblday;
-	private JLabel lblcalendar;
+//	private JLabel lblcalendar;
 	private JToggleButton calendar;
 	private JToggleButton meeting;
 	private ButtonGroup calendarSelect;
 	private JButton logOut;
-	private JPanel sharedCalendar;
+//	private JPanel sharedCalendar;
 
 	private JPanel timePanel;
 	private JLabel calendarTitle;
