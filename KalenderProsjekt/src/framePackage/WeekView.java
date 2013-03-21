@@ -227,7 +227,6 @@ public class WeekView implements CalendarView, PropertyChangeListener {
 			createWeekTable();
 			break;
 		case CalendarModel.PERSONS_ADDED_Property:
-			System.out.println("someone just got lucky! (PERSON ADDED)");
 			createWeekTable();
 			break;
 		default:
