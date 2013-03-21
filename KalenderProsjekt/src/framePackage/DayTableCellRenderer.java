@@ -52,7 +52,6 @@ public class DayTableCellRenderer extends DefaultTableCellRenderer {
 							} else {
 								component.setBackground(calendarModel.getColorOfPerson(selectedPerson));
 							}
-
 						}
 					}
 				}
@@ -63,5 +62,4 @@ public class DayTableCellRenderer extends DefaultTableCellRenderer {
 		}
 		return component;
 	}
-
 }
