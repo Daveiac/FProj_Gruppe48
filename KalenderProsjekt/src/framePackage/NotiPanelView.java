@@ -111,6 +111,7 @@ public class NotiPanelView extends JPanel implements PropertyChangeListener {
 	public void propertyChange(PropertyChangeEvent evt) {
 		switch (evt.getPropertyName()) {
 		case CalendarModel.NOTIFICATIONS_CHANGED_Property:
+			notifications = calendarModel.getAllNotificationsOfPerson(calendarModel.getUser());
 			filList();
 			break;
 		}
