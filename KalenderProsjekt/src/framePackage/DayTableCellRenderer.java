@@ -56,8 +56,8 @@ public class DayTableCellRenderer extends DefaultTableCellRenderer {
 						}
 					}
 				}
-				setText(meeting.getTitle());
 			}
+			setText(meeting.getTitle());
 		} else {
 			component.setBackground(table.getBackground());
 		}
