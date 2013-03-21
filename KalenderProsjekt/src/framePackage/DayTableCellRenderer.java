@@ -26,59 +26,101 @@ public class DayTableCellRenderer extends DefaultTableCellRenderer {
 
 		Meeting meeting = (Meeting) value;
 
-		boolean isUser = false;
-		boolean isCreator = false;
 		if (meeting != null) {
-//			if (!isUser) {
-//
-//				for (Person teamMember : meeting.getTeam().getMembers()) {
-//					if (teamMember.getUsername().equals(calendarModel.getUser().getUsername())) {
-//						component.setBackground(calendarModel.getColorOfPerson(calendarModel.getUser()));
-//						isUser = true;
-//					}
-//
-//				}
-//			}
-//			else if (!isCreator) {
-//				for (Person teamMember : meeting.getTeam().getMembers()) {
-//				
-//				
-//				
+			if (meeting.getTeam() != null) {
+
 //				for (Person selectedPerson : calendarModel.getSelectedPersons()) {
-//					if (meeting.getTeam() != null) {
-//						System.out.println("Møte som skal få tildelt farge!");
-//						System.out.println("valgtPers: " + calendarModel.getSelectedPersons());
-//						System.out.println("deltagere: " + meeting.getTeam().getMembers().toString());
-//						for (Person teamMember : meeting.getTeam().getMembers()) {
-//							if (selectedPerson.getUsername().equals(teamMember.getUsername())) {
-//								if (selectedPerson.getUsername().equals(calendarModel.getUser().getUsername())) {
-//									component.setBackground(calendarModel.getColorOfPerson(calendarModel.getUser()));
-//									isUser = true;
+//					for (Person teamMember : meeting.getTeam().getMembers()) {
+//						if (selectedPerson.getUsername().equals(teamMember.getUsername())) {
 //
-//								}
-//								else if (selectedPerson.getUsername().equals(meeting.getCreator().getUsername())) {
-//									component.setBackground(calendarModel.getColorOfPerson(meeting.getCreator()));
-//									isCreator = true;
-//								}
-//								else
-//									component.setBackground(calendarModel.getColorOfPerson(selectedPerson));
+//							System.out.println("selectedPerson = teamMember");
+//
+//							Color background = component.getBackground();
+//
+//							boolean isUser = calendarModel.getColorOfPerson(calendarModel.getUser()).equals(background);
+//							boolean isCreator = calendarModel.getColorOfPerson(meeting.getCreator()).equals(background);
+//
+//							if (!isUser	&& !isCreator) {
+//								component.setBackground(calendarModel.getColorOfPerson(selectedPerson));
+//								System.out.println("FARGE else: valgt person satt");
 //							}
-//							else
-//								System.out.println("Du ska'kke se detta møtet du!")
-//								;
+//
+//							else if (!isCreator) {
+//								component.setBackground(calendarModel.getColorOfPerson(meeting.getCreator()));
+//
+//								System.out.println("FARGE elif: creator satt");
+//							}
+//
+//							else {
+//								component.setBackground(calendarModel.getColorOfPerson(calendarModel.getUser()));
+//
+//								System.out.println("FARGE if  : user satt");
+//							}
+//
+//
+//							//							if (teamMember.getUsername().equals(calendarModel.getUser().getUsername())) {
+//							//								component.setBackground(calendarModel.getColorOfPerson(calendarModel.getUser()));
+//							//
+//							//								System.out.println("FARGE if  : user satt");
+//							//							}
+//							//
+//							//							else if (teamMember.equals(meeting.getCreator().getUsername())) {
+//							//								component.setBackground(calendarModel.getColorOfPerson(meeting.getCreator()));
+//							//
+//							//								System.out.println("FARGE elif: creator satt");
+//							//							}
+//							//
+//							//							else if (calendarModel.getColorOfPerson(calendarModel.getUser()).equals(component.getBackground())){
+//							//								component.setBackground(calendarModel.getColorOfPerson(selectedPerson));
+//							//								System.out.println("FARGE else: valgt person satt");
+//							//							}
 //						}
-//					} else {
-//						component.setBackground(calendarModel.getColorOfPerson(meeting.getCreator()));
-//						System.out.println(calendarModel.getColorOfPerson(selectedPerson).toString());
+//						//						else
+//						//							System.out.println("Du ska'kke se detta møtet du!")
+//						//							;
 //					}
 //				}
-//				setText(meeting.getTitle());
-//			} else {
-//				component.setBackground(table.getBackground());
-//			}
-//		}
+				setText(meeting.getTitle());
+			}
+		}
+		else {
+			component.setBackground(table.getBackground());
+		}
+
+
+
+		//				for (Person selectedPerson : calendarModel.getSelectedPersons()) {
+		//					System.out.println("Møte som skal få tildelt farge!");
+		//					System.out.println("valgtPers: " + calendarModel.getSelectedPersons());
+		//					System.out.println("deltagere: " + meeting.getTeam().getMembers().toString());
+		//					for (Person teamMember : meeting.getTeam().getMembers()) {
+		//						if (selectedPerson.getUsername().equals(teamMember.getUsername())) {
+		//							if (selectedPerson.getUsername().equals(calendarModel.getUser().getUsername())) {
+		//								component.setBackground(calendarModel.getColorOfPerson(calendarModel.getUser()));
+		//								isUser = true;
+		//
+		//							}
+		//							else if (selectedPerson.getUsername().equals(meeting.getCreator().getUsername())) {
+		//								component.setBackground(calendarModel.getColorOfPerson(meeting.getCreator()));
+		//								isCreator = true;
+		//							}
+		//							else
+		//								component.setBackground(calendarModel.getColorOfPerson(selectedPerson));
+		//						}
+		//						else
+		//							System.out.println("Du ska'kke se detta møtet du!")
+		//							;
+		//					}
+		//				} else {
+		//					component.setBackground(calendarModel.getColorOfPerson(meeting.getCreator()));
+		//					System.out.println(calendarModel.getColorOfPerson(selectedPerson).toString());
+		//				}
+		//			}
+		//			setText(meeting.getTitle());
+		//		}
+
+
+		return component;
 	}
 
-	return component;
-}
 }

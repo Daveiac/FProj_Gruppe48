@@ -54,7 +54,6 @@ public class CalendarModel implements Serializable {
 	 * @param username
 	 */
 	public void init(String username) {
-		System.out.println();
 		this.username = username;
 		persons = new ArrayList<Person>();
 		meetings = new ArrayList<Meeting>();
@@ -215,7 +214,6 @@ public class CalendarModel implements Serializable {
 
 	public void setSelected(Person person, boolean sel) {
 		selected.set(persons.indexOf(person), sel);
-		System.out.println("Set selected (Model)");
 		pcs.firePropertyChange(SELECTED_Property, null, null);
 	}
 
@@ -296,7 +294,6 @@ public class CalendarModel implements Serializable {
 
 	public void setAllNotifications(List<Notification> notifications) {
 		this.notifications = (ArrayList<Notification>) notifications;
-		System.out.println("setting all notifications");
 		pcs.firePropertyChange(NOTIFICATIONS_CHANGED_Property, null, null);
 	}
 
@@ -322,7 +319,6 @@ public class CalendarModel implements Serializable {
 
 	public void setStatus(char c, Notification notification) {
 		try {
-			System.out.println("setting status: "+c);
 			Program.reqHandler.sendUpdateNotificationRequest(
 					new Notification(Calendar.getInstance().getTimeInMillis(), c, notification
 							.getKind(), notification.getMeeting(), notification.getPerson()));
@@ -332,7 +328,6 @@ public class CalendarModel implements Serializable {
 	}
 
 	public void pushMeeting(Meeting meeting) {
-		System.out.println("Trying to push meeting");
 		try {
 			Program.reqHandler.sendCreateMeetingRequest(meeting);
 		} catch (IOException e) {

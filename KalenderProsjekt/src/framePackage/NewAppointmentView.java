@@ -205,6 +205,8 @@ public class NewAppointmentView extends JPanel {
 		this.add(startHourComponent, c);
 		startHourComponent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				romComponent.removeAllItems();
+				romComponent.addItem(" ");
 				for (int i = 0; i < getRoomList().size(); i++) {
 					romComponent.addItem(getRoomList().get(i).getRoomName());
 				}
@@ -218,6 +220,8 @@ public class NewAppointmentView extends JPanel {
 		this.add(startMinComponent, c);		
 		startMinComponent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				romComponent.removeAllItems();				
+				romComponent.addItem(" ");
 				for (int i = 0; i < getRoomList().size(); i++) {
 					romComponent.addItem(getRoomList().get(i).getRoomName());
 				}
@@ -232,6 +236,8 @@ public class NewAppointmentView extends JPanel {
 		this.add(endHourComponent, c);
 		endHourComponent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				romComponent.removeAllItems();
+				romComponent.addItem(" ");
 				for (int i = 0; i < getRoomList().size(); i++) {
 					romComponent.addItem(getRoomList().get(i).getRoomName());
 				}
@@ -245,6 +251,8 @@ public class NewAppointmentView extends JPanel {
 		this.add(endMinComponent, c);
 		endMinComponent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				romComponent.removeAllItems();
+				romComponent.addItem(" ");
 				for (int i = 0; i < getRoomList().size(); i++) {
 					romComponent.addItem(getRoomList().get(i).getRoomName());
 				}
@@ -398,7 +406,7 @@ public class NewAppointmentView extends JPanel {
 		endreKnapp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(validTime()==true && tittelComponent.getText().length() > 0 && infoComponent.getText().length() <= 255){
-					calendarModel.changeMeeting(getMeeting());
+					calendarModel.changeMeeting(changeMeeting());
 					frame.setVisible(false);
 				}
 				if(validTime()==false){
@@ -439,9 +447,14 @@ public class NewAppointmentView extends JPanel {
 			greCalendar.setTimeInMillis(meet.getEndTime());
 			endHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
 			endMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
-			if(meet.getLocation().length() != 0){
-				locComponent.setText(meet.getLocation());
-				romComponent.setEnabled(false);
+			try {
+				if(meet.getLocation().length() != 0){
+					locComponent.setText(meet.getLocation());
+					romComponent.setEnabled(false);
+				}
+				
+			} catch (NullPointerException e) {
+				locComponent.setEnabled(false);
 			}
 			if(meet.getRoom() != null){
 				romComponent.setEnabled(true);
@@ -474,7 +487,6 @@ public class NewAppointmentView extends JPanel {
 			opprettKnapp.setEnabled(true);
 			endreKnapp.setEnabled(false);
 			slettKnapp.setEnabled(false);
-			listModel.addElement(calendarModel.getUser());
 			for(int i = 0; i < calendarModel.getPersons().size(); i++){
 				participantComponent.addItem(getAllPerson().get(i).getFirstName() + " " +  getAllPerson().get(i).getLastName());
 			}
@@ -494,8 +506,8 @@ public class NewAppointmentView extends JPanel {
 	}
 	
 	private ArrayList<MeetingRoom> getRoomList(){
-		long startT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(), startHourComponent.getSelectedIndex(), startMinComponent.getSelectedIndex()*15);
-		long endT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(),endHourComponent.getSelectedIndex(), endMinComponent.getSelectedIndex()*15);
+		long startT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex()+1, startHourComponent.getSelectedIndex(), startMinComponent.getSelectedIndex()*15);
+		long endT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex()+1,endHourComponent.getSelectedIndex(), endMinComponent.getSelectedIndex()*15);
 		ArrayList<MeetingRoom> list = new ArrayList<MeetingRoom>();
 		list = calendarModel.getAvailableRooms(startT, endT);
 		return list;
@@ -567,8 +579,8 @@ public class NewAppointmentView extends JPanel {
 	}
 	
 	private Meeting getMeeting(){
-		long startT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(), startHourComponent.getSelectedIndex(), startMinComponent.getSelectedIndex()*15);
-		long endT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(),endHourComponent.getSelectedIndex(), endMinComponent.getSelectedIndex()*15);
+		long startT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex()+1, startHourComponent.getSelectedIndex(), startMinComponent.getSelectedIndex()*15);
+		long endT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex()+1,endHourComponent.getSelectedIndex(), endMinComponent.getSelectedIndex()*15);
 		ArrayList<Person> list = new ArrayList<Person>();
 		for(int i = 0; i< listModel.size();i++){
 				list.add(listModel.get(i));
@@ -598,9 +610,46 @@ public class NewAppointmentView extends JPanel {
 		return meeting;
 	}
 	
-	private int getMeetingID(){
-		return meeting.getMeetingID();
+	private Meeting changeMeeting(){
+		long startT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex()+1, startHourComponent.getSelectedIndex(), startMinComponent.getSelectedIndex()*15);
+		long endT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex()+1,endHourComponent.getSelectedIndex(), endMinComponent.getSelectedIndex()*15);
+		ArrayList<Person> list = new ArrayList<Person>();
+		for(int i = 0; i< listModel.size();i++){
+				list.add(listModel.get(i));
+			}
+		Team team = meeting.getTeam();
+		if(team != null){
+			team = new Team(meeting.getTeam().getTeamID(),calendarModel.getUser().getEmail(),list);		
+		}
+		else{
+			team = new Team(-1,calendarModel.getUser().getEmail(),list);
+		}
+		
+		if(listModel.size() == 0){
+			team = null;
+		}
+		String loc = null;
+		MeetingRoom mr = null;
+		int mID = 0;
+		if(locComponent.getText().length() > 0){
+			loc = locComponent.getText();
+		}
+		if(romComponent.getSelectedItem() != null){
+			mr = new MeetingRoom(romComponent.getSelectedItem().toString());
+		}
+		try {
+			if(meeting.getMeetingID() != 0){
+			mID = meeting.getMeetingID();
+		}
+			
+		} catch (NullPointerException e) {
+			mID = 0;
+		}
+		meeting = new Meeting(mID, tittelComponent.getText(), loc,startT, endT, infoComponent.getText(), team, mr, calendarModel.getUser());
+		return meeting;
 	}
+	
+	
 	
 	private long getTime(int year,int day, int month, int hour, int min){
 		GregorianCalendar greCalendar = new GregorianCalendar(year, month, day, hour, min);
