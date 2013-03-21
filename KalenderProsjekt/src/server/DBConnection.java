@@ -39,6 +39,7 @@ public class DBConnection {
 	// Will update the database according to the sql feeded
 	public void makeUpdate(String sql) throws SQLException {
 		Statement st = connection.createStatement();
+		OutputController.output(sql);
 		st.executeUpdate(sql);
 	}
 
@@ -50,11 +51,13 @@ public class DBConnection {
 		Statement st = connection.createStatement();
 		st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
 		ResultSet keys = st.getGeneratedKeys();
+		OutputController.output(sql);
 		if(keys.next())
 			return keys.getInt(1);
 		else{
 			throw new SQLException();
 		}
+		
 	}
 
 }

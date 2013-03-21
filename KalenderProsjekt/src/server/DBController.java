@@ -56,7 +56,7 @@ public class DBController {
 	public void updateMeeting(Meeting meeting) throws SQLException {
 		String sql = String
 				.format("UPDATE Meeting "
-						+ "SET title = %s, location = %s, startTime = %d, endTime = %d, description = %s, teamID = %d, username = %s "
+						+ "SET title = %s, location = %s, startTime = %d, endTime = %d, description = %s, teamID = %d, username = '%s' "
 						+ "WHERE meetingID = %d", parseStringForDB(meeting
 						.getTitle()), parseStringForDB(meeting.getLocation()),
 						meeting.getStartTime(), meeting.getEndTime(),
