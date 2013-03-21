@@ -77,7 +77,7 @@ public class AppointmentOverView {
 		star = new ImageIcon("res/icons/icon_star.png");
 
 		overViewPanel = new JPanel(new GridBagLayout());
-		overViewPanel.setPreferredSize(new Dimension(700, 450));
+		overViewPanel.setPreferredSize(new Dimension(750, 500));
 		overViewPanel.setVisible(true);
 		GridBagConstraints c = new GridBagConstraints();		
 		
@@ -103,7 +103,7 @@ public class AppointmentOverView {
 		
 		lblMoreInfo = new JLabel("Beskrivelse:");
 		c.gridx = 0;
-		c.gridy = 2;
+		c.gridy = 3;
 		overViewPanel.add(lblMoreInfo, c);
 
 		lblParticipant = new JLabel("Deltakere:");
@@ -130,17 +130,17 @@ public class AppointmentOverView {
 		
 		lblcreator = new JLabel("Møte leder: ");
 		c.gridx = 0;
-		c.gridy = 3;
+		c.gridy = 2;
 		overViewPanel.add(lblcreator,c);
 		
 		creator = new JLabel(meeting.getCreator().getFirstName() + " " + meeting.getCreator().getLastName());
 		c.gridx = 1;
-		c.gridy = 3;
+		c.gridy = 2;
 		overViewPanel.add(creator, c);
 
 		delete = new JButton("Slett avtale");
 		c.gridx = 1;
-		c.gridy = 5;
+		c.gridy = 6;
 		overViewPanel.add(delete, c);
 		delete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -159,10 +159,10 @@ public class AppointmentOverView {
 		yourStatus.addItem(cross);
 		yourStatus.addItem(question);
 		c.gridx = 1;
-		c.gridy = 4;
+		c.gridy = 5;
 		overViewPanel.add(yourStatus, c);
 		c.gridx = 2;
-		c.gridy = 4;
+		c.gridy = 5;
 		lblStatus = new JLabel();
 		lblStatus.setPreferredSize(new Dimension(70, 25));
 		overViewPanel.add(lblStatus, c);
@@ -212,7 +212,7 @@ public class AppointmentOverView {
 		moreInfo.setFocusable(false);
 		moreInfo.setPreferredSize(new Dimension(320, 100));
 		c.gridx = 1;
-		c.gridy = 2;
+		c.gridy = 3;
 		overViewPanel.add(moreInfo, c);
 
 		listModel = new DefaultListModel();
@@ -226,7 +226,7 @@ public class AppointmentOverView {
 		JScrollPane myJScrollPane = new JScrollPane(participantList);
 		myJScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		c.gridx = 1;
-		c.gridy = 3;
+		c.gridy = 4;
 		overViewPanel.add(myJScrollPane, c);
 	}
 
