@@ -46,10 +46,10 @@ public class DBConnection {
 	 * It will return the generated primary key
 	 */
 	public int makeUpdateReturnID(String sql) throws SQLException {
+		OutputController.output(sql);
 		Statement st = connection.createStatement();
 		st.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
 		ResultSet keys = st.getGeneratedKeys();
-		OutputController.output(sql);
 		if (keys.next())
 			return keys.getInt(1);
 		else {

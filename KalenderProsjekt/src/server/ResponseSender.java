@@ -27,6 +27,7 @@ public class ResponseSender implements Runnable {
 				PendingResponse pendingResponse = pendingResponses.take();
 				if (pendingResponse.respondToAll) {
 					synchronized (clients) {
+						System.out.println(clients);
 						for (Socket client : clients) {
 							sendResponse(pendingResponse.getResponse(), client);
 						}
@@ -50,8 +51,8 @@ public class ResponseSender implements Runnable {
 		try {
 			oos = new ObjectOutputStream(clientSocket.getOutputStream());
 			oos.writeObject(response);
-			OutputController.output("Responded to "
-					+ clientSocket.getInetAddress() + " with " + response);
+//			OutputController.output("Responded to "
+//					+ clientSocket.getInetAddress() + " with " + response);
 
 		} catch (IOException e) {
 			e.printStackTrace();

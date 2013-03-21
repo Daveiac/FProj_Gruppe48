@@ -56,6 +56,7 @@ public class DBController {
 	public void updateMeeting(Meeting meeting) throws SQLException {
 		String teamID = "null";
 		if (meeting.getTeam() != null) {
+			updateTeam(meeting.getTeam());
 			teamID = Integer.toString(meeting.getTeam().getTeamID());
 		}
 		String sql = String
@@ -69,6 +70,36 @@ public class DBController {
 						meeting.getCreator().getUsername(),
 						meeting.getMeetingID());
 		dBConn.makeUpdate(sql);
+	}
+	
+	private boolean isMemberOfTeam(String username, int teamID) throws SQLException{
+		String sql = String.format("SELECT Person.* FROM Person, memberOF "
+				+ "WHERE memberOF.teamID = %d "
+				+ "AND Person.username = '%s'", teamID, username);
+		ResultSet rs = dBConn.makeQuery(sql);
+		return rs.next();
+	}
+	
+	private void removeFromTeam(String username, int teamID) throws SQLException{
+		String sql = String.format("DELETE FROM memeberOF "
+				+ "WHERE memeberOF.teamID = %d " +
+				"AND memberOF.username = '%s'", teamID, username);
+		dBConn.makeUpdate(sql);
+	}
+	
+	public void updateTeam(Team team) throws SQLException{
+		Team oldTeam = getTeam(team.getTeamID());
+		for (Person person : oldTeam.getMembers()) {
+			if(!team.isMember(person)){
+				removeFromTeam(person.getUsername(), team.getTeamID());
+			}
+		}
+		for (Person p : team.getMembers()) {
+			if(!isMemberOfTeam(p.getUsername(), team.getTeamID())){
+				addMemberOf(p.getUsername(), team.getTeamID());
+			}
+		}
+		
 	}
 
 	public boolean authenticateUser(String username, String password)
@@ -185,7 +216,7 @@ public class DBController {
 			throws SQLException {
 		String sql = String.format(
 				"INSERT INTO reservation (meetingID, roomName) "
-						+ "VALUES (%d, '%s'", meetingID, roomName);
+						+ "VALUES (%d, '%s')", meetingID, roomName);
 		return dBConn.makeUpdateReturnID(sql);
 
 	}
