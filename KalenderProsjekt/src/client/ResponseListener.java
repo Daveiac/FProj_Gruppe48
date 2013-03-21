@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import networking.packages.DataResponse;
+
 import networking.packages.Response;
 
 public class ResponseListener implements Runnable{
