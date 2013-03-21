@@ -362,7 +362,7 @@ public class DBController {
 		// Remember to call resultset.next() before this method
 		return new Person(rs.getString("email"), rs.getInt("telephone"),
 				rs.getString("firstname"), rs.getString("lastname"),
-				rs.getString("username"), rs.getString("passwd"));
+				rs.getString("username"), "");
 	}
 
 	public Person getPerson(String username) throws SQLException {
