@@ -206,7 +206,6 @@ public class AppointmentView implements PropertyChangeListener {
 				mc.gridx = j;
 				meetingPanel.add(item, mc);
 			}
-			System.out.println("lol");
 			mc.weightx = 0;
 		}
 		mc.weighty = 0;

@@ -6,20 +6,13 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 
 import client.Program;
 
-import framePackage.DefaultView;
-
 public class CalendarModel implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1762790448612918057L;
 	private List<Person> persons;
 	private ArrayList<Meeting> meetings;

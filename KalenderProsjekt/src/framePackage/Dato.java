@@ -9,10 +9,10 @@ public class Dato {
 	
 	
 	private Date date;
-	private int year;
-	private int day;
-	private int monthNumber;
-	private String monthName;
+//	private int year;
+//	private int day;
+//	private int monthNumber;
+//	private String monthName;
 	
 	public Dato(){
 		date = new Date();

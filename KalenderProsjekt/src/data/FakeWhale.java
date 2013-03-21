@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 public class FakeWhale implements Serializable{
-
+	private static final long serialVersionUID = 1L;
 	/**
 	 * A fake class to simulate connection to server
 	 * All the request methods in this class is needed for the real class.
