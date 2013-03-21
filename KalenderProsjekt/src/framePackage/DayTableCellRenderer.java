@@ -43,10 +43,10 @@ public class DayTableCellRenderer extends DefaultTableCellRenderer {
 					for (Person teamMember : meeting.getTeam().getMembers()) {
 						if (selectedPerson.getUsername().equals(teamMember.getUsername())) {
 
-							if (user) {
+							if (user && selectedPerson.getUsername().equals(calendarModel.getUser().getUsername())) {
 								component.setBackground(calendarModel.getColorOfPerson(calendarModel.getUser()));
 
-							} else if (creator) {
+							} else if (creator && selectedPerson.getUsername().equals(meeting.getCreator().getUsername())) {
 								component.setBackground(calendarModel.getColorOfPerson(meeting.getCreator()));
 
 							} else {
