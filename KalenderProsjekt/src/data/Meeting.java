@@ -3,6 +3,7 @@ package data;
 import java.io.Serializable;
 
 public class Meeting implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private int meetingID;
 	private String title;
 	private String location;

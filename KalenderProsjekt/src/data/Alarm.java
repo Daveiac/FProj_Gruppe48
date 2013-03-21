@@ -3,6 +3,7 @@ package data;
 import java.io.Serializable;
 
 public class Alarm implements Serializable{
+	private static final long serialVersionUID = 1L;
 	/*
 	 * A class that represents an entry in the alarm table in the database.
 	 */
