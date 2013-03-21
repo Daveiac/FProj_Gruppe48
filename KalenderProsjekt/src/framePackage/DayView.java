@@ -271,6 +271,9 @@ public class DayView implements CalendarView, PropertyChangeListener {
 		case CalendarModel.MEETINGS_CHANGED_Property:
 			createDayTable();
 			break;
+		case CalendarModel.NOTIFICATIONS_CHANGED_Property:
+			createDayTable();
+			break;
 		case CalendarModel.SELECTED_Property:
 			System.out.println("someone just got lucky! (SELECTED)");
 			createDayTable();

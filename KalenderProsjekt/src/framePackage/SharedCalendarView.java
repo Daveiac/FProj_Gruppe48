@@ -23,7 +23,6 @@ import data.Person;
 public class SharedCalendarView implements PropertyChangeListener{
 	private JPanel sharedCPanel;
 	private CalendarModel calendarModel;
-	private JCheckBox checkBox;
 	private List<Person> personList;
 	private List<JCheckBox> checkBoxList;
 
@@ -55,19 +54,27 @@ public class SharedCalendarView implements PropertyChangeListener{
 		c.anchor = GridBagConstraints.LINE_START;
 		for(int i = 0; i < list.size(); i++){
 			personList.add(list.get(i));
-			checkBox = new JCheckBox(list.get(i).getFirstName() + list.get(i).getLastName());
+			JCheckBox checkBox = new JCheckBox(list.get(i).getFirstName() + list.get(i).getLastName());
 			checkBox.setForeground(calendarModel.getColorOfPerson(list.get(i)));
 			c.gridx = 0;
 			c.gridy = i;
 			sharedCPanel.add(checkBox,c);
 			checkBoxList.add(checkBox);
-			checkBox.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					calendarModel.setSelected(personList.get(checkBoxList.indexOf(checkBox)),checkBox.isSelected());
-				}
-			});
+			checkBox.addActionListener(new CheckBoxListener(checkBox));
 		}
 		sharedCPanel.validate();
+	}
+
+	private class CheckBoxListener implements ActionListener {
+		
+		JCheckBox checkBox;
+		public CheckBoxListener(JCheckBox checkBox) {
+			this.checkBox = checkBox;
+		}
+
+		public void actionPerformed(ActionEvent arg0) {
+			calendarModel.setSelected(personList.get(checkBoxList.indexOf(checkBox)),checkBox.isSelected());
+		}
 	}
 	
 	public JPanel getPanel(){
