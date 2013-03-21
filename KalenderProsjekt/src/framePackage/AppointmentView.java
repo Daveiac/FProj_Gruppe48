@@ -173,7 +173,9 @@ public class AppointmentView implements PropertyChangeListener {
 		
 		for (int i = 0; i < meetings.size(); i++) {
 			Meeting meeting = meetings.get(i);
-			if(addedMeetings.contains(meeting.getMeetingID())) continue;
+			if(addedMeetings.contains(meeting.getMeetingID())) {
+				continue;
+			}
 			JComponent[] items = new JComponent[7];
 			if (i == meetings.size()-1) {
 				mc.weighty = 1;
