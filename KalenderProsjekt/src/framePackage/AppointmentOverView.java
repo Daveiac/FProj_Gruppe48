@@ -181,6 +181,10 @@ public class AppointmentOverView {
 			}
 		}
 		
+		if(!meeting.getTeam().getMembers().contains(calendarModel.getUser())){
+			yourStatus.setEnabled(false);
+		}
+		
 		if(calendarModel.getUser().getUsername().equals(meeting.getCreator().getUsername()) ){
 			change.setEnabled(true);
 			delete.setEnabled(true);
