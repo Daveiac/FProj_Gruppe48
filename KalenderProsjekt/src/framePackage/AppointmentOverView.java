@@ -54,6 +54,8 @@ public class AppointmentOverView {
 	private NewAppointmentView newAppointment;
 	private CalendarModel calendarModel;
 	private Alarm alarm;
+	private JLabel lblcreator;
+	private JLabel creator;
 
 	public AppointmentOverView(Meeting meeting) {
 		this.calendarModel = Program.calendarModel;
@@ -106,17 +108,17 @@ public class AppointmentOverView {
 
 		lblParticipant = new JLabel("Deltakere:");
 		c.gridx = 0;
-		c.gridy = 3;
+		c.gridy = 4;
 		overViewPanel.add(lblParticipant, c);
 
 		lblYourStatus = new JLabel("Din status:");
 		c.gridx = 0;
-		c.gridy = 4;
+		c.gridy = 5;
 		overViewPanel.add(lblYourStatus, c);
 
 		change = new JButton("Endre avtale");
 		c.gridx = 0;
-		c.gridy = 5;
+		c.gridy = 6;
 		overViewPanel.add(change, c);
 		change.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -125,6 +127,16 @@ public class AppointmentOverView {
 				frame.setVisible(false);
 			}
 		});
+		
+		lblcreator = new JLabel("Møte leder: ");
+		c.gridx = 0;
+		c.gridy = 3;
+		overViewPanel.add(lblcreator,c);
+		
+		creator = new JLabel(meeting.getCreator().getFirstName() + " " + meeting.getCreator().getLastName());
+		c.gridx = 1;
+		c.gridy = 3;
+		overViewPanel.add(creator, c);
 
 		delete = new JButton("Slett avtale");
 		c.gridx = 1;
@@ -170,11 +182,9 @@ public class AppointmentOverView {
 		}
 		
 		if(calendarModel.getUser().getUsername().equals(meeting.getCreator().getUsername()) ){
-			yourStatus.addItem(star);
-			yourStatus.setSelectedItem(star);
 			change.setEnabled(true);
 			delete.setEnabled(true);
-			yourStatus.setEnabled(false);
+			yourStatus.setEnabled(true);
 		}
 		
 		yourStatus.addActionListener(new ActionListener() {
@@ -246,6 +256,7 @@ public class AppointmentOverView {
 	}
 	
 	public void closeFrame(){
+		System.out.println("DAVIVVIVIIVIVD");
 		frame.setVisible(false);
 	}
 
