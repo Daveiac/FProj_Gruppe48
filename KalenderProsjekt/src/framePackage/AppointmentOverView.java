@@ -180,10 +180,14 @@ public class AppointmentOverView {
 				lblStatus.setText("Vet Ikke");
 			}
 		}
-		for(int i = 0; i < meeting.getTeam().getMembers().size(); i++){
-			if(!meeting.getTeam().getMembers().get(i).getUsername().equals(calendarModel.getUser().getUsername())){
-				yourStatus.setEnabled(false);
+		yourStatus.setEnabled(false);
+		try {
+			for(int i = 0; i < meeting.getTeam().getMembers().size(); i++){
+				if(meeting.getTeam().getMembers().get(i).getUsername().equals(calendarModel.getUser().getUsername()) || meeting.getCreator().getUsername().equals(calendarModel.getUser().getUsername())){
+					yourStatus.setEnabled(true);
+				}
 			}
+		} catch (NullPointerException e) {
 		}
 		
 		if(calendarModel.getUser().getUsername().equals(meeting.getCreator().getUsername()) ){
