@@ -18,8 +18,7 @@ public class DayTableCellRenderer extends DefaultTableCellRenderer {
 		this.calendarModel = calendarModel;
 	}
 
-	public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column) {
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
 		Component component = super.getTableCellRendererComponent(table, value,
 				isSelected, hasFocus, row, column);
@@ -31,17 +30,11 @@ public class DayTableCellRenderer extends DefaultTableCellRenderer {
 				if (meeting.getTeam() != null) {
 					for (Person teamMember : meeting.getTeam().getMembers()) {
 						if (selectedPerson.equals(teamMember)) {
-							component.setBackground(calendarModel
-									.getColorOfPerson(selectedPerson));
+							component.setBackground(calendarModel.getColorOfPerson(selectedPerson));
 						}
 					}
 				} else {
-
-					component.setBackground(calendarModel
-							.getColorOfPerson(meeting.getCreator()));
-					System.out.println("color Of Meeting: "
-							+ calendarModel.getColorOfPerson(
-									meeting.getCreator()).toString());
+					component.setBackground(calendarModel.getColorOfPerson(meeting.getCreator()));
 				}
 			}
 			setText(meeting.getTitle());
