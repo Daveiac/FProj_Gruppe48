@@ -29,23 +29,58 @@ public class DayTableCellRenderer extends DefaultTableCellRenderer {
 		if (meeting != null) {
 			if (meeting.getTeam() != null) {
 
-//				for (Person selectedPerson : calendarModel.getSelectedPersons()) {
-//					for (Person teamMember : meeting.getTeam().getMembers()) {
-//						if (selectedPerson.getUsername().equals(teamMember.getUsername())) {
-//
-//							System.out.println("selectedPerson = teamMember");
-//
+				String user = "";
+				for (Person selectedPerson : calendarModel.getSelectedPersons()) {
+					if (selectedPerson.getUsername().equals(calendarModel.getUser().getUsername())) {
+						user = selectedPerson.getUsername();
+					}
+				}
+				
+				String creator = "";
+				for (Person selectedPerson : calendarModel.getSelectedPersons()) {
+					if (selectedPerson.getUsername().equals(meeting.getCreator().getUsername())) {
+						creator = selectedPerson.getUsername();
+					}
+				}
+				
+				
+				for (Person selectedPerson : calendarModel.getSelectedPersons()) {
+					for (Person teamMember : meeting.getTeam().getMembers()) {
+						if (selectedPerson.getUsername().equals(teamMember.getUsername())) {
+
+							System.out.println("selectedPerson = teamMember");
+
+							if (selectedPerson.getUsername().equals(user)) {
+								component.setBackground(calendarModel.getColorOfPerson(calendarModel.getUser()));
+
+								System.out.println("FARGE if  : user satt");
+							}
+							else if (selectedPerson.getUsername().equals(creator)) {
+								component.setBackground(calendarModel.getColorOfPerson(meeting.getCreator()));
+
+								System.out.println("FARGE elif: creator satt");
+							}
+							else {
+								component.setBackground(calendarModel.getColorOfPerson(selectedPerson));
+								System.out.println("FARGE else: valgt person satt");
+								
+							}
+							
+							
 //							Color background = component.getBackground();
 //
-//							boolean isUser = calendarModel.getColorOfPerson(calendarModel.getUser()).equals(background);
 //							boolean isCreator = calendarModel.getColorOfPerson(meeting.getCreator()).equals(background);
+//
+//							System.out.println();
+//							System.out.println("user: " + isUser);
+//							System.out.println("creator: " + isCreator);
 //
 //							if (!isUser	&& !isCreator) {
 //								component.setBackground(calendarModel.getColorOfPerson(selectedPerson));
 //								System.out.println("FARGE else: valgt person satt");
 //							}
 //
-//							else if (!isCreator) {
+//							else if (!isUser) {
 //								component.setBackground(calendarModel.getColorOfPerson(meeting.getCreator()));
 //
 //								System.out.println("FARGE elif: creator satt");
@@ -56,30 +91,30 @@ public class DayTableCellRenderer extends DefaultTableCellRenderer {
 //
 //								System.out.println("FARGE if  : user satt");
 //							}
-//
-//
-//							//							if (teamMember.getUsername().equals(calendarModel.getUser().getUsername())) {
-//							//								component.setBackground(calendarModel.getColorOfPerson(calendarModel.getUser()));
-//							//
-//							//								System.out.println("FARGE if  : user satt");
-//							//							}
-//							//
-//							//							else if (teamMember.equals(meeting.getCreator().getUsername())) {
-//							//								component.setBackground(calendarModel.getColorOfPerson(meeting.getCreator()));
-//							//
-//							//								System.out.println("FARGE elif: creator satt");
-//							//							}
-//							//
-//							//							else if (calendarModel.getColorOfPerson(calendarModel.getUser()).equals(component.getBackground())){
-//							//								component.setBackground(calendarModel.getColorOfPerson(selectedPerson));
-//							//								System.out.println("FARGE else: valgt person satt");
-//							//							}
-//						}
-//						//						else
-//						//							System.out.println("Du ska'kke se detta møtet du!")
-//						//							;
-//					}
-//				}
+
+
+							//							if (teamMember.getUsername().equals(calendarModel.getUser().getUsername())) {
+							//								component.setBackground(calendarModel.getColorOfPerson(calendarModel.getUser()));
+							//
+							//								System.out.println("FARGE if  : user satt");
+							//							}
+							//
+							//							else if (teamMember.equals(meeting.getCreator().getUsername())) {
+							//								component.setBackground(calendarModel.getColorOfPerson(meeting.getCreator()));
+							//
+							//								System.out.println("FARGE elif: creator satt");
+							//							}
+							//
+							//							else if (calendarModel.getColorOfPerson(calendarModel.getUser()).equals(component.getBackground())){
+							//								component.setBackground(calendarModel.getColorOfPerson(selectedPerson));
+							//								System.out.println("FARGE else: valgt person satt");
+							//							}
+						}
+						//						else
+						//							System.out.println("Du ska'kke se detta møtet du!")
+						//							;
+					}
+				}
 				setText(meeting.getTitle());
 			}
 		}
