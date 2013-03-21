@@ -245,7 +245,6 @@ public class DBController {
 
 		int meetingID = dBConn.makeUpdateReturnID(sql);
 		// add notifications
-		System.out.println(meetingID);
 		Meeting newMeeting = getMeeting(meetingID);
 		if (meeting.getTeam() != null) {
 			for (Person p : meeting.getTeam().getMembers()) {
