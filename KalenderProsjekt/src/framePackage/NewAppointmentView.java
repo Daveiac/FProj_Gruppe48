@@ -420,59 +420,7 @@ public class NewAppointmentView extends JPanel {
 		});
 		
 		if(meet!= null){
-			opprettKnapp.setEnabled(false);
-			endreKnapp.setEnabled(true);
-			slettKnapp.setEnabled(true);
-			for(int i = 0; i < calendarModel.getPersons().size(); i++){
-				participantComponent.addItem(getAllPerson().get(i).getFirstName() + " " +  getAllPerson().get(i).getLastName());
-			}
-			for(int j = 0; j < getRoomList().size(); j ++){
-				romComponent.addItem(getRoomList().get(j).getRoomName());
-			}
-			tittelComponent.setText(meet.getTitle());
-			greCalendar.setTimeInMillis(meet.getStartTime());
-			startHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
-			startMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
-			monthComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MONTH)-1);
-			yearComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.YEAR)%2013);
-			dayComponent.setSelectedItem(greCalendar.get(GregorianCalendar.DAY_OF_MONTH));
-			greCalendar.setTimeInMillis(meet.getEndTime());
-			endHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
-			endMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
-			try {
-				if(meet.getLocation().length() != 0){
-					locComponent.setText(meet.getLocation());
-					romComponent.setEnabled(false);
-				}
-				
-			} catch (NullPointerException e) {
-				locComponent.setEnabled(false);
-			}
-			if(meet.getRoom() != null){
-				romComponent.setEnabled(true);
-				locComponent.setEnabled(false);
-				romComponent.setSelectedItem(meet.getRoom().getRoomName());
-			}
-			try {
-				if(meet.getTeam().getMembers().size() > 0){
-					for(int i = 0; i < meet.getTeam().getMembers().size(); i++){
-						listModel.addElement(meet.getTeam().getMembers().get(i));
-					}
-				}
-				
-			} catch (NullPointerException e) {
-			}
-
-			
-			infoComponent.setText(meet.getDescription());
-			if(alarm != null){
-			greCalendar.setTimeInMillis(alarm.getTime());
-				alarmComponent.setSelected(true);
-				alarmHourComponent.setEnabled(true);
-				alarmMinComponent.setEnabled(true);
-				alarmHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
-				alarmMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
-			}
+			fillInnMeeting(meet, greCalendar);
 		}
 		
 		if(meet == null){
@@ -495,6 +443,62 @@ public class NewAppointmentView extends JPanel {
 		frame.setResizable(true);
 		frame.add(this);
 		
+	}
+
+	private void fillInnMeeting(Meeting meet, GregorianCalendar greCalendar) {
+		opprettKnapp.setEnabled(false);
+		endreKnapp.setEnabled(true);
+		slettKnapp.setEnabled(true);
+		for(int i = 0; i < calendarModel.getPersons().size(); i++){
+			participantComponent.addItem(getAllPerson().get(i).getFirstName() + " " +  getAllPerson().get(i).getLastName());
+		}
+		for(int j = 0; j < getRoomList().size(); j ++){
+			romComponent.addItem(getRoomList().get(j).getRoomName());
+		}
+		tittelComponent.setText(meet.getTitle());
+		greCalendar.setTimeInMillis(meet.getStartTime());
+		startHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
+		startMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
+		monthComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MONTH)-1);
+		yearComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.YEAR)%2013);
+		dayComponent.setSelectedItem(greCalendar.get(GregorianCalendar.DAY_OF_MONTH));
+		greCalendar.setTimeInMillis(meet.getEndTime());
+		endHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
+		endMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
+		try {
+			if(meet.getLocation().length() != 0){
+				locComponent.setText(meet.getLocation());
+				romComponent.setEnabled(false);
+			}
+			
+		} catch (NullPointerException e) {
+			locComponent.setEnabled(false);
+		}
+		if(meet.getRoom() != null){
+			romComponent.setEnabled(true);
+			locComponent.setEnabled(false);
+			romComponent.setSelectedItem(meet.getRoom().getRoomName());
+		}
+		try {
+			if(meet.getTeam().getMembers().size() > 0){
+				for(int i = 0; i < meet.getTeam().getMembers().size(); i++){
+					listModel.addElement(meet.getTeam().getMembers().get(i));
+				}
+			}
+			
+		} catch (NullPointerException e) {
+		}
+
+		
+		infoComponent.setText(meet.getDescription());
+		if(alarm != null){
+		greCalendar.setTimeInMillis(alarm.getTime());
+			alarmComponent.setSelected(true);
+			alarmHourComponent.setEnabled(true);
+			alarmMinComponent.setEnabled(true);
+			alarmHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
+			alarmMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
+		}
 	}
 	
 	private ArrayList<MeetingRoom> getRoomList(){
