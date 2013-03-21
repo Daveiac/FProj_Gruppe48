@@ -66,7 +66,7 @@ public class CalendarModel implements Serializable {
 	public ArrayList<Meeting> getAllMeetingsOfPerson(Person person,
 			boolean attending) {
 		ArrayList<Meeting> allMeetings = new ArrayList<Meeting>();
-		allMeetings.addAll(getAppointments());
+		allMeetings.addAll(getAppointments(false));
 		allMeetings.addAll(getMeetings(person, attending));
 		return allMeetings;
 	}
@@ -92,10 +92,10 @@ public class CalendarModel implements Serializable {
 	 * Returns a list of meetings.
 	 * @return appointments
 	 */
-	public ArrayList<Meeting> getAppointments() {
+	public ArrayList<Meeting> getAppointments(boolean allCreated) {
 		ArrayList<Meeting> appointments = new ArrayList<Meeting>();
 		for (Meeting meeting : meetings) {
-			if (meeting.getTeam() == null
+			if ((meeting.getTeam() == null || allCreated)
 					&& meeting.getCreator().getUsername()
 							.equals(user.getUsername())) {
 				appointments.add(meeting);
