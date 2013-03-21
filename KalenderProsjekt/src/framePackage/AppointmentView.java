@@ -147,9 +147,9 @@ public class AppointmentView implements PropertyChangeListener {
 			((JLabel) items[2]).setText(timeFormat.format(startDate.getTime()));
 			
 			if(meeting.getCreator().getUsername().equals(user.getUsername())) {
-				changeBtn.setEnabled(false);
-			} else {
 				changeBtn.addActionListener(new ChangeButtonListener(meeting));
+			} else {
+				changeBtn.setEnabled(false);
 			}
 			infoBtn.addActionListener(new InfoButtonListener(meeting));
 			
@@ -187,10 +187,9 @@ public class AppointmentView implements PropertyChangeListener {
 			((JLabel) items[2]).setText(timeFormat.format(startDate.getTime()));
 
 			if(meeting.getCreator().getUsername().equals(user.getUsername())) {
-				changeBtn.setEnabled(false);
-			} else {
-				System.out.println("testkik");
 				changeBtn.addActionListener(new ChangeButtonListener(meeting));
+			} else {
+				changeBtn.setEnabled(false);
 			}
 			infoBtn.addActionListener(new InfoButtonListener(meeting));
 			
