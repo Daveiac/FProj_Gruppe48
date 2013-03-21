@@ -439,9 +439,14 @@ public class NewAppointmentView extends JPanel {
 			greCalendar.setTimeInMillis(meet.getEndTime());
 			endHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
 			endMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
-			if(meet.getLocation().length() != 0){
-				locComponent.setText(meet.getLocation());
-				romComponent.setEnabled(false);
+			try {
+				if(meet.getLocation().length() != 0){
+					locComponent.setText(meet.getLocation());
+					romComponent.setEnabled(false);
+				}
+				
+			} catch (NullPointerException e) {
+				locComponent.setEnabled(false);
 			}
 			if(meet.getRoom() != null){
 				romComponent.setEnabled(true);
@@ -474,7 +479,6 @@ public class NewAppointmentView extends JPanel {
 			opprettKnapp.setEnabled(true);
 			endreKnapp.setEnabled(false);
 			slettKnapp.setEnabled(false);
-			listModel.addElement(calendarModel.getUser());
 			for(int i = 0; i < calendarModel.getPersons().size(); i++){
 				participantComponent.addItem(getAllPerson().get(i).getFirstName() + " " +  getAllPerson().get(i).getLastName());
 			}
