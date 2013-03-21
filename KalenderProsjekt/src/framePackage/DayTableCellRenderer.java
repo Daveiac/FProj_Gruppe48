@@ -29,14 +29,11 @@ public class DayTableCellRenderer extends DefaultTableCellRenderer {
 			if (meeting.getTeam() != null) {
 
 				boolean user = false;
+				boolean creator = false;
 				for (Person selectedPerson : calendarModel.getSelectedPersons()) {
 					if (selectedPerson.getUsername().equals(calendarModel.getUser().getUsername())) {
 						user = true;
 					}
-				}
-
-				boolean creator = false;
-				for (Person selectedPerson : calendarModel.getSelectedPersons()) {
 					if (selectedPerson.getUsername().equals(meeting.getCreator().getUsername())) {
 						creator = true;
 					}
@@ -45,8 +42,6 @@ public class DayTableCellRenderer extends DefaultTableCellRenderer {
 				for (Person selectedPerson : calendarModel.getSelectedPersons()) {
 					for (Person teamMember : meeting.getTeam().getMembers()) {
 						if (selectedPerson.getUsername().equals(teamMember.getUsername())) {
-
-							System.out.println("selectedPerson = teamMember");
 
 							if (user) {
 								component.setBackground(calendarModel.getColorOfPerson(calendarModel.getUser()));
