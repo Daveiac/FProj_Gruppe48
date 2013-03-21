@@ -46,7 +46,9 @@ public class Server extends Thread {
 			try {
 				System.out.println(newClientQueue);
 				Socket nClient = newClientQueue.take();
-				clients.add(nClient);
+				synchronized (clients) {
+					clients.add(nClient);					
+				}
 				OutputController.output("spawning new RequestListener thread");
 				(new Thread(new RequestListener(nClient, requestQueue)))
 						.start();
