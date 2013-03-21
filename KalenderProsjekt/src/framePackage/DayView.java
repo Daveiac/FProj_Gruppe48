@@ -92,10 +92,17 @@ public class DayView implements CalendarView, PropertyChangeListener {
 				if (row >= 0 && col >= 1) {
 					Meeting meeting = (Meeting) DayView.this.tableModel
 							.getValueAt(row, col);
-					if (meeting != null)
+					if (meeting != null) {
 						new AppointmentOverView(meeting);
-					else
-						new NewAppointmentView(meeting);
+					}
+					else {
+						GregorianCalendar cal = new GregorianCalendar(
+								calendar.get(GregorianCalendar.YEAR), 
+								calendar.get(GregorianCalendar.MONTH), 
+								calendar.get(GregorianCalendar.DAY_OF_MONTH),
+								row/4, (row*15) % 60);
+						new NewAppointmentView(cal, true);
+					}
 				}
 			}
 		});

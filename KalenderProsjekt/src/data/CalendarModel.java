@@ -260,12 +260,12 @@ public class CalendarModel implements Serializable {
 		for (Person person : persons) {
 			if (person.getUsername().equals(username)) {
 				user = person;
-				selected.add(true);
-			} else {
 				selected.add(false);
-
 			}
 		}
+		persons.remove(user);
+		persons.add(user);
+		selected.set(selected.size()-1, true);
 		pcs.firePropertyChange(PERSONS_ADDED_Property, null, persons);
 		requestEverything();
 	}

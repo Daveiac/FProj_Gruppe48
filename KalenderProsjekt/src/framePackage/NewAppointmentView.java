@@ -76,6 +76,15 @@ public class NewAppointmentView extends JPanel {
 
 	private Alarm alarm;
 
+	public NewAppointmentView(GregorianCalendar cal,boolean bool) {
+		this(null);
+		System.out.println("new constructor");
+		startHourComponent.setSelectedIndex(cal.get(GregorianCalendar.HOUR_OF_DAY));
+		startMinComponent.setSelectedIndex(cal.get(GregorianCalendar.MINUTE)/15);
+		monthComponent.setSelectedIndex(cal.get(GregorianCalendar.MONTH));
+		yearComponent.setSelectedIndex(cal.get(GregorianCalendar.YEAR)-2013);
+		dayComponent.setSelectedItem(cal.get(GregorianCalendar.DAY_OF_MONTH));
+	}
 	public NewAppointmentView(Meeting meet) {
 		
 		this.meeting = meet;
@@ -452,6 +461,7 @@ public class NewAppointmentView extends JPanel {
 		frame.add(this);
 		
 	}
+
 
 	private void fillInnMeeting(Meeting meet, GregorianCalendar greCalendar) {
 		opprettKnapp.setEnabled(false);
