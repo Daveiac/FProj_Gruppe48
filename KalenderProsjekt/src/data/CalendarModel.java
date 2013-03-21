@@ -310,7 +310,13 @@ public class CalendarModel implements Serializable {
 	}
 
 	public Color getColorOfPerson(Person person) {
-		return colors[persons.indexOf(person)];
+		int index = -2;
+		for (int i = 0; i < persons.size(); i++) {
+			if (person.getUsername().equals(persons.get(i).getUsername())) {
+				index = i;
+			}
+		}
+		return colors[index];
 	}
 
 	public void setStatus(char c, Notification notification) {

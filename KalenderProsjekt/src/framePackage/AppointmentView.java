@@ -109,7 +109,7 @@ public class AppointmentView implements PropertyChangeListener {
 		mainPanel.add(meetingPanel, BorderLayout.CENTER);
 		mc.anchor = GridBagConstraints.NORTH;
 		
-		/*for (int i = 0; i < notifications.size(); i++) {
+		for (int i = 0; i < notifications.size(); i++) {
 		 Notification n = notifications.get(i);
 		 Meeting meeting = n.getMeeting();
 		 JComponent[] items = new JComponent[7];
@@ -185,7 +185,7 @@ public class AppointmentView implements PropertyChangeListener {
 			mc.gridy = mc.gridy +1;
 			
 		 }
-		int n = notifications.size();*/
+		int n = notifications.size();
 		
 		for (int i = 0; i < meetings.size(); i++) {
 			Meeting meeting = meetings.get(i);
@@ -217,12 +217,12 @@ public class AppointmentView implements PropertyChangeListener {
 			}
 			infoBtn.addActionListener(new InfoButtonListener(meeting));
 
-			/*for (int j = 0; j < items.length; j++) {
+			for (int j = 0; j < items.length; j++) {
 				JComponent item = items[j];
 				item.setPreferredSize(new Dimension(sizes[j], 20));
 				mc.gridx = j;
 				meetingPanel.add(item, mc);
-			}*/
+			}
 			items[0].setPreferredSize(new Dimension(100, 20));
 			items[1].setPreferredSize(new Dimension(100, 20));
 			items[2].setPreferredSize(new Dimension(100, 20));
@@ -288,18 +288,21 @@ public class AppointmentView implements PropertyChangeListener {
 			notifications = calendarModel.getAllNotificationsOfPerson(user);
 			meetings = calendarModel.getAppointments();
 			refreshMeetings();
+			System.out.println(meetings);
 			break;
 		case CalendarModel.MEETINGS_CHANGED_Property:
 			user = calendarModel.getUser();
 			notifications = calendarModel.getAllNotificationsOfPerson(user);
 			meetings = calendarModel.getAppointments();
 			refreshMeetings();
+			System.out.println(meetings);
 			break;
 		case CalendarModel.NOTIFICATIONS_CHANGED_Property:
 			user = calendarModel.getUser();
 			notifications = calendarModel.getAllNotificationsOfPerson(user);
 			meetings = calendarModel.getAppointments();
 			refreshMeetings();
+			System.out.println(meetings);
 			break;
 		}
 
