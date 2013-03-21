@@ -457,48 +457,41 @@ public class NewAppointmentView extends JPanel {
 		opprettKnapp.setEnabled(false);
 		endreKnapp.setEnabled(true);
 		slettKnapp.setEnabled(true);
-		for(int i = 0; i < calendarModel.getPersons().size(); i++){
-			participantComponent.addItem(getAllPerson().get(i).getFirstName() + " " +  getAllPerson().get(i).getLastName());
+		for (Person p : meeting.getTeam().getMembers()) {
+			participantComponent.addItem(p.getFirstName() + " " +  p.getLastName());
 		}
-		for(int j = 0; j < getRoomList().size(); j ++){
-			romComponent.addItem(getRoomList().get(j).getRoomName());
+		long startT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(), startHourComponent.getSelectedIndex(), startMinComponent.getSelectedIndex()*15);
+		long endT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(),endHourComponent.getSelectedIndex(), endMinComponent.getSelectedIndex()*15);
+		ArrayList<MeetingRoom> availableRooms = calendarModel.getAvailableRooms(startT, endT);
+		for(int j = 0; j < availableRooms.size(); j ++){
+			romComponent.addItem(availableRooms.get(j).getRoomName());
 		}
 		tittelComponent.setText(meet.getTitle());
 		greCalendar.setTimeInMillis(meet.getStartTime());
 		startHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
 		startMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
-		monthComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MONTH)-1);
-		yearComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.YEAR)%2013);
+		monthComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MONTH));
+		yearComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.YEAR)-2013);
 		dayComponent.setSelectedItem(greCalendar.get(GregorianCalendar.DAY_OF_MONTH));
 		greCalendar.setTimeInMillis(meet.getEndTime());
 		endHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
 		endMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
-		try {
-			if(meet.getLocation().length() != 0){
-				locComponent.setText(meet.getLocation());
-				romComponent.setEnabled(false);
-			}
-			
-		} catch (NullPointerException e) {
-			locComponent.setEnabled(false);
-		}
-		if(meet.getRoom() != null){
+		if(meet.getLocation() != null ) {
+			locComponent.setText(meet.getLocation());
+			romComponent.setEnabled(false);
+		} else if(meet.getRoom() != null){
 			romComponent.setEnabled(true);
 			locComponent.setEnabled(false);
 			romComponent.setSelectedItem(meet.getRoom().getRoomName());
 		}
-		try {
-			if(meet.getTeam().getMembers().size() > 0){
-				for(int i = 0; i < meet.getTeam().getMembers().size(); i++){
-					listModel.addElement(meet.getTeam().getMembers().get(i));
-				}
+		if(meet.getTeam() != null) {
+			for(int i = 0; i < meet.getTeam().getMembers().size(); i++){
+				listModel.addElement(meet.getTeam().getMembers().get(i));
 			}
-			
-		} catch (NullPointerException e) {
 		}
-
-		
-		infoComponent.setText(meet.getDescription());
+		if(meet.getDescription() != null) {
+			infoComponent.setText(meet.getDescription());
+		}
 		if(alarm != null){
 		greCalendar.setTimeInMillis(alarm.getTime());
 			alarmComponent.setSelected(true);
@@ -583,74 +576,45 @@ public class NewAppointmentView extends JPanel {
 	}
 	
 	private Meeting getMeeting(){
-		long startT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex()+1, startHourComponent.getSelectedIndex(), startMinComponent.getSelectedIndex()*15);
-		long endT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex()+1,endHourComponent.getSelectedIndex(), endMinComponent.getSelectedIndex()*15);
-		ArrayList<Person> list = new ArrayList<Person>();
-		for(int i = 0; i< listModel.size();i++){
-				list.add(listModel.get(i));
-			}
-		Team team = new Team(-1,calendarModel.getUser().getEmail(),list);
+		long startT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(), startHourComponent.getSelectedIndex(), startMinComponent.getSelectedIndex()*15);
+		long endT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(),endHourComponent.getSelectedIndex(), endMinComponent.getSelectedIndex()*15);
+		ArrayList<Person> members = new ArrayList<Person>();
+		for (int i = 0; i < listModel.size(); i++) {
+			members.add(listModel.get(i));
+		}
+		Team team = new Team(-1,calendarModel.getUser().getEmail(),members);
 		if(listModel.size() == 0){
 			team = null;
 		}
-		String loc = null;
+		String loc = locComponent.getText();
 		MeetingRoom mr = null;
 		int mID = 0;
-		if(locComponent.getText().length() > 0){
-			loc = locComponent.getText();
-		}
-		if(romComponent.getSelectedItem() != null){
+		if(romComponent.isEnabled() && romComponent.getSelectedItem() != null){
 			mr = new MeetingRoom(romComponent.getSelectedItem().toString());
 		}
-		try {
-			if(meeting.getMeetingID() != 0){
-			mID = meeting.getMeetingID();
-		}
-			
-		} catch (NullPointerException e) {
-			mID = 0;
-		}
-		meeting = new Meeting(mID, tittelComponent.getText(), loc,startT, endT, infoComponent.getText(), team, mr, calendarModel.getUser());
-		return meeting;
+		return new Meeting(mID, tittelComponent.getText(), loc,startT, endT, infoComponent.getText(), team, mr, calendarModel.getUser());
 	}
 	
 	private Meeting changeMeeting(){
-		long startT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex()+1, startHourComponent.getSelectedIndex(), startMinComponent.getSelectedIndex()*15);
-		long endT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex()+1,endHourComponent.getSelectedIndex(), endMinComponent.getSelectedIndex()*15);
-		ArrayList<Person> list = new ArrayList<Person>();
-		for(int i = 0; i< listModel.size();i++){
-				list.add(listModel.get(i));
-			}
-		Team team = meeting.getTeam();
-		if(team != null){
-			team = new Team(meeting.getTeam().getTeamID(),calendarModel.getUser().getEmail(),list);		
+		long startT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(), startHourComponent.getSelectedIndex(), startMinComponent.getSelectedIndex()*15);
+		long endT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(),endHourComponent.getSelectedIndex(), endMinComponent.getSelectedIndex()*15);
+		ArrayList<Person> members = new ArrayList<Person>();
+		for (int i = 0; i < listModel.size(); i++) {
+			members.add(listModel.get(i));
 		}
-		else{
-			team = new Team(-1,calendarModel.getUser().getEmail(),list);
+		Team team = null;
+		if(meeting.getTeam() != null) {
+			team = new Team(meeting.getTeam().getTeamID(),calendarModel.getUser().getEmail(),members);
 		}
-		
 		if(listModel.size() == 0){
 			team = null;
 		}
-		String loc = null;
+		String loc = locComponent.getText();
 		MeetingRoom mr = null;
-		int mID = 0;
-		if(locComponent.getText().length() > 0){
-			loc = locComponent.getText();
-		}
-		if(romComponent.getSelectedItem() != null){
+		if(romComponent.isEnabled() && romComponent.getSelectedItem() != null){
 			mr = new MeetingRoom(romComponent.getSelectedItem().toString());
 		}
-		try {
-			if(meeting.getMeetingID() != 0){
-			mID = meeting.getMeetingID();
-		}
-			
-		} catch (NullPointerException e) {
-			mID = 0;
-		}
-		meeting = new Meeting(mID, tittelComponent.getText(), loc,startT, endT, infoComponent.getText(), team, mr, calendarModel.getUser());
-		return meeting;
+		return new Meeting(meeting.getMeetingID(), tittelComponent.getText(), loc,startT, endT, infoComponent.getText(), team, mr, calendarModel.getUser());
 	}
 	
 	
