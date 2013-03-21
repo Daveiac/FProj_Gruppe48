@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
+import javax.naming.LimitExceededException;
 import javax.swing.*;
 
 import client.Program;
@@ -397,8 +398,8 @@ public class NewAppointmentView extends JPanel {
 			for(int i = 0; i < calendarModel.getPersons().size(); i++){
 				participantComponent.addItem(getAllPerson().get(i).getFirstName() + " " +  getAllPerson().get(i).getLastName());
 			}
-			for(int j = 0; j < calendarModel.getRooms().size(); j ++){
-				romComponent.addItem(calendarModel.getRooms().get(j).getRoomName());
+			for(int j = 0; j < getRoomList().size(); j ++){
+				romComponent.addItem(getRoomList().get(j).getRoomName());
 			}
 			tittelComponent.setText(meet.getTitle());
 			greCalendar.setTimeInMillis(meet.getStartTime());
@@ -417,7 +418,6 @@ public class NewAppointmentView extends JPanel {
 			if(meet.getRoom() != null){
 				romComponent.setEnabled(true);
 				locComponent.setEnabled(false);
-				romComponent.addItem(meet.getRoom().getRoomName());
 				romComponent.setSelectedItem(meet.getRoom().getRoomName());
 			}
 			try {
@@ -446,11 +446,12 @@ public class NewAppointmentView extends JPanel {
 			opprettKnapp.setEnabled(true);
 			endreKnapp.setEnabled(false);
 			slettKnapp.setEnabled(false);
+			listModel.addElement(calendarModel.getUser());
 			for(int i = 0; i < calendarModel.getPersons().size(); i++){
 				participantComponent.addItem(getAllPerson().get(i).getFirstName() + " " +  getAllPerson().get(i).getLastName());
 			}
-			for(int j = 0; j < calendarModel.getRooms().size(); j ++){
-				romComponent.addItem(calendarModel.getRooms().get(j).getRoomName());
+			for(int j = 0; j < getRoomList().size(); j ++){
+				romComponent.addItem(getRoomList().get(j).getRoomName());
 			}
 		}
 		
@@ -462,6 +463,14 @@ public class NewAppointmentView extends JPanel {
 		frame.setResizable(true);
 		frame.add(this);
 		
+	}
+	
+	private ArrayList<MeetingRoom> getRoomList(){
+		long startT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(), startHourComponent.getSelectedIndex(), startMinComponent.getSelectedIndex()*15);
+		long endT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(),endHourComponent.getSelectedIndex(), endMinComponent.getSelectedIndex()*15);
+		ArrayList<MeetingRoom> list = new ArrayList<MeetingRoom>();
+		calendarModel.getAvailableRooms(startT, endT);
+		return list;
 	}
 
 	private void addDay(int nDays) {
