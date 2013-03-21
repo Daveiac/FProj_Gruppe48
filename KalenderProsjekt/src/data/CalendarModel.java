@@ -119,7 +119,7 @@ public class CalendarModel implements Serializable {
 	 */
 	public ArrayList<Notification> getAllNotificationsOfPerson(Person person) {
 		ArrayList<Notification> notis = new ArrayList<Notification>();
-		for (Notification n : notis) {
+		for (Notification n : notifications) {
 			if (n.getPerson().getUsername().equals(person.getUsername())) {
 				notis.add(n);
 			}
