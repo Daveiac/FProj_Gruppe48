@@ -7,15 +7,11 @@ import networking.packages.QueryRequest;
 import networking.packages.QueryRequest.QueryType;
 import networking.packages.UpdateRequest;
 import networking.packages.UpdateRequest.UpdateType;
-import networking.*;
-import java.net.*;
 
 import data.Alarm;
 import data.Notification;
 import data.Person;
 import data.Meeting;
-
-import framePackage.DefaultView;
 
 public class RequestHandler {
 	

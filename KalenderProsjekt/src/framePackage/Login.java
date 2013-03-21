@@ -11,6 +11,8 @@ import client.Program;
 
 public class Login extends JPanel{
 	
+
+	private static final long serialVersionUID = 1L;
 	private JPanel panel;
 	private JLabel userLabel, passwordLabel;
 	private JTextField userField;
@@ -82,5 +84,13 @@ public class Login extends JPanel{
 
 	public String getUsername() {
 		return username;
+	}
+
+	public JPanel getPanel() {
+		return panel;
+	}
+
+	public void setPanel(JPanel panel) {
+		this.panel = panel;
 	}
 }
