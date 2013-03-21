@@ -319,10 +319,8 @@ public class NewAppointmentView extends JPanel {
 				int i = participantComponent.getSelectedIndex();
 				if(participantComponent.getSelectedItem() != null){
 					Person pr = getAllPerson().get(i);
-					for(int j = 0; j < listModel.size(); j++){
-						if(!listModel.get(j).equals(pr)){
-							listModel.addElement(pr);
-						}
+					if(listModel.contains(pr) == false){
+						listModel.addElement(pr);
 					}
 				}
 			}
@@ -487,9 +485,7 @@ public class NewAppointmentView extends JPanel {
 			locComponent.setEnabled(false);
 			romComponent.setSelectedItem(meet.getRoom().getRoomName());
 		}
-		System.out.println(meet.getTeam().getMembers());
 		if(meet.getTeam() != null) {
-			System.out.println("DENNE BLIR KJØRT");
 			for(int i = 0; i < meet.getTeam().getMembers().size(); i++){
 				listModel.addElement(meet.getTeam().getMembers().get(i));
 			}
@@ -609,11 +605,7 @@ public class NewAppointmentView extends JPanel {
 		}
 		Team team = null;
 		if(meeting.getTeam() != null) {
-			System.out.println("DENNE BLIR OGSÅ KJØRT");
 			team = new Team(meeting.getTeam().getTeamID(),calendarModel.getUser().getEmail(),members);
-		}
-		if(listModel.size() > 0 && meeting.getTeam() == null){
-			team = new Team(-1,calendarModel.getUser().getEmail(),members);
 		}
 		if(listModel.size() == 0){
 			team = null;
