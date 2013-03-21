@@ -108,7 +108,7 @@ public class AppointmentView implements PropertyChangeListener {
 		meetingPanel = new JPanel();
 		mainPanel.add(meetingPanel, BorderLayout.CENTER);
 		mc.anchor = GridBagConstraints.NORTH;
-		
+		mc.gridy = 0;
 		for (int i = 0; i < notifications.size(); i++) {
 		 Notification n = notifications.get(i);
 		 Meeting meeting = n.getMeeting();
@@ -146,44 +146,20 @@ public class AppointmentView implements PropertyChangeListener {
 			((JLabel) items[1]).setText(dateFormat.format(startDate.getTime()));
 			((JLabel) items[2]).setText(timeFormat.format(startDate.getTime()));
 			
-			if(meeting.getCreator().getUsername() != user.getUsername()) {
+			if(meeting.getCreator().getUsername().equals(user.getUsername())) {
 				changeBtn.setEnabled(false);
 			} else {
 				changeBtn.addActionListener(new ChangeButtonListener(meeting));
 			}
 			infoBtn.addActionListener(new InfoButtonListener(meeting));
 			
+			System.out.println(mc.gridy = i);
 			for (int j = 0; j < items.length; j++) {
 				JComponent item = items[j];
 				item.setPreferredSize(new Dimension(sizes[j], 20));
 				mc.gridx = j;
 				meetingPanel.add(item, mc);
 			}
-			
-			items[0].setPreferredSize(new Dimension(100, 20));
-			items[1].setPreferredSize(new Dimension(100, 20));
-			items[2].setPreferredSize(new Dimension(100, 20));
-			items[3].setPreferredSize(new Dimension(100, 20));
-			items[4].setPreferredSize(new Dimension(100, 20));
-			items[5].setPreferredSize(new Dimension(100, 20));
-			items[6].setPreferredSize(new Dimension(100, 20));
-			mc.gridx = 0;
-			meetingPanel.add(items[0], mc);
-			mc.gridx = 1;
-			meetingPanel.add(items[1], mc);
-			mc.gridx = 2;
-			meetingPanel.add(items[2], mc);
-			mc.gridx = 3;
-			meetingPanel.add(items[3], mc);
-			mc.gridx = 4;
-			meetingPanel.add(items[4], mc);
-			mc.gridx = 5;
-			meetingPanel.add(items[5], mc);
-			mc.gridx = 6;
-			meetingPanel.add(items[6], mc);
-			
-			mc.gridy = mc.gridy +1;
-			
 		 }
 		int n = notifications.size();
 		
@@ -210,42 +186,21 @@ public class AppointmentView implements PropertyChangeListener {
 			((JLabel) items[1]).setText(dateFormat.format(startDate.getTime()));
 			((JLabel) items[2]).setText(timeFormat.format(startDate.getTime()));
 
-			if(meeting.getCreator().getUsername() != user.getUsername()) {
+			if(meeting.getCreator().getUsername().equals(user.getUsername())) {
 				changeBtn.setEnabled(false);
 			} else {
+				System.out.println("testkik");
 				changeBtn.addActionListener(new ChangeButtonListener(meeting));
 			}
 			infoBtn.addActionListener(new InfoButtonListener(meeting));
-
+			
+			System.out.println(mc.gridy = n+i);
 			for (int j = 0; j < items.length; j++) {
 				JComponent item = items[j];
 				item.setPreferredSize(new Dimension(sizes[j], 20));
 				mc.gridx = j;
 				meetingPanel.add(item, mc);
 			}
-			items[0].setPreferredSize(new Dimension(100, 20));
-			items[1].setPreferredSize(new Dimension(100, 20));
-			items[2].setPreferredSize(new Dimension(100, 20));
-			items[3].setPreferredSize(new Dimension(100, 20));
-			items[4].setPreferredSize(new Dimension(100, 20));
-			items[5].setPreferredSize(new Dimension(100, 20));
-			items[6].setPreferredSize(new Dimension(100, 20));
-			mc.gridx = 0;
-			meetingPanel.add(items[0], mc);
-			mc.gridx = 1;
-			meetingPanel.add(items[1], mc);
-			mc.gridx = 2;
-			meetingPanel.add(items[2], mc);
-			mc.gridx = 3;
-			meetingPanel.add(items[3], mc);
-			mc.gridx = 4;
-			meetingPanel.add(items[4], mc);
-			mc.gridx = 5;
-			meetingPanel.add(items[5], mc);
-			mc.gridx = 6;
-			meetingPanel.add(items[6], mc);
-			
-			mc.gridy = mc.gridy +1;
 		}
 		mc.weighty = 0;
 		mainPanel.validate();
@@ -288,21 +243,18 @@ public class AppointmentView implements PropertyChangeListener {
 			notifications = calendarModel.getAllNotificationsOfPerson(user);
 			meetings = calendarModel.getAppointments();
 			refreshMeetings();
-			System.out.println(meetings);
 			break;
 		case CalendarModel.MEETINGS_CHANGED_Property:
 			user = calendarModel.getUser();
 			notifications = calendarModel.getAllNotificationsOfPerson(user);
 			meetings = calendarModel.getAppointments();
 			refreshMeetings();
-			System.out.println(meetings);
 			break;
 		case CalendarModel.NOTIFICATIONS_CHANGED_Property:
 			user = calendarModel.getUser();
 			notifications = calendarModel.getAllNotificationsOfPerson(user);
 			meetings = calendarModel.getAppointments();
 			refreshMeetings();
-			System.out.println(meetings);
 			break;
 		}
 
