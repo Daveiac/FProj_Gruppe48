@@ -457,9 +457,10 @@ public class NewAppointmentView extends JPanel {
 		opprettKnapp.setEnabled(false);
 		endreKnapp.setEnabled(true);
 		slettKnapp.setEnabled(true);
-		for (Person p : meeting.getTeam().getMembers()) {
-			participantComponent.addItem(p.getFirstName() + " " +  p.getLastName());
+		for(int i = 0; i < calendarModel.getPersons().size(); i++){
+			participantComponent.addItem(getAllPerson().get(i).getFirstName() + " " +  getAllPerson().get(i).getLastName());
 		}
+
 		long startT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(), startHourComponent.getSelectedIndex(), startMinComponent.getSelectedIndex()*15);
 		long endT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(),endHourComponent.getSelectedIndex(), endMinComponent.getSelectedIndex()*15);
 		ArrayList<MeetingRoom> availableRooms = calendarModel.getAvailableRooms(startT, endT);
@@ -476,7 +477,7 @@ public class NewAppointmentView extends JPanel {
 		greCalendar.setTimeInMillis(meet.getEndTime());
 		endHourComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.HOUR_OF_DAY));
 		endMinComponent.setSelectedIndex(greCalendar.get(GregorianCalendar.MINUTE)/15);
-		if(meet.getLocation() != null ) {
+		if(meet.getLocation() != null  && !meet.getLocation().equals("")) {
 			locComponent.setText(meet.getLocation());
 			romComponent.setEnabled(false);
 		} else if(meet.getRoom() != null){
@@ -611,7 +612,7 @@ public class NewAppointmentView extends JPanel {
 		}
 		String loc = locComponent.getText();
 		MeetingRoom mr = null;
-		if(romComponent.isEnabled() && romComponent.getSelectedItem() != null){
+		if(romComponent.isEnabled() && !romComponent.getSelectedItem().equals(" ")){
 			mr = new MeetingRoom(romComponent.getSelectedItem().toString());
 		}
 		return new Meeting(meeting.getMeetingID(), tittelComponent.getText(), loc,startT, endT, infoComponent.getText(), team, mr, calendarModel.getUser());
