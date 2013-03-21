@@ -77,6 +77,7 @@ public class Login extends JPanel{
 		frame.getContentPane().add(new Login());
 		frame.pack();
 		frame.setVisible(true);
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	public String getUsername() {

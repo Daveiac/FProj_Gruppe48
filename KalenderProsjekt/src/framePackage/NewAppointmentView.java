@@ -398,7 +398,7 @@ public class NewAppointmentView extends JPanel {
 		endreKnapp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(validTime()==true && tittelComponent.getText().length() > 0 && infoComponent.getText().length() <= 255){
-					calendarModel.changeMeeting(getMeeting());
+					calendarModel.changeMeeting(changeMeeting());
 					frame.setVisible(false);
 				}
 				if(validTime()==false){
@@ -602,9 +602,39 @@ public class NewAppointmentView extends JPanel {
 		return meeting;
 	}
 	
-	private int getMeetingID(){
-		return meeting.getMeetingID();
+	private Meeting changeMeeting(){
+		long startT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(), startHourComponent.getSelectedIndex(), startMinComponent.getSelectedIndex()*15);
+		long endT = getTime(yearComponent.getSelectedIndex()+2013, dayComponent.getSelectedIndex()+1, monthComponent.getSelectedIndex(),endHourComponent.getSelectedIndex(), endMinComponent.getSelectedIndex()*15);
+		ArrayList<Person> list = new ArrayList<Person>();
+		for(int i = 0; i< listModel.size();i++){
+				list.add(listModel.get(i));
+			}
+		Team team = new Team(meeting.getTeam().getTeamID(),calendarModel.getUser().getEmail(),list);
+		if(listModel.size() == 0){
+			team = null;
+		}
+		String loc = null;
+		MeetingRoom mr = null;
+		int mID = 0;
+		if(locComponent.getText().length() > 0){
+			loc = locComponent.getText();
+		}
+		if(romComponent.getSelectedItem() != null){
+			mr = new MeetingRoom(romComponent.getSelectedItem().toString());
+		}
+		try {
+			if(meeting.getMeetingID() != 0){
+			mID = meeting.getMeetingID();
+		}
+			
+		} catch (NullPointerException e) {
+			mID = 0;
+		}
+		meeting = new Meeting(mID, tittelComponent.getText(), loc,startT, endT, infoComponent.getText(), team, mr, calendarModel.getUser());
+		return meeting;
 	}
+	
+	
 	
 	private long getTime(int year,int day, int month, int hour, int min){
 		GregorianCalendar greCalendar = new GregorianCalendar(year, month, day, hour, min);

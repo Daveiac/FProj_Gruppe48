@@ -310,14 +310,12 @@ public class MonthView implements CalendarView, PropertyChangeListener {
 			createMonthTable();
 			break;
 		case CalendarModel.SELECTED_Property:
-			System.out.println("someone just got lucky! (SELECTED)");
 			createMonthTable();
 			break;
 		case CalendarModel.DATE_CHANGED_Property:
 			createMonthTable();
 			break;
 		case CalendarModel.PERSONS_ADDED_Property:
-			System.out.println("someone just got lucky! (PERSON ADDED)");
 			createMonthTable();
 			break;
 		default:
