@@ -75,6 +75,7 @@ public class AppointmentOverView {
 		cross = new ImageIcon("res/icons/icon_cross.png");
 		question = new ImageIcon("res/icons/icon_question.png");
 		star = new ImageIcon("res/icons/icon_star.png");
+		
 
 		overViewPanel = new JPanel(new GridBagLayout());
 		overViewPanel.setPreferredSize(new Dimension(750, 500));
@@ -237,6 +238,17 @@ public class AppointmentOverView {
 		c.gridx = 1;
 		c.gridy = 4;
 		overViewPanel.add(myJScrollPane, c);
+		if(meeting.getCreator().getUsername().equals(calendarModel.getUser().getUsername())) {
+			if(meeting.getTeam()!= null){
+				yourStatus.setEnabled(false);
+				for (Person p : meeting.getTeam().getMembers()) {
+					if(p.getUsername().equals(calendarModel.getUser().getUsername())) {
+						yourStatus.setEnabled(true);
+					}
+				}
+			}
+			
+		}
 	}
 
 	private String getTime() {
