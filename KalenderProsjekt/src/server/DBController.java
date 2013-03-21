@@ -54,13 +54,13 @@ public class DBController {
 	}
 
 	public void updateMeeting(Meeting meeting) throws SQLException {
-		Integer teamID = null;
+		String teamID = "null";
 		if (meeting.getTeam() != null){
-			teamID = meeting.getTeam().getTeamID();
+			teamID = Integer.toString(meeting.getTeam().getTeamID());
 		}
 		String sql = String
 				.format("UPDATE Meeting "
-						+ "SET title = %s, location = %s, startTime = %d, endTime = %d, description = %s, teamID = %d, username = '%s' "
+						+ "SET title = %s, location = %s, startTime = %d, endTime = %d, description = %s, teamID = %s, username = '%s' "
 						+ "WHERE meetingID = %d", parseStringForDB(meeting
 						.getTitle()), parseStringForDB(meeting.getLocation()),
 						meeting.getStartTime(), meeting.getEndTime(),
@@ -179,6 +179,14 @@ public class DBController {
 		return meetings;
 	}
 
+	private int addReservation(int meetingID, String roomName) throws SQLException{
+		String sql = String.format(
+				"INSERT INTO reservation (meetingID, roomName) " +
+				"VALUES (%d, '%s'", meetingID, roomName);
+		return dBConn.makeUpdateReturnID(sql);
+		
+	}
+	
 	public List<Reservation> getReservationsForMeetingRoom(MeetingRoom room)
 			throws SQLException {
 		String sql = String.format("SELECT * FROM reservation "
@@ -247,6 +255,11 @@ public class DBController {
 		System.out.println(sql);
 
 		int meetingID = dBConn.makeUpdateReturnID(sql);
+		
+		//Add reservations
+		if(meeting.getRoom() != null){
+			addReservation(meetingID, meeting.getRoom().getRoomName());
+		}
 		// add notifications
 		Meeting newMeeting = getMeeting(meetingID);
 		if (meeting.getTeam() != null) {
