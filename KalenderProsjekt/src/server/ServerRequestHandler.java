@@ -229,7 +229,7 @@ public class ServerRequestHandler implements Runnable {
 			try {
 				handleUpdateRequest((UpdateRequest) request.networkRequest,
 						request.clientSocket);
-				
+
 			} catch (NullPointerException e) {
 				e.printStackTrace();
 			}

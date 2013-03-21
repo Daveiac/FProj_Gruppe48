@@ -55,17 +55,19 @@ public class DBController {
 
 	public void updateMeeting(Meeting meeting) throws SQLException {
 		String teamID = "null";
-		if (meeting.getTeam() != null){
+		if (meeting.getTeam() != null) {
 			teamID = Integer.toString(meeting.getTeam().getTeamID());
 		}
 		String sql = String
 				.format("UPDATE Meeting "
 						+ "SET title = %s, location = %s, startTime = %d, endTime = %d, description = %s, teamID = %s, username = '%s' "
-						+ "WHERE meetingID = %d", parseStringForDB(meeting
-						.getTitle()), parseStringForDB(meeting.getLocation()),
+						+ "WHERE meetingID = %d",
+						parseStringForDB(meeting.getTitle()),
+						parseStringForDB(meeting.getLocation()),
 						meeting.getStartTime(), meeting.getEndTime(),
-						parseStringForDB(meeting.getDescription()), teamID, meeting.getCreator()
-								.getUsername(), meeting.getMeetingID());
+						parseStringForDB(meeting.getDescription()), teamID,
+						meeting.getCreator().getUsername(),
+						meeting.getMeetingID());
 		dBConn.makeUpdate(sql);
 	}
 
@@ -179,14 +181,15 @@ public class DBController {
 		return meetings;
 	}
 
-	private int addReservation(int meetingID, String roomName) throws SQLException{
+	private int addReservation(int meetingID, String roomName)
+			throws SQLException {
 		String sql = String.format(
-				"INSERT INTO reservation (meetingID, roomName) " +
-				"VALUES (%d, '%s'", meetingID, roomName);
+				"INSERT INTO reservation (meetingID, roomName) "
+						+ "VALUES (%d, '%s'", meetingID, roomName);
 		return dBConn.makeUpdateReturnID(sql);
-		
+
 	}
-	
+
 	public List<Reservation> getReservationsForMeetingRoom(MeetingRoom room)
 			throws SQLException {
 		String sql = String.format("SELECT * FROM reservation "
@@ -255,9 +258,9 @@ public class DBController {
 		System.out.println(sql);
 
 		int meetingID = dBConn.makeUpdateReturnID(sql);
-		
-		//Add reservations
-		if(meeting.getRoom() != null){
+
+		// Add reservations
+		if (meeting.getRoom() != null) {
 			addReservation(meetingID, meeting.getRoom().getRoomName());
 		}
 		// add notifications
@@ -312,27 +315,28 @@ public class DBController {
 		}
 		int meetingID = rs.getInt("meetingID");
 		MeetingRoom room = getRoomFromMeeting(meetingID);
-		return new Meeting(meetingID, title,
-				rs.getString("location"), rs.getLong("startTime"),
-				rs.getLong("endTime"), rs.getString("description"), team,
-				room, getPerson(rs.getString("username")));
+		return new Meeting(meetingID, title, rs.getString("location"),
+				rs.getLong("startTime"), rs.getLong("endTime"),
+				rs.getString("description"), team, room,
+				getPerson(rs.getString("username")));
 	}
-	
+
 	/**
-	 * Will return a MeetingRoom corrsponding to the meeting. If it is an appointment it will return null 
+	 * Will return a MeetingRoom corrsponding to the meeting. If it is an
+	 * appointment it will return null
 	 * 
 	 */
 	private MeetingRoom getRoomFromMeeting(int meetingID) throws SQLException {
 		MeetingRoom room = null;
 
-		String sql = String
-				.format("SELECT MeetingRoom.roomName FROM reservation, MeetingRoom " +
-						"WHERE reservation.meetingID = %d " +
-						"AND reservation.roomName = MeetingRoom.roomName",
-						meetingID);
+		String sql = String.format(
+				"SELECT MeetingRoom.roomName FROM reservation, MeetingRoom "
+						+ "WHERE reservation.meetingID = %d "
+						+ "AND reservation.roomName = MeetingRoom.roomName",
+				meetingID);
 		ResultSet rs = dBConn.makeQuery(sql);
-		if(rs.next()){
-			room = getMeetingRoomFromResultSet(rs);		
+		if (rs.next()) {
+			room = getMeetingRoomFromResultSet(rs);
 		}
 		return room;
 	}
@@ -450,8 +454,6 @@ public class DBController {
 		}
 		return notificationList;
 	}
-
-
 
 	public List<MeetingRoom> getAllMeetingRooms() throws SQLException {
 		List<MeetingRoom> rooms = new ArrayList<MeetingRoom>();
