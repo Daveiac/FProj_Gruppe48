@@ -85,7 +85,20 @@ public class WeekView implements CalendarView, PropertyChangeListener {
 				int col = weekTable.columnAtPoint(evt.getPoint());
 				if (row >= 0 && col >= 1) {
 					Meeting meeting = (Meeting) WeekView.this.tableModel.getValueAt(row, col);
-					new NewAppointmentView(meeting);
+					if (meeting != null) {
+						new AppointmentOverView(meeting);
+					}
+					else {
+						GregorianCalendar cal = new GregorianCalendar(
+								calendar.get(GregorianCalendar.YEAR),
+								calendar.get(GregorianCalendar.MONTH),
+								calendar.get(GregorianCalendar.DAY_OF_MONTH));
+						int firstDayOfWeek = -cal.get(GregorianCalendar.DAY_OF_WEEK) + 2;
+						cal.add(GregorianCalendar.DAY_OF_WEEK, firstDayOfWeek+col-1);
+						cal.add(GregorianCalendar.HOUR, row/4);
+						cal.add(GregorianCalendar.MINUTE, (row*15)%60);
+						new NewAppointmentView(cal, true);
+					}
 				}
 			}
 		});

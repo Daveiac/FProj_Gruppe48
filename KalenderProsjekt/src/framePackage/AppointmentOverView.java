@@ -277,7 +277,6 @@ public class AppointmentOverView {
 	}
 	
 	public void closeFrame(){
-		System.out.println("DAVIVVIVIIVIVD");
 		frame.setVisible(false);
 	}
 

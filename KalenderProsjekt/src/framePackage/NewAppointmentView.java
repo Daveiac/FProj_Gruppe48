@@ -78,9 +78,12 @@ public class NewAppointmentView extends JPanel {
 
 	public NewAppointmentView(GregorianCalendar cal,boolean bool) {
 		this(null);
-		System.out.println("new constructor");
-		startHourComponent.setSelectedIndex(cal.get(GregorianCalendar.HOUR_OF_DAY));
+		int startHour = cal.get(GregorianCalendar.HOUR_OF_DAY);
+		int endHour = (startHour <23)? startHour+1: startHour; 
+		startHourComponent.setSelectedIndex(startHour);
 		startMinComponent.setSelectedIndex(cal.get(GregorianCalendar.MINUTE)/15);
+		endHourComponent.setSelectedIndex(endHour);
+		endMinComponent.setSelectedIndex(cal.get(GregorianCalendar.MINUTE)/15);
 		monthComponent.setSelectedIndex(cal.get(GregorianCalendar.MONTH));
 		yearComponent.setSelectedIndex(cal.get(GregorianCalendar.YEAR)-2013);
 		dayComponent.setSelectedItem(cal.get(GregorianCalendar.DAY_OF_MONTH));
