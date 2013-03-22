@@ -62,3 +62,6 @@ Meeting *-- Team
  * @author David
  *
  */
+public class UML_CD_Total {
+
+}
