@@ -47,7 +47,8 @@ public class ConnectionImpl extends AbstractConnection {
      *            - the local port to associate with this connection
      */
     public ConnectionImpl(int myPort) {
-        throw new RuntimeException("not Implemented");
+        myAddress = getIPv4Address();
+        this.myPort = myPort;
     }
 
     private String getIPv4Address() {
