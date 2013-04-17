@@ -79,6 +79,7 @@ public class ConnectionImpl extends AbstractConnection {
     	}
     	try{
     		KtnDatagram packet = constructInternalPacket(KtnDatagram.Flag.SYN);
+    		state = State.SYN_SENT;
     		simplySendPacket(packet);
     		if(receiveAck() != null){
     			state = State.ESTABLISHED;
@@ -98,7 +99,7 @@ public class ConnectionImpl extends AbstractConnection {
     	if(state != State.LISTEN){
     		throw new ConnectException("server kjører ikke accept");
     	}
-    	
+    	// tror vi skal skrive noe som recive SYN her tror jeg
     }
 
     /**
@@ -114,6 +115,7 @@ public class ConnectionImpl extends AbstractConnection {
      * @see no.ntnu.fp.net.co.Connection#send(String)
      */
     public void send(String msg) throws ConnectException, IOException {
+    	
     	throw new RuntimeException("not Implemented");
     }
 
