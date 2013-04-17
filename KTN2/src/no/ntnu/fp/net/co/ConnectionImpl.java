@@ -20,6 +20,7 @@ import no.ntnu.fp.net.cl.ClException;
 import no.ntnu.fp.net.cl.ClSocket;
 import no.ntnu.fp.net.cl.KtnDatagram;
 import no.ntnu.fp.net.cl.KtnDatagram.Flag;
+import no.ntnu.fp.net.separat.client.ChatClient;
 
 /**
  * Implementation of the Connection-interface. <br>
@@ -73,7 +74,18 @@ public class ConnectionImpl extends AbstractConnection {
      */
     public void connect(InetAddress remoteAddress, int remotePort) throws IOException,
             SocketTimeoutException {
-//        throw new NotImplementedException();
+    	if(state != State.CLOSED){
+    		throw new ConnectException("not closed");
+    	}
+    	try{
+    		KtnDatagram packet = constructInternalPacket(KtnDatagram.Flag.SYN);
+    		simplySendPacket(packet);
+    		if(receiveAck() != null){
+    			state = State.ESTABLISHED;
+    		}
+    	}
+    	catch(Exception e){
+    	}
     }
 
     /**
@@ -83,7 +95,10 @@ public class ConnectionImpl extends AbstractConnection {
      * @see Connection#accept()
      */
     public Connection accept() throws IOException, SocketTimeoutException {
-        throw new RuntimeException("not Implemented");
+    	if(state != State.LISTEN){
+    		throw new ConnectException("server kjører ikke accept");
+    	}
+    	
     }
 
     /**

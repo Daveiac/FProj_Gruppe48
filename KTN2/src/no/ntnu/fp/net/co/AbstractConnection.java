@@ -25,7 +25,7 @@ import no.ntnu.fp.net.co.Connection;
 public abstract class AbstractConnection implements Connection {
 
     /**
-     * The possible states for a Connection.
+     * The possible states for a Connection.listen
      */
     protected enum State {
         CLOSED, LISTEN, SYN_SENT, SYN_RCVD, ESTABLISHED, FIN_WAIT_1, FIN_WAIT_2, TIME_WAIT, CLOSE_WAIT, LAST_ACK
