@@ -116,8 +116,12 @@ public class ConnectionImpl extends AbstractConnection {
      * @see no.ntnu.fp.net.co.Connection#send(String)
      */
     public void send(String msg) throws ConnectException, IOException {
+    	KtnDatagram packet = constructDataPacket(msg);
+    	KtnDatagram ack = null;
+    	while(ack == null) {
+    		ack = sendDataPacketWithRetransmit(packet);
+    	}
     	
-    	throw new RuntimeException("not Implemented");
     }
 
     /**
@@ -129,7 +133,12 @@ public class ConnectionImpl extends AbstractConnection {
      * @see AbstractConnection#sendAck(KtnDatagram, boolean)
      */
     public String receive() throws ConnectException, IOException {
-    	throw new RuntimeException("not Implemented");
+    	KtnDatagram packet = receivePacket(false);
+    	if(isValid(packet)) {
+    		return (String) packet.getPayload();
+    	} else {
+    		throw new RuntimeException("Receive fail");
+    	}
     }
 
     /**
@@ -138,7 +147,9 @@ public class ConnectionImpl extends AbstractConnection {
      * @see Connection#close()
      */
     public void close() throws IOException {
-    	throw new RuntimeException("not Implemented");
+    	KtnDatagram fin = constructInternalPacket(Flag.FIN);
+    	sendDataPacketWithRetransmit(fin);
+    	receivePacket(true);
     }
 
     /**
