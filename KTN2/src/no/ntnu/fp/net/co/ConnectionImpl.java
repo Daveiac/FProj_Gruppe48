@@ -80,8 +80,8 @@ public class ConnectionImpl extends AbstractConnection {
     	}
     	try{
     		KtnDatagram packet = constructInternalPacket(KtnDatagram.Flag.SYN);
-    		state = State.SYN_SENT;
     		simplySendPacket(packet);
+    		state = State.SYN_SENT;
     		if(receiveAck() != null){
     			state = State.ESTABLISHED;
     		}
@@ -161,6 +161,16 @@ public class ConnectionImpl extends AbstractConnection {
      * @return true if packet is free of errors, false otherwise.
      */
     protected boolean isValid(KtnDatagram packet) {
-    	throw new RuntimeException("not Implemented");
+    	if(packet != null){
+    		System.out.println("det er ikke noe i pakken");
+    		if(packet.getChecksum() == packet.calculateChecksum()){
+    			if(packet.getSeq_nr() == lastDataPacketSent.getSeq_nr()+1){
+    				if(packet.getSrc_port() == remotePort && packet.getSrc_addr() == remoteAddress){
+    					return true;
+    				}
+    			}
+    		}
+    	}
+    	return false;
     }
 }
