@@ -149,6 +149,15 @@ public class ConnectionImpl extends AbstractConnection {
      * @return true if packet is free of errors, false otherwise.
      */
     protected boolean isValid(KtnDatagram packet) {
+    	if(packet != null){
+    		System.out.println("det er ikke noe i pakken");
+    		if(packet.getChecksum() == packet.calculateChecksum()){
+    			if(packet.getSeq_nr() == lastDataPacketSent.getSeq_nr()+1){
+    				if()
+    				
+    			}
+    		}
+    	}
     	throw new RuntimeException("not Implemented");
     }
 }
