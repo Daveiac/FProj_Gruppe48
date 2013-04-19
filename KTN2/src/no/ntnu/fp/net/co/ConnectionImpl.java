@@ -138,7 +138,7 @@ public class ConnectionImpl extends AbstractConnection {
 //    	while(ack == null) {
     		ack = sendDataPacketWithRetransmit(packet);
 //    	}
-    	
+    	lastDataPacketSent = packet;
     }
 
     /**
@@ -214,7 +214,7 @@ public class ConnectionImpl extends AbstractConnection {
     	if(packet != null){
     		System.out.println("det er ikke noe i pakken");
     		if(packet.getChecksum() == packet.calculateChecksum()){
-    			if(packet.getSeq_nr() == lastDataPacketSent.getSeq_nr()+1){
+    			if(lastDataPacketSent != null && packet.getSeq_nr() == lastDataPacketSent.getSeq_nr()+1){
     				if(packet.getSrc_port() == remotePort && packet.getSrc_addr() == remoteAddress){
     					return true;
     				}
