@@ -132,12 +132,10 @@ public class ConnectionImpl extends AbstractConnection {
      * @see AbstractConnection#sendDataPacketWithRetransmit(KtnDatagram)
      * @see no.ntnu.fp.net.co.Connection#send(String)
      */
-    public void send(String msg) throws ConnectException, IOException {
-    	KtnDatagram packet = constructDataPacket(msg);
-    	KtnDatagram ack = null;
-    	ack = sendDataPacketWithRetransmit(packet);
-    	lastDataPacketSent = packet;
-    }
+	public void send(String msg) throws ConnectException, IOException {
+		KtnDatagram packet = constructDataPacket(msg);
+		KtnDatagram ack = sendDataPacketWithRetransmit(packet);
+	}
 
     /**
      * Wait for incoming data.
@@ -149,9 +147,10 @@ public class ConnectionImpl extends AbstractConnection {
      */
     public String receive() throws ConnectException, IOException {
     	KtnDatagram packet = receivePacket(false);
-    	while(!isValid(packet)) {
-    		packet = receivePacket(false);
-    	}
+//    	while(!isValid(packet)) {
+//    		packet = receivePacket(false);
+//    		System.out.println("trying to receive");
+//    	}
     	sendAck(packet, false);
     	lastValidPacketReceived = packet;
     	return (String) packet.getPayload();
