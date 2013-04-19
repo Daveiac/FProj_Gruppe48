@@ -100,7 +100,7 @@ public class ConnectionImpl extends AbstractConnection {
     public Connection accept() throws IOException, SocketTimeoutException {
     	state = State.LISTEN;
     	KtnDatagram packet = null;
-		while (packet == null) {
+		while (packet == null || packet.getFlag() != Flag.SYN) {
 			packet = receivePacket(true);
 		}
 		ConnectionImpl conn = new ConnectionImpl(myPort);
