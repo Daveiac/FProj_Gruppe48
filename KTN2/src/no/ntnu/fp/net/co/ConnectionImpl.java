@@ -135,9 +135,7 @@ public class ConnectionImpl extends AbstractConnection {
     public void send(String msg) throws ConnectException, IOException {
     	KtnDatagram packet = constructDataPacket(msg);
     	KtnDatagram ack = null;
-//    	while(ack == null) {
-    		ack = sendDataPacketWithRetransmit(packet);
-//    	}
+    	ack = sendDataPacketWithRetransmit(packet);
     	lastDataPacketSent = packet;
     }
 
@@ -151,11 +149,12 @@ public class ConnectionImpl extends AbstractConnection {
      */
     public String receive() throws ConnectException, IOException {
     	KtnDatagram packet = receivePacket(false);
-    	if(isValid(packet)) {
-    		return (String) packet.getPayload();
-    	} else {
-    		throw new RuntimeException("Receive fail");
+    	while(!isValid(packet)) {
+    		packet = receivePacket(false);
     	}
+    	sendAck(packet, false);
+    	lastValidPacketReceived = packet;
+    	return (String) packet.getPayload();
     }
 
     /**
