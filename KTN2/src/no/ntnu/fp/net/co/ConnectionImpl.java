@@ -113,7 +113,6 @@ public class ConnectionImpl extends AbstractConnection {
 		packet = null;
 		while (packet == null)
 			packet = receiveAck();
-		sendAck(packet, false);
 		conn.lastValidPacketReceived = packet;
 
 		conn.state = State.ESTABLISHED;
