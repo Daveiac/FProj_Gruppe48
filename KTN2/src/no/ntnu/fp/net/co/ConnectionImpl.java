@@ -3,7 +3,6 @@
  */
 package no.ntnu.fp.net.co;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.InetAddress;
@@ -15,12 +14,10 @@ import java.util.Map;
 
 //import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import no.ntnu.fp.net.admin.Log;
 import no.ntnu.fp.net.cl.ClException;
 import no.ntnu.fp.net.cl.ClSocket;
 import no.ntnu.fp.net.cl.KtnDatagram;
 import no.ntnu.fp.net.cl.KtnDatagram.Flag;
-import no.ntnu.fp.net.separat.client.ChatClient;
 
 /**
  * Implementation of the Connection-interface. <br>
@@ -78,16 +75,20 @@ public class ConnectionImpl extends AbstractConnection {
     	if(state != State.CLOSED){
     		throw new ConnectException("not closed");
     	}
-    	try{
-    		KtnDatagram packet = constructInternalPacket(KtnDatagram.Flag.SYN);
-    		simplySendPacket(packet);
-    		state = State.SYN_SENT;
-    		if(receiveAck() != null){
-    			state = State.ESTABLISHED;
-    		}
-    	}
-    	catch(Exception e){
-    	}
+    		try {
+    			this.remoteAddress = remoteAddress.getHostAddress();
+    			this.remotePort = remotePort;
+    			KtnDatagram packet = constructInternalPacket(KtnDatagram.Flag.SYN);
+				simplySendPacket(packet);
+				state = State.SYN_SENT;
+				KtnDatagram receiveAck = receiveAck();
+				if(receiveAck != null){
+					state = State.ESTABLISHED;
+					sendAck(receiveAck, false);
+				}
+			} catch (ClException e) {
+				e.printStackTrace();
+			}
     }
 
     /**
@@ -97,10 +98,27 @@ public class ConnectionImpl extends AbstractConnection {
      * @see Connection#accept()
      */
     public Connection accept() throws IOException, SocketTimeoutException {
-    	if(state != State.LISTEN){
-    		throw new ConnectException("server kjører ikke accept");
-    	}
-    	// tror vi skal skrive noe som recive SYN her tror jeg
+    	state = State.LISTEN;
+    	KtnDatagram packet = null;
+		while (packet == null) {
+			packet = receivePacket(true);
+		}
+		ConnectionImpl conn = new ConnectionImpl(myPort);
+		conn.lastValidPacketReceived = packet;
+		conn.remoteAddress = packet.getSrc_addr();
+		conn.remotePort = packet.getSrc_port();
+
+		conn.sendAck(packet, true);
+		conn.state = State.SYN_RCVD;
+		packet = null;
+		while (packet == null)
+			packet = receiveAck();
+		sendAck(packet, false);
+		conn.lastValidPacketReceived = packet;
+
+		conn.state = State.ESTABLISHED;
+
+		return conn;
     }
 
     /**
@@ -118,9 +136,9 @@ public class ConnectionImpl extends AbstractConnection {
     public void send(String msg) throws ConnectException, IOException {
     	KtnDatagram packet = constructDataPacket(msg);
     	KtnDatagram ack = null;
-    	while(ack == null) {
+//    	while(ack == null) {
     		ack = sendDataPacketWithRetransmit(packet);
-    	}
+//    	}
     	
     }
 
