@@ -138,7 +138,42 @@ public class ConnectionImpl extends AbstractConnection {
      * @see Connection#close()
      */
     public void close() throws IOException {
-    	throw new RuntimeException("not Implemented");
+//    	throw new RuntimeException("not Implemented");
+    	
+    	try {
+    		state = State.FIN_WAIT_1;
+    		if (disconnectRequest != null){ // If first to send FIN
+    			sendAck(disconnectRequest, false);
+    			state = State.FIN_WAIT_2;
+    		}
+    		
+    		KtnDatagram finToSend = constructInternalPacket(Flag.FIN);
+    		KtnDatagram ackToReceive = null;
+    		
+    		for (int tries = 3; tries > 0; tries--) {
+    			if (!isValid(ackToReceive)) {
+    				simplySendPacket(finToSend);
+    				ackToReceive = receivePacket(true);
+    			}
+    		}
+
+			KtnDatagram finToReceive = null;
+			
+    		if (state != State.FIN_WAIT_2) {
+        		for (int tries = 3; tries > 0; tries--) {
+        			if (isValid(finToReceive)) {
+        				finToReceive = receivePacket(true);
+        			}
+        		}
+        		sendAck(finToReceive, false);
+    		}
+    		
+    		
+    	}
+    	catch (Exception e) {
+    		
+    	}
+    	state = State.CLOSED;
     }
 
     /**
