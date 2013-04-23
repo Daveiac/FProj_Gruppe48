@@ -147,40 +147,50 @@ public class ConnectionImpl extends AbstractConnection {
      * @see Connection#close()
      */
     public void close() throws IOException {
-//    	throw new RuntimeException("not Implemented");
-    	
+    	//    	throw new RuntimeException("not Implemented");
+
+    	/* Two cases:
+    	 * Case 1: Receiving a disconnect request.
+    	 * Case 2: Sending a disconnect request.
+    	 */
+
     	try {
     		state = State.FIN_WAIT_1;
-    		if (disconnectRequest != null){ // If first to send FIN
+
+    		// If Case 1 (receiving FIN first), then send ACK
+    		if (disconnectRequest != null) {
     			sendAck(disconnectRequest, false);
     			state = State.FIN_WAIT_2;
     		}
-    		
+
     		KtnDatagram finToSend = constructInternalPacket(Flag.FIN);
     		KtnDatagram ackToReceive = null;
-    		
+
+    		// Case 1: Answer the disconnection with sending a FIN
+    		// Case 2: Send FIN to close the connection
+    		sendDataPacketWithRetransmit(finToSend);
+
+    		// Receive ACK
     		for (int tries = 3; tries > 0; tries--) {
     			if (!isValid(ackToReceive)) {
-    				simplySendPacket(finToSend);
-    				ackToReceive = receivePacket(true);
+    				ackToReceive = receiveAck();
     			}
     		}
 
-			KtnDatagram finToReceive = null;
-			
+    		KtnDatagram finToReceive = null;
+
+    		// If Case 2 (sending FIN first), then receive the other connections FIN
     		if (state != State.FIN_WAIT_2) {
-        		for (int tries = 3; tries > 0; tries--) {
-        			if (isValid(finToReceive)) {
-        				finToReceive = receivePacket(true);
-        			}
-        		}
-        		sendAck(finToReceive, false);
+    			for (int tries = 3; tries > 0; tries--) {
+    				if (isValid(finToReceive)) {
+    					finToReceive = receivePacket(true);
+    				}
+    			}
+				sendAck(finToReceive, false);
     		}
-    		
-    		
     	}
     	catch (Exception e) {
-    		
+    		// TODO something something something...
     	}
     	state = State.CLOSED;
     }
