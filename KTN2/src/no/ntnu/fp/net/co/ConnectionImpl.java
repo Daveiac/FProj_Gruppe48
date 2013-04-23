@@ -205,7 +205,7 @@ public class ConnectionImpl extends AbstractConnection {
     		}
     	}
     	catch (Exception e) {
-    		// TODO something something something...
+			  throw new IOException();
     	}
     	state = State.CLOSED;
     }
