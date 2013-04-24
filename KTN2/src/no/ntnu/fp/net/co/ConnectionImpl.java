@@ -176,84 +176,91 @@ public class ConnectionImpl extends AbstractConnection {
 	 * @see Connection#close()
 	 */
 	public void close() throws IOException {
-		// throw new RuntimeException("not Implemented");
+		//    	throw new RuntimeException("not Implemented");
 
 
 
-    	// Server
+		// Server
 
-    	//Receive FIN
-    	if (state == State.ESTABLISHED)
-    		disconnectRequest = receivePacket(false);
+		//Receive FIN
+		if (state == State.ESTABLISHED)
+			disconnectRequest = receivePacket(false);
 
-    	if (disconnectRequest != null) {
+		if (disconnectRequest != null) {
 
-    		// Send ACK
-    		sendAck(disconnectRequest, false);
+			// Send ACK
+			sendAck(disconnectRequest, false);
 
-    		state = State.CLOSE_WAIT;
+			state = State.CLOSE_WAIT;
 
-    		KtnDatagram finToSend = constructInternalPacket(Flag.FIN);
-    		KtnDatagram ackToReceive = null;
+			KtnDatagram finToSend = constructInternalPacket(Flag.FIN);
+			KtnDatagram ackToReceive = null;
 
-    		// Send FIN
-    		try {
+			// Send FIN
+			try {
 				simplySendPacket(finToSend);
 			} catch (ClException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-    		state = State.LAST_ACK;
+			state = State.LAST_ACK;
 
-    		// Receive ACK
-    		for (int tries = 3; tries > 0; tries--) {
-    			if (!isValid(ackToReceive)) {
-    				ackToReceive = receiveAck();
-    			}
-    		}
-    	}
+			// Receive ACK
+			for (int tries = 3; tries > 0; tries--) {
+				if (!isValid(ackToReceive)) {
+					ackToReceive = receiveAck();
+				}
+			}
+		}
 
-    	// Client
-    	else {
+		// Client
+		else {
 
-    		KtnDatagram finToSend = constructInternalPacket(Flag.FIN);
-    		KtnDatagram ackToReceive = null;
+			KtnDatagram finToSend = constructInternalPacket(Flag.FIN);
+			KtnDatagram ackToReceive = null;
 
-    		// Send FIN
-    		try {
+			// Send FIN
+			try {
 				simplySendPacket(finToSend);
 			} catch (ClException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-    		state = State.FIN_WAIT_1;
+			state = State.FIN_WAIT_1;
 
-    		// Receive ACK
-    		for (int tries = 3; tries > 0; tries--) {
-    			if (!isValid(ackToReceive)) {
-    				ackToReceive = receiveAck();
-    			}
-    		}
-
-    		if (ackToReceive != null)
-    			state = State.FIN_WAIT_2;
-
-    		KtnDatagram finToReceive = null;
-
-    		// Receive FIN
-    		if (state != State.FIN_WAIT_2) {
-    			for (int tries = 3; tries > 0; tries--) {
-    				if (isValid(finToReceive)) {
-    					finToReceive = receivePacket(true);
-    				}
-    			}
-    			// Send ACK
-    			sendAck(finToReceive, false);
+			// Receive ACK
+			for (int tries = 3; tries > 0; tries--) {
+				if (!isValid(ackToReceive)) {
+					ackToReceive = receiveAck();
+				}
 			}
-		} catch (Exception e) {
-			throw new IOException();
+
+			if (ackToReceive != null)
+				state = State.FIN_WAIT_2;
+
+			KtnDatagram finToReceive = null;
+
+			// Receive FIN
+			if (state != State.FIN_WAIT_2) {
+				for (int tries = 3; tries > 0; tries--) {
+					if (isValid(finToReceive)) {
+						finToReceive = receivePacket(true);
+					}
+				}
+				// Send ACK
+				sendAck(finToReceive, false);
+			}
+
+			state = State.TIME_WAIT;
+
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		state = State.CLOSED;
 	}
@@ -266,24 +273,15 @@ public class ConnectionImpl extends AbstractConnection {
 	 *            Packet to test.
 	 * @return true if packet is free of errors, false otherwise.
 	 */
-	
+
 	protected boolean isValid(KtnDatagram packet) {
-    	if (packet != null && packet.calculateChecksum() == packet.getChecksum() && stateValid(packet)) {
-    		lastValidPacketReceived = packet;
-    		return true;
+		if (packet != null && packet.calculateChecksum() == packet.getChecksum() && stateValid(packet)) {
+			lastValidPacketReceived = packet;
+			return true;
+		}
+		return false;
+	}
 
-    		state = State.TIME_WAIT;
-
-    		try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
-        state = State.CLOSED;
-    }
-	
 	private boolean stateValid(KtnDatagram packet) {
 		if((packet.getFlag() == Flag.ACK || packet.getFlag() == Flag.SYN_ACK) && packet.getAck() != lastValidPacketReceived.getSeq_nr()){
 			return false;
@@ -291,22 +289,22 @@ public class ConnectionImpl extends AbstractConnection {
 		if(state == state.SYN_SENT){
 			remotePort = packet.getSrc_port();
 			return (packet.getFlag() == Flag.SYN_ACK && remoteAddress.equals(packet.getSrc_addr()));
-    	}
-    	else if (state == State.LISTEN) {
-    		return (packet.getFlag() == Flag.SYN);
-    	}
-    	else if (packet.getSrc_addr() != remoteAddress && packet.getSrc_port() != remotePort) {
-    		return false;
-    	}
-    	else if (state == State.SYN_RCVD) {
-    		return (packet.getFlag() == Flag.ACK);
-    	}
-    	else if (state == State.FIN_WAIT_1 || state == State.FIN_WAIT_2) {
-    		return (packet.getFlag() == Flag.FIN || packet.getFlag() == Flag.ACK);
-    	}
-    	else if (state == State.CLOSE_WAIT) {
-    		return (packet.getFlag() == Flag.FIN);
-    	}
-    	return true;
+		}
+		else if (state == State.LISTEN) {
+			return (packet.getFlag() == Flag.SYN);
+		}
+		else if (packet.getSrc_addr() != remoteAddress && packet.getSrc_port() != remotePort) {
+			return false;
+		}
+		else if (state == State.SYN_RCVD) {
+			return (packet.getFlag() == Flag.ACK);
+		}
+		else if (state == State.FIN_WAIT_1 || state == State.FIN_WAIT_2) {
+			return (packet.getFlag() == Flag.FIN || packet.getFlag() == Flag.ACK);
+		}
+		else if (state == State.CLOSE_WAIT) {
+			return (packet.getFlag() == Flag.FIN);
+		}
+		return true;
 	}
 }
