@@ -140,7 +140,7 @@ public class ConnectionImpl extends AbstractConnection {
 	public void send(String msg) throws ConnectException, IOException {
 		KtnDatagram packet = constructDataPacket(msg);
 		KtnDatagram ack = sendDataPacketWithRetransmit(packet);
-		if(ack != null || ack.getFlag() != Flag.ACK){
+		if(ack != null && ack.getFlag() != Flag.ACK){
 			lastDataPacketSent = packet;
 			lastValidPacketReceived = ack;
 		}
