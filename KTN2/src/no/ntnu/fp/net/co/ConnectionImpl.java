@@ -164,26 +164,57 @@ public class ConnectionImpl extends AbstractConnection {
     public void close() throws IOException {
     	//    	throw new RuntimeException("not Implemented");
 
-    	/* Two cases:
-    	 * Case 1: Receiving a disconnect request.
-    	 * Case 2: Sending a disconnect request.
-    	 */
 
-    	try {
-    		state = State.FIN_WAIT_1;
 
-    		// If Case 1 (receiving FIN first), then send ACK
-    		if (disconnectRequest != null) {
-    			sendAck(disconnectRequest, false);
-    			state = State.FIN_WAIT_2;
-    		}
+    	// Server
+
+    	//Receive FIN
+    	if (state == State.ESTABLISHED)
+    		disconnectRequest = receivePacket(false);
+
+    	if (disconnectRequest != null) {
+
+    		// Send ACK
+    		sendAck(disconnectRequest, false);
+
+    		state = State.CLOSE_WAIT;
 
     		KtnDatagram finToSend = constructInternalPacket(Flag.FIN);
     		KtnDatagram ackToReceive = null;
 
-    		// Case 1: Answer the disconnection with sending a FIN
-    		// Case 2: Send FIN to close the connection
-    		sendDataPacketWithRetransmit(finToSend);
+    		// Send FIN
+    		try {
+				simplySendPacket(finToSend);
+			} catch (ClException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+    		state = State.LAST_ACK;
+
+    		// Receive ACK
+    		for (int tries = 3; tries > 0; tries--) {
+    			if (!isValid(ackToReceive)) {
+    				ackToReceive = receiveAck();
+    			}
+    		}
+    	}
+
+    	// Client
+    	else {
+
+    		KtnDatagram finToSend = constructInternalPacket(Flag.FIN);
+    		KtnDatagram ackToReceive = null;
+
+    		// Send FIN
+    		try {
+				simplySendPacket(finToSend);
+			} catch (ClException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+    		state = State.FIN_WAIT_1;
 
     		// Receive ACK
     		for (int tries = 3; tries > 0; tries--) {
@@ -192,22 +223,32 @@ public class ConnectionImpl extends AbstractConnection {
     			}
     		}
 
+    		if (ackToReceive != null)
+    			state = State.FIN_WAIT_2;
+
     		KtnDatagram finToReceive = null;
 
-    		// If Case 2 (sending FIN first), then receive the other connections FIN
+    		// Receive FIN
     		if (state != State.FIN_WAIT_2) {
     			for (int tries = 3; tries > 0; tries--) {
     				if (isValid(finToReceive)) {
     					finToReceive = receivePacket(true);
     				}
     			}
-				sendAck(finToReceive, false);
+    			// Send ACK
+    			sendAck(finToReceive, false);
     		}
+
+    		state = State.TIME_WAIT;
+
+    		try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
-    	catch (Exception e) {
-			  throw new IOException();
-    	}
-    	state = State.CLOSED;
+        state = State.CLOSED;
     }
 
     /**
