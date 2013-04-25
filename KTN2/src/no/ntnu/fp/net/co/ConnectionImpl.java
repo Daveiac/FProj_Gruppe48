@@ -90,10 +90,21 @@ public class ConnectionImpl extends AbstractConnection {
 		while (recievedSynAck == null)
 			recievedSynAck = receiveAck();
 		lastValidPacketReceived = recievedSynAck;
-		if (recievedSynAck.getFlag() == Flag.SYN_ACK)
+		if (recievedSynAck.getFlag() == Flag.SYN_ACK) {
+			sleep();
 			sendAck(recievedSynAck, false);
+		}
 		state = State.ESTABLISHED;
 
+	}
+
+	private void sleep() {
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -160,11 +171,14 @@ public class ConnectionImpl extends AbstractConnection {
 			try {
 				packet = receivePacket(false);
 			} catch (EOFException e) {
+				System.out.println("sender ack????");
+				sleep();
 				sendAck(disconnectRequest, false);
-				this.state = state.CLOSE_WAIT;
+				this.state = State.CLOSE_WAIT;
 				throw e;
 			}
 			if (isValid(packet)) {
+				sleep();
 				sendAck(packet, false);
 				lastValidPacketReceived = packet;
 				return (String) packet.getPayload();
@@ -197,10 +211,10 @@ public class ConnectionImpl extends AbstractConnection {
 				state = State.FIN_WAIT_2;
 			}
 			
-		case FIN_WAIT_2:
+		case FIN_WAIT_2:			
 			KtnDatagram fin = receivePacket(true);
 			for (int i = 0; i < 3; i++) {
-				if(fin == null) fin = receiveAck();
+				if(fin == null) fin = receivePacket(true);
 			}
 			try {
 				simplySendPacket(fin);
@@ -213,6 +227,7 @@ public class ConnectionImpl extends AbstractConnection {
 		case CLOSE_WAIT:
 			finPacket = constructInternalPacket(Flag.FIN);
 			try {
+				sleep();
 				simplySendPacket(finPacket);
 			} catch (ClException e) {
 				// TODO Auto-generated catch block
