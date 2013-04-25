@@ -190,12 +190,18 @@ public class ConnectionImpl extends AbstractConnection {
 		
 		case FIN_WAIT_1:
 			KtnDatagram ack = receiveAck();
-			if(ack.getFlag() == Flag.ACK){
+			for (int i = 0; i < 3; i++) {
+				if(ack == null) ack = receiveAck();
+			}
+			if(ack != null && ack.getFlag() == Flag.ACK){
 				state = State.FIN_WAIT_2;
 			}
 			
 		case FIN_WAIT_2:
 			KtnDatagram fin = receivePacket(true);
+			for (int i = 0; i < 3; i++) {
+				if(fin == null) fin = receiveAck();
+			}
 			try {
 				simplySendPacket(fin);
 			} catch (ClException e1) {
